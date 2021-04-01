@@ -5,6 +5,37 @@ import 'package:todoapp/model/note_model.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/provider/notes_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
+import 'dart:async';
+
+checkMe() {
+  final dateBox = Hive.box<String>(dateBoxName);
+  String date = dateBox.get('date');
+  var now = DateTime.now();
+  if (date != null) {
+    List<String> dateList = date.split(',');
+    int day = now.day;
+    int month = now.month;
+    int year = now.year;
+    Box<Note> noteBox = Hive.box<Note>(noteBoxName);
+    if (int.parse(dateList[0]) < year ||
+        int.parse(dateList[1]) < month ||
+        int.parse(dateList[2]) < day) {
+      if (noteBox.length != 0) {
+        for (int i = 0; i < noteBox.length; i++) {
+          var ntitle = noteBox.getAt(i).title;
+          var nttext = noteBox.getAt(i).text;
+          Note note = Note(ntitle, nttext, false);
+          noteBox.putAt(i, note);
+        }
+        dateBox.put('date',
+            "${DateTime.now().year},${DateTime.now().month},${DateTime.now().day}");
+      }
+    }
+  } else {
+    dateBox.put('date',
+        "${DateTime.now().year},${DateTime.now().month},${DateTime.now().day}");
+  }
+}
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -20,6 +51,10 @@ class _HomeState extends State<Home> {
     // TODO: implement initState
     super.initState();
     noteBox = Hive.box<Note>(noteBoxName);
+    super.initState();
+    var _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      checkMe();
+    });
   }
 
   @override
@@ -88,7 +123,6 @@ class _HomeState extends State<Home> {
               FloatingActionButton(
                 heroTag: null,
                 onPressed: () {
-
                   _myProvider.cancelClicked();
                 },
                 backgroundColor: uiKit.Colors.lightBlue,

@@ -31,7 +31,9 @@ class _myRorderableState extends State<myRorderable> {
           builder: (context, Box<Note> notes, _) {
             List<int> keys = notes.keys.cast<int>().toList();
             return Theme(
-              data: ThemeData(canvasColor: Colors.transparent , shadowColor: Colors.transparent),
+              data: ThemeData(
+                  canvasColor: Colors.transparent,
+                  shadowColor: Colors.transparent),
               child: ReorderableListView(
                 children: [
                   for (int index = 0; index < keys.length; index++)
@@ -56,24 +58,26 @@ class _myRorderableState extends State<myRorderable> {
                         title: InkWell(
                           child: Container(
                             margin: EdgeInsets.only(top: SizeX * 0.01),
-                            height: SizeX * 0.2,
+                            height: SizeX * 0.25,
                             decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20)),
                                 color: uiKit.Colors.shadedBlue),
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 20),
-                                  child: Row(
-                                    children: [
-                                      Theme(
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Theme(
                                         data: ThemeData(
                                             unselectedWidgetColor:
                                                 uiKit.Colors.darkBlue),
                                         child: Padding(
                                           padding:
-                                              const EdgeInsets.only(top: 20),
+                                              const EdgeInsets.only(top: 10),
                                           child: Checkbox(
                                               checkColor: uiKit.Colors.darkBlue,
                                               value: notes
@@ -87,43 +91,42 @@ class _myRorderableState extends State<myRorderable> {
                                               }),
                                         ),
                                       ),
-                                      Column(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(4.0),
-                                            child: Container(
-                                              height: 50,
-                                              margin: EdgeInsets.only(
-                                                  top: SizeX * 0.015),
-                                              child: Center(
-                                                child: Text(
-                                                  notes.get(keys[index]).title,
-                                                  style: TextStyle(
-                                                      fontSize: 25,
-                                                      color:
-                                                          uiKit.Colors.darkBlue,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                            ),
+                                    ),
+                                    Expanded(
+                                      flex: 5,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 5, right: 10),
+                                        child: Center(
+                                          child: Text(
+                                            notes.get(keys[index]).title,
+                                            maxLines: 1,
+                                            softWrap: false,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                fontSize: 25,
+                                                color: uiKit.Colors.darkBlue,
+                                                fontWeight: FontWeight.bold),
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10),
                                   child: Text(
                                     notes.get(keys[index]).text,
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 20,
                                       color: uiKit.Colors.darkBlue,
                                     ),
                                   ),
                                 ),
+                                Spacer(),
                               ],
                             ),
                           ),

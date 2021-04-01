@@ -12,5 +12,7 @@
   "textHint" : "Your Note :)",
   "emptyFieldsAlert" : "Empty note ? check the fields and try again !",
   "notSavingAlert" : "To quit whithout saving press the button again !",
-  "willingToDelete" : "If You are wiling to delete the note delete it via list delete"
+  "willingToDelete" : "If You are wiling to delete the note delete it via list delete",
+  "patient" : "A little bit of patience...",
+  "more" : "more ..."
 }

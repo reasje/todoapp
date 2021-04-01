@@ -15,14 +15,15 @@ class _MySplashScreenState extends State<MySplashScreen> {
   Widget build(BuildContext context) {
 return new SplashScreen(
       seconds: 1,
+      image: Image.asset('assets/todoapplogo.png'),
       navigateAfterSeconds: Home(),
-      loaderColor: uiKit.Colors.lightBlue,
+      loaderColor: uiKit.Colors.whiteSmoke,
       backgroundColor: uiKit.Colors.darkBlue,
       photoSize: 100,
       loadingText: Text(
-        "اندکی صبر ...",
+        uiKit.AppLocalizations.of(context).translate('patient'),
         style: TextStyle(
-            color: uiKit.Colors.lightBlue, fontFamily: 'Iransans'),
+            color: uiKit.Colors.whiteSmoke, fontFamily: 'Iransans'),
       ),
     );
   }
