@@ -4,10 +4,13 @@ import 'package:hive/hive.dart';
 import 'package:todoapp/model/note_model.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
+import 'package:undo/undo.dart';
 
 class myProvider extends ChangeNotifier {
   final TextEditingController title = TextEditingController(text: '');
   final TextEditingController text = TextEditingController(text: '');
+  // handeling changes to text textfield
+  var changes = new ChangeStack();
   // these two varrables are used to check if anything has been changed or not .
   String ttitle;
   String ttext;
@@ -21,36 +24,83 @@ class myProvider extends ChangeNotifier {
   int floating_index = 0;
   // to press the back button twice for getting back to the notes list ! without saving
   int notSaving = 0;
+  // the chnage and edit controller
+  String old_value;
+  String new_value_helper;
+  String redo_value;
+  bool begin_edit;
+  // Hiive database
   final noteBox = Hive.box<Note>(noteBoxName);
   List<int> providerKeys;
   int providerIndex;
   TextEditingController get myTitle => title;
   TextEditingController get myText => text;
   bool newNote;
+  // This is used inside of Note textfield to control and save the changes for undo property 
+  void listenerActivated(newValue) {
+    // This Line is used for prevent unusual behavior of the textfield 
+    // It executes the on change function twice after entering only one word
+    if (new_value_helper != newValue) {
+      // Staging the changes !
+      changes.add(new Change(old_value, () {
+      }, (oldValue) {
+        // When the chnage is being apllies or in other words 
+        // The undo button is selected I want to make the text controller 
+        // text equal to the oldValue that the change got before .
+        text.text = oldValue;
+        // Updating the old_value and making it ready for the next change 
+        old_value = oldValue;
+        // Making the cursor stay at the right position 
+        text.selection =
+            TextSelection.fromPosition(TextPosition(offset: text.text.length));
+      }));
+      // After giving the value of the old_value as Oldvalue to the change
+      // It's Time to update old_value for the next change 
+      old_value = text.text;
+      // updating the new_value_helper to prevent extra execution of onChange function 
+      new_value_helper = newValue;
+      notifyListeners();
+    }
+  }
+  // Redo and Undo button activation change and used 
+  // to avoid direct access to provider 
+  bool get canRedo => changes.canRedo;
+  bool get canUndo => changes.canUndo;
+  // Handeling the Undo function 
+  void changesUndo() {
+    changes.undo();
+    notifyListeners();
+  }
+  // handeling the Redo function 
+  void changesRedo() {
+    changes.redo();
+    notifyListeners();
+  }
+
   // fo the clear button in the form
   void clearTitle() {
     title.clear();
     notifyListeners();
   }
-
+  // Clearing only the text 
   void clearText() {
     text.clear();
     notifyListeners();
   }
-
   // for the clear the form
   void clearTitleAndText() {
     title.clear();
     text.clear();
     notifyListeners();
   }
-
+  // When the add icon is tapped this function will be executed and 
+  // prepare the provider for the new Note
   void addNewNote() {
     clearTitleAndText();
     newNote = true;
     notifyListeners();
   }
-
+  // Updating the Stacks 
   void changeStacks() {
     if (stack_index < 1) {
       stack_index++;
@@ -70,18 +120,19 @@ class myProvider extends ChangeNotifier {
   void takeSnapshot() {
     ttitle = title.text;
     ttext = text.text;
+    old_value = text.text;
+    begin_edit = false;
   }
 
   // checks the snapsht that has been edited or not
   bool isEdited() {
-    print("${ttitle} , ${title.text}");
     if (ttitle == title.text && ttext == text.text) {
       return false;
     } else {
       return true;
     }
   }
-
+  // upodating the database when the check box is checked or unchecked 
   void updateIsChecked(bool newValue, List<int> keys, int index) {
     providerKeys = keys;
     providerIndex = index;
@@ -91,7 +142,7 @@ class myProvider extends ChangeNotifier {
     noteBox.put(providerKeys[providerIndex], note);
     notifyListeners();
   }
-
+  // new Note clieked 
   void newNoteClicked(BuildContext context) {
     myContext = context;
     addNewNote();
@@ -148,7 +199,9 @@ class myProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
-
+  // When the clear Icon clicked or back button is tapped
+  // this fucntion will be executed checking for changes 
+  // if the changes has been made it is going to show an alert 
   void cancelClicked() {
     if (isEdited()) {
       print("object");
@@ -171,12 +224,6 @@ class myProvider extends ChangeNotifier {
     } else {
       changeStacks();
       notifyListeners();
-    }
-  }
-
-  void loop() {
-    for (int i = 0; i < noteBox.length; i++) {
-      print(noteBox.getAt(i).isChecked);
     }
   }
 }

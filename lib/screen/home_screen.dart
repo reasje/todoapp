@@ -97,7 +97,6 @@ class _HomeState extends State<Home> {
           FloatingActionButton(
             heroTag: null,
             onPressed: () {
-              _myProvider.loop();
               _myProvider.newNoteClicked(context);
             },
             backgroundColor: uiKit.Colors.lightBlue,
