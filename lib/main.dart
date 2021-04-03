@@ -69,7 +69,7 @@ class _MyAppState extends State<MyApp> {
             return supportedLocales.first;
           },
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(fontFamily: "BalsamiqSans"),
+          theme: ThemeData(fontFamily: "BalsamiqSans" ),
           home: MySplashScreen(),
         ));
   }

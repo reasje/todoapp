@@ -62,7 +62,8 @@ class _HomeState extends State<Home> {
     final _myProvider = Provider.of<myProvider>(context);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
-    return Scaffold(
+    return 
+    Scaffold(
       backgroundColor: uiKit.Colors.darkBlue,
       body: SafeArea(
         child: Container(
@@ -72,6 +73,14 @@ class _HomeState extends State<Home> {
             padding:
                 EdgeInsets.only(left: SizeX * 0.0005, right: SizeX * 0.0005),
             decoration: BoxDecoration(
+                boxShadow: [
+      BoxShadow(
+        color: uiKit.Colors.whiteSmoke.withOpacity(0.2),
+        spreadRadius: 1,
+        blurRadius: 5,
+        offset: Offset(0, 1), // changes position of shadow
+      ),
+    ],                
                 border: Border.all(width: 1, color: uiKit.Colors.darkBlue),
                 color: uiKit.Colors.whiteSmoke,
                 borderRadius: BorderRadius.all(Radius.circular(30))),

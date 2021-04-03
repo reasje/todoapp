@@ -23,7 +23,7 @@ return new SplashScreen(
       loadingText: Text(
         uiKit.AppLocalizations.of(context).translate('patient'),
         style: TextStyle(
-            color: uiKit.Colors.whiteSmoke, fontFamily: 'Iransans'),
+            color: uiKit.Colors.whiteSmoke),
       ),
     );
   }

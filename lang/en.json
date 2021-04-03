@@ -16,5 +16,7 @@
   "patient" : "A little bit of patience...",
   "more" : "more ..." ,
   "NoNotesyet" : "No notes created yet ?!",
-  "addNewNotePlease" : "Try creating one by pressing + sign :)"
+  "addNewNotePlease" : "Try creating one by pressing + sign :)",
+  "undoNote" : "Note deleted successfully !",
+  "undo" : "Undo"
 }

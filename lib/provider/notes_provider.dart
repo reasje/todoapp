@@ -36,42 +36,43 @@ class myProvider extends ChangeNotifier {
   TextEditingController get myTitle => title;
   TextEditingController get myText => text;
   bool newNote;
-  // This is used inside of Note textfield to control and save the changes for undo property 
+  // This is used inside of Note textfield to control and save the changes for undo property
   void listenerActivated(newValue) {
-    // This Line is used for prevent unusual behavior of the textfield 
+    // This Line is used for prevent unusual behavior of the textfield
     // It executes the on change function twice after entering only one word
     if (new_value_helper != newValue) {
       // Staging the changes !
-      changes.add(new Change(old_value, () {
-      }, (oldValue) {
-        // When the chnage is being apllies or in other words 
-        // The undo button is selected I want to make the text controller 
+      changes.add(new Change(old_value, () {}, (oldValue) {
+        // When the chnage is being apllies or in other words
+        // The undo button is selected I want to make the text controller
         // text equal to the oldValue that the change got before .
         text.text = oldValue;
-        // Updating the old_value and making it ready for the next change 
+        // Updating the old_value and making it ready for the next change
         old_value = oldValue;
-        // Making the cursor stay at the right position 
+        // Making the cursor stay at the right position
         text.selection =
             TextSelection.fromPosition(TextPosition(offset: text.text.length));
       }));
       // After giving the value of the old_value as Oldvalue to the change
-      // It's Time to update old_value for the next change 
+      // It's Time to update old_value for the next change
       old_value = text.text;
-      // updating the new_value_helper to prevent extra execution of onChange function 
+      // updating the new_value_helper to prevent extra execution of onChange function
       new_value_helper = newValue;
       notifyListeners();
     }
   }
-  // Redo and Undo button activation change and used 
-  // to avoid direct access to provider 
+
+  // Redo and Undo button activation change and used
+  // to avoid direct access to provider
   bool get canRedo => changes.canRedo;
   bool get canUndo => changes.canUndo;
-  // Handeling the Undo function 
+  // Handeling the Undo function
   void changesUndo() {
     changes.undo();
     notifyListeners();
   }
-  // handeling the Redo function 
+
+  // handeling the Redo function
   void changesRedo() {
     changes.redo();
     notifyListeners();
@@ -82,25 +83,29 @@ class myProvider extends ChangeNotifier {
     title.clear();
     notifyListeners();
   }
-  // Clearing only the text 
+
+  // Clearing only the text
   void clearText() {
     text.clear();
     notifyListeners();
   }
+
   // for the clear the form
   void clearTitleAndText() {
     title.clear();
     text.clear();
     notifyListeners();
   }
-  // When the add icon is tapped this function will be executed and 
+
+  // When the add icon is tapped this function will be executed and
   // prepare the provider for the new Note
   void addNewNote() {
     clearTitleAndText();
     newNote = true;
     notifyListeners();
   }
-  // Updating the Stacks 
+
+  // Updating the Stacks
   void changeStacks() {
     if (stack_index < 1) {
       stack_index++;
@@ -132,7 +137,8 @@ class myProvider extends ChangeNotifier {
       return true;
     }
   }
-  // upodating the database when the check box is checked or unchecked 
+
+  // upodating the database when the check box is checked or unchecked
   void updateIsChecked(bool newValue, List<int> keys, int index) {
     providerKeys = keys;
     providerIndex = index;
@@ -142,7 +148,8 @@ class myProvider extends ChangeNotifier {
     noteBox.put(providerKeys[providerIndex], note);
     notifyListeners();
   }
-  // new Note clieked 
+
+  // new Note clieked
   void newNoteClicked(BuildContext context) {
     myContext = context;
     addNewNote();
@@ -175,11 +182,12 @@ class myProvider extends ChangeNotifier {
         final String noteText = text.text;
         Note note = Note(noteTitle, noteText, false);
         noteBox.add(note);
+        changes.clearHistory();
         changeStacks();
       } else {
         ScaffoldMessenger.of(myContext).showSnackBar(uiKit.MySnackBar(
-            uiKit.AppLocalizations.of(myContext)
-                .translate('emptyFieldsAlert')));
+            uiKit.AppLocalizations.of(myContext).translate('emptyFieldsAlert'),
+            false));
       }
       clearTitleAndText();
     } else {
@@ -189,27 +197,29 @@ class myProvider extends ChangeNotifier {
         Note note = new Note(noteTitle, text.text,
             noteBox.get(providerKeys[providerIndex]).isChecked);
         noteBox.put(providerKeys[providerIndex], note);
+        changes.clearHistory();
         changeStacks();
         notifyListeners();
       } else {
         noteBox.delete(providerKeys[providerIndex]);
+        changes.clearHistory();
         changeStacks();
         notifyListeners();
       }
     }
     notifyListeners();
   }
+
   // When the clear Icon clicked or back button is tapped
-  // this fucntion will be executed checking for changes 
-  // if the changes has been made it is going to show an alert 
+  // this fucntion will be executed checking for changes
+  // if the changes has been made it is going to show an alert
   void cancelClicked() {
     if (isEdited()) {
-      print("object");
       if (text.text.isNotEmpty || title.text.isNotEmpty) {
         if (notSaving == 0) {
           ScaffoldMessenger.of(myContext).showSnackBar(uiKit.MySnackBar(
-              uiKit.AppLocalizations.of(myContext)
-                  .translate('notSavingAlert')));
+              uiKit.AppLocalizations.of(myContext).translate('notSavingAlert'),
+              false));
           notSaving = notSaving + 1;
         } else {
           notSaving = 0;
@@ -217,11 +227,13 @@ class myProvider extends ChangeNotifier {
         }
       } else {
         ScaffoldMessenger.of(myContext).showSnackBar(uiKit.MySnackBar(
-            uiKit.AppLocalizations.of(myContext).translate('willingToDelete')));
+            uiKit.AppLocalizations.of(myContext).translate('willingToDelete'),
+            false));
         changeStacks();
         notifyListeners();
       }
     } else {
+      changes.clearHistory();
       changeStacks();
       notifyListeners();
     }
