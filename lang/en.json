@@ -14,5 +14,7 @@
   "notSavingAlert" : "To quit whithout saving press the button again !",
   "willingToDelete" : "If You are wiling to delete the note delete it via list delete",
   "patient" : "A little bit of patience...",
-  "more" : "more ..."
+  "more" : "more ..." ,
+  "NoNotesyet" : "No notes created yet ?!",
+  "addNewNotePlease" : "Try creating one by pressing + sign :)"
 }

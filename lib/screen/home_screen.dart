@@ -85,7 +85,7 @@ class _HomeState extends State<Home> {
                           SizeX: SizeX, SizeY: SizeY, noteBox: noteBox)),
                 ),
                 Container(
-                  child: uiKit.MyNotesEditing(),
+                  child: uiKit.MyNotesEditing(SizeX: SizeX,SizeY: SizeY,),
                 )
               ],
             )),

@@ -58,6 +58,7 @@ flutter:
     - lang/en.json
     - lang/fa.json
     - assets/todoapplogo.png
+    - assets/notask.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
@@ -67,11 +68,13 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
+  fonts:
+    - family: BalsamiqSans
+      fonts:
+        - asset: assets/fonts/BalsamiqSans-Regular.ttf
+        - asset: assets/fonts/BalsamiqSans-Bold.ttf
+        - asset: assets/fonts/BalsamiqSans-BoldItalic.ttf
+        - asset: assets/fonts/BalsamiqSans-Italic.ttf 
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:
