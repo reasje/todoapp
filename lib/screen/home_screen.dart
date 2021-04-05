@@ -24,7 +24,8 @@ checkMe() {
         for (int i = 0; i < noteBox.length; i++) {
           var ntitle = noteBox.getAt(i).title;
           var nttext = noteBox.getAt(i).text;
-          Note note = Note(ntitle, nttext, false);
+          var nttime = noteBox.getAt(i).time;
+          Note note = Note(ntitle, nttext, false , nttime);
           noteBox.putAt(i, note);
         }
         dateBox.put('date',

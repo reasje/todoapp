@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/provider/notes_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
-// TODO snack bar showing
 // TODO moving and reordering list view effect
 class MyNotesEditing extends StatefulWidget {
   double SizeX;
@@ -42,6 +41,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                         }
                       },
               ),
+              
             ],
           ),
           TextField(

@@ -111,7 +111,8 @@ class _myRorderableState extends State<myRorderable> {
                             Note note = Note(
                                 noteBox.get(keys[index]).title,
                                 noteBox.get(keys[index]).text,
-                                noteBox.get(keys[index]).isChecked);
+                                noteBox.get(keys[index]).isChecked,
+                                noteBox.get(keys[index]).time);
                             notes.delete(keys[index]);
                             ScaffoldMessenger.of(context).hideCurrentSnackBar();
                             ScaffoldMessenger.of(context).showSnackBar(

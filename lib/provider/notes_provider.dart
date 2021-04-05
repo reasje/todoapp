@@ -144,7 +144,8 @@ class myProvider extends ChangeNotifier {
     providerIndex = index;
     var ntitle = noteBox.get(providerKeys[providerIndex]).title;
     var nttext = noteBox.get(providerKeys[providerIndex]).text;
-    Note note = Note(ntitle, nttext, newValue);
+    var nttime = noteBox.get(providerKeys[providerIndex]).time;
+    Note note = Note(ntitle, nttext, newValue, nttime);
     noteBox.put(providerKeys[providerIndex], note);
     notifyListeners();
   }
@@ -180,7 +181,7 @@ class myProvider extends ChangeNotifier {
         String noteTitle;
         title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
         final String noteText = text.text;
-        Note note = Note(noteTitle, noteText, false);
+        Note note = Note(noteTitle, noteText, false ,0);
         noteBox.add(note);
         changes.clearHistory();
         changeStacks();
@@ -195,7 +196,7 @@ class myProvider extends ChangeNotifier {
         String noteTitle;
         title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
         Note note = new Note(noteTitle, text.text,
-            noteBox.get(providerKeys[providerIndex]).isChecked);
+            noteBox.get(providerKeys[providerIndex]).isChecked, 0);
         noteBox.put(providerKeys[providerIndex], note);
         changes.clearHistory();
         changeStacks();
