@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todoapp/provider/notes_provider.dart';
 import 'package:todoapp/screen/home_screen.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:todoapp/uikit.dart' as uiKit;
@@ -13,17 +17,21 @@ class MySplashScreen extends StatefulWidget {
 class _MySplashScreenState extends State<MySplashScreen> {
   @override
   Widget build(BuildContext context) {
-return new SplashScreen(
-      seconds: 1,
-      image: Image.asset('assets/todoapplogo.png'),
-      navigateAfterSeconds: Home(),
-      loaderColor: uiKit.Colors.whiteSmoke,
-      backgroundColor: uiKit.Colors.darkBlue,
-      photoSize: 100,
-      loadingText: Text(
-        uiKit.AppLocalizations.of(context).translate('patient'),
-        style: TextStyle(
-            color: uiKit.Colors.whiteSmoke),
+    final _myprovider = Provider.of<myProvider>(context);
+    return Theme(
+      data: Theme.of(context).copyWith(
+        brightness: _myprovider.brightness),
+        
+      child: new SplashScreen(
+        seconds: 1,
+        navigateAfterSeconds: Home(),
+        loaderColor: _myprovider.lightShadowColor,
+        backgroundColor: _myprovider.mainColor,
+        photoSize: 100,
+        loadingText: Text(
+          uiKit.AppLocalizations.of(context).translate('patient'),
+          style: TextStyle(color: _myprovider.lightShadowColor),
+        ),
       ),
     );
   }

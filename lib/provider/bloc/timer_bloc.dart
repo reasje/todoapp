@@ -1,18 +1,31 @@
 import 'dart:async';
+import 'package:hive/hive.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:todoapp/main.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/ticker.dart';
-
 part 'timer_event.dart';
 part 'timer_state.dart';
 
-class TimerBloc extends Bloc<TimerEvent, TimerState> {
+class TimerBloc extends Bloc<TimerEvent, TimerState> with HydratedMixin {
+  final noteBox = Hive.box<Note>(noteBoxName);
   final int duration;
   final Ticker _ticker;
-
+  final List<int> keys;
+  final int index;
   StreamSubscription<int> _tickerSubscription;
-  TimerBloc({@required Ticker ticker , @required int this.duration}) : _ticker = ticker, super(Ready(duration));
+  TimerBloc(
+      {@required Ticker ticker,
+      @required int this.duration,
+      List<int> this.keys,
+      int this.index})
+      : _ticker = ticker,
+        super(Ready(duration)) {
+    hydrate();
+  }
 
   @override
   Stream<TimerState> mapEventToState(TimerEvent event) async* {
@@ -47,5 +60,23 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   Future<void> close() {
     _tickerSubscription?.cancel();
     return super.close();
+  }
+
+  @override
+  TimerState fromJson(Map<String, dynamic> json) {
+    try {
+      return (json['state'] as TimerState);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Map<String, dynamic> toJson(TimerState state) {
+    try {
+      return {'state': state.toString()};
+    } catch (_) {
+      return null;
+    }
   }
 }

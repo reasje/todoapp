@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class AppLocalizations{
+class AppLocalizations extends ChangeNotifier{
   final Locale locale;
 
   AppLocalizations(this.locale);
@@ -47,9 +47,6 @@ class _AppLocalizationsDelegate
     AppLocalizations localizations = new AppLocalizations(locale);
     await localizations.load();
     return localizations;
-
-
-
   }
 
   @override

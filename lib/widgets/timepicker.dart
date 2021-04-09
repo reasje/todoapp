@@ -1,27 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todoapp/provider/notes_provider.dart';
 
-class MyDatePicker extends StatefulWidget {
-  MyDatePicker({Key key}) : super(key: key);
-
-  @override
-  _MyDatePickerState createState() => _MyDatePickerState();
-}
-
-class _MyDatePickerState extends State<MyDatePicker> {
-  Duration duration = Duration(seconds: 0);
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      child: CupertinoTimerPicker(
-        initialTimerDuration: duration,
-        mode: CupertinoTimerPickerMode.hms,
-        onTimerDurationChanged: (val) {
-          setState(() {
-            this.duration = val;
-          });
-        },
-      ),
-    );
-  }
+Widget MyDatePicker(@required BuildContext context) {
+  final _myprovider = Provider.of<myProvider>(context);
+  return SizedBox(
+    height: 180,
+    child: CupertinoTimerPicker(
+      onTimerDurationChanged: (value) {
+        _myprovider.timerDurationChange(value);
+      },
+      initialTimerDuration: _myprovider.time_duration,
+      mode: CupertinoTimerPickerMode.hms,
+      minuteInterval: 1,
+      secondInterval: 1,
+    ),
+  );
 }

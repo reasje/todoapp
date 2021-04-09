@@ -28,8 +28,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   equatable: ^2.0.0
   flutter_bloc: ^7.0.0
+  flutter_icons: ^1.1.0
+  google_fonts: ^2.0.0
   hive: ^2.0.0
   hive_flutter: ^1.0.0
+  hydrated_bloc: ^7.0.0
   meta: ^1.3.0
   path_provider: ^2.0.1
   provider: ^5.0.0
@@ -72,13 +75,19 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: BalsamiqSans
-      fonts:
-        - asset: assets/fonts/BalsamiqSans-Regular.ttf
-        - asset: assets/fonts/BalsamiqSans-Bold.ttf
-        - asset: assets/fonts/BalsamiqSans-BoldItalic.ttf
-        - asset: assets/fonts/BalsamiqSans-Italic.ttf
+  # fonts:
+  #   - family: BalsamiqSans
+  #     fonts:
+  #       - asset: assets/fonts/BalsamiqSans-Regular.ttf
+  #       - asset: assets/fonts/BalsamiqSans-Bold.ttf
+  #       - asset: assets/fonts/BalsamiqSans-BoldItalic.ttf
+  #       - asset: assets/fonts/BalsamiqSans-Italic.ttf
+  #   - family: Dubai
+  #     fonts:
+  #       - asset: assets/fonts/Dubai-Regular.otf
+  #       - asset: assets/fonts/Dubai-Bold.otf
+  #       - asset: assets/fonts/Dubai-Light.otf
+  #       - asset: assets/fonts/Dubai-Medium.otf
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:

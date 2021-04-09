@@ -3,6 +3,7 @@
   "newNoteTitle": "New note title",
   "newNoteText": "New note text",
   "ok": "Ok",
+  "done" : "Done",
   "cancel": "Cancel",
   "updateNote": "Update Note",
   "updateNoteTitle_": "Update note title",
@@ -18,5 +19,6 @@
   "NoNotesyet" : "No notes created yet ?!",
   "addNewNotePlease" : "Try creating one by pressing + sign :)",
   "undoNote" : "Note deleted successfully !",
-  "undo" : "Undo"
+  "undo" : "Undo",
+  "notesApp" : "NotesApp "
 }
