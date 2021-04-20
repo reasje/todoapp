@@ -1,13 +1,11 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
-import 'package:todoapp/provider/bloc/timer_bloc.dart';
 import 'package:todoapp/provider/notes_provider.dart';
-import 'package:todoapp/provider/ticker.dart';
+import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
 class myRorderable extends StatefulWidget {
@@ -22,9 +20,18 @@ class myRorderable extends StatefulWidget {
 }
 
 class _myRorderableState extends State<myRorderable> {
+  ScrollController _scrollController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    _scrollController = ScrollController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<myProvider>(context);
+    final _timerState = Provider.of<TimerState>(context);
     Box<Note> noteBox = widget.noteBox;
     double SizeX = widget.SizeX;
     double SizeY = widget.SizeY;
@@ -52,7 +59,7 @@ class _myRorderableState extends State<myRorderable> {
                           height: SizeX * 0.65,
                           width: SizeY,
                           child: Image.asset(
-                            "assets/notask.jpg",
+                            "assets/images/notask.jpg",
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -78,7 +85,7 @@ class _myRorderableState extends State<myRorderable> {
                             style: TextStyle(
                                 color: _myProvider.textColor,
                                 fontWeight: FontWeight.w500,
-                                fontSize: SizeX * SizeY * 0.0001),
+                                fontSize: SizeX * SizeY * 0.00008),
                           ),
                         ],
                       ),
@@ -91,11 +98,14 @@ class _myRorderableState extends State<myRorderable> {
                     canvasColor: Colors.transparent,
                     shadowColor: Colors.transparent,
                     textTheme: TextTheme(
-                        headline1: TextStyle(color: _myProvider.textColor)),
+
+                        headline1: TextStyle( color: _myProvider.textColor)),
                   ),
                   child: ScrollConfiguration(
+
                     behavior: NoGlowBehaviour(),
                     child: ReorderableListView(
+                      scrollController: _scrollController,
                       padding: EdgeInsets.only(
                           bottom: SizeX * 0.1, top: SizeX * 0.01),
                       children: [
@@ -177,197 +187,191 @@ class _myRorderableState extends State<myRorderable> {
                                   data: Theme.of(context).copyWith(
                                     unselectedWidgetColor:
                                         _myProvider.textColor,
+                                    textSelectionTheme: TextSelectionThemeData(),
+                                    
                                   ),
                                   child: Column(
                                     children: [
                                       notes.get(keys[index]).time != 0
-                                          ? BlocProvider(
-                                              create: (context) => TimerBloc(
-                                                  ticker: Ticker(),
-                                                  duration: notes
-                                                      .get(keys[index])
-                                                      .time,
-                                                  keys: keys,
-                                                  index: index),
+                                          ? InkWell(
+                                              key: new PageStorageKey<String>(
+                                                  notes.get(keys[index]).title),
+                                              onTap: () {
+                                                if (!(_timerState.isRunning.any(
+                                                    (element) =>
+                                                        element == true))) {
+                                                  _myProvider
+                                                      .changeTimerStack();
+                                                  _timerState.loadTimer(
+                                                      keys, index);
+                                                } else {
+                                                  if (_timerState.index ==
+                                                      index) {
+                                                    _myProvider
+                                                        .changeTimerStack();
+                                                    _timerState.loadTimer(
+                                                        keys, index);
+                                                  } else {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .hideCurrentSnackBar();
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(uiKit.MySnackBar(
+                                                            uiKit.AppLocalizations
+                                                                    .of(context)
+                                                                .translate(
+                                                                    'timerOn'),
+                                                            false,
+                                                            context));
+                                                  }
+                                                }
+                                              },
                                               child: Container(
-                                                  padding: EdgeInsets.all(4),
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  10)),
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          color: _myProvider
-                                                              .lightShadowColor,
-                                                          offset: Offset(2, 2),
-                                                          blurRadius: 0.0,
-                                                          // changes position of shadow
+                                                padding: EdgeInsets.all(4),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                10)),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: _myProvider
+                                                            .lightShadowColor,
+                                                        offset: Offset(2, 2),
+                                                        blurRadius: 0.0,
+                                                        // changes position of shadow
+                                                      ),
+                                                      BoxShadow(
+                                                        color: _myProvider
+                                                            .shadowColor
+                                                            .withOpacity(0.14),
+                                                        offset: Offset(-1, -1),
+                                                      ),
+                                                      BoxShadow(
+                                                        color: _myProvider
+                                                            .mainColor,
+                                                        offset: Offset(5, 8),
+                                                        spreadRadius: -0.5,
+                                                        blurRadius: 14.0,
+                                                        // changes position of shadow
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: Directionality(
+                                                    textDirection:
+                                                        TextDirection.ltr,
+                                                    child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Text(
+                                                          ((noteBox
+                                                                          .get(keys[
+                                                                              index])
+                                                                          .leftTime /
+                                                                      3600) %
+                                                                  60)
+                                                              .floor()
+                                                              .toString()
+                                                              .padLeft(2, '0'),
+                                                          style: TextStyle(
+                                                              color: _timerState
+                                                                          .isRunning[
+                                                                      index]
+                                                                  ? _myProvider
+                                                                      .swachColor
+                                                                  : _myProvider
+                                                                      .textColor,
+                                                              fontSize: SizeX *
+                                                                  SizeY *
+                                                                  0.00015),
                                                         ),
-                                                        BoxShadow(
-                                                          color: _myProvider
-                                                              .shadowColor
-                                                              .withOpacity(
-                                                                  0.14),
-                                                          offset:
-                                                              Offset(-1, -1),
+                                                        Text(
+                                                          ':',
+                                                          style: TextStyle(
+                                                              color: _timerState
+                                                                          .isRunning[
+                                                                      index]
+                                                                  ? _myProvider
+                                                                      .swachColor
+                                                                  : _myProvider
+                                                                      .textColor,
+                                                              fontSize: SizeX *
+                                                                  SizeY *
+                                                                  0.00015),
                                                         ),
-                                                        BoxShadow(
-                                                          color: _myProvider
-                                                              .mainColor,
-                                                          offset: Offset(5, 8),
-                                                          spreadRadius: -0.5,
-                                                          blurRadius: 14.0,
-                                                          // changes position of shadow
+                                                        Text(
+                                                          ((noteBox
+                                                                          .get(keys[
+                                                                              index])
+                                                                          .leftTime /
+                                                                      60) %
+                                                                  60)
+                                                              .floor()
+                                                              .toString()
+                                                              .padLeft(2, '0'),
+                                                          style: TextStyle(
+                                                              color: _timerState
+                                                                          .isRunning[
+                                                                      index]
+                                                                  ? _myProvider
+                                                                      .swachColor
+                                                                  : _myProvider
+                                                                      .textColor,
+                                                              fontSize: SizeX *
+                                                                  SizeY *
+                                                                  0.00015),
+                                                        ),
+                                                        Text(
+                                                          ':',
+                                                          style: TextStyle(
+                                                              color: _timerState
+                                                                          .isRunning[
+                                                                      index]
+                                                                  ? _myProvider
+                                                                      .swachColor
+                                                                  : _myProvider
+                                                                      .textColor,
+                                                              fontSize: SizeX *
+                                                                  SizeY *
+                                                                  0.00015),
+                                                        ),
+                                                        Text(
+                                                          (noteBox
+                                                                      .get(keys[
+                                                                          index])
+                                                                      .leftTime %
+                                                                  60)
+                                                              .floor()
+                                                              .toString()
+                                                              .padLeft(2, '0'),
+                                                          style: TextStyle(
+                                                              color: _timerState
+                                                                          .isRunning[
+                                                                      index]
+                                                                  ? _myProvider
+                                                                      .swachColor
+                                                                  : _myProvider
+                                                                      .textColor,
+                                                              fontSize: SizeX *
+                                                                  SizeY *
+                                                                  0.00015),
                                                         ),
                                                       ],
                                                     ),
-                                                    child: BlocBuilder<
-                                                        TimerBloc, TimerState>(
-                                                      builder:
-                                                          (context, state) {
-                                                        final String
-                                                            hourSection =
-                                                            ((state.duration /
-                                                                        3600) %
-                                                                    60)
-                                                                .floor()
-                                                                .toString()
-                                                                .padLeft(
-                                                                    2, '0');
-                                                        final String
-                                                            minutesSection =
-                                                            ((state.duration /
-                                                                        60) %
-                                                                    60)
-                                                                .floor()
-                                                                .toString()
-                                                                .padLeft(
-                                                                    2, '0');
-                                                        final String
-                                                            secondsSection =
-                                                            (state.duration %
-                                                                    60)
-                                                                .floor()
-                                                                .toString()
-                                                                .padLeft(
-                                                                    2, '0');
-
-                                                        final TimerState
-                                                            currentState =
-                                                            BlocProvider.of<
-                                                                        TimerBloc>(
-                                                                    context)
-                                                                .state;
-                                                        //_myProvider.saveDuration(keys, index, state.duration);
-                                                        return InkWell(
-                                                          child: Container(
-                                                            //padding: EdgeInsets.all(SizeX*SizeY*0.00001),
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceEvenly,
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              children: [
-                                                                Text(
-                                                                  hourSection,
-                                                                  style: TextStyle(
-                                                                      color: currentState
-                                                                              is Running
-                                                                          ? _myProvider
-                                                                              .swachColor
-                                                                          : _myProvider
-                                                                              .textColor,
-                                                                      fontSize: SizeX *
-                                                                          SizeY *
-                                                                          0.00015),
-                                                                ),
-                                                                Text(
-                                                                  ':',
-                                                                  style: TextStyle(
-                                                                      color: currentState
-                                                                              is Running
-                                                                          ? _myProvider
-                                                                              .swachColor
-                                                                          : _myProvider
-                                                                              .textColor,
-                                                                      fontSize: SizeX *
-                                                                          SizeY *
-                                                                          0.00015),
-                                                                ),
-                                                                Text(
-                                                                  minutesSection,
-                                                                  style: TextStyle(
-                                                                      color: currentState
-                                                                              is Running
-                                                                          ? _myProvider
-                                                                              .swachColor
-                                                                          : _myProvider
-                                                                              .textColor,
-                                                                      fontSize: SizeX *
-                                                                          SizeY *
-                                                                          0.00015),
-                                                                ),
-                                                                Text(
-                                                                  ':',
-                                                                  style: TextStyle(
-                                                                      color: currentState
-                                                                              is Running
-                                                                          ? _myProvider
-                                                                              .swachColor
-                                                                          : _myProvider
-                                                                              .textColor,
-                                                                      fontSize: SizeX *
-                                                                          SizeY *
-                                                                          0.00015),
-                                                                ),
-                                                                Text(
-                                                                  secondsSection,
-                                                                  style: TextStyle(
-                                                                      color: currentState
-                                                                              is Running
-                                                                          ? _myProvider
-                                                                              .swachColor
-                                                                          : _myProvider
-                                                                              .textColor,
-                                                                      fontSize: SizeX *
-                                                                          SizeY *
-                                                                          0.00015),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          onTap: () {
-                                                            if (currentState
-                                                                is Running) {
-                                                              BlocProvider.of<
-                                                                          TimerBloc>(
-                                                                      context)
-                                                                  .add(Pause());
-                                                            } else {
-                                                              BlocProvider.of<
-                                                                          TimerBloc>(
-                                                                      context)
-                                                                  .add(Start(
-                                                                      duration:
-                                                                          currentState
-                                                                              .duration));
-                                                            }
-                                                          },
-                                                          onDoubleTap: () {
-                                                            BlocProvider.of<
-                                                                        TimerBloc>(
-                                                                    context)
-                                                                .add(Reset());
-                                                          },
-                                                        );
-                                                      },
-                                                    ),
-                                                  )),
+                                                  ),
+                                                ),
+                                              ),
                                             )
+
                                           // In this case the note doesnt have a
                                           : Container(),
                                       notes.get(keys[index]).time != 0
@@ -408,6 +412,15 @@ class _myRorderableState extends State<myRorderable> {
                                             onExpansionChanged: (value) {
                                               _myProvider.changeNoteTitleColor(
                                                   value, index);
+                                              if (value) {
+                                                _scrollController.animateTo(
+                                                    _scrollController
+                                                            .position.pixels +
+                                                        SizeX * 0.1,
+                                                    duration:
+                                                        Duration(seconds: 1),
+                                                    curve: Curves.easeIn);
+                                              }
                                             },
                                             initiallyExpanded: false,
                                             // tried too hard to make the expanion color and
@@ -427,7 +440,6 @@ class _myRorderableState extends State<myRorderable> {
                                                   Expanded(
                                                     flex: 1,
                                                     child: Checkbox(
-                                                      
                                                         checkColor: _myProvider
                                                             .textColor,
                                                         value: notes
@@ -565,5 +577,15 @@ class NoGlowBehaviour extends ScrollBehavior {
   Widget buildViewportChrome(
       BuildContext context, Widget child, AxisDirection axisDirection) {
     return child;
+  }
+}
+
+void _scrollToSelectedContent({GlobalKey expansionTileKey}) {
+  final keyContext = expansionTileKey.currentContext;
+  if (keyContext != null) {
+    Future.delayed(Duration(milliseconds: 200)).then((value) {
+      Scrollable.ensureVisible(keyContext,
+          duration: Duration(milliseconds: 200));
+    });
   }
 }

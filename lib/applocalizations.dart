@@ -22,7 +22,7 @@ class AppLocalizations extends ChangeNotifier{
   Future<bool> load() async{
     // Load the language JSON file form the "lang" folder
     String jsonString =
-        await rootBundle.loadString('lang/${locale.languageCode}.json');
+        await rootBundle.loadString('assets/lang/${locale.languageCode}.json');
       Map<String, dynamic> jsonMap = json.decode(jsonString);
 
       _localizedString = jsonMap.map((key, value) => MapEntry(key, value.toString()));

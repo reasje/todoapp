@@ -30,7 +30,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.all(12),
+            margin: EdgeInsets.all(SizeX*0.015),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -40,20 +40,23 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       uiKit.MyButton(
-                        SizeX: SizeX,
-                        SizeY: SizeY,
+                        sizePU: SizeX*0.07,
+                        sizePD: SizeX*0.08,
+                        iconSize: SizeX*SizeY*0.0001,
                         iconData: FontAwesome.undo,
                         id: 'undo',
                       ),
                       uiKit.MyButton(
-                        SizeX: SizeX,
-                        SizeY: SizeY,
-                        iconData: FontAwesome.paint_brush,
-                        id: 'color',
+                        sizePU: SizeX*0.07,
+                        sizePD: SizeX*0.08,
+                        iconSize: SizeX*SizeY*0.0001,
+                        iconData: FontAwesome.rotate_right,
+                        id: 'redo',
                       ),
                       uiKit.MyButton(
-                        SizeX: SizeX,
-                        SizeY: SizeY,
+                        sizePU: SizeX*0.07,
+                        sizePD: SizeX*0.08,
+                        iconSize: SizeX*SizeY*0.0001,
                         iconData: FontAwesome.hourglass,
                         id: 'timer',
                       ),
@@ -63,17 +66,19 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                 Expanded(
                   flex: 1,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       uiKit.MyButton(
-                        SizeX: SizeX,
-                        SizeY: SizeY,
+                        sizePU: SizeX*0.07,
+                        sizePD: SizeX*0.08,
+                        iconSize: SizeX*SizeY*0.0001,
                         iconData: FontAwesome.times,
                         id: 'cancel',
                       ),
                       uiKit.MyButton(
-                        SizeX: SizeX,
-                        SizeY: SizeY,
+                        sizePU: SizeX*0.07,
+                        sizePD: SizeX*0.08,
+                        iconSize: SizeX*SizeY*0.0001,
                         iconData: FontAwesome.check,
                         id: 'save',
                       ),
@@ -130,9 +135,9 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
           //   ],
           // ),
           Container(
-            margin: EdgeInsets.all(5),
+            margin: EdgeInsets.all(SizeX*0.01),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: BorderRadius.all(Radius.circular(SizeX*0.016)),
               boxShadow: [
                 BoxShadow(
                   color: _myProvider.lightShadowColor,
@@ -187,9 +192,9 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
           ),
           Expanded(
             child: Container(
-              margin: EdgeInsets.all(5),
+              margin: EdgeInsets.all(SizeX*0.01),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderRadius: BorderRadius.all(Radius.circular(SizeX*0.016)),
                 boxShadow: [
                   BoxShadow(
                     color: _myProvider.lightShadowColor,

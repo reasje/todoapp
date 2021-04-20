@@ -20,5 +20,7 @@
   "addNewNotePlease" : "Try creating one by pressing + sign :)",
   "undoNote" : "Note deleted successfully !",
   "undo" : "Undo",
-  "notesApp" : "NotesApp "
+  "notesApp" : "NotesApp ",
+  "timerOn" : "Another Timer is ON ! ",
+  "taskOver" : "Congratulations the task is over :)"
 }

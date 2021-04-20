@@ -2,20 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/provider/notes_provider.dart';
+import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 //typedef function = void Function();
 
 class MyButton extends StatefulWidget {
   final IconData iconData;
-  final double SizeX;
-  final double SizeY;
+  final double sizePU;
+  final double sizePD;
+  final double iconSize;
   final String id;
   const MyButton({
     Key key,
-    this.SizeX,
-    this.SizeY,
-    this.id,
+    this.sizePU,
+    this.sizePD,
+    this.iconSize,
     this.iconData,
+    this.id,
   }) : super(key: key);
   @override
   _MyButtonState createState() => _MyButtonState();
@@ -24,6 +27,7 @@ class MyButton extends StatefulWidget {
 class _MyButtonState extends State<MyButton> {
   bool isPressed = false;
   var _myProvider;
+  var _timerState;
   void onPressedUp(PointerUpEvent event) {
     setState(() {
       isPressed = false;
@@ -35,7 +39,23 @@ class _MyButtonState extends State<MyButton> {
       isPressed = true;
       Future.delayed(Duration(milliseconds: 100), () {
         final _myProvider = Provider.of<myProvider>(context, listen: false);
+        final _timerState = Provider.of<TimerState>(context, listen: false);
         switch (widget.id) {
+          case 'menu':
+            _myProvider.changeTimerStack();
+            break;
+          case 'start':
+            _timerState.startTimer(context);
+            break;
+          case 'stop':
+            _timerState.stopTimer();
+            break;
+          case 'reset':
+            _timerState.resetTimer();
+            break;
+          case 'redo':
+            _myProvider.canRedo ? _myProvider.changesRedo() : null;
+            break;
           case 'lan':
             _myProvider.changeLan();
             break;
@@ -56,12 +76,18 @@ class _MyButtonState extends State<MyButton> {
                   context: context,
                   builder: (context) => CupertinoActionSheet(
                         actions: [uiKit.MyDatePicker(context)],
-                        cancelButton: CupertinoActionSheetAction(
-                          child: Text(uiKit.AppLocalizations.of(context)
-                              .translate('done')),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
+                        cancelButton: Container(
+                          decoration: BoxDecoration(
+                              color: _myProvider.mainColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: CupertinoActionSheetAction(
+                            child: Text(uiKit.AppLocalizations.of(context)
+                                .translate('done')),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
                         ),
                       ));
             }
@@ -87,14 +113,15 @@ class _MyButtonState extends State<MyButton> {
   @override
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<myProvider>(context);
+    final _timerState = Provider.of<TimerState>(context);
     return Listener(
       onPointerUp: onPressedUp,
       onPointerDown: onPressedDown,
       // TODO if hovered more then the funrciton not to be executed
       child: isPressed
           ? Container(
-              height: widget.SizeX * 0.08,
-              width: widget.SizeX * 0.08,
+              height: widget.sizePD,
+              width: widget.sizePD,
               padding: EdgeInsets.all(4),
               child: Container(
                 decoration: BoxDecoration(
@@ -121,14 +148,14 @@ class _MyButtonState extends State<MyButton> {
                 ),
                 child: Icon(
                   widget.iconData,
-                  size: 27,
+                  size: widget.iconSize,
                   color: _myProvider.blueMaterial,
                 ),
               ),
             )
           : Container(
-              height: widget.SizeX * 0.07,
-              width: widget.SizeX * 0.07,
+              height: widget.sizePU,
+              width: widget.sizePU,
               decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
@@ -147,20 +174,24 @@ class _MyButtonState extends State<MyButton> {
                   color: _myProvider.mainColor,
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               child: Icon(widget.iconData,
-                  size: 27,
+                  size: widget.iconSize,
                   color: widget.id == 'undo'
                       ? _myProvider.canUndo
                           ? _myProvider.blueMaterial
                           : _myProvider.textColor
-                      : widget.id == 'save' || widget.id == 'cancel'
-                          ? _myProvider.isEdited()
+                      : widget.id == 'redo'
+                          ? _myProvider.canRedo
                               ? _myProvider.blueMaterial
                               : _myProvider.textColor
-                          : widget.id == 'timer'
-                              ? _myProvider.time_duration != Duration()
+                          : widget.id == 'save' || widget.id == 'cancel'
+                              ? _myProvider.isEdited()
                                   ? _myProvider.blueMaterial
                                   : _myProvider.textColor
-                              : _myProvider.textColor),
+                              : widget.id == 'timer'
+                                  ? _myProvider.time_duration != Duration()
+                                      ? _myProvider.blueMaterial
+                                      : _myProvider.textColor
+                                  : _myProvider.textColor),
             ),
     );
   }

@@ -23,14 +23,15 @@ class _MySplashScreenState extends State<MySplashScreen> {
         brightness: _myprovider.brightness),
         
       child: new SplashScreen(
-        seconds: 1,
+        seconds: 2,
+        image: Image.asset(_myprovider.splashImage ?? 'assets/images/SplashScreenWhite.gif'),
         navigateAfterSeconds: Home(),
-        loaderColor: _myprovider.lightShadowColor,
+        loaderColor: _myprovider.textColor,
         backgroundColor: _myprovider.mainColor,
         photoSize: 100,
         loadingText: Text(
           uiKit.AppLocalizations.of(context).translate('patient'),
-          style: TextStyle(color: _myprovider.lightShadowColor),
+          style: TextStyle(color: _myprovider.textColor),
         ),
       ),
     );

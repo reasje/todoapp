@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/model/note_model.dart';
@@ -49,6 +50,30 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Box<Note> noteBox = Hive.box<Note>(noteBoxName);
+
+    @override
+  void initState() {
+    super.initState();
+    _requestPermissions();
+  }
+  void _requestPermissions() {
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            MacOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
+  }
   // @override
   // void initState() {
   //   // TODO: implement initState
@@ -66,12 +91,13 @@ class _HomeState extends State<Home> {
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     return AnimatedTheme(
-      duration: Duration(milliseconds: 300),
+      duration: Duration(milliseconds: 600),
       data: Theme.of(context),
       child: Scaffold(
         backgroundColor: _myProvider.mainColor,
         body: SafeArea(
-          child: Container(
+          child: AnimatedContainer(
+              duration: Duration(microseconds: 500),
               height: SizeX * 0.98,
               width: SizeY,
               padding: EdgeInsets.only(),
@@ -85,37 +111,57 @@ class _HomeState extends State<Home> {
                         children: [
                           Column(
                             children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                      padding: EdgeInsets.all(SizeX * 0.025),
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        uiKit.AppLocalizations.of(context)
+                                            .translate('notesApp'),
+                                        style: TextStyle(
+                                            color: _myProvider.titleColor,
+                                            fontSize: SizeX * SizeY * 0.00014),
+                                      )),
+                                  Container(
+                                    padding: EdgeInsets.all(SizeX * 0.025),
+                                    alignment: Alignment.centerLeft,
+                                    child: uiKit.MyButton(
+                                      sizePU: SizeX * 0.05,
+                                      sizePD: SizeX * 0.06,
+                                      iconSize: SizeX * SizeY * 0.00006,
+                                      iconData: FontAwesome.code,
+                                      id: 'coder',
+                                    ),
+                                  ),
+                                ],
+                              ),
                               Container(
-                                  padding: EdgeInsets.all(10),
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    uiKit.AppLocalizations.of(context)
-                                        .translate('notesApp'),
-                                    style: TextStyle(
-                                      color: _myProvider.titleColor,
-                                        fontSize: SizeX * SizeY * 0.00014),
-                                  )),
-                              Container(
-                                margin: EdgeInsets.all(12),
+                                margin: EdgeInsets.all(SizeX * 0.025),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
                                     uiKit.MyButton(
-                                      SizeX: SizeX,
-                                      SizeY: SizeY,
+                                      sizePU: SizeX * 0.07,
+                                      sizePD: SizeX * 0.08,
+                                      iconSize: SizeX * SizeY * 0.0001,
                                       iconData: FontAwesome.language,
                                       id: 'lan',
                                     ),
                                     uiKit.MyButton(
-                                      SizeX: SizeX,
-                                      SizeY: SizeY,
+                                      sizePU: SizeX * 0.07,
+                                      sizePD: SizeX * 0.08,
+                                      iconSize: SizeX * SizeY * 0.0001,
                                       iconData: FontAwesome.plus,
                                       id: 'new',
                                     ),
                                     uiKit.MyButton(
-                                      SizeX: SizeX,
-                                      SizeY: SizeY,
+                                      sizePU: SizeX * 0.07,
+                                      sizePD: SizeX * 0.08,
+                                      iconSize: SizeX * SizeY * 0.0001,
                                       iconData: FontAwesome.lightbulb_o,
                                       id: 'lamp',
                                     ),
@@ -127,15 +173,20 @@ class _HomeState extends State<Home> {
                           uiKit.myRorderable(
                               SizeX: SizeX, SizeY: SizeY, noteBox: noteBox)
                         ],
-                      )),
+                      )
+                    ),
                   Container(
                     child: uiKit.MyNotesEditing(
                       SizeX: SizeX,
                       SizeY: SizeY,
                     ),
+                  ),
+                  Container(
+                    child: uiKit.MyTimer(SizeX: SizeX,SizeY: SizeY ,noteBox: noteBox),
                   )
                 ],
-              )),
+              )
+            ),
         ),
       ),
     );

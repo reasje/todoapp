@@ -13,22 +13,11 @@ import 'package:undo/undo.dart';
 class myProvider extends ChangeNotifier {
   myProvider() {
     initialColorsAndLan();
-    //checkDayChange();
+    // setting the timer for only once
+    Timer.periodic(Duration(seconds: 60), (timer) {
+      checkDayChange();
+    });
   }
-  // THEME MANAGMENT PART   /                ////                  /             ////           /
-  Color whiteMainColor = Color(0xffe6ebf2);
-  Color blackMainColor = Color(0xff303234);
-  Color whiteShadowColor = Colors.black;
-  Color blackShadowColor = Color(0xff000000).withOpacity(0.4);
-  Color whiteLightShadowColor = Colors.white;
-  Color blackLightShadowColor = Color(0xff494949).withOpacity(0.4);
-  Color whiteTextColor = Colors.black.withOpacity(.5);
-  Color blackTextColor = Colors.white.withOpacity(.5);
-  Color whiteTitleColor = Colors.black;
-  Color blackTitleColor = Colors.white;
-
-  Color whiteNoteTitleColor = Colors.black.withOpacity(.5);
-  Color blackNoteTitleColor = Colors.white.withOpacity(.5);
 
   List<Color> noteTitleColor;
 
@@ -57,11 +46,32 @@ class myProvider extends ChangeNotifier {
     800: const Color(0xE6001b48),
     900: const Color(0xFF001b48),
   });
+
+  // Hiive database
+  final noteBox = Hive.box<Note>(noteBoxName);
+  // THEME MANAGMENT PART   /                ////                  /             ////           /
+  String splashImage;
+  Color whiteMainColor = Color(0xffe6ebf2);
+  Color blackMainColor = Color(0xff303234);
+  Color whiteShadowColor = Colors.black;
+  Color blackShadowColor = Color(0xff000000).withOpacity(0.4);
+  Color whiteLightShadowColor = Colors.white;
+  Color blackLightShadowColor = Color(0xff494949).withOpacity(0.4);
+  Color whiteTextColor = Colors.black.withOpacity(.5);
+  Color blackTextColor = Colors.white.withOpacity(.5);
+  Color whiteTitleColor = Colors.black;
+  Color blackTitleColor = Colors.white;
+  Color runningColor;
+  Color pausedColor;
+  Color overColor;
+  Color whiteNoteTitleColor = Colors.black.withOpacity(.5);
+  Color blackNoteTitleColor = Colors.white.withOpacity(.5);
+
   // This was the date box but now I use it to store
   // the theme status as string
   final dateBox = Hive.box<String>(dateBoxName);
 
-  Future<void> initialColorsAndLan() async {
+  Future initialColorsAndLan() async {
     String lan = dateBox.get('lan') ?? dateBox.put('lan', 'en');
     if (lan == 'en') {
       isEn = true;
@@ -71,9 +81,12 @@ class myProvider extends ChangeNotifier {
       locale = Locale("fa", "IR");
     }
     String theme = dateBox.get('theme') ?? dateBox.put('theme', 'white');
-    theme = 'white';
     noteTitleColor = List<Color>.filled(100, Colors.white);
+    runningColor = Colors.greenAccent[400];
+    pausedColor = blueMaterial.withOpacity(0.7);
+    overColor = Colors.redAccent[400];
     if (theme == 'white') {
+      splashImage = 'assets/images/SplashScreenWhite.gif';
       mainColor = whiteMainColor;
       shadowColor = whiteShadowColor;
       lightShadowColor = whiteLightShadowColor;
@@ -84,6 +97,7 @@ class myProvider extends ChangeNotifier {
       titleColor = whiteTitleColor;
       noteTitleColor.fillRange(0, 100, whiteNoteTitleColor);
     } else {
+      splashImage = 'assets/images/SplashScreenBlack.gif';
       mainColor = blackMainColor;
       shadowColor = blackShadowColor;
       lightShadowColor = blackLightShadowColor;
@@ -99,7 +113,11 @@ class myProvider extends ChangeNotifier {
 
   void changeBrigness() {
     String theme = dateBox.get('theme');
+    runningColor = Colors.greenAccent[400];
+    pausedColor = blueMaterial.withOpacity(0.7);
+    overColor = Colors.redAccent[400];
     if (theme == 'white') {
+      splashImage = 'assets/images/SplashScreenBlack.gif';
       mainColor = blackMainColor;
       shadowColor = blackShadowColor;
       lightShadowColor = blackLightShadowColor;
@@ -110,9 +128,9 @@ class myProvider extends ChangeNotifier {
       swachColor = blueMaterial.withOpacity(0.7);
       titleColor = blackTitleColor;
       dateBox.put('theme', 'black');
-
       notifyListeners();
     } else {
+      splashImage = 'assets/images/SplashScreenWhite.gif';
       mainColor = whiteMainColor;
       shadowColor = whiteShadowColor;
       lightShadowColor = whiteLightShadowColor;
@@ -168,7 +186,7 @@ class myProvider extends ChangeNotifier {
 
   List<int> durationKeys;
   int duartionIndex;
-  void saveDuration(List<int>keys, int index , int duration) {
+  void saveDuration(List<int> keys, int index, int duration) {
     var ntitle = noteBox.get(keys[index]).title;
     var nttext = noteBox.get(keys[index]).text;
     var nttime = noteBox.get(keys[index]).time;
@@ -180,7 +198,7 @@ class myProvider extends ChangeNotifier {
   }
 
   //////////////////////////////////// CHECKBOX CHECK PART///////////////////////////////////////////////////
-  void checkDayChange() {
+  Future<void> checkDayChange() async {
     String date = dateBox.get('date');
     var now = DateTime.now();
     if (date != null) {
@@ -211,9 +229,6 @@ class myProvider extends ChangeNotifier {
           "${DateTime.now().year},${DateTime.now().month},${DateTime.now().day}");
     }
     notifyListeners();
-    Timer.periodic(Duration(seconds: 60), (timer) {
-      checkDayChange();
-    });
   }
 
   final TextEditingController title = TextEditingController(text: '');
@@ -243,8 +258,7 @@ class myProvider extends ChangeNotifier {
   String new_value_helper;
   String redo_value;
   bool begin_edit;
-  // Hiive database
-  final noteBox = Hive.box<Note>(noteBoxName);
+
   List<int> providerKeys;
   int providerIndex;
   TextEditingController get myTitle => title;
@@ -259,7 +273,9 @@ class myProvider extends ChangeNotifier {
     // It executes the on change function twice after entering only one word
     if (new_value_helper != newValue) {
       // Staging the changes !
-      changes.add(new Change(old_value, () {}, (oldValue) {
+      changes.add(new Change(old_value, () {
+        redo_value = newValue;
+      }, (oldValue) {
         // When the chnage is being apllies or in other words
         // The undo button is selected I want to make the text controller
         // text equal to the oldValue that the change got before .
@@ -292,6 +308,9 @@ class myProvider extends ChangeNotifier {
   // handeling the Redo function
   void changesRedo() {
     changes.redo();
+    text.text = redo_value;
+    text.selection =
+        TextSelection.fromPosition(TextPosition(offset: text.text.length));
     notifyListeners();
   }
 
@@ -326,10 +345,14 @@ class myProvider extends ChangeNotifier {
     } else {
       stack_index = 0;
     }
-    if (floating_index < 1) {
-      floating_index++;
+    notifyListeners();
+  }
+
+  void changeTimerStack() {
+    if (stack_index < 2) {
+      stack_index = 2;
     } else {
-      floating_index = 0;
+      stack_index = 0;
     }
     notifyListeners();
   }
@@ -406,6 +429,7 @@ class myProvider extends ChangeNotifier {
 
   // executed when the user tapped on the check floating button (done icon FAB)
   void doneClicked() {
+    print('object');
     // checking whether your going to update the note or add new one
     // that is done by chekcing the newNote true or false
     if (newNote) {
@@ -415,6 +439,7 @@ class myProvider extends ChangeNotifier {
         final String noteText = text.text;
         final int noteTime = time_duration.inSeconds;
         int leftTime = noteTime;
+
         Note note = Note(noteTitle, noteText, false, noteTime, 0, leftTime);
         noteBox.add(note);
         changes.clearHistory();
