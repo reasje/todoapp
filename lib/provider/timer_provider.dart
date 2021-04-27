@@ -13,7 +13,7 @@ class TimerState extends ChangeNotifier {
     this.keys.add(0);
     this.index = 0;
   }
-  BuildContext context;
+  BuildContext my_context;
   List<bool> isRunning = List<bool>.filled(100, false);
   bool isOver = false;
   bool isPaused = true;
@@ -23,7 +23,7 @@ class TimerState extends ChangeNotifier {
   int index;
   final noteBox = Hive.box<Note>(noteBoxName);
   void startTimer(BuildContext context) {
-    this.context = context;
+    my_context = context;
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       int leftTime = noteBox.get(keys[index]).leftTime;
       leftTime = leftTime - 1;
@@ -118,8 +118,8 @@ class TimerState extends ChangeNotifier {
           icon: 'todoapplogo',
           sound: RawResourceAndroidNotificationSound('alarm'),
           largeIcon: DrawableResourceAndroidBitmap('todoapplogo'),
-          //playSound: true,
-          //ticker: 'ticker',
+          // playSound: true,
+          // ticker: 'ticker',
           showWhen: true,
           channelAction: channelAction,
           enableVibration: true,
@@ -136,8 +136,8 @@ class TimerState extends ChangeNotifier {
           iOS: iOSPlatformChannelSpecifics);
       await flutterLocalNotificationsPlugin.show(
           0,
-          "uiKit.AppLocalizations.of(context).translate('notesapp')",
-          "uiKit.AppLocalizations.of(context).translate('taskOver')",
+          uiKit.AppLocalizations.of(my_context).translate('notesapp'),
+          uiKit.AppLocalizations.of(my_context).translate('taskOver'),
           platformChannelSpecifics);
     });
 

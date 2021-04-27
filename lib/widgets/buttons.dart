@@ -4,7 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/provider/notes_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
+import 'package:url_launcher/url_launcher.dart';
+
 //typedef function = void Function();
+const _url = 'https://idpay.ir/todoapp';
 
 class MyButton extends StatefulWidget {
   final IconData iconData;
@@ -12,6 +15,7 @@ class MyButton extends StatefulWidget {
   final double sizePD;
   final double iconSize;
   final String id;
+  final BuildContext timerContext;
   const MyButton({
     Key key,
     this.sizePU,
@@ -19,6 +23,7 @@ class MyButton extends StatefulWidget {
     this.iconSize,
     this.iconData,
     this.id,
+    this.timerContext,
   }) : super(key: key);
   @override
   _MyButtonState createState() => _MyButtonState();
@@ -45,7 +50,7 @@ class _MyButtonState extends State<MyButton> {
             _myProvider.changeTimerStack();
             break;
           case 'start':
-            _timerState.startTimer(context);
+            _timerState.startTimer(widget.timerContext);
             break;
           case 'stop':
             _timerState.stopTimer();
@@ -74,19 +79,21 @@ class _MyButtonState extends State<MyButton> {
             {
               showCupertinoModalPopup(
                   context: context,
-                  builder: (context) => CupertinoActionSheet(
-                        actions: [uiKit.MyDatePicker(context)],
-                        cancelButton: Container(
-                          decoration: BoxDecoration(
-                              color: _myProvider.mainColor,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                          child: CupertinoActionSheetAction(
-                            child: Text(uiKit.AppLocalizations.of(context)
-                                .translate('done')),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
+                  builder: (context) => Container(
+                        child: CupertinoActionSheet(
+                          actions: [uiKit.MyDatePicker(context)],
+                          cancelButton: Container(
+                            decoration: BoxDecoration(
+                                color: _myProvider.mainColor,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            child: CupertinoActionSheetAction(
+                              child: Text(uiKit.AppLocalizations.of(context)
+                                  .translate('done')),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
                           ),
                         ),
                       ));
@@ -105,6 +112,14 @@ class _MyButtonState extends State<MyButton> {
             break;
           case 'cancel':
             _myProvider.cancelClicked();
+            break;
+          case 'coder':
+            _myProvider.gotoDonate();
+            break;
+          case 'donate':
+            print('object');
+            _launchURL();
+            break;
         }
       });
     });
@@ -184,7 +199,7 @@ class _MyButtonState extends State<MyButton> {
                               ? _myProvider.blueMaterial
                               : _myProvider.textColor
                           : widget.id == 'save' || widget.id == 'cancel'
-                              ? _myProvider.isEdited()
+                              ? _myProvider.canUndo || _myProvider.isEdited()
                                   ? _myProvider.blueMaterial
                                   : _myProvider.textColor
                               : widget.id == 'timer'
@@ -196,3 +211,6 @@ class _MyButtonState extends State<MyButton> {
     );
   }
 }
+
+void _launchURL() async =>
+    await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';

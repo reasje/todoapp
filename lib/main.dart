@@ -44,6 +44,7 @@ void main() async {
   });
   // getting the path of the document in the device for accesing the database
   final document = await getApplicationDocumentsDirectory();
+  print(document.path);
   // Giving the path of the data base to the Hive
   Hive.init(document.path);
   // registering the adapter

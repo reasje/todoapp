@@ -491,9 +491,14 @@ class myProvider extends ChangeNotifier {
               false,
               myContext));
           notSaving = notSaving + 1;
+          Future.delayed(Duration(seconds: 10), () {
+            notSaving = 0;
+          });
         } else {
           notSaving = 0;
           changeStacks();
+          changes.clearHistory();
+          notifyListeners();
         }
       } else {
         ScaffoldMessenger.of(myContext).showSnackBar(uiKit.MySnackBar(
@@ -519,6 +524,15 @@ class myProvider extends ChangeNotifier {
   void timerDurationChange(duration) {
     // updating the state and notifiung the listeners
     time_duration = duration;
+    notifyListeners();
+  }
+
+  void gotoDonate() {
+    if (stack_index == 0) {
+      stack_index = 3;
+    } else {
+      stack_index = 0;
+    }
     notifyListeners();
   }
 }

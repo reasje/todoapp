@@ -30,12 +30,12 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.all(SizeX*0.015),
+            padding: EdgeInsets.symmetric(vertical: SizeX*0.03),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Expanded(
-                  flex: 2,
+                  flex: 22,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -64,7 +64,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                   ),
                 ),
                 Expanded(
-                  flex: 1,
+                  flex: 15,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -164,13 +164,13 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
               keyboardType: TextInputType.multiline,
               maxLines: null,
               cursorColor: _myProvider.swachColor,
-              cursorHeight: SizeX * SizeY * 0.00014,
+              cursorHeight: SizeX * SizeY * 0.00012,
               style: TextStyle(
                   color: _myProvider.textColor,
-                  fontSize: SizeX * SizeY * 0.00014,
+                  fontSize: SizeX * SizeY * 0.00012,
                   fontWeight: FontWeight.w400),
               decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(SizeX * SizeY * 0.00006),
+                  contentPadding: EdgeInsets.all(SizeX * SizeY * 0.00004),
                   suffixIcon: IconButton(
                     icon: Icon(Icons.clear_sharp),
                     onPressed: () {
@@ -185,8 +185,8 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
                   hintStyle: TextStyle(
-                      color: _myProvider.hintColor,
-                      fontSize: SizeX * SizeY * 0.00014,
+                      color: _myProvider.hintColor.withOpacity(0.12),
+                      fontSize: SizeX * SizeY * 0.00012,
                       fontWeight: FontWeight.w400)),
             ),
           ),
@@ -224,10 +224,10 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
                 cursorColor: _myProvider.swachColor,
-                cursorHeight: SizeX * SizeY * 0.00011,
+                cursorHeight: SizeX * SizeY * 0.00009,
                 style: TextStyle(
                     color: _myProvider.textColor,
-                    fontSize: SizeX * SizeY * 0.00011,
+                    fontSize: SizeX * SizeY *0.00009,
                     fontWeight: FontWeight.w400),
                 decoration: InputDecoration(
                     suffixIcon: IconButton(
@@ -245,8 +245,8 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
                     hintStyle: TextStyle(
-                        color: _myProvider.hintColor,
-                        fontSize: SizeX * SizeY * 0.00011,
+                        color: _myProvider.hintColor.withOpacity(0.12),
+                        fontSize: SizeX * SizeY * 0.00009,
                         fontWeight: FontWeight.w400)),
               ),
             ),

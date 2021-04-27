@@ -2,6 +2,7 @@
     package="com.example.todoapp">
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
    <application
         android:label="todoapp"
         android:icon="@mipmap/ic_launcher"

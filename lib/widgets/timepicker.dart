@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/provider/notes_provider.dart';
-import 'package:todoapp/uiKit.dart' as uiKit;
 
 Widget MyDatePicker(@required BuildContext context) {
   final _myprovider = Provider.of<myProvider>(context);
-  return SizedBox(
+  return Container(
+    color: _myprovider.mainColor,
     height: 180,
     child: CupertinoTheme(
       data: CupertinoThemeData(

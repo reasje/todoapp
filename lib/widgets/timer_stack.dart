@@ -94,8 +94,8 @@ class _MyTimerState extends State<MyTimer> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Container(
-                        height: SizeX * 0.5,
-                        width: SizeY,
+                        height: SizeY * 0.85,
+                        width: SizeY * 0.85,
                         padding: EdgeInsets.all(SizeX * 0.03),
                         decoration: BoxDecoration(
                             boxShadow: [
@@ -115,10 +115,14 @@ class _MyTimerState extends State<MyTimer> {
                                     Offset(3, 4), // changes position of shadow
                               ),
                             ],
-                            color:  _timerState.isOver? _myProvider.overColor
-                                          : _timerState.isPaused ? _myProvider.pausedColor :_timerState.isRunning
-                                              .any((element) => element == true)
-                                          ? _myProvider.runningColor : null ,
+                            color: _timerState.isOver
+                                ? _myProvider.overColor
+                                : _timerState.isPaused
+                                    ? _myProvider.pausedColor
+                                    : _timerState.isRunning
+                                            .any((element) => element == true)
+                                        ? _myProvider.runningColor
+                                        : null,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(SizeX * 0.3))),
                         child: Container(
@@ -235,6 +239,7 @@ class _MyTimerState extends State<MyTimer> {
                                   iconSize: SizeX * SizeY * 0.00014,
                                   iconData: FontAwesome.play,
                                   id: 'start',
+                                  timerContext: context,
                                 ),
                               ),
                       )

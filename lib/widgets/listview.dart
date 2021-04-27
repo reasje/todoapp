@@ -97,12 +97,8 @@ class _myRorderableState extends State<myRorderable> {
                   data: Theme.of(context).copyWith(
                     canvasColor: Colors.transparent,
                     shadowColor: Colors.transparent,
-                    textTheme: TextTheme(
-
-                        headline1: TextStyle( color: _myProvider.textColor)),
                   ),
                   child: ScrollConfiguration(
-
                     behavior: NoGlowBehaviour(),
                     child: ReorderableListView(
                       scrollController: _scrollController,
@@ -187,8 +183,6 @@ class _myRorderableState extends State<myRorderable> {
                                   data: Theme.of(context).copyWith(
                                     unselectedWidgetColor:
                                         _myProvider.textColor,
-                                    textSelectionTheme: TextSelectionThemeData(),
-                                    
                                   ),
                                   child: Column(
                                     children: [
@@ -292,7 +286,7 @@ class _myRorderableState extends State<myRorderable> {
                                                                       .textColor,
                                                               fontSize: SizeX *
                                                                   SizeY *
-                                                                  0.00015),
+                                                                  0.00012),
                                                         ),
                                                         Text(
                                                           ':',
@@ -306,7 +300,7 @@ class _myRorderableState extends State<myRorderable> {
                                                                       .textColor,
                                                               fontSize: SizeX *
                                                                   SizeY *
-                                                                  0.00015),
+                                                                  0.00012),
                                                         ),
                                                         Text(
                                                           ((noteBox
@@ -328,7 +322,7 @@ class _myRorderableState extends State<myRorderable> {
                                                                       .textColor,
                                                               fontSize: SizeX *
                                                                   SizeY *
-                                                                  0.00015),
+                                                                  0.00012),
                                                         ),
                                                         Text(
                                                           ':',
@@ -342,7 +336,7 @@ class _myRorderableState extends State<myRorderable> {
                                                                       .textColor,
                                                               fontSize: SizeX *
                                                                   SizeY *
-                                                                  0.00015),
+                                                                  0.00012),
                                                         ),
                                                         Text(
                                                           (noteBox
@@ -363,7 +357,7 @@ class _myRorderableState extends State<myRorderable> {
                                                                       .textColor,
                                                               fontSize: SizeX *
                                                                   SizeY *
-                                                                  0.00015),
+                                                                  0.00012),
                                                         ),
                                                       ],
                                                     ),
@@ -489,7 +483,7 @@ class _myRorderableState extends State<myRorderable> {
                                                                   index],
                                                               fontSize: SizeX *
                                                                   SizeY *
-                                                                  0.00016,
+                                                                  0.00012,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w100),
@@ -506,18 +500,14 @@ class _myRorderableState extends State<myRorderable> {
                                             ),
                                             children: [
                                               Container(
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                35))),
+                                                padding: EdgeInsets.all(SizeY*0.05),
                                                 child: Text(
                                                   notes.get(keys[index]).text,
                                                   style: TextStyle(
                                                     color:
                                                         _myProvider.textColor,
                                                     fontSize:
-                                                        SizeX * SizeY * 0.0001,
+                                                        SizeX * SizeY * 0.00008,
                                                   ),
                                                 ),
                                               ),

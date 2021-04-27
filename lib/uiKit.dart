@@ -10,3 +10,4 @@ export 'widgets/timepicker.dart';
 export 'widgets/buttons.dart';
 export 'widgets/colorpicker.dart';
 export 'widgets/timer_stack.dart';
+export 'widgets/donate_stack.dart';

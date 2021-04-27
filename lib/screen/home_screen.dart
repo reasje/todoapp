@@ -50,12 +50,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Box<Note> noteBox = Hive.box<Note>(noteBoxName);
-
-    @override
+  @override
   void initState() {
     super.initState();
     _requestPermissions();
   }
+
   void _requestPermissions() {
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
@@ -74,16 +74,6 @@ class _HomeState extends State<Home> {
           sound: true,
         );
   }
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   noteBox = Hive.box<Note>(noteBoxName);
-  //   super.initState();
-  //   // var _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-  //   //   checkMe();
-  //   // });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -95,98 +85,106 @@ class _HomeState extends State<Home> {
       data: Theme.of(context),
       child: Scaffold(
         backgroundColor: _myProvider.mainColor,
-        body: SafeArea(
-          child: AnimatedContainer(
-              duration: Duration(microseconds: 500),
-              height: SizeX * 0.98,
-              width: SizeY,
-              padding: EdgeInsets.only(),
-              child: IndexedStack(
-                index: _myProvider.stack_index,
-                children: [
-                  Container(
-                      width: SizeY,
-                      height: SizeX,
-                      child: Column(
-                        children: [
-                          Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
+        body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+          },
+          child: SafeArea(
+            child: AnimatedContainer(
+                duration: Duration(microseconds: 500),
+                height: SizeX * 0.98,
+                width: SizeY,
+                padding: EdgeInsets.only(),
+                child: IndexedStack(
+                  index: _myProvider.stack_index,
+                  children: [
+                    Container(
+                        width: SizeY,
+                        height: SizeX,
+                        child: Column(
+                          children: [
+                            Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                        padding: EdgeInsets.all(SizeX * 0.025),
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          uiKit.AppLocalizations.of(context)
+                                              .translate('notesApp'),
+                                          style: TextStyle(
+                                              color: _myProvider.titleColor,
+                                              fontSize:
+                                                  SizeX * SizeY * 0.00014),
+                                        )),
+                                    Container(
                                       padding: EdgeInsets.all(SizeX * 0.025),
                                       alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        uiKit.AppLocalizations.of(context)
-                                            .translate('notesApp'),
-                                        style: TextStyle(
-                                            color: _myProvider.titleColor,
-                                            fontSize: SizeX * SizeY * 0.00014),
-                                      )),
-                                  Container(
-                                    padding: EdgeInsets.all(SizeX * 0.025),
-                                    alignment: Alignment.centerLeft,
-                                    child: uiKit.MyButton(
-                                      sizePU: SizeX * 0.05,
-                                      sizePD: SizeX * 0.06,
-                                      iconSize: SizeX * SizeY * 0.00006,
-                                      iconData: FontAwesome.code,
-                                      id: 'coder',
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                margin: EdgeInsets.all(SizeX * 0.025),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    uiKit.MyButton(
-                                      sizePU: SizeX * 0.07,
-                                      sizePD: SizeX * 0.08,
-                                      iconSize: SizeX * SizeY * 0.0001,
-                                      iconData: FontAwesome.language,
-                                      id: 'lan',
-                                    ),
-                                    uiKit.MyButton(
-                                      sizePU: SizeX * 0.07,
-                                      sizePD: SizeX * 0.08,
-                                      iconSize: SizeX * SizeY * 0.0001,
-                                      iconData: FontAwesome.plus,
-                                      id: 'new',
-                                    ),
-                                    uiKit.MyButton(
-                                      sizePU: SizeX * 0.07,
-                                      sizePD: SizeX * 0.08,
-                                      iconSize: SizeX * SizeY * 0.0001,
-                                      iconData: FontAwesome.lightbulb_o,
-                                      id: 'lamp',
+                                      child: uiKit.MyButton(
+                                        sizePU: SizeX * 0.05,
+                                        sizePD: SizeX * 0.06,
+                                        iconSize: SizeX * SizeY * 0.00006,
+                                        iconData: FontAwesome.code,
+                                        id: 'coder',
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          uiKit.myRorderable(
-                              SizeX: SizeX, SizeY: SizeY, noteBox: noteBox)
-                        ],
-                      )
+                                Container(
+                                  margin: EdgeInsets.all(SizeX * 0.025),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      uiKit.MyButton(
+                                        sizePU: SizeX * 0.07,
+                                        sizePD: SizeX * 0.08,
+                                        iconSize: SizeX * SizeY * 0.0001,
+                                        iconData: FontAwesome.language,
+                                        id: 'lan',
+                                      ),
+                                      uiKit.MyButton(
+                                        sizePU: SizeX * 0.07,
+                                        sizePD: SizeX * 0.08,
+                                        iconSize: SizeX * SizeY * 0.0001,
+                                        iconData: FontAwesome.plus,
+                                        id: 'new',
+                                      ),
+                                      uiKit.MyButton(
+                                        sizePU: SizeX * 0.07,
+                                        sizePD: SizeX * 0.08,
+                                        iconSize: SizeX * SizeY * 0.0001,
+                                        iconData: FontAwesome.lightbulb_o,
+                                        id: 'lamp',
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            uiKit.myRorderable(
+                                SizeX: SizeX, SizeY: SizeY, noteBox: noteBox)
+                          ],
+                        )),
+                    Container(
+                      child: uiKit.MyNotesEditing(
+                        SizeX: SizeX,
+                        SizeY: SizeY,
+                      ),
                     ),
-                  Container(
-                    child: uiKit.MyNotesEditing(
-                      SizeX: SizeX,
-                      SizeY: SizeY,
+                    Container(
+                      child: uiKit.MyTimer(
+                          SizeX: SizeX, SizeY: SizeY, noteBox: noteBox),
                     ),
-                  ),
-                  Container(
-                    child: uiKit.MyTimer(SizeX: SizeX,SizeY: SizeY ,noteBox: noteBox),
-                  )
-                ],
-              )
-            ),
+                    Container(
+                      child: uiKit.MyDoante(SizeX: SizeX, SizeY: SizeY,),
+                    ),
+                  ],
+                )),
+          ),
         ),
       ),
     );
