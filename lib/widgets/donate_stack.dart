@@ -49,12 +49,27 @@ class _MyDoanteState extends State<MyDoante> {
                   width: SizeX * 0.35,
                 ),
                 Center(
-                  child: Text(
-                    uiKit.AppLocalizations.of(context).translate('donate'),
-                    style: TextStyle(
-                        color: _myProvider.textColor,
-                        fontSize: SizeX * SizeY * 0.00009,
-                        fontWeight: FontWeight.w100),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        uiKit.AppLocalizations.of(context).translate('donate'),
+                        style: TextStyle(
+                            color: _myProvider.textColor,
+                            fontSize: SizeX * SizeY * 0.00009,
+                            fontWeight: FontWeight.w100),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: SizeX*0.008),
+                        child: Text(
+                          '@Rezaaslejeddian@gmail.com',
+                          style: TextStyle(
+                              color: _myProvider.textColor,
+                              fontSize: SizeX * SizeY * 0.00005,
+                              fontWeight: FontWeight.w100),
+                        ),
+                      ),
+                    ],
                   ),
                 )
               ],

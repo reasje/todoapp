@@ -32,11 +32,13 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
           Container(
             padding: EdgeInsets.symmetric(vertical: SizeX*0.03),
             child: Row(
+              textDirection: TextDirection.ltr,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Expanded(
                   flex: 22,
                   child: Row(
+                    textDirection: TextDirection.ltr,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       uiKit.MyButton(
@@ -66,6 +68,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                 Expanded(
                   flex: 15,
                   child: Row(
+                    textDirection: TextDirection.ltr,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       uiKit.MyButton(

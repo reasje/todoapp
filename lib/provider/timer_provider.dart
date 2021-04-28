@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
+import 'package:todoapp/provider/notes_provider.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
@@ -21,6 +23,8 @@ class TimerState extends ChangeNotifier {
   int leftTime = 0;
   List<int> keys;
   int index;
+  String title = "";
+  String text = "";
   final noteBox = Hive.box<Note>(noteBoxName);
   void startTimer(BuildContext context) {
     my_context = context;
@@ -108,7 +112,7 @@ class TimerState extends ChangeNotifier {
   }
 
   void startAlarm() async {
-    Future.delayed(Duration(seconds: 5), () async {
+    Future.delayed(Duration(seconds: 0), () async {
       // var scheduledNotificationDateTime =
       //     DateTime.now().add(Duration(seconds: 10));
       AndroidNotificationChannelAction channelAction =
@@ -124,7 +128,8 @@ class TimerState extends ChangeNotifier {
           channelAction: channelAction,
           enableVibration: true,
           importance: Importance.max,
-          priority: Priority.high);
+          priority: Priority.high,
+          styleInformation: new DefaultStyleInformation(true, true));
 
       var iOSPlatformChannelSpecifics = IOSNotificationDetails(
           sound: 'alarm.mp3',
@@ -136,13 +141,26 @@ class TimerState extends ChangeNotifier {
           iOS: iOSPlatformChannelSpecifics);
       await flutterLocalNotificationsPlugin.show(
           0,
-          uiKit.AppLocalizations.of(my_context).translate('notesapp'),
+          "<b>${uiKit.AppLocalizations.of(my_context).translate('notesapp')}</b>",
           uiKit.AppLocalizations.of(my_context).translate('taskOver'),
           platformChannelSpecifics);
     });
 
     // await flutterLocalNotificationsPlugin.schedule(0, 'Office', 'alarmInfo.title',
     //     scheduledNotificationDateTime, platformChannelSpecifics);
+  }
+
+  // trying to avoid the user from getting back while the timer is on
+  void backPressed() {
+    if (isRunning[index]) {
+      ScaffoldMessenger.of(my_context).showSnackBar(uiKit.MySnackBar(
+          uiKit.AppLocalizations.of(my_context).translate('cannotGoBack'),
+          false,
+          my_context));
+    } else {
+      var _myProvider = Provider.of<myProvider>(my_context);
+      _myProvider.changeTimerStack();
+    }
   }
 
   // void onSaveAlarm() {

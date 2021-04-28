@@ -23,5 +23,6 @@
   "notesApp" : "NotesApp ",
   "timerOn" : "Another Timer is ON ! ",
   "taskOver" : "Congratulations the task is over :)",
-  "donate" : "Having fun ? Buy me a coffee :)"
+  "donate" : "Having fun ? Buy me a coffee :)",
+  "cannotGoBack" : "You can't go back while the timer is running !"
 }

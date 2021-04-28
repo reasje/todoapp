@@ -29,7 +29,6 @@ dependencies:
   equatable: ^2.0.0
   flutter_icons: ^1.1.0
   flutter_local_notifications: ^5.0.0+1
-  google_fonts: ^2.0.0
   hive: ^2.0.0
   hive_flutter: ^1.0.0
   meta: ^1.3.0
@@ -91,9 +90,9 @@ flutter:
         - asset: assets/fonts/Dubai-Light.otf
         - asset: assets/fonts/Dubai-Medium.otf
           style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
+    - family: Ubuntu Condensed
+      fonts:
+        - asset: assets/fonts/UbuntuCondensed-Regular.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #

@@ -103,68 +103,6 @@ class _HomeState extends State<Home> {
                         height: SizeX,
                         child: Column(
                           children: [
-                            Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                        padding: EdgeInsets.all(SizeX * 0.025),
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          uiKit.AppLocalizations.of(context)
-                                              .translate('notesApp'),
-                                          style: TextStyle(
-                                              color: _myProvider.titleColor,
-                                              fontSize:
-                                                  SizeX * SizeY * 0.00014),
-                                        )),
-                                    Container(
-                                      padding: EdgeInsets.all(SizeX * 0.025),
-                                      alignment: Alignment.centerLeft,
-                                      child: uiKit.MyButton(
-                                        sizePU: SizeX * 0.05,
-                                        sizePD: SizeX * 0.06,
-                                        iconSize: SizeX * SizeY * 0.00006,
-                                        iconData: FontAwesome.code,
-                                        id: 'coder',
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  margin: EdgeInsets.all(SizeX * 0.025),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      uiKit.MyButton(
-                                        sizePU: SizeX * 0.07,
-                                        sizePD: SizeX * 0.08,
-                                        iconSize: SizeX * SizeY * 0.0001,
-                                        iconData: FontAwesome.language,
-                                        id: 'lan',
-                                      ),
-                                      uiKit.MyButton(
-                                        sizePU: SizeX * 0.07,
-                                        sizePD: SizeX * 0.08,
-                                        iconSize: SizeX * SizeY * 0.0001,
-                                        iconData: FontAwesome.plus,
-                                        id: 'new',
-                                      ),
-                                      uiKit.MyButton(
-                                        sizePU: SizeX * 0.07,
-                                        sizePD: SizeX * 0.08,
-                                        iconSize: SizeX * SizeY * 0.0001,
-                                        iconData: FontAwesome.lightbulb_o,
-                                        id: 'lamp',
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
                             uiKit.myRorderable(
                                 SizeX: SizeX, SizeY: SizeY, noteBox: noteBox)
                           ],
