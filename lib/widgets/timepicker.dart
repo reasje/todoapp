@@ -8,31 +8,34 @@ Widget MyDatePicker(@required BuildContext context) {
   return Container(
     color: _myprovider.mainColor,
     height: 180,
-    child: CupertinoTheme(
-        
-        data: CupertinoThemeData(
+    child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: CupertinoTheme(
           
-    brightness: _myprovider.brightness,
-    textTheme: CupertinoTextThemeData(
-      
-      dateTimePickerTextStyle: TextStyle(
-        color: _myprovider.textColor
-      )
-    )
-        ),
-      child: CupertinoTimerPicker(
-        alignment: Alignment.center,
-        backgroundColor: _myprovider.mainColor,
+          data: CupertinoThemeData(
+            
+      brightness: _myprovider.brightness,
+      textTheme: CupertinoTextThemeData(
         
-    onTimerDurationChanged: (value) {
-      _myprovider.timerDurationChange(value);
-    },
-    initialTimerDuration: _myprovider.time_duration,
-    mode: CupertinoTimerPickerMode.hms,
-    minuteInterval: 1,
-    secondInterval: 1,
-    
+        dateTimePickerTextStyle: TextStyle(
+          color: _myprovider.textColor
+        )
+      )
+          ),
+        child: CupertinoTimerPicker(
+          alignment: Alignment.center,
+          backgroundColor: _myprovider.mainColor,
+          
+      onTimerDurationChanged: (value) {
+        _myprovider.timerDurationChange(value);
+      },
+      initialTimerDuration: _myprovider.time_duration,
+      mode: CupertinoTimerPickerMode.hms,
+      minuteInterval: 1,
+      secondInterval: 1,
+      
+          ),
         ),
-      ),
+    ),
   );
 }
