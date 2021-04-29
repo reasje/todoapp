@@ -13,6 +13,7 @@ import 'package:undo/undo.dart';
 class myProvider extends ChangeNotifier {
   myProvider() {
     initialColorsAndLan();
+    checkDayChange();
     // setting the timer for only once
     Timer.periodic(Duration(seconds: 60), (timer) {
       checkDayChange();
@@ -106,7 +107,7 @@ class myProvider extends ChangeNotifier {
     } else {
       dateBox.put('theme', 'white');
       theme = 'white';
-    }    
+    }
     noteTitleColor = List<Color>.filled(100, Colors.white);
     runningColor = Colors.greenAccent[400];
     pausedColor = blueMaterial.withOpacity(0.7);
