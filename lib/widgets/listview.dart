@@ -127,16 +127,16 @@ class _myRorderableState extends State<myRorderable> {
                                   child: Column(
                                     children: [
                                       Container(
-                                        height: SizeX * 0.5,
+                                        height: SizeX * 0.45,
                                         width: SizeY * 0.8,
                                         child: Padding(
                                           padding: EdgeInsets.only(
                                               top: SizeX * 0.019),
                                           child: Container(
-                                            height: SizeX * 0.65,
+                                            height: SizeX * 0.45,
                                             width: SizeY,
                                             child: Image.asset(
-                                              "assets/images/notask.jpg",
+                                              _myProvider.noTaskImage,
                                               fit: BoxFit.cover,
                                             ),
                                           ),
@@ -156,7 +156,7 @@ class _myRorderableState extends State<myRorderable> {
                                                   color: _myProvider.textColor,
                                                   fontWeight: FontWeight.w400,
                                                   fontSize:
-                                                      SizeX * SizeY * 0.0001),
+                                                      SizeX * SizeY * 0.00008),
                                             ),
                                             Text(
                                               uiKit.AppLocalizations.of(context)
