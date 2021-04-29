@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/provider/notes_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
+import 'package:todoapp/screen/home_screen.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -46,6 +47,11 @@ class _MyButtonState extends State<MyButton> {
         final _myProvider = Provider.of<myProvider>(context, listen: false);
         final _timerState = Provider.of<TimerState>(context, listen: false);
         switch (widget.id) {
+          case 'home':
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Home()));
+            _myProvider.changeFirstTime();
+            break;
           case 'menu':
             _myProvider.changeTimerStack();
             break;
@@ -88,7 +94,6 @@ class _MyButtonState extends State<MyButton> {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
                             child: CupertinoActionSheetAction(
-
                               child: Text(uiKit.AppLocalizations.of(context)
                                   .translate('done')),
                               onPressed: () {

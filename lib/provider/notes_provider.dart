@@ -31,8 +31,10 @@ class myProvider extends ChangeNotifier {
   Color swachColor;
 
   bool isEn;
+  // this varrable is used to control the showcase
+  bool isFirstTime;
   Locale locale;
-
+  String noTaskImage;
   MaterialColor blueMaterial =
       const MaterialColor(0xFF3694fc, const <int, Color>{
     50: const Color(0x1A001b48),
@@ -72,7 +74,20 @@ class myProvider extends ChangeNotifier {
   final dateBox = Hive.box<String>(dateBoxName);
 
   Future initialColorsAndLan() async {
-    String lan = dateBox.get('lan') ?? dateBox.put('lan', 'en');
+    String first_time =
+        dateBox.get('firstTime') ?? dateBox.put('firstTime', "Yes");
+    if (first_time == "Yes") {
+      isFirstTime = true;
+    } else {
+      isFirstTime = false;
+    }
+    String lan;
+    if (dateBox.get('lan') != null) {
+      lan = dateBox.get('lan');
+    } else {
+      dateBox.put('lan', 'en');
+      lan = 'en';
+    }
     if (lan == 'en') {
       isEn = true;
       locale = Locale("en", "US");
@@ -87,6 +102,7 @@ class myProvider extends ChangeNotifier {
     overColor = Colors.redAccent[400];
     if (theme == 'white') {
       splashImage = 'assets/images/SplashScreenWhite.gif';
+      noTaskImage = "assets/images/notask.png";
       mainColor = whiteMainColor;
       shadowColor = whiteShadowColor;
       lightShadowColor = whiteLightShadowColor;
@@ -98,6 +114,7 @@ class myProvider extends ChangeNotifier {
       noteTitleColor.fillRange(0, 100, whiteNoteTitleColor);
     } else {
       splashImage = 'assets/images/SplashScreenBlack.gif';
+      noTaskImage = "assets/images/blacknotask.png";
       mainColor = blackMainColor;
       shadowColor = blackShadowColor;
       lightShadowColor = blackLightShadowColor;
@@ -118,6 +135,7 @@ class myProvider extends ChangeNotifier {
     overColor = Colors.redAccent[400];
     if (theme == 'white') {
       splashImage = 'assets/images/SplashScreenBlack.gif';
+      noTaskImage = "assets/images/blacknotask.png";
       mainColor = blackMainColor;
       shadowColor = blackShadowColor;
       lightShadowColor = blackLightShadowColor;
@@ -131,6 +149,7 @@ class myProvider extends ChangeNotifier {
       notifyListeners();
     } else {
       splashImage = 'assets/images/SplashScreenWhite.gif';
+      noTaskImage = "assets/images/notask.png";
       mainColor = whiteMainColor;
       shadowColor = whiteShadowColor;
       lightShadowColor = whiteLightShadowColor;
@@ -174,6 +193,20 @@ class myProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void changeLanToPersian() {
+    isEn = false;
+    dateBox.put('lan', 'fa');
+    locale = Locale("fa", "IR");
+    notifyListeners();
+  }
+
+  void changeLanToEnglish() {
+    isEn = true;
+    dateBox.put('lan', 'en');
+    locale = Locale("en", "US");
+    notifyListeners();
+  }
+
   bool boolIsWhite;
   bool isWhite() {
     String theme = dateBox.get('theme');
@@ -182,6 +215,11 @@ class myProvider extends ChangeNotifier {
     } else {
       return false;
     }
+  }
+
+  bool changeFirstTime() {
+    dateBox.put('firstTime', "No");
+    notifyListeners();
   }
 
   List<int> durationKeys;

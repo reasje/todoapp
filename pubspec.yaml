@@ -65,7 +65,13 @@ flutter:
     - assets/lang/en.json
     - assets/lang/fa.json
     - assets/images/todoapplogo.png
-    - assets/images/notask.jpg
+    - assets/images/notask.png
+    - assets/images/blacknotask.png
+    - assets/images/plant.png
+    - assets/images/deepwork.png
+    - assets/images/family.png
+    - assets/images/paradise.png
+    - assets/images/pioritize.png
     - assets/images/SplashScreenBlack.gif
     - assets/images/SplashScreenWhite.gif
     - assets/images/coffee.png

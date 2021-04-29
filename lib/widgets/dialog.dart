@@ -1,9 +1,80 @@
-// import 'package:flutter/material.dart';
-// import 'package:todoapp/model/note_model.dart';
-// import 'package:hive/hive.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todoapp/model/note_model.dart';
+import 'package:hive/hive.dart';
+import 'package:todoapp/provider/notes_provider.dart';
 
-// import '../applocalizations.dart';
+import '../applocalizations.dart';
 
+Future showAddDialog(
+  BuildContext context,
+) async {
+  final TextEditingController _titleFieldController = TextEditingController();
+  final TextEditingController _textFieldController = TextEditingController();
+  var _myProvider = Provider.of<myProvider>(context, listen: false);
+  bool _validate = false;
+  return showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, setState) {
+            return AlertDialog(
+              title: Center(child: Text("Choose you language ! ")),
+              content: Container(
+                height: 70,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                        alignment: Alignment.bottomLeft,
+                        height: 50,
+                        width: 100,
+                        //margin: EdgeInsets.only(right: 30),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.blue),
+                        child: InkWell(
+                            child: Center(
+                                child: Text(
+                              "English",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            )),
+                            onTap: () {
+                              _myProvider.changeLanToEnglish();
+                              Navigator.pop(context);
+                            })),
+                    Container(
+                        alignment: Alignment.bottomRight,
+                        height: 50,
+                        width: 100,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.blue),
+                        child: InkWell(
+                          child: Center(
+                              child: Text(
+                            "فارسی",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          )),
+                          onTap: () {
+                              _myProvider.changeLanToPersian();                            
+                              Navigator.pop(context);
+                          },
+                        ))
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      });
+}
 
 // Future<Widget> showAddDialog(
 //   BuildContext context,

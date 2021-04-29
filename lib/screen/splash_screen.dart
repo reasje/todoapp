@@ -6,7 +6,7 @@ import 'package:todoapp/provider/notes_provider.dart';
 import 'package:todoapp/screen/home_screen.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:todoapp/uikit.dart' as uiKit;
-
+import 'onboarding_screen.dart';
 class MySplashScreen extends StatefulWidget {
   MySplashScreen({Key key}) : super(key: key);
 
@@ -25,7 +25,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
       child: new SplashScreen(
         seconds: 2,
         image: Image.asset(_myprovider.splashImage ?? 'assets/images/SplashScreenWhite.gif'),
-        navigateAfterSeconds: Home(),
+        navigateAfterSeconds: _myprovider.isFirstTime ? Onboarding() : Home(),
         loaderColor: _myprovider.textColor,
         backgroundColor: _myprovider.mainColor,
         photoSize: 100,
