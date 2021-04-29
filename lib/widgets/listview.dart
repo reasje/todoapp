@@ -74,7 +74,7 @@ class _myRorderableState extends State<myRorderable> {
                                             .translate('notesApp'),
                                         style: TextStyle(
                                             color: _myProvider.titleColor,
-                                            fontSize: SizeX * SizeY * 0.00012),
+                                            fontSize: _myProvider.isEn ?  SizeX * SizeY * 0.00012 : SizeX * SizeY * 0.0001),
                                       )),
                                   Container(
                                     padding: EdgeInsets.all(SizeX * 0.015),
@@ -166,7 +166,7 @@ class _myRorderableState extends State<myRorderable> {
                                                   color: _myProvider.textColor,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize:
-                                                      SizeX * SizeY * 0.00008),
+                                                      _myProvider.isEn ? SizeX * SizeY * 0.00008 : SizeX * SizeY * 0.00006),
                                             ),
                                           ],
                                         ),

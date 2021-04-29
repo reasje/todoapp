@@ -81,7 +81,6 @@ class _MyButtonState extends State<MyButton> {
                   context: context,
                   builder: (context) => Container(
                         child: CupertinoActionSheet(
-
                           actions: [uiKit.MyDatePicker(context)],
                           cancelButton: Container(
                             decoration: BoxDecoration(
@@ -89,7 +88,7 @@ class _MyButtonState extends State<MyButton> {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
                             child: CupertinoActionSheetAction(
-                              
+
                               child: Text(uiKit.AppLocalizations.of(context)
                                   .translate('done')),
                               onPressed: () {

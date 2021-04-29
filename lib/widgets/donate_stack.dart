@@ -56,7 +56,7 @@ class _MyDoanteState extends State<MyDoante> {
                         uiKit.AppLocalizations.of(context).translate('donate'),
                         style: TextStyle(
                             color: _myProvider.textColor,
-                            fontSize: SizeX * SizeY * 0.00009,
+                            fontSize: _myProvider.isEn ? SizeX * SizeY * 0.00009 : SizeX * SizeY * 0.000075,
                             fontWeight: FontWeight.w100),
                       ),
                       Container(
@@ -65,7 +65,7 @@ class _MyDoanteState extends State<MyDoante> {
                           '@Rezaaslejeddian@gmail.com',
                           style: TextStyle(
                               color: _myProvider.textColor,
-                              fontSize: SizeX * SizeY * 0.00005,
+                              fontSize: _myProvider.isEn ? SizeX * SizeY * 0.00005 : SizeX * SizeY * 0.00006,
                               fontWeight: FontWeight.w100),
                         ),
                       ),

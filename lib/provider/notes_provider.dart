@@ -348,6 +348,11 @@ class myProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void goBackToMain() {
+    stack_index = 0;
+    notifyListeners();
+  }
+
   void changeTimerStack() {
     if (stack_index < 2) {
       stack_index = 2;

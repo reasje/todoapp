@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/provider/notes_provider.dart';
+import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'dart:async';
-
+import 'package:notification_permissions/notification_permissions.dart';
+import 'package:move_to_background/move_to_background.dart';
 // checkMe() {
 //   final dateBox = Hive.box<String>(dateBoxName);
 //   String date = dateBox.get('date');
@@ -48,15 +49,30 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with WidgetsBindingObserver {
+  Future<String> permissionStatusFuture;
+
+  var permGranted = "granted";
+  var permDenied = "denied";
+  var permUnknown = "unknown";
+  var permProvisional = "provisional";
   Box<Note> noteBox = Hive.box<Note>(noteBoxName);
   @override
   void initState() {
     super.initState();
     _requestPermissions();
+    permissionStatusFuture = getCheckNotificationPermStatus();
+    // With this, we will be able to check if the permission is granted or not
+    // when returning to the application
+    WidgetsBinding.instance.addObserver(this);
   }
 
   void _requestPermissions() {
+    NotificationPermissions.requestNotificationPermissions(
+      openSettings: true,
+      iosSettings:
+          const NotificationSettingsIos(sound: true, badge: true, alert: true),
+    );
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             IOSFlutterLocalNotificationsPlugin>()
@@ -76,8 +92,37 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      setState(() {
+        permissionStatusFuture = getCheckNotificationPermStatus();
+      });
+    }
+  }
+
+  /// Checks the notification permission status
+  Future<String> getCheckNotificationPermStatus() {
+    return NotificationPermissions.getNotificationPermissionStatus()
+        .then((status) {
+      switch (status) {
+        case PermissionStatus.denied:
+          return permDenied;
+        case PermissionStatus.granted:
+          return permGranted;
+        case PermissionStatus.unknown:
+          return permUnknown;
+        case PermissionStatus.provisional:
+          return permProvisional;
+        default:
+          return null;
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<myProvider>(context);
+    final _timerState = Provider.of<TimerState>(context);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     return AnimatedTheme(
@@ -85,43 +130,92 @@ class _HomeState extends State<Home> {
       data: Theme.of(context),
       child: Scaffold(
         backgroundColor: _myProvider.mainColor,
-        body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).requestFocus(new FocusNode());
+        body: WillPopScope(
+          onWillPop: () async {
+            // current index of the stack is editing stack
+            if (_myProvider.stack_index == 1) {
+              _myProvider.cancelClicked();
+            }
+            // if current stack is timer stack
+            else if (_myProvider.stack_index == 2) {
+              if (_timerState.isRunning.any((element) => element == true)) {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                ScaffoldMessenger.of(context).showSnackBar(uiKit.MySnackBar(
+                    uiKit.AppLocalizations.of(context)
+                        .translate('cannotGoBack'),
+                    false,
+                    context));
+              } else {
+                _myProvider.changeTimerStack();
+              }
+            }
+            // if the current stack is the donate stack
+            else if (_myProvider.stack_index == 3) {
+              _myProvider.goBackToMain();
+            } else if (_myProvider.stack_index == 0) {
+              MoveToBackground.moveTaskToBack();
+              return true;
+            }
+            return false;
           },
-          child: SafeArea(
-            child: AnimatedContainer(
-                duration: Duration(microseconds: 500),
-                height: SizeX * 0.98,
-                width: SizeY,
-                padding: EdgeInsets.only(),
-                child: IndexedStack(
-                  index: _myProvider.stack_index,
-                  children: [
-                    Container(
-                        width: SizeY,
-                        height: SizeX,
-                        child: Column(
-                          children: [
-                            uiKit.myRorderable(
-                                SizeX: SizeX, SizeY: SizeY, noteBox: noteBox)
-                          ],
-                        )),
-                    Container(
-                      child: uiKit.MyNotesEditing(
-                        SizeX: SizeX,
-                        SizeY: SizeY,
-                      ),
-                    ),
-                    Container(
-                      child: uiKit.MyTimer(
-                          SizeX: SizeX, SizeY: SizeY, noteBox: noteBox),
-                    ),
-                    Container(
-                      child: uiKit.MyDoante(SizeX: SizeX, SizeY: SizeY,),
-                    ),
-                  ],
-                )),
+          child: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).requestFocus(new FocusNode());
+            },
+            child: SafeArea(
+              child: FutureBuilder(
+                  future: permissionStatusFuture,
+                  builder: (context, snapshot) {
+                    // if we are waiting for data, show a progress indicator
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    }
+                    if (snapshot.hasData) {
+                      // The permission is granted, then just show the text
+                      if (snapshot.data == permGranted) {
+                        return AnimatedContainer(
+                            duration: Duration(microseconds: 500),
+                            height: SizeX * 0.98,
+                            width: SizeY,
+                            padding: EdgeInsets.only(),
+                            child: IndexedStack(
+                              index: _myProvider.stack_index,
+                              children: [
+                                Container(
+                                    width: SizeY,
+                                    height: SizeX,
+                                    child: Column(
+                                      children: [
+                                        uiKit.myRorderable(
+                                            SizeX: SizeX,
+                                            SizeY: SizeY,
+                                            noteBox: noteBox)
+                                      ],
+                                    )),
+                                Container(
+                                  child: uiKit.MyNotesEditing(
+                                    SizeX: SizeX,
+                                    SizeY: SizeY,
+                                  ),
+                                ),
+                                Container(
+                                  child: uiKit.MyTimer(
+                                      SizeX: SizeX,
+                                      SizeY: SizeY,
+                                      noteBox: noteBox),
+                                ),
+                                Container(
+                                  child: uiKit.MyDoante(
+                                    SizeX: SizeX,
+                                    SizeY: SizeY,
+                                  ),
+                                ),
+                              ],
+                            ));
+                      }
+                    }
+                  }),
+            ),
           ),
         ),
       ),

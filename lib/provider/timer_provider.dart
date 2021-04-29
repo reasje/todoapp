@@ -122,8 +122,8 @@ class TimerState extends ChangeNotifier {
           icon: 'todoapplogo',
           sound: RawResourceAndroidNotificationSound('alarm'),
           largeIcon: DrawableResourceAndroidBitmap('todoapplogo'),
-          // playSound: true,
-          // ticker: 'ticker',
+          playSound: true,
+          ticker: 'ticker',
           showWhen: true,
           channelAction: channelAction,
           enableVibration: true,
@@ -141,7 +141,7 @@ class TimerState extends ChangeNotifier {
           iOS: iOSPlatformChannelSpecifics);
       await flutterLocalNotificationsPlugin.show(
           0,
-          "<b>${uiKit.AppLocalizations.of(my_context).translate('notesapp')}</b>",
+          uiKit.AppLocalizations.of(my_context).translate('notesapp'),
           uiKit.AppLocalizations.of(my_context).translate('taskOver'),
           platformChannelSpecifics);
     });
@@ -151,17 +151,18 @@ class TimerState extends ChangeNotifier {
   }
 
   // trying to avoid the user from getting back while the timer is on
-  void backPressed() {
-    if (isRunning[index]) {
-      ScaffoldMessenger.of(my_context).showSnackBar(uiKit.MySnackBar(
-          uiKit.AppLocalizations.of(my_context).translate('cannotGoBack'),
-          false,
-          my_context));
-    } else {
-      var _myProvider = Provider.of<myProvider>(my_context);
-      _myProvider.changeTimerStack();
-    }
-  }
+  // void backPressed() {
+  //   if (isRunning[index]) {
+  //     print('object');
+  //     ScaffoldMessenger.of(my_context).showSnackBar(uiKit.MySnackBar(
+  //         uiKit.AppLocalizations.of(my_context).translate('cannotGoBack'),
+  //         false,
+  //         my_context));
+  //   } else {
+  //     var _myProvider = Provider.of<myProvider>(my_context);
+  //     _myProvider.changeTimerStack();
+  //   }
+  // }
 
   // void onSaveAlarm() {
   //   DateTime scheduleAlarmDateTime;
