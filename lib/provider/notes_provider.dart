@@ -74,8 +74,13 @@ class myProvider extends ChangeNotifier {
   final dateBox = Hive.box<String>(dateBoxName);
 
   Future initialColorsAndLan() async {
-    String first_time =
-        dateBox.get('firstTime') ?? dateBox.put('firstTime', "Yes");
+    String first_time;
+    if (dateBox.get('firstTime') != null) {
+      first_time = dateBox.get('firstTime');
+    } else {
+      dateBox.put('firstTime', "Yes");
+      first_time = "Yes";
+    }
     if (first_time == "Yes") {
       isFirstTime = true;
     } else {
@@ -95,7 +100,13 @@ class myProvider extends ChangeNotifier {
       isEn = false;
       locale = Locale("fa", "IR");
     }
-    String theme = dateBox.get('theme') ?? dateBox.put('theme', 'white');
+    String theme;
+    if (dateBox.get('theme') != null) {
+      theme = dateBox.get('theme');
+    } else {
+      dateBox.put('theme', 'white');
+      theme = 'white';
+    }    
     noteTitleColor = List<Color>.filled(100, Colors.white);
     runningColor = Colors.greenAccent[400];
     pausedColor = blueMaterial.withOpacity(0.7);
