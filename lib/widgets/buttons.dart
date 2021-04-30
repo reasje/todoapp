@@ -35,9 +35,12 @@ class _MyButtonState extends State<MyButton> {
   var _myProvider;
   var _timerState;
   void onPressedUp(PointerUpEvent event) {
+    if (mounted){
     setState(() {
       isPressed = false;
     });
+    }
+
   }
 
   void onPressedDown(PointerDownEvent event) {
