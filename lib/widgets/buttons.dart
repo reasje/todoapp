@@ -35,103 +35,104 @@ class _MyButtonState extends State<MyButton> {
   var _myProvider;
   var _timerState;
   void onPressedUp(PointerUpEvent event) {
-    if (mounted){
-    setState(() {
-      isPressed = false;
-    });
+    if (mounted) {
+      setState(() {
+        isPressed = false;
+      });
     }
-
   }
 
   void onPressedDown(PointerDownEvent event) {
-    setState(() {
-      isPressed = true;
-      Future.delayed(Duration(milliseconds: 100), () {
-        final _myProvider = Provider.of<myProvider>(context, listen: false);
-        final _timerState = Provider.of<TimerState>(context, listen: false);
-        switch (widget.id) {
-          case 'home':
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Home()));
-            _myProvider.changeFirstTime();
-            break;
-          case 'menu':
-            _myProvider.changeTimerStack();
-            break;
-          case 'start':
-            _timerState.startTimer(widget.timerContext);
-            break;
-          case 'stop':
-            _timerState.stopTimer();
-            break;
-          case 'reset':
-            _timerState.resetTimer();
-            break;
-          case 'redo':
-            _myProvider.canRedo ? _myProvider.changesRedo() : null;
-            break;
-          case 'lan':
-            _myProvider.changeLan();
-            break;
-          case 'new':
-            _myProvider.newNoteClicked(context);
-            break;
-          case 'lamp':
-            _myProvider.changeBrigness();
-            break;
-          case 'undo':
-            {
-              _myProvider.canUndo ? _myProvider.changesUndo() : null;
-            }
-            break;
-          case 'timer':
-            {
-              showCupertinoModalPopup(
-                  context: context,
-                  builder: (context) => Container(
-                        child: CupertinoActionSheet(
-                          actions: [uiKit.MyDatePicker(context)],
-                          cancelButton: Container(
-                            decoration: BoxDecoration(
-                                color: _myProvider.mainColor,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            child: CupertinoActionSheetAction(
-                              child: Text(uiKit.AppLocalizations.of(context)
-                                  .translate('done')),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
+    if (mounted) {
+      setState(() {
+        isPressed = true;
+        Future.delayed(Duration(milliseconds: 100), () {
+          final _myProvider = Provider.of<myProvider>(context, listen: false);
+          final _timerState = Provider.of<TimerState>(context, listen: false);
+          switch (widget.id) {
+            case 'home':
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Home()));
+              _myProvider.changeFirstTime();
+              break;
+            case 'menu':
+              _myProvider.changeTimerStack();
+              break;
+            case 'start':
+              _timerState.startTimer(widget.timerContext);
+              break;
+            case 'stop':
+              _timerState.stopTimer();
+              break;
+            case 'reset':
+              _timerState.resetTimer();
+              break;
+            case 'redo':
+              _myProvider.canRedo ? _myProvider.changesRedo() : null;
+              break;
+            case 'lan':
+              _myProvider.changeLan();
+              break;
+            case 'new':
+              _myProvider.newNoteClicked(context);
+              break;
+            case 'lamp':
+              _myProvider.changeBrigness();
+              break;
+            case 'undo':
+              {
+                _myProvider.canUndo ? _myProvider.changesUndo() : null;
+              }
+              break;
+            case 'timer':
+              {
+                showCupertinoModalPopup(
+                    context: context,
+                    builder: (context) => Container(
+                          child: CupertinoActionSheet(
+                            actions: [uiKit.MyDatePicker(context)],
+                            cancelButton: Container(
+                              decoration: BoxDecoration(
+                                  color: _myProvider.mainColor,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              child: CupertinoActionSheetAction(
+                                child: Text(uiKit.AppLocalizations.of(context)
+                                    .translate('done')),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                      ));
-            }
+                        ));
+              }
 
-            break;
-          case 'color':
-            // showModalBottomSheet(
-            //     context: context,
-            //     builder: (BuildContext ctx) {
-            //       return uiKit.ColorSlider(context);
-            //     });
-            break;
-          case 'save':
-            _myProvider.doneClicked();
-            break;
-          case 'cancel':
-            _myProvider.cancelClicked();
-            break;
-          case 'coder':
-            _myProvider.gotoDonate();
-            break;
-          case 'donate':
-            print('object');
-            _launchURL();
-            break;
-        }
+              break;
+            case 'color':
+              // showModalBottomSheet(
+              //     context: context,
+              //     builder: (BuildContext ctx) {
+              //       return uiKit.ColorSlider(context);
+              //     });
+              break;
+            case 'save':
+              _myProvider.doneClicked();
+              break;
+            case 'cancel':
+              _myProvider.cancelClicked();
+              break;
+            case 'coder':
+              _myProvider.gotoDonate();
+              break;
+            case 'donate':
+              print('object');
+              _launchURL();
+              break;
+          }
+        });
       });
-    });
+    }
   }
 
   @override
