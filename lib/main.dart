@@ -53,9 +53,9 @@ void main() async {
   await Hive.openBox<String>(dateBoxName);
   // Hydrated bloc for keeping the instances of the
   // blocs alive
-  // Future.microtask(() {
-  //   myProvider().initialColorsAndLan();
-  // });
+  Future.microtask(() {
+    myProvider().initialColorsAndLan();
+  });
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -71,12 +71,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   myProvider().checkDayChange();
-  // }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    myProvider().checkDayChange();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +104,7 @@ class _MyAppState extends State<MyApp> {
                 Locale("en", "US"),
                 Locale("fa", "IR"),
               ],
-
+              
               // Return a locale which will be used by the app
               // localeResolutionCallback: (locale, supportedLocales) {
               //   // Check if the current device locale is supported

@@ -561,7 +561,7 @@ class _myRorderableState extends State<myRorderable> {
                                                                               false,
                                                                           style: TextStyle(
                                                                               color: _myProvider.noteTitleColor[index],
-                                                                              fontSize: SizeX * SizeY * 0.00012,
+                                                                              fontSize: SizeX * SizeY * 0.00011,
                                                                               fontWeight: FontWeight.w100),
                                                                         ),
                                                                       ),

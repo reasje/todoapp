@@ -147,7 +147,7 @@ class _OnboardingState extends State<Onboarding> {
           //padding: EdgeInsets.only(top: SizeX * 0.0005),
           child: Text(
             title,
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: SizeX*SizeY*0.00008, fontWeight: FontWeight.w500),
           ),
         ),
         Container(
@@ -155,7 +155,7 @@ class _OnboardingState extends State<Onboarding> {
               top: SizeX * 0.02, right: SizeY * 0.03, left: SizeY * 0.03),
           child: Text(
             text,
-            style: TextStyle(fontSize: 16, color: Colors.grey),
+            style: TextStyle(fontSize: SizeX*SizeY*0.00005, color: Colors.grey),
             textAlign: TextAlign.center,
           ),
         )

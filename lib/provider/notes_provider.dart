@@ -13,7 +13,7 @@ import 'package:undo/undo.dart';
 class myProvider extends ChangeNotifier {
   myProvider() {
     initialColorsAndLan();
-    checkDayChange();
+    //checkDayChange();
     // setting the timer for only once
     Timer.periodic(Duration(seconds: 60), (timer) {
       checkDayChange();

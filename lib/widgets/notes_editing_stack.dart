@@ -164,7 +164,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
             keyboardType: TextInputType.multiline,
             maxLines: null,
             cursorColor: _myProvider.swachColor,
-            cursorHeight: SizeX * SizeY * 0.00012,
+            cursorHeight: SizeX * 0.055,
             style: TextStyle(
                 color: _myProvider.textColor,
                 fontSize:_myProvider.isEn ? SizeX * SizeY * 0.00012 : SizeX * SizeY * 0.0001,
@@ -224,7 +224,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
               keyboardType: TextInputType.multiline,
               maxLines: null,
               cursorColor: _myProvider.swachColor,
-              cursorHeight: SizeX * SizeY * 0.00009,
+              cursorHeight: SizeX * 0.045,
               style: TextStyle(
                   color: _myProvider.textColor,
                   fontSize: SizeX * SizeY *0.00009,

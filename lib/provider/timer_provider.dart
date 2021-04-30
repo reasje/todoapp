@@ -111,7 +111,7 @@ class TimerState extends ChangeNotifier {
     leftTime = noteBox.get(keys[index]).leftTime;
   }
 
-  void startAlarm() async {
+  Future<void> startAlarm() async {
     Future.delayed(Duration(seconds: 0), () async {
       // var scheduledNotificationDateTime =
       //     DateTime.now().add(Duration(seconds: 10));
