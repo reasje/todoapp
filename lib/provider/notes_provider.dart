@@ -30,7 +30,7 @@ class myProvider extends ChangeNotifier {
   Color hintColor;
   Brightness brightness;
   Color swachColor;
-
+  BuildContext donateContext;
   bool isEn;
   // this varrable is used to control the showcase
   bool isFirstTime;
@@ -582,12 +582,21 @@ class myProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void gotoDonate() {
+  void gotoDonate(BuildContext context) {
+    this.donateContext = context;
     if (stack_index == 0) {
       stack_index = 3;
     } else {
       stack_index = 0;
     }
     notifyListeners();
+  }
+
+  showDogeCopied() {
+    ScaffoldMessenger.of(donateContext).removeCurrentSnackBar();
+    ScaffoldMessenger.of(donateContext).showSnackBar(uiKit.MySnackBar(
+        uiKit.AppLocalizations.of(donateContext).translate('dogeAddressCopied'),
+        false,
+        donateContext));
   }
 }
