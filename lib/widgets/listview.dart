@@ -74,7 +74,9 @@ class _myRorderableState extends State<myRorderable> {
                                             .translate('notesApp'),
                                         style: TextStyle(
                                             color: _myProvider.titleColor,
-                                            fontSize: _myProvider.isEn ?  SizeX * SizeY * 0.00012 : SizeX * SizeY * 0.0001),
+                                            fontSize: _myProvider.isEn
+                                                ? SizeX * SizeY * 0.00012
+                                                : SizeX * SizeY * 0.0001),
                                       )),
                                   Container(
                                     padding: EdgeInsets.all(SizeX * 0.015),
@@ -165,8 +167,11 @@ class _myRorderableState extends State<myRorderable> {
                                               style: TextStyle(
                                                   color: _myProvider.textColor,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize:
-                                                      _myProvider.isEn ? SizeX * SizeY * 0.00008 : SizeX * SizeY * 0.00006),
+                                                  fontSize: _myProvider.isEn
+                                                      ? SizeX * SizeY * 0.00008
+                                                      : SizeX *
+                                                          SizeY *
+                                                          0.00006),
                                             ),
                                           ],
                                         ),
@@ -303,8 +308,10 @@ class _myRorderableState extends State<myRorderable> {
                                                                       .changeTimerStack();
                                                                   _timerState
                                                                       .loadTimer(
-                                                                          keys,
-                                                                          index, _myProvider.myContext,);
+                                                                    keys,
+                                                                    index,
+                                                                    context,
+                                                                  );
                                                                 } else {
                                                                   if (_timerState
                                                                           .index ==
@@ -313,9 +320,10 @@ class _myRorderableState extends State<myRorderable> {
                                                                         .changeTimerStack();
                                                                     _timerState
                                                                         .loadTimer(
-                                                                            
-                                                                            keys,
-                                                                            index,_myProvider.myContext,);
+                                                                      keys,
+                                                                      index,
+                                                                      context,
+                                                                    );
                                                                   } else {
                                                                     ScaffoldMessenger.of(
                                                                             context)

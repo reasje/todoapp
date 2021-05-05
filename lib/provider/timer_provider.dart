@@ -162,8 +162,8 @@ class TimerState extends ChangeNotifier {
     this.keys = keys;
     this.index = index;
     this.my_context = context;
-    title = uiKit.AppLocalizations.of(my_context).translate('notesapp');
-    text= uiKit.AppLocalizations.of(my_context).translate('taskOver');
+    title = uiKit.AppLocalizations.of(context).translate('notesapp');
+    text= uiKit.AppLocalizations.of(context).translate('taskOver');
     leftTime = noteBox.get(keys[index]).leftTime;
   }
 

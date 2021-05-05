@@ -8,7 +8,6 @@ import 'package:todoapp/provider/notes_provider.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/screen/splash_screen.dart';
-import 'package:wakelock/wakelock.dart';
 import 'applocalizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -61,7 +60,7 @@ void main() async {
     myProvider().initialColorsAndLan();
   });
   // android alarm manager services
-  //await AndroidAlarmManager.initialize();
+  //await AndroidAlarmManager.initialize();]
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
