@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/provider/notes_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
@@ -9,6 +10,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 //typedef function = void Function();
 const _url = 'https://idpay.ir/todoapp';
+const _dogeAdress = 'bnb1g3thz6z0t2gz2fffthdvv6mxpjvgfacp7hfjml';
+Future<void> copyDogeAdress() async {
+  ClipboardData data = ClipboardData(text: _dogeAdress);
+  print(data.text);
+  await Clipboard.setData(data);
+}
 
 class MyButton extends StatefulWidget {
   final IconData iconData;
@@ -50,8 +57,12 @@ class _MyButtonState extends State<MyButton> {
           final _myProvider = Provider.of<myProvider>(context, listen: false);
           final _timerState = Provider.of<TimerState>(context, listen: false);
           switch (widget.id) {
+            case 'dogedonate':
+              copyDogeAdress();
+              _myProvider.showDogeCopied();
+              break;
             case 'home':
-              Navigator.push(
+              Navigator.pushReplacement(
                   context, MaterialPageRoute(builder: (context) => Home()));
               _myProvider.changeFirstTime();
               break;
@@ -59,7 +70,7 @@ class _MyButtonState extends State<MyButton> {
               _myProvider.changeTimerStack();
               break;
             case 'start':
-              _timerState.startTimer(widget.timerContext);
+              _timerState.startTimer();
               break;
             case 'stop':
               _timerState.stopTimer();
@@ -123,7 +134,7 @@ class _MyButtonState extends State<MyButton> {
               _myProvider.cancelClicked();
               break;
             case 'coder':
-              _myProvider.gotoDonate();
+              _myProvider.gotoDonate(context);
               break;
             case 'donate':
               print('object');
@@ -171,11 +182,16 @@ class _MyButtonState extends State<MyButton> {
                     ),
                   ],
                 ),
-                child: Icon(
-                  widget.iconData,
-                  size: widget.iconSize,
-                  color: _myProvider.blueMaterial,
-                ),
+                child: widget.id == 'dogedonate'
+                    ? Image.asset(
+                        'assets/images/dogecoin.png',
+                        fit: BoxFit.fill,
+                      )
+                    : Icon(
+                        widget.iconData,
+                        size: widget.iconSize,
+                        color: _myProvider.blueMaterial,
+                      ),
               ),
             )
           : Container(
@@ -198,25 +214,31 @@ class _MyButtonState extends State<MyButton> {
                   ],
                   color: _myProvider.mainColor,
                   borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: Icon(widget.iconData,
-                  size: widget.iconSize,
-                  color: widget.id == 'undo'
-                      ? _myProvider.canUndo
-                          ? _myProvider.blueMaterial
-                          : _myProvider.textColor
-                      : widget.id == 'redo'
-                          ? _myProvider.canRedo
+              child: widget.id == 'dogedonate'
+                  ? Image.asset(
+                      'assets/images/dogecoin.png',
+                      fit: BoxFit.fill,
+                    )
+                  : Icon(widget.iconData,
+                      size: widget.iconSize,
+                      color: widget.id == 'undo'
+                          ? _myProvider.canUndo
                               ? _myProvider.blueMaterial
                               : _myProvider.textColor
-                          : widget.id == 'save' || widget.id == 'cancel'
-                              ? _myProvider.canUndo || _myProvider.isEdited()
+                          : widget.id == 'redo'
+                              ? _myProvider.canRedo
                                   ? _myProvider.blueMaterial
                                   : _myProvider.textColor
-                              : widget.id == 'timer'
-                                  ? _myProvider.time_duration != Duration()
+                              : widget.id == 'save' || widget.id == 'cancel'
+                                  ? _myProvider.canUndo ||
+                                          _myProvider.isEdited()
                                       ? _myProvider.blueMaterial
                                       : _myProvider.textColor
-                                  : _myProvider.textColor),
+                                  : widget.id == 'timer'
+                                      ? _myProvider.time_duration != Duration()
+                                          ? _myProvider.blueMaterial
+                                          : _myProvider.textColor
+                                      : _myProvider.textColor),
             ),
     );
   }

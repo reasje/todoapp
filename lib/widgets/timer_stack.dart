@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapp/main.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/notes_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
@@ -86,7 +85,7 @@ class _MyTimerState extends State<MyTimer> {
                           false
                       ? Container(
                           alignment: Alignment.centerRight,
-                          margin: EdgeInsets.all(SizeX * 0.03),
+                          margin: EdgeInsets.only(top: SizeX*0.04, right: 30),
                           child: uiKit.MyButton(
                             sizePU: SizeX * 0.07,
                             sizePD: SizeX * 0.08,

@@ -3,9 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
-import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
-import 'package:todoapp/provider/notes_provider.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
@@ -15,127 +13,125 @@ class TimerState extends ChangeNotifier {
     this.keys.add(0);
     this.index = 0;
   }
+
   BuildContext my_context;
   List<bool> isRunning = List<bool>.filled(100, false);
   bool isOver = false;
   bool isPaused = true;
-  Timer timer;
+  var timer;
   int leftTime = 0;
   List<int> keys;
   int index;
   String title = "";
   String text = "";
   final noteBox = Hive.box<Note>(noteBoxName);
-  void startTimer(BuildContext context) {
+  void startTimer() {
     if (timer == null) {
-        my_context = context;
-        timer = Timer.periodic(Duration(seconds: 1), (timer) {
-          int leftTime = noteBox.get(keys[index]).leftTime;
-          leftTime = leftTime - 1;
-          if (leftTime == 0) {
-            isOver = true;
-            stopTimer();
-            var ntitle = noteBox.get(keys[index]).title;
-            var nttext = noteBox.get(keys[index]).text;
-            var nttime = noteBox.get(keys[index]).time;
-            var ntisChecked = noteBox.get(keys[index]).isChecked;
-            var ntcolor = noteBox.get(keys[index]).color;
-            var ntlefttime = leftTime;
-            Note note =
-                Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime);
-            noteBox.put(keys[index], note);
-            isRunning[index] = true;
-            isOver = true;
-            startAlarm();
-            // Future.microtask(() {
-            //   startAlarm();
-            // });
-            notifyListeners();
-          } else if (leftTime == -1) {
-            isPaused = true;
-            isOver = false;
-            var ntitle = noteBox.get(keys[index]).title;
-            var nttext = noteBox.get(keys[index]).text;
-            var nttime = noteBox.get(keys[index]).time;
-            var ntisChecked = noteBox.get(keys[index]).isChecked;
-            var ntcolor = noteBox.get(keys[index]).color;
-            var ntlefttime = nttime;
-            Note note =
-                Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime);
-            noteBox.put(keys[index], note);
-            isRunning[index] = true;
-            notifyListeners();
-          } else {
-            isPaused = false;
-            isOver = false;
-            var ntitle = noteBox.get(keys[index]).title;
-            var nttext = noteBox.get(keys[index]).text;
-            var nttime = noteBox.get(keys[index]).time;
-            var ntisChecked = noteBox.get(keys[index]).isChecked;
-            var ntcolor = noteBox.get(keys[index]).color;
-            var ntlefttime = leftTime;
-            Note note =
-                Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime);
-            noteBox.put(keys[index], note);
-            isRunning[index] = true;
-            notifyListeners();
-          }
-        });
-      
-    }else if (!timer.isActive) {
-        my_context = context;
-        timer = Timer.periodic(Duration(seconds: 1), (timer) {
-          int leftTime = noteBox.get(keys[index]).leftTime;
-          leftTime = leftTime - 1;
-          if (leftTime == 0) {
-            isOver = true;
-            stopTimer();
-            var ntitle = noteBox.get(keys[index]).title;
-            var nttext = noteBox.get(keys[index]).text;
-            var nttime = noteBox.get(keys[index]).time;
-            var ntisChecked = noteBox.get(keys[index]).isChecked;
-            var ntcolor = noteBox.get(keys[index]).color;
-            var ntlefttime = leftTime;
-            Note note =
-                Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime);
-            noteBox.put(keys[index], note);
-            isRunning[index] = true;
-            isOver = true;
-            startAlarm();
-            // Future.microtask(() {
-            //   startAlarm();
-            // });
-            notifyListeners();
-          } else if (leftTime == -1) {
-            isPaused = true;
-            isOver = false;
-            var ntitle = noteBox.get(keys[index]).title;
-            var nttext = noteBox.get(keys[index]).text;
-            var nttime = noteBox.get(keys[index]).time;
-            var ntisChecked = noteBox.get(keys[index]).isChecked;
-            var ntcolor = noteBox.get(keys[index]).color;
-            var ntlefttime = nttime;
-            Note note =
-                Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime);
-            noteBox.put(keys[index], note);
-            isRunning[index] = true;
-            notifyListeners();
-          } else {
-            isPaused = false;
-            isOver = false;
-            var ntitle = noteBox.get(keys[index]).title;
-            var nttext = noteBox.get(keys[index]).text;
-            var nttime = noteBox.get(keys[index]).time;
-            var ntisChecked = noteBox.get(keys[index]).isChecked;
-            var ntcolor = noteBox.get(keys[index]).color;
-            var ntlefttime = leftTime;
-            Note note =
-                Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime);
-            noteBox.put(keys[index], note);
-            isRunning[index] = true;
-            notifyListeners();
-          }
-        });
+      timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        int leftTime = noteBox.get(keys[index]).leftTime;
+        leftTime = leftTime - 1;
+        if (leftTime == 0) {
+          isOver = true;
+          stopTimer();
+          var ntitle = noteBox.get(keys[index]).title;
+          var nttext = noteBox.get(keys[index]).text;
+          var nttime = noteBox.get(keys[index]).time;
+          var ntisChecked = noteBox.get(keys[index]).isChecked;
+          var ntcolor = noteBox.get(keys[index]).color;
+          var ntlefttime = leftTime;
+          Note note =
+              Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime);
+          noteBox.put(keys[index], note);
+          isRunning[index] = true;
+          isOver = true;
+          startAlarm();
+          // Future.microtask(() {
+          //   startAlarm();
+          // });
+          notifyListeners();
+        } else if (leftTime == -1) {
+          isPaused = true;
+          isOver = false;
+          var ntitle = noteBox.get(keys[index]).title;
+          var nttext = noteBox.get(keys[index]).text;
+          var nttime = noteBox.get(keys[index]).time;
+          var ntisChecked = noteBox.get(keys[index]).isChecked;
+          var ntcolor = noteBox.get(keys[index]).color;
+          var ntlefttime = nttime;
+          Note note =
+              Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime);
+          noteBox.put(keys[index], note);
+          isRunning[index] = true;
+          notifyListeners();
+        } else {
+          isPaused = false;
+          isOver = false;
+          var ntitle = noteBox.get(keys[index]).title;
+          var nttext = noteBox.get(keys[index]).text;
+          var nttime = noteBox.get(keys[index]).time;
+          var ntisChecked = noteBox.get(keys[index]).isChecked;
+          var ntcolor = noteBox.get(keys[index]).color;
+          var ntlefttime = leftTime;
+          Note note =
+              Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime);
+          noteBox.put(keys[index], note);
+          isRunning[index] = true;
+          notifyListeners();
+        }
+      });
+    } else if (!timer.isActive) {
+      timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        int leftTime = noteBox.get(keys[index]).leftTime;
+        leftTime = leftTime - 1;
+        if (leftTime == 0) {
+          isOver = true;
+          stopTimer();
+          var ntitle = noteBox.get(keys[index]).title;
+          var nttext = noteBox.get(keys[index]).text;
+          var nttime = noteBox.get(keys[index]).time;
+          var ntisChecked = noteBox.get(keys[index]).isChecked;
+          var ntcolor = noteBox.get(keys[index]).color;
+          var ntlefttime = leftTime;
+          Note note =
+              Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime);
+          noteBox.put(keys[index], note);
+          isRunning[index] = true;
+          isOver = true;
+          startAlarm();
+          // Future.microtask(() {
+          //   startAlarm();
+          // });
+          notifyListeners();
+        } else if (leftTime == -1) {
+          isPaused = true;
+          isOver = false;
+          var ntitle = noteBox.get(keys[index]).title;
+          var nttext = noteBox.get(keys[index]).text;
+          var nttime = noteBox.get(keys[index]).time;
+          var ntisChecked = noteBox.get(keys[index]).isChecked;
+          var ntcolor = noteBox.get(keys[index]).color;
+          var ntlefttime = nttime;
+          Note note =
+              Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime);
+          noteBox.put(keys[index], note);
+          isRunning[index] = true;
+          notifyListeners();
+        } else {
+          isPaused = false;
+          isOver = false;
+          var ntitle = noteBox.get(keys[index]).title;
+          var nttext = noteBox.get(keys[index]).text;
+          var nttime = noteBox.get(keys[index]).time;
+          var ntisChecked = noteBox.get(keys[index]).isChecked;
+          var ntcolor = noteBox.get(keys[index]).color;
+          var ntlefttime = leftTime;
+          Note note =
+              Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime);
+          noteBox.put(keys[index], note);
+          isRunning[index] = true;
+          notifyListeners();
+        }
+      });
     }
   }
 
@@ -162,9 +158,12 @@ class TimerState extends ChangeNotifier {
     stopTimer();
   }
 
-  void loadTimer(List<int> keys, int index) {
+  void loadTimer(List<int> keys, int index, BuildContext context) {
     this.keys = keys;
     this.index = index;
+    this.my_context = context;
+    title = uiKit.AppLocalizations.of(my_context).translate('notesapp');
+    text= uiKit.AppLocalizations.of(my_context).translate('taskOver');
     leftTime = noteBox.get(keys[index]).leftTime;
   }
 
@@ -198,8 +197,8 @@ class TimerState extends ChangeNotifier {
           iOS: iOSPlatformChannelSpecifics);
       await flutterLocalNotificationsPlugin.show(
           0,
-          uiKit.AppLocalizations.of(my_context).translate('notesapp'),
-          uiKit.AppLocalizations.of(my_context).translate('taskOver'),
+          title,
+          text,
           platformChannelSpecifics);
     });
 

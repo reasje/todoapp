@@ -23,10 +23,10 @@ class _MyDoanteState extends State<MyDoante> {
     return Column(
       children: [
         Expanded(
-          flex: 2,
+          flex: 1,
           child: Container(
             alignment: Alignment.centerRight,
-            margin: EdgeInsets.all(30),
+            margin: EdgeInsets.only(top: SizeX*0.0008, right: 30),
             child: uiKit.MyButton(
               sizePU: SizeX * 0.07,
               sizePD: SizeX * 0.08,
@@ -37,10 +37,9 @@ class _MyDoanteState extends State<MyDoante> {
           ),
         ),
         Expanded(
-          flex: 5,
+          flex: 3,
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Image.asset(
                   'assets/images/coffee.png',
@@ -56,16 +55,20 @@ class _MyDoanteState extends State<MyDoante> {
                         uiKit.AppLocalizations.of(context).translate('donate'),
                         style: TextStyle(
                             color: _myProvider.textColor,
-                            fontSize: _myProvider.isEn ? SizeX * SizeY * 0.00009 : SizeX * SizeY * 0.000075,
+                            fontSize: _myProvider.isEn
+                                ? SizeX * SizeY * 0.00009
+                                : SizeX * SizeY * 0.000075,
                             fontWeight: FontWeight.w100),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: SizeX*0.008),
+                        margin: EdgeInsets.only(top: SizeX * 0.008),
                         child: Text(
                           '@Rezaaslejeddian@gmail.com',
                           style: TextStyle(
                               color: _myProvider.textColor,
-                              fontSize: _myProvider.isEn ? SizeX * SizeY * 0.00005 : SizeX * SizeY * 0.00006,
+                              fontSize: _myProvider.isEn
+                                  ? SizeX * SizeY * 0.00005
+                                  : SizeX * SizeY * 0.00006,
                               fontWeight: FontWeight.w100),
                         ),
                       ),
@@ -77,15 +80,55 @@ class _MyDoanteState extends State<MyDoante> {
           ),
         ),
         Expanded(
-            flex: 3,
-            child: Center(
-              child: uiKit.MyButton(
-                sizePU: SizeX * 0.1,
-                sizePD: SizeX * 0.1,
-                iconSize: SizeX * SizeY * 0.00014,
-                iconData: FontAwesome.dollar,
-                id: 'donate',
-              ),
+            flex: 2,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    uiKit.MyButton(
+                      sizePU: SizeX * 0.1,
+                      sizePD: SizeX * 0.1,
+                      iconSize: SizeX * SizeY * 0.00014,
+                      iconData: FontAwesome.dollar,
+                      id: 'donate',
+                    ),
+                    Text(
+                      uiKit.AppLocalizations.of(context)
+                          .translate('donateRials'),
+                      style: TextStyle(
+                          color: _myProvider.textColor,
+                          fontSize: _myProvider.isEn
+                              ? SizeX * SizeY * 0.00007
+                              : SizeX * SizeY * 0.00007,
+                          fontWeight: FontWeight.w400),
+                    )
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    uiKit.MyButton(
+                      sizePU: SizeX * 0.1,
+                      sizePD: SizeX * 0.1,
+                      iconSize: SizeX * SizeY * 0.00014,
+                      iconData: FontAwesome.dollar,
+                      id: 'dogedonate',
+                    ),
+                    Text(
+                      uiKit.AppLocalizations.of(context)
+                          .translate('donateDoge'),
+                      style: TextStyle(
+                          color: _myProvider.textColor,
+                          fontSize: _myProvider.isEn
+                              ? SizeX * SizeY * 0.00007
+                              : SizeX * SizeY * 0.00006,
+                          fontWeight: FontWeight.w400),
+                    )
+                  ],
+                )
+              ],
             ))
       ],
     );

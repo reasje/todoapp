@@ -8,6 +8,7 @@ import 'package:todoapp/provider/notes_provider.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/screen/splash_screen.dart';
+import 'package:wakelock/wakelock.dart';
 import 'applocalizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -17,6 +18,9 @@ const String dateBoxName = 'dates';
 // Flutter notifications
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
+// void printHello() {
+//   print('object');
+// }
 
 void main() async {
   // ensurening that the init is done !
@@ -56,12 +60,15 @@ void main() async {
   Future.microtask(() {
     myProvider().initialColorsAndLan();
   });
+  // android alarm manager services
+  //await AndroidAlarmManager.initialize();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]).then((_) {
     runApp(MyApp());
   });
+  //await AndroidAlarmManager.periodic(const Duration(seconds: 1), 1, printHello, exact: true, wakeup: true);
 }
 
 class MyApp extends StatefulWidget {
@@ -104,7 +111,7 @@ class _MyAppState extends State<MyApp> {
                 Locale("en", "US"),
                 Locale("fa", "IR"),
               ],
-              
+
               // Return a locale which will be used by the app
               // localeResolutionCallback: (locale, supportedLocales) {
               //   // Check if the current device locale is supported
@@ -119,9 +126,7 @@ class _MyAppState extends State<MyApp> {
               debugShowCheckedModeBanner: false,
               theme: ThemeData(
                   visualDensity: VisualDensity.adaptivePlatformDensity,
-                  fontFamily: _myProvider.isEn
-                      ? "Ubuntu Condensed"
-                      : "Dubai"),
+                  fontFamily: _myProvider.isEn ? "Ubuntu Condensed" : "Dubai"),
               home: MySplashScreen(),
             );
           },

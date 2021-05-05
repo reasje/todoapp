@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:move_to_background/move_to_background.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/model/note_model.dart';
@@ -9,7 +11,7 @@ import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'dart:async';
 import 'package:notification_permissions/notification_permissions.dart';
-import 'package:move_to_background/move_to_background.dart';
+
 // checkMe() {
 //   final dateBox = Hive.box<String>(dateBoxName);
 //   String date = dateBox.get('date');
@@ -93,10 +95,17 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    final _timerState = Provider.of<TimerState>(context, listen: false);
     if (state == AppLifecycleState.resumed) {
+      print('Resumed');
       setState(() {
         permissionStatusFuture = getCheckNotificationPermStatus();
       });
+    } else if ((state == AppLifecycleState.paused ||
+            state == AppLifecycleState.inactive) &
+        (_timerState.isRunning.any((element) => element == true))) {
+      print('Paused');
+      MoveToBackground.moveTaskToBack();
     }
   }
 
@@ -156,7 +165,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
               MoveToBackground.moveTaskToBack();
               return true;
             }
-            return false;
+            return true;
           },
           child: GestureDetector(
             onTap: () {
