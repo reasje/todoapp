@@ -404,23 +404,23 @@ class _myRorderableState extends State<myRorderable> {
                                                                               children: [
                                                                                 Text(
                                                                                   ((notes.get(keys[index]).leftTime / 3600) % 60).floor().toString().padLeft(2, '0'),
-                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012),
+                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012,fontFamily: "Ubuntu Condensed"),
                                                                                 ),
                                                                                 Text(
                                                                                   ':',
-                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012),
+                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012,fontFamily: "Ubuntu Condensed"),
                                                                                 ),
                                                                                 Text(
                                                                                   ((notes.get(keys[index]).leftTime / 60) % 60).floor().toString().padLeft(2, '0'),
-                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012),
+                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012,fontFamily: "Ubuntu Condensed"),
                                                                                 ),
                                                                                 Text(
                                                                                   ':',
-                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012),
+                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012,fontFamily: "Ubuntu Condensed"),
                                                                                 ),
                                                                                 Text(
                                                                                   (notes.get(keys[index]).leftTime % 60).floor().toString().padLeft(2, '0'),
-                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012),
+                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012,fontFamily: "Ubuntu Condensed"),
                                                                                 ),
                                                                               ],
                                                                             ),
@@ -551,7 +551,7 @@ class _myRorderableState extends State<myRorderable> {
                                                                                 child: Text(
                                                                                   notes.get(keys[index]).title.length >= (SizeY * 0.08).round() ? notes.get(keys[index]).title.substring(0, (SizeY * 0.08).round()) + "..." : notes.get(keys[index]).title,
                                                                                   softWrap: false,
-                                                                                  style: TextStyle(color: _myProvider.noteTitleColor[index], fontSize: SizeX * SizeY * 0.00011, fontWeight: FontWeight.w100),
+                                                                                  style: TextStyle(color: _myProvider.noteTitleColor[index], fontSize: _myProvider.isEn ? SizeX * SizeY * 0.00011 : SizeX * SizeY * 0.00009, fontWeight:_myProvider.isEn ?  FontWeight.w100 : FontWeight.w600),
                                                                                 ),
                                                                               ),
                                                                             ),

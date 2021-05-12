@@ -174,7 +174,7 @@ class _MyTimerState extends State<MyTimer> {
                                               (element) => element == true)
                                           ? _myProvider.swachColor
                                           : _myProvider.textColor,
-                                      fontSize: SizeX * SizeY * 0.00015),
+                                      fontSize: SizeX * SizeY * 0.00015,fontFamily: "Ubuntu Condensed"),
                                 ),
                                 // Text(
                                 //   ':',
@@ -192,7 +192,7 @@ class _MyTimerState extends State<MyTimer> {
                                               (element) => element == true)
                                           ? _myProvider.swachColor
                                           : _myProvider.textColor,
-                                      fontSize: SizeX * SizeY * 0.00015),
+                                      fontSize: SizeX * SizeY * 0.00015,fontFamily: "Ubuntu Condensed"),
                                 ),
                                 // Text(
                                 //   ':',
@@ -210,7 +210,7 @@ class _MyTimerState extends State<MyTimer> {
                                               (element) => element == true)
                                           ? _myProvider.swachColor
                                           : _myProvider.textColor,
-                                      fontSize: SizeX * SizeY * 0.00015),
+                                      fontSize: SizeX * SizeY * 0.00015,fontFamily: "Ubuntu Condensed"),
                                 ),
                               ],
                             ),
@@ -294,7 +294,7 @@ class _MyTimerState extends State<MyTimer> {
                               style: TextStyle(
                                   color: _myProvider.textColor,
                                   fontSize: SizeX * SizeY * 0.0001,
-                                  fontWeight: FontWeight.w100),
+                                  fontWeight: _myProvider.isEn ? FontWeight.w100 : FontWeight.w600),
                             ),
                           ),
                         ),
@@ -345,7 +345,7 @@ class _MyTimerState extends State<MyTimer> {
                                     style: TextStyle(
                                         color: _myProvider.textColor,
                                         fontSize: SizeX * SizeY * 0.0001,
-                                        fontWeight: FontWeight.w100),
+                                        fontWeight:  _myProvider.isEn ? FontWeight.w100 : FontWeight.w600),
                                   ),
                                 ),
                               ),
