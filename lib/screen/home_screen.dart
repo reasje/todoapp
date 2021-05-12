@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:move_to_background/move_to_background.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/model/note_model.dart';
@@ -53,7 +52,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with WidgetsBindingObserver {
   Future<String> permissionStatusFuture;
-
+  AnimationController _anicontroller;
+  bool shouldRun;
   var permGranted = "granted";
   var permDenied = "denied";
   var permUnknown = "unknown";
@@ -95,17 +95,18 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    final _timerState = Provider.of<TimerState>(context, listen: false);
-    if (state == AppLifecycleState.resumed) {
+    final _timerState = Provider.of<TimerState>(context , listen: false);
+    if (state == AppLifecycleState.resumed && shouldRun) {
       print('Resumed');
       setState(() {
         permissionStatusFuture = getCheckNotificationPermStatus();
       });
-    } else if ((state == AppLifecycleState.paused ||
-            state == AppLifecycleState.inactive) &
+      _timerState.updateTimer();
+    } else if (state == AppLifecycleState.paused &&
         (_timerState.isRunning.any((element) => element == true))) {
       print('Paused');
-      MoveToBackground.moveTaskToBack();
+      _timerState.stopTimer();
+      shouldRun = true;
     }
   }
 
@@ -134,97 +135,90 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     final _timerState = Provider.of<TimerState>(context);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
-    return AnimatedTheme(
-      duration: Duration(milliseconds: 600),
-      data: Theme.of(context),
-      child: Scaffold(
-        backgroundColor: _myProvider.mainColor,
-        body: WillPopScope(
-          onWillPop: () async {
-            // current index of the stack is editing stack
-            if (_myProvider.stack_index == 1) {
-              _myProvider.cancelClicked();
+    return Scaffold(
+      backgroundColor: _myProvider.mainColor,
+      body: WillPopScope(
+        onWillPop: () async {
+          // current index of the stack is editing stack
+          if (_myProvider.stack_index == 1) {
+            _myProvider.cancelClicked();
+          }
+          // if current stack is timer stack
+          else if (_myProvider.stack_index == 2) {
+            if (_timerState.isRunning.any((element) => element == true)) {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(uiKit.MySnackBar(
+                  uiKit.AppLocalizations.of(context).translate('cannotGoBack'),
+                  false,
+                  context));
+            } else {
+              _myProvider.changeTimerStack();
             }
-            // if current stack is timer stack
-            else if (_myProvider.stack_index == 2) {
-              if (_timerState.isRunning.any((element) => element == true)) {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                ScaffoldMessenger.of(context).showSnackBar(uiKit.MySnackBar(
-                    uiKit.AppLocalizations.of(context)
-                        .translate('cannotGoBack'),
-                    false,
-                    context));
-              } else {
-                _myProvider.changeTimerStack();
-              }
-            }
-            // if the current stack is the donate stack
-            else if (_myProvider.stack_index == 3) {
-              _myProvider.goBackToMain();
-            } else if (_myProvider.stack_index == 0) {
-              MoveToBackground.moveTaskToBack();
-              return true;
-            }
+          }
+          // if the current stack is the donate stack
+          else if (_myProvider.stack_index == 3) {
+            _myProvider.goBackToMain();
+          } else if (_myProvider.stack_index == 0) {
             return true;
+          }
+          return true;
+        },
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
           },
-          child: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).requestFocus(new FocusNode());
-            },
-            child: SafeArea(
-              child: FutureBuilder(
-                  future: permissionStatusFuture,
-                  builder: (context, snapshot) {
-                    // if we are waiting for data, show a progress indicator
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    }
-                    if (snapshot.hasData) {
-                      // The permission is granted, then just show the text
-                      if (snapshot.data == permGranted) {
-                        return AnimatedContainer(
-                            duration: Duration(microseconds: 500),
-                            height: SizeX * 0.98,
-                            width: SizeY,
-                            padding: EdgeInsets.only(),
-                            child: IndexedStack(
-                              index: _myProvider.stack_index,
-                              children: [
-                                Container(
-                                    width: SizeY,
-                                    height: SizeX,
-                                    child: Column(
-                                      children: [
-                                        uiKit.myRorderable(
-                                            SizeX: SizeX,
-                                            SizeY: SizeY,
-                                            noteBox: noteBox)
-                                      ],
-                                    )),
-                                Container(
-                                  child: uiKit.MyNotesEditing(
+          child: SafeArea(
+            child: FutureBuilder(
+                future: permissionStatusFuture,
+                builder: (context, snapshot) {
+                  // if we are waiting for data, show a progress indicator
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  }
+                  if (snapshot.hasData) {
+                    // The permission is granted, then just show the text
+                    if (snapshot.data == permGranted) {
+                      return Container(
+                          height: SizeX * 0.98,
+                          width: SizeY,
+                          padding: EdgeInsets.only(),
+                          child: IndexedStack(
+                            index: _myProvider.stack_index,
+                            children: [
+                              Container(
+                                  width: SizeY,
+                                  height: SizeX,
+                                  child: Column(
+                                    children: [
+                                      uiKit.myRorderable(
+                                          SizeX: SizeX,
+                                          SizeY: SizeY,
+                                          noteBox: noteBox)
+                                    ],
+                                  )),
+                              Container(
+                                child: uiKit.MyNotesEditing(
+                                  SizeX: SizeX,
+                                  SizeY: SizeY,
+                                ),
+                              ),
+                              Container(
+                                child: uiKit.MyTimer(
                                     SizeX: SizeX,
                                     SizeY: SizeY,
-                                  ),
+                                    noteBox: noteBox),
+                              ),
+                              Container(
+                                child: uiKit.MyDoante(
+                                  SizeX: SizeX,
+                                  SizeY: SizeY,
                                 ),
-                                Container(
-                                  child: uiKit.MyTimer(
-                                      SizeX: SizeX,
-                                      SizeY: SizeY,
-                                      noteBox: noteBox),
-                                ),
-                                Container(
-                                  child: uiKit.MyDoante(
-                                    SizeX: SizeX,
-                                    SizeY: SizeY,
-                                  ),
-                                ),
-                              ],
-                            ));
-                      }
+                              ),
+                            ],
+                          ));
                     }
-                  }),
-            ),
+                  }
+                }),
           ),
         ),
       ),

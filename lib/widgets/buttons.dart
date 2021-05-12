@@ -1,3 +1,4 @@
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +16,15 @@ Future<void> copyDogeAdress() async {
   ClipboardData data = ClipboardData(text: _dogeAdress);
   print(data.text);
   await Clipboard.setData(data);
+}
+
+Future<void> startTimer() async {
+  print('started');
+  await AndroidAlarmManager.oneShotAt(DateTime(2021, 5, 7, 12, 05), 0, printMe);
+}
+
+void printMe() {
+  print('Hell');
 }
 
 class MyButton extends StatefulWidget {
@@ -71,9 +81,11 @@ class _MyButtonState extends State<MyButton> {
               break;
             case 'start':
               _timerState.startTimer();
+              //startTimer();
               break;
             case 'stop':
               _timerState.stopTimer();
+              _timerState.cancelAlarm();
               break;
             case 'reset':
               _timerState.resetTimer();
@@ -243,6 +255,5 @@ class _MyButtonState extends State<MyButton> {
     );
   }
 }
-
 void _launchURL() async =>
     await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
