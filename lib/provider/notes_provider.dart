@@ -492,9 +492,8 @@ class myProvider extends ChangeNotifier {
         String noteTitle;
         title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
         final String noteText = text.text;
-        final int noteTime = time_duration.inSeconds == 0 ? null : time_duration.inSeconds;
+        final int noteTime = time_duration.inSeconds;
         int leftTime = noteTime;
-
         Note note = Note(noteTitle, noteText, false, noteTime, 0, leftTime);
         noteBox.add(note);
         changes.clearHistory();
