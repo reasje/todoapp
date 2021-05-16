@@ -27,7 +27,7 @@ class _myRorderableState extends State<myRorderable> {
   @override
   void initState() {
     // TODO: implement initState
-    _scrollController = ScrollController();
+    _scrollController = ScrollController(keepScrollOffset: false);
     super.initState();
   }
 
@@ -42,14 +42,25 @@ class _myRorderableState extends State<myRorderable> {
       child: Container(
           width: SizeX,
           margin: EdgeInsets.only(
-            right: SizeY * 0.02,
-            left: SizeY * 0.02,
-          ),
+              //right: SizeY * 0.02,
+              //left: SizeY * 0.02,
+              ),
           // padding: EdgeInsets.only(top: SizeX * 0.01),
           child: ValueListenableBuilder(
               valueListenable: noteBox.listenable(),
               builder: (context, Box<Note> notes, _) {
                 List<int> keys = notes.keys.cast<int>().toList();
+                int with_timer = 0;
+                int without_timer = 0;
+                for (int i = 0; i < keys.length; i++) {
+                  if (notes.get(keys[i]).time == 0) {
+                    without_timer = without_timer + 1;
+                  } else {
+                    without_timer = without_timer + 1;
+                  }
+                }
+                double listview_size = (without_timer * SizeX * 0.22) +
+                    (with_timer * SizeX * 0.5);
                 return Theme(
                   data: Theme.of(context).copyWith(
                     canvasColor: Colors.transparent,
@@ -181,12 +192,13 @@ class _myRorderableState extends State<myRorderable> {
                                   ),
                                 )
                               : Container(
-                                  height: SizeX,
+                                  height: listview_size+400.0,
                                   width: SizeY,
                                   child: ScrollConfiguration(
                                     behavior: NoGlowBehaviour(),
                                     child: AnimationLimiter(
                                       child: ReorderableListView(
+                                        physics: NeverScrollableScrollPhysics(),
                                         scrollController: _scrollController,
                                         padding: EdgeInsets.only(
                                             bottom: SizeX * 0.1,
@@ -404,23 +416,23 @@ class _myRorderableState extends State<myRorderable> {
                                                                               children: [
                                                                                 Text(
                                                                                   ((notes.get(keys[index]).leftTime / 3600) % 60).floor().toString().padLeft(2, '0'),
-                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012,fontFamily: "Ubuntu Condensed"),
+                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
                                                                                 ),
                                                                                 Text(
                                                                                   ':',
-                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012,fontFamily: "Ubuntu Condensed"),
+                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
                                                                                 ),
                                                                                 Text(
                                                                                   ((notes.get(keys[index]).leftTime / 60) % 60).floor().toString().padLeft(2, '0'),
-                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012,fontFamily: "Ubuntu Condensed"),
+                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
                                                                                 ),
                                                                                 Text(
                                                                                   ':',
-                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012,fontFamily: "Ubuntu Condensed"),
+                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
                                                                                 ),
                                                                                 Text(
                                                                                   (notes.get(keys[index]).leftTime % 60).floor().toString().padLeft(2, '0'),
-                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012,fontFamily: "Ubuntu Condensed"),
+                                                                                  style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
                                                                                 ),
                                                                               ],
                                                                             ),
@@ -510,6 +522,7 @@ class _myRorderableState extends State<myRorderable> {
                                                                       //       curve: Curves
                                                                       //           .easeIn);
                                                                       // }
+
                                                                     },
                                                                     initiallyExpanded:
                                                                         false,
@@ -551,7 +564,7 @@ class _myRorderableState extends State<myRorderable> {
                                                                                 child: Text(
                                                                                   notes.get(keys[index]).title.length >= (SizeY * 0.08).round() ? notes.get(keys[index]).title.substring(0, (SizeY * 0.08).round()) + "..." : notes.get(keys[index]).title,
                                                                                   softWrap: false,
-                                                                                  style: TextStyle(color: _myProvider.noteTitleColor[index], fontSize: _myProvider.isEn ? SizeX * SizeY * 0.00011 : SizeX * SizeY * 0.00009, fontWeight:_myProvider.isEn ?  FontWeight.w100 : FontWeight.w600),
+                                                                                  style: TextStyle(color: _myProvider.noteTitleColor[index], fontSize: _myProvider.isEn ? SizeX * SizeY * 0.00011 : SizeX * SizeY * 0.00009, fontWeight: _myProvider.isEn ? FontWeight.w100 : FontWeight.w600),
                                                                                 ),
                                                                               ),
                                                                             ),

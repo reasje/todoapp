@@ -79,57 +79,57 @@ class _MyDoanteState extends State<MyDoante> {
             ),
           ),
         ),
-        Expanded(
-            flex: 2,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    uiKit.MyButton(
-                      sizePU: SizeX * 0.1,
-                      sizePD: SizeX * 0.1,
-                      iconSize: SizeX * SizeY * 0.00014,
-                      iconData: FontAwesome.dollar,
-                      id: 'donate',
-                    ),
-                    Text(
-                      uiKit.AppLocalizations.of(context)
-                          .translate('donateRials'),
-                      style: TextStyle(
-                          color: _myProvider.textColor,
-                          fontSize: _myProvider.isEn
-                              ? SizeX * SizeY * 0.00007
-                              : SizeX * SizeY * 0.00007,
-                          fontWeight: FontWeight.w400),
-                    )
-                  ],
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    uiKit.MyButton(
-                      sizePU: SizeX * 0.1,
-                      sizePD: SizeX * 0.1,
-                      iconSize: SizeX * SizeY * 0.00014,
-                      iconData: FontAwesome.dollar,
-                      id: 'dogedonate',
-                    ),
-                    Text(
-                      uiKit.AppLocalizations.of(context)
-                          .translate('donateDoge'),
-                      style: TextStyle(
-                          color: _myProvider.textColor,
-                          fontSize: _myProvider.isEn
-                              ? SizeX * SizeY * 0.00007
-                              : SizeX * SizeY * 0.00006,
-                          fontWeight: FontWeight.w400),
-                    )
-                  ],
-                )
-              ],
-            ))
+        // Expanded(
+        //     flex: 2,
+        //     child: Row(
+        //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //       children: [
+        //         Column(
+        //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //           children: [
+        //             uiKit.MyButton(
+        //               sizePU: SizeX * 0.1,
+        //               sizePD: SizeX * 0.1,
+        //               iconSize: SizeX * SizeY * 0.00014,
+        //               iconData: FontAwesome.dollar,
+        //               id: 'donate',
+        //             ),
+        //             Text(
+        //               uiKit.AppLocalizations.of(context)
+        //                   .translate('donateRials'),
+        //               style: TextStyle(
+        //                   color: _myProvider.textColor,
+        //                   fontSize: _myProvider.isEn
+        //                       ? SizeX * SizeY * 0.00007
+        //                       : SizeX * SizeY * 0.00007,
+        //                   fontWeight: FontWeight.w400),
+        //             )
+        //           ],
+        //         ),
+        //         Column(
+        //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //           children: [
+        //             uiKit.MyButton(
+        //               sizePU: SizeX * 0.1,
+        //               sizePD: SizeX * 0.1,
+        //               iconSize: SizeX * SizeY * 0.00014,
+        //               iconData: FontAwesome.dollar,
+        //               id: 'dogedonate',
+        //             ),
+        //             Text(
+        //               uiKit.AppLocalizations.of(context)
+        //                   .translate('donateDoge'),
+        //               style: TextStyle(
+        //                   color: _myProvider.textColor,
+        //                   fontSize: _myProvider.isEn
+        //                       ? SizeX * SizeY * 0.00007
+        //                       : SizeX * SizeY * 0.00006,
+        //                   fontWeight: FontWeight.w400),
+        //             )
+        //           ],
+        //         )
+        //       ],
+        //     ))
       ],
     );
   }
