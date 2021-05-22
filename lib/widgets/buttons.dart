@@ -3,11 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapp/provider/GoogleAuthClient.dart';
 import 'package:todoapp/provider/notes_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/screen/home_screen.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:googleapis/drive/v3.dart' as drive;
+import 'package:google_sign_in/google_sign_in.dart' as signIn;
 
 //typedef function = void Function();
 const _url = 'https://idpay.ir/todoapp';
@@ -25,6 +28,23 @@ Future<void> startTimer() async {
 
 void printMe() {
   print('Hell');
+}
+
+Future<void> signInFun() async {
+  final googleSignIn =
+      signIn.GoogleSignIn.standard(scopes: [drive.DriveApi.driveScope]);
+  final signIn.GoogleSignInAccount account = await googleSignIn.signIn();
+  print("User account $account");
+  final authHeaders = await account.authHeaders;
+  final authenticateClient = GoogleAuthClient(authHeaders);
+  final driveApi = drive.DriveApi(authenticateClient);
+  final Stream<List<int>> mediaStream =
+      Future.value([104, 105]).asStream().asBroadcastStream();
+  var media = new drive.Media(mediaStream, 2);
+  var driveFile = new drive.File();
+  driveFile.name = "hello_world.txt";
+  final result = await driveApi.files.create(driveFile, uploadMedia: media);
+  print("Upload result: $result");
 }
 
 class MyButton extends StatefulWidget {
@@ -94,7 +114,8 @@ class _MyButtonState extends State<MyButton> {
               _myProvider.canRedo ? _myProvider.changesRedo() : null;
               break;
             case 'lan':
-              _myProvider.changeLan();
+              //_myProvider.changeLan();
+              signInFun();
               break;
             case 'new':
               _myProvider.newNoteClicked(context);
@@ -255,5 +276,6 @@ class _MyButtonState extends State<MyButton> {
     );
   }
 }
+
 void _launchURL() async =>
     await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
