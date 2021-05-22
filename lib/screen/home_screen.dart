@@ -53,7 +53,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with WidgetsBindingObserver {
   Future<String> permissionStatusFuture;
   AnimationController _anicontroller;
-  bool shouldRun;
+  bool shouldRun=false;
   var permGranted = "granted";
   var permDenied = "denied";
   var permUnknown = "unknown";
