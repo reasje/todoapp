@@ -17,5 +17,10 @@ class Note {
   int color;
   @HiveField(5)
   int leftTime;
-  Note(this.title, this.text, this.isChecked, this.time, this.color , this.leftTime);
+  Note(this.title, this.text, this.isChecked, this.time, this.color,
+      this.leftTime);
+
+  // factory Note.fromJson(Map<String, dynamic> json) {
+  //   return Note(json['title'], json['text'], false, json['time'], null, null);
+  // }
 }
