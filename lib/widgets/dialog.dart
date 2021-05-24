@@ -3,23 +3,108 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/provider/notes_provider.dart';
-
+import 'package:todoapp/uiKit.dart' as uiKit;
 import '../applocalizations.dart';
+import 'package:googleapis/drive/v3.dart' as drive;
+import 'package:google_sign_in/google_sign_in.dart' as signIn;
+import 'package:todoapp/provider/drive_provider.dart';
 
-Future showAddDialog(
-  BuildContext context,
-) async {
+// Future showLanDialog(
+//   BuildContext context,
+// ) async {
+//   final TextEditingController _titleFieldController = TextEditingController();
+//   final TextEditingController _textFieldController = TextEditingController();
+//   var _myProvider = Provider.of<myProvider>(context, listen: false);
+//   bool _validate = false;
+//   return showDialog(
+//       context: context,
+//       builder: (context) {
+//         return StatefulBuilder(
+//           builder: (BuildContext context, setState) {
+//             return AlertDialog(
+//               title: Center(child: Text()),
+//               content: Container(
+//                 height: 70,
+//                 decoration: BoxDecoration(
+//                     borderRadius: BorderRadius.all(Radius.circular(20))),
+//                 child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   children: [
+//                     Container(
+//                         alignment: Alignment.bottomLeft,
+//                         height: 50,
+//                         width: 100,
+//                         //margin: EdgeInsets.only(right: 30),
+//                         decoration: BoxDecoration(
+//                             borderRadius: BorderRadius.circular(10),
+//                             color: Colors.blue),
+//                         child: InkWell(
+//                             child: Center(
+//                                 child: Text(
+//                               "English",
+//                               style: TextStyle(
+//                                   color: Colors.white,
+//                                   fontWeight: FontWeight.bold),
+//                             )),
+//                             onTap: () {
+//                               _myProvider.changeLanToEnglish();
+//                               Navigator.pop(context);
+//                             })),
+//                     Container(
+//                         alignment: Alignment.bottomRight,
+//                         height: 50,
+//                         width: 100,
+//                         decoration: BoxDecoration(
+//                             borderRadius: BorderRadius.circular(10),
+//                             color: Colors.blue),
+//                         child: InkWell(
+//                           child: Center(
+//                               child: Text(
+//                             "فارسی",
+//                             style: TextStyle(
+//                                 color: Colors.white,
+//                                 fontWeight: FontWeight.bold),
+//                           )),
+//                           onTap: () {
+//                               _myProvider.changeLanToPersian();
+//                               Navigator.pop(context);
+//                           },
+//                         ))
+//                   ],
+//                 ),
+//               ),
+//             );
+//           },
+//         );
+//       });
+// }
+Future showAlertDialog(BuildContext context,
+    [String id,
+    drive.DriveApi driveApi,
+    drive.File driveFile,
+    Box<Note> noteBox,
+    file_id]) async {
   final TextEditingController _titleFieldController = TextEditingController();
   final TextEditingController _textFieldController = TextEditingController();
   var _myProvider = Provider.of<myProvider>(context, listen: false);
-  bool _validate = false;
   return showDialog(
       context: context,
       builder: (context) {
         return StatefulBuilder(
           builder: (BuildContext context, setState) {
             return AlertDialog(
-              title: Center(child: Text("Choose you language ! ")),
+              backgroundColor: _myProvider.mainColor,
+              title: Center(
+                  child: Text(id == "lan"
+                      ? "Choose you language ! "
+                      : id == "up"
+                          ? uiKit.AppLocalizations.of(context)
+                              .translate('fileExists')
+                          : id == "internet"
+                              ? uiKit.AppLocalizations.of(context)
+                                  .translate('noInternet')
+                              : uiKit.AppLocalizations.of(context)
+                                  .translate('continue') , style: TextStyle(color: _myProvider.textColor , ),)),
               content: Container(
                 height: 70,
                 decoration: BoxDecoration(
@@ -28,45 +113,65 @@ Future showAddDialog(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                        alignment: Alignment.bottomLeft,
-                        height: 50,
-                        width: 100,
-                        //margin: EdgeInsets.only(right: 30),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.blue),
-                        child: InkWell(
-                            child: Center(
-                                child: Text(
-                              "English",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            )),
-                            onTap: () {
-                              _myProvider.changeLanToEnglish();
-                              Navigator.pop(context);
-                            })),
-                    Container(
-                        alignment: Alignment.bottomRight,
+                        alignment:  Alignment.bottomRight,
                         height: 50,
                         width: 100,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.blue),
+                            color: _myProvider.textColor),
                         child: InkWell(
                           child: Center(
                               child: Text(
-                            "فارسی",
+                            id == "lan"
+                                ? "فارسی"
+                                : id == "internet"
+                                    ? uiKit.AppLocalizations.of(context)
+                                        .translate('ok')
+                                    : uiKit.AppLocalizations.of(context)
+                                        .translate('cancel'),
                             style: TextStyle(
-                                color: Colors.white,
+                                color: _myProvider.mainColor,
                                 fontWeight: FontWeight.bold),
                           )),
                           onTap: () {
-                              _myProvider.changeLanToPersian();                            
-                              Navigator.pop(context);
+                            id == "lan"
+                                ? _myProvider.changeLanToPersian()
+                                : null;
+                            Navigator.pop(context);
                           },
-                        ))
+                        )),
+                    id != "internet"
+                        ? Container(
+                            alignment: Alignment.bottomLeft,
+                            height: 50,
+                            width: 100,
+                            //margin: EdgeInsets.only(right: 30),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: _myProvider.textColor),
+                            child: InkWell(
+                                child: Center(
+                                    child: Text(
+                                  id == "lan"
+                                      ? "English"
+                                      : uiKit.AppLocalizations.of(context)
+                                          .translate('ok'),
+                                  style: TextStyle(
+                                      color: _myProvider.mainColor,
+                                      fontWeight: FontWeight.bold),
+                                )),
+                                onTap: () {
+                                  //_myProvider.changeLanToEnglish();
+                                  id == "lan"
+                                      ? _myProvider.changeLanToEnglish()
+                                      : id == "up"
+                                          ? upload(driveApi, driveFile, noteBox,
+                                              file_id)
+                                          : download(driveApi, driveFile,
+                                              noteBox, file_id);
+                                  Navigator.pop(context);
+                                }))
+                        : Container()
                   ],
                 ),
               ),
@@ -75,7 +180,6 @@ Future showAddDialog(
         );
       });
 }
-
 // Future<Widget> showAddDialog(
 //   BuildContext context,
 //   double SizeX,

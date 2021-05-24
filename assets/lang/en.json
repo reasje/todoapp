@@ -37,5 +37,8 @@
   "pioritizeTitle": "Priority Matters",
   "pioritize": "Vilfredo Pareto says\n \"80% of outcomes (or outputs) result from 20% of all causes (or inputs) for any given event\"\n Here comes the value of prioritize your list and reorder the list as necessary",
   "familyTitle": "Enjoy the rest",
-  "family": "With this app,\n You will have the time to share with loved Ones ."
+  "family": "With this app,\n You will have the time to share with loved Ones .",
+  "fileExists": "File already existce in  the drive are you willing to update it ?",
+  "continue": "Are you willing to continue to download the file ? (New notes will be added as the procces succeed) ",
+  "noInternet": "Internet connection required ! "
 }

@@ -96,12 +96,10 @@ class _MyButtonState extends State<MyButton> {
               _myProvider.canRedo ? _myProvider.changesRedo() : null;
               break;
             case 'lan':
-              //_myProvider.changeLan();
-              upload();
+              _myProvider.changeLan();
               break;
             case 'new':
-              download();
-              //_myProvider.newNoteClicked(context);
+              _myProvider.newNoteClicked(context);
               break;
             case 'lamp':
               _myProvider.changeBrigness();
@@ -155,6 +153,12 @@ class _MyButtonState extends State<MyButton> {
             case 'donate':
               print('object');
               _launchURL();
+              break;
+            case 'upload':
+              login(true , context);
+              break;
+            case 'download':
+              login(false , context);
               break;
           }
         });

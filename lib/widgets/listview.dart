@@ -59,8 +59,8 @@ class _myRorderableState extends State<myRorderable> {
                     without_timer = without_timer + 1;
                   }
                 }
-                double listview_size = (without_timer * SizeX * 0.22) +
-                    (with_timer * SizeX * 0.5);
+                double listview_size =
+                    (without_timer * SizeX * 0.22) + (with_timer * SizeX * 0.5);
                 return Theme(
                   data: Theme.of(context).copyWith(
                     canvasColor: Colors.transparent,
@@ -74,63 +74,97 @@ class _myRorderableState extends State<myRorderable> {
                         children: [
                           Column(
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
+                              Directionality(
+                                textDirection: TextDirection.ltr,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                        padding: EdgeInsets.all(SizeX * 0.03),
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          uiKit.AppLocalizations.of(context)
+                                              .translate('notesApp'),
+                                          style: TextStyle(
+                                              color: _myProvider.titleColor,
+                                              fontSize: _myProvider.isEn
+                                                  ? SizeX * SizeY * 0.00012
+                                                  : SizeX * SizeY * 0.0001),
+                                        )),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          padding:
+                                              EdgeInsets.all(SizeX * 0.015),
+                                          alignment: Alignment.centerLeft,
+                                          child: uiKit.MyButton(
+                                            sizePU: SizeX * 0.05,
+                                            sizePD: SizeX * 0.06,
+                                            iconSize: SizeX * SizeY * 0.00006,
+                                            iconData: FontAwesome.download,
+                                            id: 'download',
+                                          ),
+                                        ),
+                                        Container(
+                                          padding:
+                                              EdgeInsets.all(SizeX * 0.015),
+                                          alignment: Alignment.centerLeft,
+                                          child: uiKit.MyButton(
+                                            sizePU: SizeX * 0.05,
+                                            sizePD: SizeX * 0.06,
+                                            iconSize: SizeX * SizeY * 0.00006,
+                                            iconData: FontAwesome.upload,
+                                            id: 'upload',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
                                       padding: EdgeInsets.all(SizeX * 0.015),
                                       alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        uiKit.AppLocalizations.of(context)
-                                            .translate('notesApp'),
-                                        style: TextStyle(
-                                            color: _myProvider.titleColor,
-                                            fontSize: _myProvider.isEn
-                                                ? SizeX * SizeY * 0.00012
-                                                : SizeX * SizeY * 0.0001),
-                                      )),
-                                  Container(
-                                    padding: EdgeInsets.all(SizeX * 0.015),
-                                    alignment: Alignment.centerLeft,
-                                    child: uiKit.MyButton(
-                                      sizePU: SizeX * 0.05,
-                                      sizePD: SizeX * 0.06,
-                                      iconSize: SizeX * SizeY * 0.00006,
-                                      iconData: FontAwesome.code,
-                                      id: 'coder',
+                                      child: uiKit.MyButton(
+                                        sizePU: SizeX * 0.05,
+                                        sizePD: SizeX * 0.06,
+                                        iconSize: SizeX * SizeY * 0.00006,
+                                        iconData: FontAwesome.code,
+                                        id: 'coder',
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                               Container(
                                 margin: EdgeInsets.all(SizeX * 0.025),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    uiKit.MyButton(
-                                      sizePU: SizeX * 0.07,
-                                      sizePD: SizeX * 0.08,
-                                      iconSize: SizeX * SizeY * 0.0001,
-                                      iconData: FontAwesome.language,
-                                      id: 'lan',
-                                    ),
-                                    uiKit.MyButton(
-                                      sizePU: SizeX * 0.07,
-                                      sizePD: SizeX * 0.08,
-                                      iconSize: SizeX * SizeY * 0.0001,
-                                      iconData: FontAwesome.plus,
-                                      id: 'new',
-                                    ),
-                                    uiKit.MyButton(
-                                      sizePU: SizeX * 0.07,
-                                      sizePD: SizeX * 0.08,
-                                      iconSize: SizeX * SizeY * 0.0001,
-                                      iconData: FontAwesome.lightbulb_o,
-                                      id: 'lamp',
-                                    ),
-                                  ],
+                                child: Directionality(
+                                  textDirection: TextDirection.ltr,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      uiKit.MyButton(
+                                        sizePU: SizeX * 0.07,
+                                        sizePD: SizeX * 0.08,
+                                        iconSize: SizeX * SizeY * 0.0001,
+                                        iconData: FontAwesome.language,
+                                        id: 'lan',
+                                      ),
+                                      uiKit.MyButton(
+                                        sizePU: SizeX * 0.07,
+                                        sizePD: SizeX * 0.08,
+                                        iconSize: SizeX * SizeY * 0.0001,
+                                        iconData: FontAwesome.plus,
+                                        id: 'new',
+                                      ),
+                                      uiKit.MyButton(
+                                        sizePU: SizeX * 0.07,
+                                        sizePD: SizeX * 0.08,
+                                        iconSize: SizeX * SizeY * 0.0001,
+                                        iconData: FontAwesome.lightbulb_o,
+                                        id: 'lamp',
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
@@ -192,7 +226,7 @@ class _myRorderableState extends State<myRorderable> {
                                   ),
                                 )
                               : Container(
-                                  height: listview_size+400.0,
+                                  height: listview_size + 400.0,
                                   width: SizeY,
                                   child: ScrollConfiguration(
                                     behavior: NoGlowBehaviour(),
@@ -522,7 +556,6 @@ class _myRorderableState extends State<myRorderable> {
                                                                       //       curve: Curves
                                                                       //           .easeIn);
                                                                       // }
-
                                                                     },
                                                                     initiallyExpanded:
                                                                         false,
