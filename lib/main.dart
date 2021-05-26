@@ -5,12 +5,15 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
+import 'package:todoapp/provider/conn_provider.dart';
 import 'package:todoapp/provider/notes_provider.dart';
 import 'package:hive/hive.dart';
+import 'package:todoapp/provider/signin_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/screen/splash_screen.dart';
 import 'applocalizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 const String noteBoxName = 'Note';
 const String dateBoxName = 'dates';
@@ -47,7 +50,7 @@ void main() async {
   // getting the path of the document in the device for accesing the database
   final document = await getApplicationDocumentsDirectory();
   print(document.uri);
-  
+
   // Giving the path of the data base to the Hive
   Hive.init(document.path);
   // registering the adapter
@@ -58,9 +61,9 @@ void main() async {
   await Hive.openBox<String>(dateBoxName);
   // Hydrated bloc for keeping the instances of the
   // blocs alive
-  Future.microtask(() {
-    myProvider().initialColorsAndLan();
-  });
+  // Future.microtask(() async {
+  //   await myProvider().initialColorsAndLan();
+  // });
   // android alarm manager services
   final int helloAlarmID = 0;
   await AndroidAlarmManager.initialize();
@@ -70,8 +73,25 @@ void main() async {
   ]).then((_) {
     runApp(MyApp());
   });
+  // configLoading();
   //await AndroidAlarmManager.periodic(const Duration(seconds: 1), 1, printHello, exact: true, wakeup: true);
 }
+
+// void configLoading() {
+//   EasyLoading.instance
+//     ..displayDuration = const Duration(milliseconds: 2000)
+//     ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+//     ..loadingStyle = EasyLoadingStyle.dark
+//     ..indicatorSize = 45.0
+//     ..radius = 10.0
+//     ..progressColor = Colors.yellow
+//     ..backgroundColor = Colors.green
+//     ..indicatorColor = Colors.yellow
+//     ..textColor = Colors.yellow
+//     ..maskColor = Colors.blue.withOpacity(0.5)
+//     ..userInteractions = true
+//     ..customAnimation = CustomAnimation();
+// }
 
 class MyApp extends StatefulWidget {
   MyApp({Key key}) : super(key: key);
@@ -80,12 +100,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    myProvider().checkDayChange();
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   myProvider().checkDayChange();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +114,9 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(
             create: (context) => myProvider(),
           ),
-          ChangeNotifierProvider(create: (context) => TimerState())
+          ChangeNotifierProvider(create: (context) => TimerState()),
+          ChangeNotifierProvider(create: (context) => ConnState()),
+          ChangeNotifierProvider(create: (context) => SigninState()),
         ],
         child: Consumer<myProvider>(
           builder: (context, _myProvider, _) {
