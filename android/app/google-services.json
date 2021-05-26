@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "93105071651-bebi5cp4rhm73vlmeo5rg6ptvoiainal.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.reasje.notesapp",
+            "certificate_hash": "09712ae9ebed570e7780e050b997c67a2fa07ad8"
+          }
+        },
+        {
           "client_id": "93105071651-hk59ip1m3d5ingorv7nsv81g28og84ue.apps.googleusercontent.com",
           "client_type": 3
         }

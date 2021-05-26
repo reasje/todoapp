@@ -24,9 +24,9 @@
   "timerOn": "Another Timer is ON ! ",
   "taskOver": "Congratulations the task is over 😍",
   "donate": "Having fun ? Buy me a coffee :)",
-  "donateRials" : "Rials",
-  "donateDoge" : "DogeCoin BEP2",
-  "dogeAddressCopied" : "DogeCoin BEP2 Address copied successfully.",
+  "donateRials": "Rials",
+  "donateDoge": "DogeCoin BEP2",
+  "dogeAddressCopied": "DogeCoin BEP2 Address copied successfully.",
   "cannotGoBack": "You can't go back while the timer is running !",
   "paradiseTitle": "Welcome",
   "paradise": "This app is the way to heaven , You may ask why ? ",
@@ -40,5 +40,7 @@
   "family": "With this app,\n You will have the time to share with loved Ones .",
   "fileExists": "File already existce in  the drive are you willing to update it ?",
   "continue": "Are you willing to continue to download the file ? (New notes will be added as the procces succeed) ",
-  "noInternet": "Internet connection required ! "
+  "noInternet": "Internet connection required ! ",
+  "signIn": "Please signin first ! ",
+  "noNotes": "No notes available !"
 }

@@ -83,7 +83,7 @@ Future showAlertDialog(BuildContext context,
     drive.DriveApi driveApi,
     drive.File driveFile,
     Box<Note> noteBox,
-    file_id]) async {
+    String file_id]) async {
   final TextEditingController _titleFieldController = TextEditingController();
   final TextEditingController _textFieldController = TextEditingController();
   var _myProvider = Provider.of<myProvider>(context, listen: false);
@@ -95,16 +95,27 @@ Future showAlertDialog(BuildContext context,
             return AlertDialog(
               backgroundColor: _myProvider.mainColor,
               title: Center(
-                  child: Text(id == "lan"
-                      ? "Choose you language ! "
-                      : id == "up"
-                          ? uiKit.AppLocalizations.of(context)
-                              .translate('fileExists')
-                          : id == "internet"
-                              ? uiKit.AppLocalizations.of(context)
-                                  .translate('noInternet')
-                              : uiKit.AppLocalizations.of(context)
-                                  .translate('continue') , style: TextStyle(color: _myProvider.textColor , ),)),
+                  child: Text(
+                id == "lan"
+                    ? "Choose you language ! "
+                    : id == "up"
+                        ? uiKit.AppLocalizations.of(context)
+                            .translate('fileExists')
+                        : id == "internet"
+                            ? uiKit.AppLocalizations.of(context)
+                                .translate('noInternet')
+                            : id == "signIn"
+                                ? uiKit.AppLocalizations.of(context)
+                                    .translate('signIn')
+                                : id == "noNotes"
+                                    ? uiKit.AppLocalizations.of(context)
+                                        .translate('noNotes')
+                                    : uiKit.AppLocalizations.of(context)
+                                        .translate('continue'),
+                style: TextStyle(
+                  color: _myProvider.textColor,
+                ),
+              )),
               content: Container(
                 height: 70,
                 decoration: BoxDecoration(
@@ -113,7 +124,7 @@ Future showAlertDialog(BuildContext context,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                        alignment:  Alignment.bottomRight,
+                        alignment: Alignment.bottomRight,
                         height: 50,
                         width: 100,
                         decoration: BoxDecoration(
@@ -124,7 +135,9 @@ Future showAlertDialog(BuildContext context,
                               child: Text(
                             id == "lan"
                                 ? "فارسی"
-                                : id == "internet"
+                                : id == "internet" ||
+                                        id == "signIn" ||
+                                        id == "noNotes"
                                     ? uiKit.AppLocalizations.of(context)
                                         .translate('ok')
                                     : uiKit.AppLocalizations.of(context)
@@ -140,7 +153,7 @@ Future showAlertDialog(BuildContext context,
                             Navigator.pop(context);
                           },
                         )),
-                    id != "internet"
+                    id != "internet" && id != "signIn" && id != "noNotes"
                         ? Container(
                             alignment: Alignment.bottomLeft,
                             height: 50,

@@ -3,9 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapp/provider/conn_provider.dart';
 
 import 'package:todoapp/provider/drive_provider.dart';
 import 'package:todoapp/provider/notes_provider.dart';
+import 'package:todoapp/provider/signin_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/screen/home_screen.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
@@ -68,6 +70,8 @@ class _MyButtonState extends State<MyButton> {
         Future.delayed(Duration(milliseconds: 100), () {
           final _myProvider = Provider.of<myProvider>(context, listen: false);
           final _timerState = Provider.of<TimerState>(context, listen: false);
+          final _signinState = Provider.of<SigninState>(context, listen: false);
+          final _connState = Provider.of<ConnState>(context, listen: false);
           switch (widget.id) {
             case 'dogedonate':
               copyDogeAdress();
@@ -155,10 +159,17 @@ class _MyButtonState extends State<MyButton> {
               _launchURL();
               break;
             case 'upload':
-              login(true , context);
+              login(true, context);
               break;
             case 'download':
-              login(false , context);
+              login(false, context);
+              break;
+            case 'google':
+              if (_connState.is_conn) {
+                _signinState.signinToAccount();
+              } else {
+                uiKit.showAlertDialog(context, 'internet');
+              }
               break;
           }
         });
@@ -170,6 +181,7 @@ class _MyButtonState extends State<MyButton> {
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<myProvider>(context);
     final _timerState = Provider.of<TimerState>(context);
+    final _signinState = Provider.of<SigninState>(context);
     return Listener(
       onPointerUp: onPressedUp,
       onPointerDown: onPressedDown,
@@ -258,7 +270,11 @@ class _MyButtonState extends State<MyButton> {
                                       ? _myProvider.time_duration != Duration()
                                           ? _myProvider.blueMaterial
                                           : _myProvider.textColor
-                                      : _myProvider.textColor),
+                                      : widget.id == 'google'
+                                          ? _signinState.isSignedin
+                                              ? Colors.green
+                                              : Colors.red
+                                          : _myProvider.textColor),
             ),
     );
   }

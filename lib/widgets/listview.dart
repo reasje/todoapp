@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
+import 'package:todoapp/provider/conn_provider.dart';
 
 import 'package:todoapp/provider/notes_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
@@ -35,6 +36,7 @@ class _myRorderableState extends State<myRorderable> {
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<myProvider>(context);
     final _timerState = Provider.of<TimerState>(context);
+    final _connState = Provider.of<ConnState>(context);
     Box<Note> noteBox = widget.noteBox;
     double SizeX = widget.SizeX;
     double SizeY = widget.SizeY;
@@ -80,18 +82,34 @@ class _myRorderableState extends State<myRorderable> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Container(
-                                        padding: EdgeInsets.all(SizeX * 0.03),
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          uiKit.AppLocalizations.of(context)
-                                              .translate('notesApp'),
-                                          style: TextStyle(
-                                              color: _myProvider.titleColor,
-                                              fontSize: _myProvider.isEn
-                                                  ? SizeX * SizeY * 0.00012
-                                                  : SizeX * SizeY * 0.0001),
-                                        )),
+                                    Row(
+                                      children: [
+                                        Container(
+                                            padding: EdgeInsets.only(
+                                                top: SizeX * 0.03,
+                                                bottom: SizeX * 0.03,
+                                                left: SizeX * 0.03),
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              uiKit.AppLocalizations.of(context)
+                                                  .translate('notesApp'),
+                                              style: TextStyle(
+                                                  color: _myProvider.titleColor,
+                                                  fontSize: _myProvider.isEn
+                                                      ? SizeX * SizeY * 0.00012
+                                                      : SizeX * SizeY * 0.0001),
+                                            )),
+                                        Container(
+                                          child: Icon(
+                                            FontAwesome.dot_circle_o,
+                                            size: SizeX * SizeY * 0.00005,
+                                            color: _connState.is_conn
+                                                ? Colors.green
+                                                : Colors.red,
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                     Row(
                                       children: [
                                         Container(
@@ -116,6 +134,18 @@ class _myRorderableState extends State<myRorderable> {
                                             iconSize: SizeX * SizeY * 0.00006,
                                             iconData: FontAwesome.upload,
                                             id: 'upload',
+                                          ),
+                                        ),
+                                        Container(
+                                          padding:
+                                              EdgeInsets.all(SizeX * 0.015),
+                                          alignment: Alignment.centerLeft,
+                                          child: uiKit.MyButton(
+                                            sizePU: SizeX * 0.05,
+                                            sizePD: SizeX * 0.06,
+                                            iconSize: SizeX * SizeY * 0.00006,
+                                            iconData: FontAwesome.google,
+                                            id: 'google',
                                           ),
                                         ),
                                       ],
