@@ -1,4 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:ffi';
+import 'dart:typed_data';
+
 import 'package:hive/hive.dart';
 // run flutter packages pub run build_runner build to generate the dependency
 part 'note_model.g.dart';
@@ -17,8 +19,11 @@ class Note {
   int color;
   @HiveField(5)
   int leftTime;
+  @HiveField(6)
+  List<Uint8List> imageList;
+
   Note(this.title, this.text, this.isChecked, this.time, this.color,
-      this.leftTime);
+      this.leftTime, this.imageList);
 
   // factory Note.fromJson(Map<String, dynamic> json) {
   //   return Note(json['title'], json['text'], false, json['time'], null, null);

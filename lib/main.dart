@@ -56,7 +56,7 @@ void main() async {
   // registering the adapter
   Hive.registerAdapter(NoteAdapter());
   // opening the box
-  await Hive.openBox<Note>(noteBoxName);
+  await Hive.openLazyBox<Note>(noteBoxName);
   // the database of time for day change recognizing
   await Hive.openBox<String>(dateBoxName);
   // Hydrated bloc for keeping the instances of the

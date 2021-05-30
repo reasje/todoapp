@@ -23,6 +23,7 @@
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize"
             android:showWhenLocked="true"
+            android:requestLegacyExternalStorage="true"
             android:turnScreenOn="true">
         <meta-data
             android:name="flutterEmbedding"

@@ -83,7 +83,7 @@ Future<void> download(drive.DriveApi driveApi, drive.File driveFile,
       var text = list[i]['text'];
       text = utf8.fuse(base64).decode(text);
       int time = list[i]['time'];
-      noteBox.add(Note(title, text, false, time, 0, time));
+      noteBox.add(Note(title, text, false, time, 0, time, null));
     }
   });
 }
