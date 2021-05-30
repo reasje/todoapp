@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:todoapp/model/note_model.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:undo/undo.dart';
+import 'package:image_picker/image_picker.dart';
 
 // TODO orginaing the providers and having multi providres having a separate
 // provider for check me .
@@ -243,7 +246,9 @@ class myProvider extends ChangeNotifier {
     var ntlefttime = duration;
     var ntcolor = noteBox.get(keys[index]).color;
     var ntchecked = noteBox.get(keys[index]).isChecked;
-    Note note = Note(ntitle, nttext, ntchecked, nttime, ntcolor, ntlefttime);
+    var ntimageList = noteBox.get(keys[index]).imageList;
+    Note note = Note(
+        ntitle, nttext, ntchecked, nttime, ntcolor, ntlefttime, ntimageList);
     noteBox.put(keys[index], note);
   }
 
@@ -266,8 +271,9 @@ class myProvider extends ChangeNotifier {
             var nttime = noteBox.getAt(i).time;
             var ntcolor = noteBox.getAt(i).color;
             var ntlefttime = noteBox.getAt(i).leftTime;
-            Note note =
-                Note(ntitle, nttext, false, nttime, ntcolor, ntlefttime);
+            var ntImageList = noteBox.getAt(i).imageList;
+            Note note = Note(ntitle, nttext, false, nttime, ntcolor, ntlefttime,
+                ntImageList);
             noteBox.putAt(i, note);
           }
           dateBox.put('date',
@@ -317,6 +323,31 @@ class myProvider extends ChangeNotifier {
   // note color is used for reloading the color selection selected
   Color noteColor;
   int indexOfSelectedColor;
+
+  // list of images that will be loaded on user tap
+  List<Uint8List> imageList = [];
+  // used for both loading images and taking images
+  final picker = ImagePicker();
+  PickedFile _image;
+  // Show the image picker dilog
+  void imagePickerGalley() async {
+    _image = await picker.getImage(source: ImageSource.gallery);
+    if (_image != null) {
+      var h = await _image.readAsBytes();
+      imageList.add(h);
+    }
+    notifyListeners();
+  }
+
+  void imagePickerCamera() async {
+    _image = await picker.getImage(source: ImageSource.camera);
+    if (_image != null) {
+      var h = await _image.readAsBytes();
+      imageList.add(h);
+    }
+    notifyListeners();
+  }
+
   // This is used inside of Note textfield to control and save the changes for undo property
   void listenerActivated(newValue) {
     // This Line is used for prevent unusual behavior of the textfield
@@ -377,7 +408,8 @@ class myProvider extends ChangeNotifier {
   }
 
   // for the clear the form
-  void clearTitleAndText() {
+  void clearTitleAndTextAndImageList() {
+    imageList.clear();
     title.clear();
     text.clear();
     notifyListeners();
@@ -442,7 +474,9 @@ class myProvider extends ChangeNotifier {
     var nttime = noteBox.get(providerKeys[providerIndex]).time;
     var ntcolor = noteBox.get(providerKeys[providerIndex]).color;
     var ntlefttime = noteBox.get(providerKeys[providerIndex]).leftTime;
-    Note note = Note(ntitle, nttext, newValue, nttime, ntcolor, ntlefttime);
+    var ntImageList = noteBox.get(providerKeys[providerIndex]).imageList;
+    Note note = Note(
+        ntitle, nttext, newValue, nttime, ntcolor, ntlefttime, ntImageList);
     noteBox.put(providerKeys[providerIndex], note);
     notifyListeners();
   }
@@ -452,7 +486,7 @@ class myProvider extends ChangeNotifier {
     myContext = context;
     // When the add icon is tapped this function will be executed and
     // prepare the provider for the new Note
-    clearTitleAndText();
+    clearTitleAndTextAndImageList();
     clearDuration();
     newNote = true;
     takeSnapshot();
@@ -461,10 +495,24 @@ class myProvider extends ChangeNotifier {
   }
 
   // used indie list view after an elemt of listview is tapped
-  void loadNote(List<int> keys, int index, BuildContext context) {
+  void loadNote(List<int> keys, int index, BuildContext context) async {
     myContext = context;
     providerKeys = keys;
     providerIndex = index;
+    clearTitleAndTextAndImageList();
+    // getting the pics form the database.
+    print(
+        'noteBox.get(providerKeys[providerIndex]).imageList.isNotEmpty ${noteBox.get(providerKeys[providerIndex]).imageList.isNotEmpty}');
+    if (noteBox.get(providerKeys[providerIndex]).imageList.isNotEmpty) {
+      var hallo = noteBox.get(providerKeys[providerIndex]).imageList;
+      print('hallo $hallo');
+      imageList = noteBox.get(providerKeys[providerIndex]).imageList;
+      // print('imageList $imageList');
+      // for (int i = 0; i < noteBox.length; i++) {
+      //   imageList.add(noteBox.get(keys[index]).pics[i]);
+      //   print('imageList[0] ${imageList[i]}');
+      // }
+    }
     title.text = noteBox.get(keys[index]).title;
     text.text = noteBox.get(keys[index]).text;
     time_duration = Duration(seconds: noteBox.get(keys[index]).time);
@@ -494,7 +542,9 @@ class myProvider extends ChangeNotifier {
         final String noteText = text.text;
         final int noteTime = time_duration.inSeconds;
         int leftTime = noteTime;
-        Note note = Note(noteTitle, noteText, false, noteTime, 0, leftTime);
+        List<Uint8List> noteimages = imageList;
+        Note note =
+            Note(noteTitle, noteText, false, noteTime, 0, leftTime, imageList);
         noteBox.add(note);
         changes.clearHistory();
         changeStacks();
@@ -506,19 +556,19 @@ class myProvider extends ChangeNotifier {
         ));
       }
       // TODO find out why this is here
-      clearTitleAndText();
+      clearTitleAndTextAndImageList();
     } else {
       if (text.text.isNotEmpty || title.text.isNotEmpty) {
         String noteTitle;
         title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
         Note note = new Note(
-          noteTitle,
-          text.text,
-          noteBox.get(providerKeys[providerIndex]).isChecked,
-          time_duration.inSeconds,
-          0,
-          time_duration.inSeconds,
-        );
+            noteTitle,
+            text.text,
+            noteBox.get(providerKeys[providerIndex]).isChecked,
+            time_duration.inSeconds,
+            0,
+            time_duration.inSeconds,
+            imageList);
         noteBox.put(providerKeys[providerIndex], note);
         changes.clearHistory();
         changeStacks();

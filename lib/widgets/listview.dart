@@ -294,17 +294,23 @@ class _myRorderableState extends State<myRorderable> {
                                               ),
                                               onDismissed: (direction) {
                                                 Note note = Note(
-                                                  notes.get(keys[index]).title,
-                                                  notes.get(keys[index]).text,
-                                                  notes
-                                                      .get(keys[index])
-                                                      .isChecked,
-                                                  notes.get(keys[index]).time,
-                                                  notes.get(keys[index]).color,
-                                                  notes
-                                                      .get(keys[index])
-                                                      .leftTime,
-                                                );
+                                                    notes
+                                                        .get(keys[index])
+                                                        .title,
+                                                    notes.get(keys[index]).text,
+                                                    notes
+                                                        .get(keys[index])
+                                                        .isChecked,
+                                                    notes.get(keys[index]).time,
+                                                    notes
+                                                        .get(keys[index])
+                                                        .color,
+                                                    notes
+                                                        .get(keys[index])
+                                                        .leftTime,
+                                                    notes
+                                                        .get(keys[index])
+                                                        .imageList);
                                                 notes.delete(keys[index]);
                                                 ScaffoldMessenger.of(context)
                                                     .hideCurrentSnackBar();

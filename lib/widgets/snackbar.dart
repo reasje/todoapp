@@ -25,14 +25,17 @@ import 'package:flutter/material.dart';
 
 // }
 
-Widget MySnackBar(String text, bool isAction,
-    [BuildContext context,
-    Box<Note> noteBox,
-    Note note,
-    List<int> keys,
-    int index,
-    bool isWhite,]) {
-  final _myProvider = Provider.of<myProvider>(context , listen: false);
+Widget MySnackBar(
+  String text,
+  bool isAction, [
+  BuildContext context,
+  LazyBox<Note> noteBox,
+  Note note,
+  List<int> keys,
+  int index,
+  bool isWhite,
+]) {
+  final _myProvider = Provider.of<myProvider>(context, listen: false);
   bool isWhite = _myProvider.isWhite();
   print('isWhite ${isWhite}');
   return SnackBar(

@@ -1,7 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/notes_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
@@ -9,7 +13,12 @@ import 'package:todoapp/uiKit.dart' as uiKit;
 class MyNotesEditing extends StatefulWidget {
   double SizeX;
   double SizeY;
-  MyNotesEditing({@required this.SizeX, @required this.SizeY, Key key})
+  Box<Note> noteBox;
+  MyNotesEditing(
+      {@required this.SizeX,
+      @required this.SizeY,
+      @required this.noteBox,
+      Key key})
       : super(key: key);
 
   @override
@@ -22,10 +31,11 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
     double SizeX = widget.SizeX;
     double SizeY = widget.SizeY;
     final _myProvider = Provider.of<myProvider>(context);
+    Box<Note> noteBox = widget.noteBox;
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(vertical: SizeX*0.03),
+          padding: EdgeInsets.symmetric(vertical: SizeX * 0.03),
           child: Row(
             textDirection: TextDirection.ltr,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -37,23 +47,23 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     uiKit.MyButton(
-                      sizePU: SizeX*0.07,
-                      sizePD: SizeX*0.08,
-                      iconSize: SizeX*SizeY*0.0001,
+                      sizePU: SizeX * 0.07,
+                      sizePD: SizeX * 0.08,
+                      iconSize: SizeX * SizeY * 0.0001,
                       iconData: FontAwesome.undo,
                       id: 'undo',
                     ),
                     uiKit.MyButton(
-                      sizePU: SizeX*0.07,
-                      sizePD: SizeX*0.08,
-                      iconSize: SizeX*SizeY*0.0001,
+                      sizePU: SizeX * 0.07,
+                      sizePD: SizeX * 0.08,
+                      iconSize: SizeX * SizeY * 0.0001,
                       iconData: FontAwesome.rotate_right,
                       id: 'redo',
                     ),
                     uiKit.MyButton(
-                      sizePU: SizeX*0.07,
-                      sizePD: SizeX*0.08,
-                      iconSize: SizeX*SizeY*0.0001,
+                      sizePU: SizeX * 0.07,
+                      sizePD: SizeX * 0.08,
+                      iconSize: SizeX * SizeY * 0.0001,
                       iconData: FontAwesome.hourglass,
                       id: 'timer',
                     ),
@@ -67,17 +77,17 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     uiKit.MyButton(
-                      sizePU: SizeX*0.07,
-                      sizePD: SizeX*0.08,
-                      iconSize: SizeX*SizeY*0.0001,
+                      sizePU: SizeX * 0.07,
+                      sizePD: SizeX * 0.08,
+                      iconSize: SizeX * SizeY * 0.0001,
                       iconData: FontAwesome.times,
                       id: 'cancel',
                     ),
                     Container(
                       child: uiKit.MyButton(
-                        sizePU: SizeX*0.07,
-                        sizePD: SizeX*0.08,
-                        iconSize: SizeX*SizeY*0.0001,
+                        sizePU: SizeX * 0.07,
+                        sizePD: SizeX * 0.08,
+                        iconSize: SizeX * SizeY * 0.0001,
                         iconData: FontAwesome.check,
                         id: 'save',
                       ),
@@ -134,67 +144,76 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
         //     )
         //   ],
         // ),
-        Container(
-          margin: EdgeInsets.all(SizeX*0.02),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(SizeX*0.016)),
-            boxShadow: [
-              BoxShadow(
-                color: _myProvider.lightShadowColor,
-                offset: Offset(2, 2),
-                blurRadius: 0.0,
-                // changes position of shadow
-              ),
-              BoxShadow(
-                color: _myProvider.shadowColor.withOpacity(0.14),
-                offset: Offset(-1, -1),
-              ),
-              BoxShadow(
-                color: _myProvider.mainColor,
-                offset: Offset(5, 8),
-                spreadRadius: -0.5,
-                blurRadius: 14.0,
-                // changes position of shadow
-              ),
-            ],
-          ),
-          child: TextField(
-            controller: _myProvider.title,
-            focusNode: _myProvider.fTitle,
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
-            cursorColor: _myProvider.swachColor,
-            cursorHeight: SizeX * 0.055,
-            style: TextStyle(
-                color: _myProvider.textColor,
-                fontSize:_myProvider.isEn ? SizeX * SizeY * 0.00012 : SizeX * SizeY * 0.0001,
-                fontWeight: FontWeight.w400),
-            decoration: InputDecoration(
-                contentPadding: EdgeInsets.all( _myProvider.isEn ? SizeX * SizeY * 0.00004 : SizeX * SizeY * 0.00003),
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.clear_sharp),
-                  onPressed: () {
-                    _myProvider.clearTitle();
-                  },
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.all(SizeX * 0.02),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(SizeX * 0.016)),
+              boxShadow: [
+                BoxShadow(
+                  color: _myProvider.lightShadowColor,
+                  offset: Offset(2, 2),
+                  blurRadius: 0.0,
+                  // changes position of shadow
                 ),
-                hintText:
-                    uiKit.AppLocalizations.of(context).translate('titleHint'),
-                border: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                errorBorder: InputBorder.none,
-                disabledBorder: InputBorder.none,
-                hintStyle: TextStyle(
-                    color: _myProvider.hintColor.withOpacity(0.12),
-                    fontSize: _myProvider.isEn ? SizeX * SizeY * 0.00012 : SizeX * SizeY * 0.0001 ,
-                    fontWeight: FontWeight.w400)),
+                BoxShadow(
+                  color: _myProvider.shadowColor.withOpacity(0.14),
+                  offset: Offset(-1, -1),
+                ),
+                BoxShadow(
+                  color: _myProvider.mainColor,
+                  offset: Offset(5, 8),
+                  spreadRadius: -0.5,
+                  blurRadius: 14.0,
+                  // changes position of shadow
+                ),
+              ],
+            ),
+            child: TextField(
+              controller: _myProvider.title,
+              focusNode: _myProvider.fTitle,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              cursorColor: _myProvider.swachColor,
+              cursorHeight: SizeX * 0.055,
+              style: TextStyle(
+                  color: _myProvider.textColor,
+                  fontSize: _myProvider.isEn
+                      ? SizeX * SizeY * 0.00012
+                      : SizeX * SizeY * 0.0001,
+                  fontWeight: FontWeight.w400),
+              decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(_myProvider.isEn
+                      ? SizeX * SizeY * 0.00004
+                      : SizeX * SizeY * 0.00003),
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.clear_sharp),
+                    onPressed: () {
+                      _myProvider.clearTitle();
+                    },
+                  ),
+                  hintText:
+                      uiKit.AppLocalizations.of(context).translate('titleHint'),
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  hintStyle: TextStyle(
+                      color: _myProvider.hintColor.withOpacity(0.12),
+                      fontSize: _myProvider.isEn
+                          ? SizeX * SizeY * 0.00012
+                          : SizeX * SizeY * 0.0001,
+                      fontWeight: FontWeight.w400)),
+            ),
           ),
         ),
         Expanded(
+          flex: 2,
           child: Container(
-            margin: EdgeInsets.all(SizeX*0.02),
+            margin: EdgeInsets.all(SizeX * 0.02),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(SizeX*0.016)),
+              borderRadius: BorderRadius.all(Radius.circular(SizeX * 0.016)),
               boxShadow: [
                 BoxShadow(
                   color: _myProvider.lightShadowColor,
@@ -227,7 +246,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
               cursorHeight: SizeX * 0.045,
               style: TextStyle(
                   color: _myProvider.textColor,
-                  fontSize: SizeX * SizeY *0.00009,
+                  fontSize: SizeX * SizeY * 0.00009,
                   fontWeight: FontWeight.w400),
               decoration: InputDecoration(
                   suffixIcon: IconButton(
@@ -237,8 +256,8 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                     },
                   ),
                   contentPadding: EdgeInsets.all(SizeX * SizeY * 0.00006),
-                  hintText: uiKit.AppLocalizations.of(context)
-                      .translate('textHint'),
+                  hintText:
+                      uiKit.AppLocalizations.of(context).translate('textHint'),
                   border: InputBorder.none,
                   focusedBorder: InputBorder.none,
                   enabledBorder: InputBorder.none,
@@ -250,7 +269,104 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                       fontWeight: FontWeight.w400)),
             ),
           ),
-        )
+        ),
+        Expanded(
+            child: Container(
+          child: ListView.builder(
+              itemCount: _myProvider.imageList != null
+                  ? _myProvider.imageList.length + 1
+                  : 1,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                if (index ==
+                    (_myProvider.imageList != null
+                        ? _myProvider.imageList.length
+                        : 0)) {
+                  return InkWell(
+                    child: Container(
+                      height: SizeX * 0.1,
+                      width: SizeX * 0.1,
+                      margin: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: _myProvider.lightShadowColor,
+                              spreadRadius: 1.0,
+                              blurRadius: 1.0,
+                              offset:
+                                  Offset(-1, -1), // changes position of shadow
+                            ),
+                            BoxShadow(
+                              color: _myProvider.shadowColor.withOpacity(0.17),
+                              spreadRadius: 1.0,
+                              blurRadius: 2.0,
+                              offset:
+                                  Offset(3, 4), // changes position of shadow
+                            ),
+                          ],
+                          color: _myProvider.mainColor,
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(SizeX * 0.3))),
+                    ),
+                    onTap: () {
+                      showCupertinoModalPopup(
+                          context: context,
+                          builder: (context) => CupertinoActionSheet(
+                                actions: [
+                                  CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        _myProvider.imagePickerCamera();
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('Camera')),
+                                  CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        _myProvider.imagePickerGalley();
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('Gallery'))
+                                ],
+                              ));
+                    },
+                  );
+                } else {
+                  return InkWell(
+                    child: Container(
+                        height: SizeX * 0.1,
+                        width: SizeX * 0.1,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: _myProvider.lightShadowColor,
+                              spreadRadius: 1.0,
+                              blurRadius: 1.0,
+                              offset:
+                                  Offset(-1, -1), // changes position of shadow
+                            ),
+                            BoxShadow(
+                              color: _myProvider.shadowColor.withOpacity(0.17),
+                              spreadRadius: 1.0,
+                              blurRadius: 2.0,
+                              offset:
+                                  Offset(3, 4), // changes position of shadow
+                            ),
+                          ],
+                          color: _myProvider.mainColor,
+                          // borderRadius:
+                          //     BorderRadius.all(Radius.circular(SizeX * 0.3))
+                        ),
+                        child: _myProvider.imageList != null
+                            ? Container(
+                                child: Image.memory(
+                                _myProvider.imageList[index],
+                                fit: BoxFit.fill,
+                              ))
+                            : Container()),
+                  );
+                }
+              }),
+        )),
+        Expanded(child: Container())
       ],
     );
   }

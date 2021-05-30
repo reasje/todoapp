@@ -63,8 +63,8 @@ class TimerState extends ChangeNotifier {
           var ntisChecked = noteBox.get(keys[index]).isChecked;
           var ntcolor = noteBox.get(keys[index]).color;
           var ntlefttime = leftTime;
-          Note note =
-              Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime);
+          Note note = Note(
+              ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, null);
           noteBox.put(keys[index], note);
           isRunning[index] = true;
           isOver = true;
@@ -83,8 +83,8 @@ class TimerState extends ChangeNotifier {
           var ntisChecked = noteBox.get(keys[index]).isChecked;
           var ntcolor = noteBox.get(keys[index]).color;
           var ntlefttime = nttime;
-          Note note =
-              Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime);
+          Note note = Note(
+              ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, null);
           noteBox.put(keys[index], note);
           isRunning[index] = true;
           notifyListeners();
@@ -97,8 +97,8 @@ class TimerState extends ChangeNotifier {
           var ntisChecked = noteBox.get(keys[index]).isChecked;
           var ntcolor = noteBox.get(keys[index]).color;
           var ntlefttime = leftTime;
-          Note note =
-              Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime);
+          Note note = Note(
+              ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, null);
           noteBox.put(keys[index], note);
           isRunning[index] = true;
           notifyListeners();
@@ -121,6 +121,7 @@ class TimerState extends ChangeNotifier {
     var nttime = noteBox.get(keys[index]).time;
     var ntisChecked = noteBox.get(keys[index]).isChecked;
     var ntcolor = noteBox.get(keys[index]).color;
+    var ntimages = noteBox.get(keys[index]).imageList;
     var ntlefttime;
     if (leftTime >= 0) {
       ntlefttime = 0;
@@ -130,22 +131,22 @@ class TimerState extends ChangeNotifier {
       isRunning[index] = true;
       _turnOn = false;
       notifyListeners();
-    }else if (leftTime == -1)
-    {
-          ntlefttime = 0;
+    } else if (leftTime == -1) {
+      ntlefttime = 0;
       isPaused = true;
       isOver = true;
       stopTimer();
       isRunning[index] = true;
       _turnOn = false;
-      notifyListeners();}
-    else {
+      notifyListeners();
+    } else {
       isPaused = false;
       isOver = false;
       _turnOn = true;
       ntlefttime = leftTime.abs();
     }
-    Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime);
+    Note note = Note(
+        ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, ntimages);
     noteBox.put(keys[index], note);
     if (_turnOn) {
       startTimer();
@@ -169,8 +170,10 @@ class TimerState extends ChangeNotifier {
     var nttime = noteBox.get(keys[index]).time;
     var ntisChecked = noteBox.get(keys[index]).isChecked;
     var ntcolor = noteBox.get(keys[index]).color;
+    var ntimages = noteBox.get(keys[index]).imageList;
     var ntlefttime = nttime;
-    Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime);
+    Note note = Note(
+        ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, ntimages);
     noteBox.put(keys[index], note);
     stopTimer();
     cancelAlarm();

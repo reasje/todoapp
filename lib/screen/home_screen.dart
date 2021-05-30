@@ -53,7 +53,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with WidgetsBindingObserver {
   Future<String> permissionStatusFuture;
   AnimationController _anicontroller;
-  bool shouldRun=false;
+  bool shouldRun = false;
   var permGranted = "granted";
   var permDenied = "denied";
   var permUnknown = "unknown";
@@ -95,7 +95,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    final _timerState = Provider.of<TimerState>(context , listen: false);
+    final _timerState = Provider.of<TimerState>(context, listen: false);
     if (state == AppLifecycleState.resumed && shouldRun) {
       print('Resumed');
       setState(() {
@@ -198,9 +198,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                                   )),
                               Container(
                                 child: uiKit.MyNotesEditing(
-                                  SizeX: SizeX,
-                                  SizeY: SizeY,
-                                ),
+                                    SizeX: SizeX,
+                                    SizeY: SizeY,
+                                    noteBox: noteBox),
                               ),
                               Container(
                                 child: uiKit.MyTimer(
