@@ -58,7 +58,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   var permDenied = "denied";
   var permUnknown = "unknown";
   var permProvisional = "provisional";
-  Box<Note> noteBox = Hive.box<Note>(noteBoxName);
+  LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
   @override
   void initState() {
     super.initState();
@@ -136,6 +136,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: _myProvider.mainColor,
       body: WillPopScope(
         onWillPop: () async {
@@ -173,7 +174,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                 builder: (context, snapshot) {
                   // if we are waiting for data, show a progress indicator
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return Container(
+                        child: Center(child: CircularProgressIndicator()));
                   }
                   if (snapshot.hasData) {
                     // The permission is granted, then just show the text
@@ -191,9 +193,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                                   child: Column(
                                     children: [
                                       uiKit.myRorderable(
-                                          SizeX: SizeX,
-                                          SizeY: SizeY,
-                                          noteBox: noteBox)
+                                        SizeX: SizeX,
+                                        SizeY: SizeY,
+                                        noteBox: noteBox,
+                                      )
                                     ],
                                   )),
                               Container(
@@ -216,7 +219,13 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                               ),
                             ],
                           ));
+                    } else {
+                      return Container(
+                          child: Center(child: CircularProgressIndicator()));
                     }
+                  } else {
+                    return Container(
+                        child: Center(child: CircularProgressIndicator()));
                   }
                 }),
           ),

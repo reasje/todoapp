@@ -30,10 +30,11 @@ class TimerState extends ChangeNotifier {
   String title = "";
   String text = "";
   var target;
-  final noteBox = Hive.box<Note>(noteBoxName);
+  final noteBox = Hive.lazyBox<Note>(noteBoxName);
   void startTimer() async {
     if (timer == null || !timer?.isActive) {
-      int leftTime = noteBox.get(keys[index]).leftTime;
+      var bnote = await noteBox.get(keys[index]);
+      int leftTime = bnote.leftTime;
       var now = DateTime.now();
       if (leftTime > 900) {
         leftTime = leftTime - 180;
@@ -50,18 +51,19 @@ class TimerState extends ChangeNotifier {
       await AndroidAlarmManager.oneShotAt(target, 0, startAlarm);
       leftTime = leftTime - 1;
       timer = Timer.periodic(Duration(seconds: 1), (timer) async {
-        int leftTime = noteBox.get(keys[index]).leftTime;
+        int leftTime = bnote.leftTime;
         print('Left Time : ${leftTime}');
         leftTime = leftTime - 1;
         // If the timer finishes
         if (leftTime == 0) {
           isOver = true;
           stopTimer();
-          var ntitle = noteBox.get(keys[index]).title;
-          var nttext = noteBox.get(keys[index]).text;
-          var nttime = noteBox.get(keys[index]).time;
-          var ntisChecked = noteBox.get(keys[index]).isChecked;
-          var ntcolor = noteBox.get(keys[index]).color;
+          var bnote = await noteBox.get(keys[index]);
+          var ntitle = bnote.title;
+          var nttext = bnote.text;
+          var nttime = bnote.time;
+          var ntisChecked = bnote.isChecked;
+          var ntcolor = bnote.color;
           var ntlefttime = leftTime;
           Note note = Note(
               ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, null);
@@ -77,11 +79,12 @@ class TimerState extends ChangeNotifier {
         } else if (leftTime == -1) {
           isPaused = true;
           isOver = false;
-          var ntitle = noteBox.get(keys[index]).title;
-          var nttext = noteBox.get(keys[index]).text;
-          var nttime = noteBox.get(keys[index]).time;
-          var ntisChecked = noteBox.get(keys[index]).isChecked;
-          var ntcolor = noteBox.get(keys[index]).color;
+          var bnote = await noteBox.get(keys[index]);
+          var ntitle = bnote.title;
+          var nttext = bnote.text;
+          var nttime = bnote.time;
+          var ntisChecked = bnote.isChecked;
+          var ntcolor = bnote.color;
           var ntlefttime = nttime;
           Note note = Note(
               ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, null);
@@ -91,11 +94,12 @@ class TimerState extends ChangeNotifier {
         } else {
           isPaused = false;
           isOver = false;
-          var ntitle = noteBox.get(keys[index]).title;
-          var nttext = noteBox.get(keys[index]).text;
-          var nttime = noteBox.get(keys[index]).time;
-          var ntisChecked = noteBox.get(keys[index]).isChecked;
-          var ntcolor = noteBox.get(keys[index]).color;
+          var bnote = await noteBox.get(keys[index]);
+          var ntitle = bnote.title;
+          var nttext = bnote.text;
+          var nttime = bnote.time;
+          var ntisChecked = bnote.isChecked;
+          var ntcolor = bnote.color;
           var ntlefttime = leftTime;
           Note note = Note(
               ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, null);
@@ -111,17 +115,18 @@ class TimerState extends ChangeNotifier {
     await AndroidAlarmManager.cancel(0);
   }
 
-  void updateTimer() {
+  void updateTimer() async {
     print(target);
     bool _turnOn;
     leftTime = DateTime.now().difference(target).inSeconds;
     print('LeftTime after update : ${leftTime}');
-    var ntitle = noteBox.get(keys[index]).title;
-    var nttext = noteBox.get(keys[index]).text;
-    var nttime = noteBox.get(keys[index]).time;
-    var ntisChecked = noteBox.get(keys[index]).isChecked;
-    var ntcolor = noteBox.get(keys[index]).color;
-    var ntimages = noteBox.get(keys[index]).imageList;
+    var bnote = await noteBox.get(keys[index]);
+    var ntitle = bnote.title;
+    var nttext = bnote.text;
+    var nttime = bnote.time;
+    var ntisChecked = bnote.isChecked;
+    var ntcolor = bnote.color;
+    var ntimages = bnote.imageList;
     var ntlefttime;
     if (leftTime >= 0) {
       ntlefttime = 0;
@@ -162,15 +167,16 @@ class TimerState extends ChangeNotifier {
     }
   }
 
-  void resetTimer() {
+  void resetTimer() async {
     isPaused = true;
     isOver = false;
-    var ntitle = noteBox.get(keys[index]).title;
-    var nttext = noteBox.get(keys[index]).text;
-    var nttime = noteBox.get(keys[index]).time;
-    var ntisChecked = noteBox.get(keys[index]).isChecked;
-    var ntcolor = noteBox.get(keys[index]).color;
-    var ntimages = noteBox.get(keys[index]).imageList;
+    var bnote = await noteBox.get(keys[index]);
+    var ntitle = bnote.title;
+    var nttext = bnote.text;
+    var nttime = bnote.time;
+    var ntisChecked = bnote.isChecked;
+    var ntcolor = bnote.color;
+    var ntimages = bnote.imageList;
     var ntlefttime = nttime;
     Note note = Note(
         ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, ntimages);
@@ -179,13 +185,14 @@ class TimerState extends ChangeNotifier {
     cancelAlarm();
   }
 
-  void loadTimer(List<int> keys, int index, BuildContext context) {
+  void loadTimer(List<int> keys, int index, BuildContext context) async {
+    var bnote = await noteBox.get(keys[index]);
     this.keys = keys;
     this.index = index;
     this.my_context = context;
     title = uiKit.AppLocalizations.of(context).translate('notesapp');
     text = uiKit.AppLocalizations.of(context).translate('taskOver');
-    leftTime = noteBox.get(keys[index]).leftTime;
+    leftTime = bnote.leftTime;
   }
 
   Future<void> startAlarm() async {

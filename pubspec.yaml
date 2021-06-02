@@ -29,7 +29,7 @@ dependencies:
   connectivity: ^3.0.4
   flutter_easyloading: ^3.0.0
   flutter_icons: ^1.1.0
-  flutter_local_notifications: ^6.0.0
+  flutter_local_notifications: 4.0.1+2
   flutter_staggered_animations: ^1.0.0
   google_sign_in: ^5.0.3
   googleapis: ^3.0.0

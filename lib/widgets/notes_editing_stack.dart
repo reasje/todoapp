@@ -8,12 +8,13 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/notes_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
+import 'package:todoapp/widgets/image.dart';
 
 // TODO moving and reordering list view effect
 class MyNotesEditing extends StatefulWidget {
   double SizeX;
   double SizeY;
-  Box<Note> noteBox;
+  LazyBox<Note> noteBox;
   MyNotesEditing(
       {@required this.SizeX,
       @required this.SizeY,
@@ -31,7 +32,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
     double SizeX = widget.SizeX;
     double SizeY = widget.SizeY;
     final _myProvider = Provider.of<myProvider>(context);
-    Box<Note> noteBox = widget.noteBox;
+    LazyBox<Note> noteBox = widget.noteBox;
     return Column(
       children: [
         Container(
@@ -98,52 +99,6 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
             ],
           ),
         ),
-        // Row(
-        //   children: [
-        //     Expanded(
-        //       flex: 1,
-        //       child: Align(
-        //         alignment: Alignment.centerLeft,
-        //         child: IconButton(
-        //           icon: Icon(Icons.undo),
-        //           disabledColor: uiKit.Colors.shadedBlue,
-        //           color: uiKit.Colors.darkBlue,
-        //           onPressed: !_myProvider.canUndo
-        //               ? null
-        //               : () {
-        //                   if (mounted) {
-        //                     _myProvider.changesUndo();
-        //                   }
-        //                 },
-        //         ),
-        //       ),
-        //     ),
-        //     Expanded(
-        //       flex: 1,
-        //       child: Align(
-        //         alignment: Alignment.centerRight,
-        //         child: IconButton(
-        //           icon: Icon(Icons.access_alarms_rounded),
-        //           color: uiKit.Colors.darkBlue,
-        //           onPressed: () {
-        //             showCupertinoModalPopup(
-        //                 context: context,
-        //                 builder: (context) => CupertinoActionSheet(
-        //                       actions: [uiKit.MyDatePicker(context)],
-        //                       cancelButton: CupertinoActionSheetAction(
-        //                         child: Text(uiKit.AppLocalizations.of(context)
-        //                             .translate('done')),
-        //                         onPressed: () {
-        //                           Navigator.pop(context);
-        //                         },
-        //                       ),
-        //                     ));
-        //           },
-        //         ),
-        //       ),
-        //     )
-        //   ],
-        // ),
         Expanded(
           child: Container(
             margin: EdgeInsets.all(SizeX * 0.02),
@@ -271,69 +226,31 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
           ),
         ),
         Expanded(
-            child: Container(
-          child: ListView.builder(
-              itemCount: _myProvider.imageList != null
-                  ? _myProvider.imageList.length + 1
-                  : 1,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                if (index ==
-                    (_myProvider.imageList != null
-                        ? _myProvider.imageList.length
-                        : 0)) {
-                  return InkWell(
-                    child: Container(
-                      height: SizeX * 0.1,
-                      width: SizeX * 0.1,
-                      margin: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: _myProvider.lightShadowColor,
-                              spreadRadius: 1.0,
-                              blurRadius: 1.0,
-                              offset:
-                                  Offset(-1, -1), // changes position of shadow
-                            ),
-                            BoxShadow(
-                              color: _myProvider.shadowColor.withOpacity(0.17),
-                              spreadRadius: 1.0,
-                              blurRadius: 2.0,
-                              offset:
-                                  Offset(3, 4), // changes position of shadow
-                            ),
-                          ],
-                          color: _myProvider.mainColor,
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(SizeX * 0.3))),
-                    ),
-                    onTap: () {
-                      showCupertinoModalPopup(
-                          context: context,
-                          builder: (context) => CupertinoActionSheet(
-                                actions: [
-                                  CupertinoActionSheetAction(
-                                      onPressed: () {
-                                        _myProvider.imagePickerCamera();
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('Camera')),
-                                  CupertinoActionSheetAction(
-                                      onPressed: () {
-                                        _myProvider.imagePickerGalley();
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('Gallery'))
-                                ],
-                              ));
-                    },
-                  );
-                } else {
-                  return InkWell(
-                    child: Container(
-                        height: SizeX * 0.1,
-                        width: SizeX * 0.1,
+            child: ListView.builder(
+                itemCount: _myProvider.imageList != null
+                    ? _myProvider.imageList.length + 1
+                    : 1,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  if (index ==
+                      (_myProvider.imageList != null
+                          ? _myProvider.imageList.length
+                          : 0)) {
+                    return Container(
+                      padding: EdgeInsets.symmetric(horizontal: SizeY*0.1),
+                      alignment: Alignment.centerLeft,
+                      child: uiKit.MyButton(
+                        sizePU: SizeX * 0.07,
+                        sizePD: SizeX * 0.08,
+                        iconSize: SizeX * SizeY * 0.00006,
+                        iconData: FontAwesome.plus,
+                        id: 'newpic',
+                      ),
+                    );
+                  } else {
+                    return Container(
+                        width: SizeX * 0.16,
+                        margin: EdgeInsets.symmetric(horizontal: SizeY * 0.03),
                         decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
@@ -356,16 +273,22 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                           //     BorderRadius.all(Radius.circular(SizeX * 0.3))
                         ),
                         child: _myProvider.imageList != null
-                            ? Container(
-                                child: Image.memory(
-                                _myProvider.imageList[index],
-                                fit: BoxFit.fill,
-                              ))
-                            : Container()),
-                  );
-                }
-              }),
-        )),
+                            ? InkWell(
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            PicDetail(index: index))),
+                                child: Hero(
+                                    tag: 'pic${index}',
+                                    child: Image.memory(
+                                      _myProvider.imageList[index],
+                                      fit: BoxFit.cover,
+                                    )),
+                              )
+                            : Container());
+                  }
+                })),
         Expanded(child: Container())
       ],
     );

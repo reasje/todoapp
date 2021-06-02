@@ -171,6 +171,26 @@ class _MyButtonState extends State<MyButton> {
                 uiKit.showAlertDialog(context, 'internet');
               }
               break;
+            case 'newpic':
+              showCupertinoModalPopup(
+                  context: context,
+                  builder: (context) => CupertinoActionSheet(
+                        actions: [
+                          CupertinoActionSheetAction(
+                              onPressed: () {
+                                _myProvider.imagePickerCamera();
+                                Navigator.pop(context);
+                              },
+                              child: Text('Camera')),
+                          CupertinoActionSheetAction(
+                              onPressed: () {
+                                _myProvider.imagePickerGalley();
+                                Navigator.pop(context);
+                              },
+                              child: Text('Gallery'))
+                        ],
+                      ));
+              break;
           }
         });
       });

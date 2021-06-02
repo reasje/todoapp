@@ -39,6 +39,7 @@ class myProvider extends ChangeNotifier {
   bool isFirstTime;
   Locale locale;
   String noTaskImage;
+  double listview_size;
   MaterialColor blueMaterial =
       const MaterialColor(0xFF3694fc, const <int, Color>{
     50: const Color(0x1A001b48),
@@ -54,7 +55,7 @@ class myProvider extends ChangeNotifier {
   });
 
   // Hiive database
-  final noteBox = Hive.box<Note>(noteBoxName);
+  final noteBox = Hive.lazyBox<Note>(noteBoxName);
   // THEME MANAGMENT PART   /                ////                  /             ////           /
   String splashImage;
   Color whiteMainColor = Color(0xffe6ebf2);
@@ -239,14 +240,15 @@ class myProvider extends ChangeNotifier {
 
   List<int> durationKeys;
   int duartionIndex;
-  void saveDuration(List<int> keys, int index, int duration) {
-    var ntitle = noteBox.get(keys[index]).title;
-    var nttext = noteBox.get(keys[index]).text;
-    var nttime = noteBox.get(keys[index]).time;
+  void saveDuration(List<int> keys, int index, int duration) async {
+    var bnote = await noteBox.get(keys[index]);
+    var ntitle = bnote.title;
+    var nttext = bnote.text;
+    var nttime = bnote.time;
     var ntlefttime = duration;
-    var ntcolor = noteBox.get(keys[index]).color;
-    var ntchecked = noteBox.get(keys[index]).isChecked;
-    var ntimageList = noteBox.get(keys[index]).imageList;
+    var ntcolor = bnote.color;
+    var ntchecked = bnote.isChecked;
+    var ntimageList = bnote.imageList;
     Note note = Note(
         ntitle, nttext, ntchecked, nttime, ntcolor, ntlefttime, ntimageList);
     noteBox.put(keys[index], note);
@@ -266,12 +268,13 @@ class myProvider extends ChangeNotifier {
           int.parse(dateList[2]) < day) {
         if (noteBox.length != 0) {
           for (int i = 0; i < noteBox.length; i++) {
-            var ntitle = noteBox.getAt(i).title;
-            var nttext = noteBox.getAt(i).text;
-            var nttime = noteBox.getAt(i).time;
-            var ntcolor = noteBox.getAt(i).color;
-            var ntlefttime = noteBox.getAt(i).leftTime;
-            var ntImageList = noteBox.getAt(i).imageList;
+            var bnote = await noteBox.getAt(i);
+            var ntitle = bnote.title;
+            var nttext = bnote.text;
+            var nttime = bnote.time;
+            var ntcolor = bnote.color;
+            var ntlefttime = bnote.leftTime;
+            var ntImageList = bnote.imageList;
             Note note = Note(ntitle, nttext, false, nttime, ntcolor, ntlefttime,
                 ntImageList);
             noteBox.putAt(i, note);
@@ -466,15 +469,16 @@ class myProvider extends ChangeNotifier {
   }
 
   // upodating the database when the check box is checked or unchecked
-  void updateIsChecked(bool newValue, List<int> keys, int index) {
+  void updateIsChecked(bool newValue, List<int> keys, int index) async {
     providerKeys = keys;
     providerIndex = index;
-    var ntitle = noteBox.get(providerKeys[providerIndex]).title;
-    var nttext = noteBox.get(providerKeys[providerIndex]).text;
-    var nttime = noteBox.get(providerKeys[providerIndex]).time;
-    var ntcolor = noteBox.get(providerKeys[providerIndex]).color;
-    var ntlefttime = noteBox.get(providerKeys[providerIndex]).leftTime;
-    var ntImageList = noteBox.get(providerKeys[providerIndex]).imageList;
+    var bnote = await noteBox.get(providerKeys[providerIndex]);
+    var ntitle = bnote.title;
+    var nttext = bnote.text;
+    var nttime = bnote.time;
+    var ntcolor = bnote.color;
+    var ntlefttime = bnote.leftTime;
+    var ntImageList = bnote.imageList;
     Note note = Note(
         ntitle, nttext, newValue, nttime, ntcolor, ntlefttime, ntImageList);
     noteBox.put(providerKeys[providerIndex], note);
@@ -501,26 +505,20 @@ class myProvider extends ChangeNotifier {
     providerIndex = index;
     clearTitleAndTextAndImageList();
     // getting the pics form the database.
-    print(
-        'noteBox.get(providerKeys[providerIndex]).imageList.isNotEmpty ${noteBox.get(providerKeys[providerIndex]).imageList.isNotEmpty}');
-    if (noteBox.get(providerKeys[providerIndex]).imageList.isNotEmpty) {
-      var hallo = noteBox.get(providerKeys[providerIndex]).imageList;
-      print('hallo $hallo');
-      imageList = noteBox.get(providerKeys[providerIndex]).imageList;
-      // print('imageList $imageList');
-      // for (int i = 0; i < noteBox.length; i++) {
-      //   imageList.add(noteBox.get(keys[index]).pics[i]);
-      //   print('imageList[0] ${imageList[i]}');
-      // }
+    var bnote = await noteBox.get(providerKeys[providerIndex]);
+    // if the note doesnot include any notes pass
+    if (bnote.imageList.isNotEmpty) {
+      imageList = bnote.imageList;
     }
-    title.text = noteBox.get(keys[index]).title;
-    text.text = noteBox.get(keys[index]).text;
-    time_duration = Duration(seconds: noteBox.get(keys[index]).time);
-    noteColor = Color(noteBox.get(keys[index]).color);
+    title.text = bnote.title;
+    text.text = bnote.text;
+    time_duration = Duration(seconds: bnote.time);
+    noteColor = Color(bnote.color);
     newNote = false;
     takeSnapshot();
     changeStacks();
     notifyListeners();
+    print('this is done ');
   }
 
   // getting the color that was choosen by the user
@@ -531,7 +529,7 @@ class myProvider extends ChangeNotifier {
   }
 
   // executed when the user tapped on the check floating button (done icon FAB)
-  void doneClicked() {
+  void doneClicked() async {
     print('object');
     // checking whether your going to update the note or add new one
     // that is done by chekcing the newNote true or false
@@ -559,16 +557,11 @@ class myProvider extends ChangeNotifier {
       clearTitleAndTextAndImageList();
     } else {
       if (text.text.isNotEmpty || title.text.isNotEmpty) {
+        var bnote = await noteBox.get(providerKeys[providerIndex]);
         String noteTitle;
         title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
-        Note note = new Note(
-            noteTitle,
-            text.text,
-            noteBox.get(providerKeys[providerIndex]).isChecked,
-            time_duration.inSeconds,
-            0,
-            time_duration.inSeconds,
-            imageList);
+        Note note = new Note(noteTitle, text.text, bnote.isChecked,
+            time_duration.inSeconds, 0, time_duration.inSeconds, imageList);
         noteBox.put(providerKeys[providerIndex], note);
         changes.clearHistory();
         changeStacks();
@@ -647,5 +640,31 @@ class myProvider extends ChangeNotifier {
         uiKit.AppLocalizations.of(donateContext).translate('dogeAddressCopied'),
         false,
         donateContext));
+  }
+
+  Future<bool> updateListSize(List<int> keys, SizeX, SizeY) async {
+    int with_timer = 0;
+    int without_timer = 0;
+
+    for (int i = 0; i < keys.length; i++) {
+      var bnote = await noteBox.get(keys[i]);
+      if (bnote.time == 0) {
+        without_timer = without_timer + 1;
+      } else {
+        without_timer = without_timer + 1;
+      }
+    }
+    listview_size = (without_timer * SizeX * 0.22) + (with_timer * SizeX * 0.5);
+    return true;
+  }
+
+  Future<Note> getNoteListView(List<int> keys, int index) async {
+    var bnote = await noteBox.get(keys[index]);
+    return bnote;
+  }
+
+  Future<Note> getNoteEditStack(List<int> keys, int index) async {
+    var bnote = await noteBox.get(keys[index]);
+    return bnote;
   }
 }
