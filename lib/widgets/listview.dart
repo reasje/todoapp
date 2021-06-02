@@ -349,17 +349,19 @@ class _myRorderableState extends State<myRorderable> {
                                                         .hideCurrentSnackBar();
                                                     ScaffoldMessenger.of(
                                                             context)
-                                                        .showSnackBar(uiKit.MySnackBar(
-                                                            uiKit.AppLocalizations
-                                                                    .of(context)
-                                                                .translate(
-                                                                    'undoNote'),
-                                                            true,
-                                                            context,
-                                                            notes,
-                                                            note,
-                                                            keys,
-                                                            index));
+                                                        .showSnackBar(
+                                                            uiKit.MySnackBar(
+                                                      uiKit.AppLocalizations.of(
+                                                              context)
+                                                          .translate(
+                                                              'undoNote'),
+                                                      true,
+                                                      context,
+                                                      index,
+                                                      notes,
+                                                      note,
+                                                      keys,
+                                                    ));
                                                   },
                                                   child: AnimationConfiguration
                                                       .staggeredList(

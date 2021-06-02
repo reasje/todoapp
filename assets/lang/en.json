@@ -42,5 +42,7 @@
   "continue": "Are you willing to continue to download the file ? (New notes will be added as the procces succeed) ",
   "noInternet": "Internet connection required ! ",
   "signIn": "Please signin first ! ",
-  "noNotes": "No notes available !"
+  "noNotes": "No notes available !",
+  "undoImage":"Images deleted successfully !"
+
 }

@@ -26,6 +26,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   android_alarm_manager: ^2.0.0
+  collection: ^1.15.0
   connectivity: ^3.0.4
   flutter_easyloading: ^3.0.0
   flutter_icons: ^1.1.0

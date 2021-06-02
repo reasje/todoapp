@@ -9,13 +9,21 @@ class PicDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<myProvider>(context);
-    return Hero(
-        tag: 'imageHero',
-        transitionOnUserGestures: true,
-        
-        child: Image.memory(
-          
-          _myProvider.imageList[index],
-        ));
+    return Scaffold(
+          backgroundColor: _myProvider.mainColor,
+          body: InkWell(
+            onTap: (){Navigator.pop(context);},
+                      child: Center(
+              child: Hero(
+              tag: 'imageHero',
+              transitionOnUserGestures: true,
+              
+              child: Image.memory(
+                
+                _myProvider.imageList[index],
+              )),
+            ),
+          ),
+    );
   }
 }

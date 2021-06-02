@@ -29,10 +29,10 @@ Widget MySnackBar(
   String text,
   bool isAction, [
   BuildContext context,
+  int index,
   LazyBox<Note> noteBox,
   Note note,
   List<int> keys,
-  int index,
   bool isWhite,
 ]) {
   final _myProvider = Provider.of<myProvider>(context, listen: false);
@@ -55,7 +55,11 @@ Widget MySnackBar(
             textColor: _myProvider.swachColor,
             label: uiKit.AppLocalizations.of(context).translate('undo'),
             onPressed: () {
-              noteBox.put(keys[index], note);
+              if (noteBox==null) {
+                _myProvider.imageRecover(index);
+              } else {
+                noteBox.put(keys[index], note);
+              }
             },
           )
         : null,

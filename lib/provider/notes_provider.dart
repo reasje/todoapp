@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -10,6 +9,7 @@ import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:undo/undo.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:collection/collection.dart';
 
 // TODO orginaing the providers and having multi providres having a separate
 // provider for check me .
@@ -329,9 +329,12 @@ class myProvider extends ChangeNotifier {
 
   // list of images that will be loaded on user tap
   List<Uint8List> imageList = [];
+  List<Uint8List> imageListSnapshot = [];
+  Uint8List dismissedImage;
   // used for both loading images and taking images
   final picker = ImagePicker();
   PickedFile _image;
+  Note bnote;
   // Show the image picker dilog
   void imagePickerGalley() async {
     _image = await picker.getImage(source: ImageSource.gallery);
@@ -348,6 +351,15 @@ class myProvider extends ChangeNotifier {
       var h = await _image.readAsBytes();
       imageList.add(h);
     }
+    notifyListeners();
+  }
+
+  void imageDissmissed(index) {
+    dismissedImage = imageList.removeAt(index);
+  }
+
+  void imageRecover(index) {
+    imageList.insert(index, dismissedImage);
     notifyListeners();
   }
 
@@ -455,13 +467,15 @@ class myProvider extends ChangeNotifier {
     old_value = text.text;
     time_snapshot = time_duration;
     begin_edit = false;
+    imageListSnapshot = bnote.imageList;
   }
 
   // checks the snapsht that has been edited or not
   bool isEdited() {
     if (ttitle == title.text &&
         ttext == text.text &&
-        time_duration == time_snapshot) {
+        time_duration == time_snapshot &&
+        IterableEquality().equals(imageList, imageListSnapshot)) {
       return false;
     } else {
       return true;
@@ -583,6 +597,7 @@ class myProvider extends ChangeNotifier {
     if (isEdited()) {
       if (text.text.isNotEmpty || title.text.isNotEmpty) {
         if (notSaving == 0) {
+          ScaffoldMessenger.of(myContext).clearSnackBars();
           ScaffoldMessenger.of(myContext).showSnackBar(uiKit.MySnackBar(
               uiKit.AppLocalizations.of(myContext).translate('notSavingAlert'),
               false,
@@ -598,6 +613,7 @@ class myProvider extends ChangeNotifier {
           notifyListeners();
         }
       } else {
+        ScaffoldMessenger.of(myContext).clearSnackBars();
         ScaffoldMessenger.of(myContext).showSnackBar(uiKit.MySnackBar(
             uiKit.AppLocalizations.of(myContext).translate('willingToDelete'),
             false,
@@ -635,6 +651,7 @@ class myProvider extends ChangeNotifier {
   }
 
   showDogeCopied() {
+    ScaffoldMessenger.of(myContext).clearSnackBars();
     ScaffoldMessenger.of(donateContext).removeCurrentSnackBar();
     ScaffoldMessenger.of(donateContext).showSnackBar(uiKit.MySnackBar(
         uiKit.AppLocalizations.of(donateContext).translate('dogeAddressCopied'),
@@ -664,7 +681,7 @@ class myProvider extends ChangeNotifier {
   }
 
   Future<Note> getNoteEditStack(List<int> keys, int index) async {
-    var bnote = await noteBox.get(keys[index]);
+    bnote = await noteBox.get(keys[index]);
     return bnote;
   }
 }
