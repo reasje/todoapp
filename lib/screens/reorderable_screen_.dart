@@ -11,6 +11,7 @@ import 'package:todoapp/provider/conn_provider.dart';
 import 'package:todoapp/provider/notes_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
+import 'package:todoapp/widgets/buttons.dart';
 
 import '../main.dart';
 
@@ -40,10 +41,10 @@ class _MyRorderableState extends State<MyRorderable> {
     double SizeY = MediaQuery.of(context).size.width;
 
     return Scaffold(
-                resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false,
       backgroundColor: _myProvider.mainColor,
       body: Container(
-        padding: EdgeInsets.only(top: SizeX*0.02),
+          padding: EdgeInsets.only(top: SizeX * 0.02),
           width: SizeX,
           margin: EdgeInsets.only(
               //right: SizeY * 0.02,
@@ -54,7 +55,7 @@ class _MyRorderableState extends State<MyRorderable> {
               valueListenable: noteBox.listenable(),
               builder: (context, LazyBox<Note> notes, _) {
                 List<int> keys = notes.keys.cast<int>().toList();
-    
+
                 return FutureBuilder(
                     future: _myProvider.updateListSize(keys, SizeX, SizeY),
                     builder: (context, snapShot) {
@@ -88,8 +89,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                     alignment:
                                                         Alignment.centerLeft,
                                                     child: Text(
-                                                      uiKit.AppLocalizations
-                                                              .of(context)
+                                                      uiKit.AppLocalizations.of(
+                                                              context)
                                                           .translate(
                                                               'notesApp'),
                                                       style: TextStyle(
@@ -107,9 +108,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                 Container(
                                                   child: Icon(
                                                     FontAwesome.dot_circle_o,
-                                                    size: SizeX *
-                                                        SizeY *
-                                                        0.00005,
+                                                    size:
+                                                        SizeX * SizeY * 0.00005,
                                                     color: _connState.is_conn
                                                         ? Colors.green
                                                         : Colors.red,
@@ -127,9 +127,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                   child: uiKit.MyButton(
                                                     sizePU: SizeX * 0.05,
                                                     sizePD: SizeX * 0.06,
-                                                    iconSize: SizeX *
-                                                        SizeY *
-                                                        0.00006,
+                                                    iconSize:
+                                                        SizeX * SizeY * 0.00006,
                                                     iconData:
                                                         FontAwesome.download,
                                                     id: 'download',
@@ -143,9 +142,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                   child: uiKit.MyButton(
                                                     sizePU: SizeX * 0.05,
                                                     sizePD: SizeX * 0.06,
-                                                    iconSize: SizeX *
-                                                        SizeY *
-                                                        0.00006,
+                                                    iconSize:
+                                                        SizeX * SizeY * 0.00006,
                                                     iconData:
                                                         FontAwesome.upload,
                                                     id: 'upload',
@@ -159,9 +157,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                   child: uiKit.MyButton(
                                                     sizePU: SizeX * 0.05,
                                                     sizePD: SizeX * 0.06,
-                                                    iconSize: SizeX *
-                                                        SizeY *
-                                                        0.00006,
+                                                    iconSize:
+                                                        SizeX * SizeY * 0.00006,
                                                     iconData:
                                                         FontAwesome.google,
                                                     id: 'google',
@@ -170,8 +167,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                               ],
                                             ),
                                             Container(
-                                              padding: EdgeInsets.all(
-                                                  SizeX * 0.015),
+                                              padding:
+                                                  EdgeInsets.all(SizeX * 0.015),
                                               alignment: Alignment.centerLeft,
                                               child: uiKit.MyButton(
                                                 sizePU: SizeX * 0.05,
@@ -198,8 +195,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                 sizePD: SizeX * 0.08,
                                                 iconSize:
                                                     SizeX * SizeY * 0.0001,
-                                                iconData:
-                                                    FontAwesome.language,
+                                                iconData: FontAwesome.language,
                                                 id: 'lan',
                                               ),
                                               uiKit.MyButton(
@@ -251,17 +247,15 @@ class _MyRorderableState extends State<MyRorderable> {
                                             //padding: EdgeInsets.only(bottom: SizeX * 0.2),
                                             child: Column(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceAround,
+                                                  MainAxisAlignment.spaceAround,
                                               children: [
                                                 Text(
                                                   uiKit.AppLocalizations.of(
                                                           context)
-                                                      .translate(
-                                                          'NoNotesyet'),
+                                                      .translate('NoNotesyet'),
                                                   style: TextStyle(
-                                                      color: _myProvider
-                                                          .textColor,
+                                                      color:
+                                                          _myProvider.textColor,
                                                       fontWeight:
                                                           FontWeight.w400,
                                                       fontSize: SizeX *
@@ -274,18 +268,17 @@ class _MyRorderableState extends State<MyRorderable> {
                                                       .translate(
                                                           'addNewNotePlease'),
                                                   style: TextStyle(
-                                                      color: _myProvider
-                                                          .textColor,
+                                                      color:
+                                                          _myProvider.textColor,
                                                       fontWeight:
                                                           FontWeight.w500,
-                                                      fontSize:
-                                                          _myProvider.isEn
-                                                              ? SizeX *
-                                                                  SizeY *
-                                                                  0.00008
-                                                              : SizeX *
-                                                                  SizeY *
-                                                                  0.00006),
+                                                      fontSize: _myProvider.isEn
+                                                          ? SizeX *
+                                                              SizeY *
+                                                              0.00008
+                                                          : SizeX *
+                                                              SizeY *
+                                                              0.00006),
                                                 ),
                                               ],
                                             ),
@@ -295,8 +288,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                     )
                                   else
                                     Container(
-                                      height:
-                                          _myProvider.listview_size + 400.0,
+                                      height: _myProvider.listview_size + 400.0,
                                       width: SizeY,
                                       child: ScrollConfiguration(
                                         behavior: NoGlowBehaviour(),
@@ -304,8 +296,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                           child: ReorderableListView(
                                             physics:
                                                 NeverScrollableScrollPhysics(),
-                                            scrollController:
-                                                _scrollController,
+                                            scrollController: _scrollController,
                                             padding: EdgeInsets.only(
                                                 bottom: SizeX * 0.1,
                                                 top: SizeX * 0.01),
@@ -325,8 +316,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                           BorderRadius.all(
                                                               Radius.circular(
                                                                   35)),
-                                                      color: _myProvider
-                                                          .mainColor,
+                                                      color:
+                                                          _myProvider.mainColor,
                                                     ),
                                                     alignment:
                                                         AlignmentDirectional
@@ -336,8 +327,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                       size: SizeX *
                                                           SizeY *
                                                           0.0002,
-                                                      color: _myProvider
-                                                          .textColor,
+                                                      color:
+                                                          _myProvider.textColor,
                                                     ),
                                                   ),
                                                   onDismissed:
@@ -360,8 +351,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                             context)
                                                         .showSnackBar(
                                                             uiKit.MySnackBar(
-                                                      uiKit.AppLocalizations
-                                                              .of(context)
+                                                      uiKit.AppLocalizations.of(
+                                                              context)
                                                           .translate(
                                                               'undoNote'),
                                                       true,
@@ -372,9 +363,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                       keys,
                                                     ));
                                                   },
-                                                  child:
-                                                      AnimationConfiguration
-                                                          .staggeredList(
+                                                  child: AnimationConfiguration
+                                                      .staggeredList(
                                                     position: index,
                                                     delay: Duration(
                                                         milliseconds: 100),
@@ -392,24 +382,24 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                   4000),
                                                           curve: Curves
                                                               .fastLinearToSlowEaseIn,
-                                                          flipAxis:
-                                                              FlipAxis.y,
+                                                          flipAxis: FlipAxis.y,
                                                           child: Container(
-                                                            width:
-                                                                SizeY * 0.9,
-                                                            padding: EdgeInsets.symmetric(
-                                                                horizontal:
-                                                                    SizeY *
-                                                                        0.009,
-                                                                vertical:
-                                                                    SizeY *
-                                                                        0.04),
-                                                            margin: EdgeInsets.only(
-                                                                bottom:
-                                                                    SizeX *
-                                                                        0.04,
-                                                                top: SizeX *
-                                                                    0.01),
+                                                            width: SizeY * 0.9,
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        SizeY *
+                                                                            0.009,
+                                                                    vertical:
+                                                                        SizeY *
+                                                                            0.04),
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    bottom:
+                                                                        SizeX *
+                                                                            0.04,
+                                                                    top: SizeX *
+                                                                        0.01),
                                                             decoration:
                                                                 BoxDecoration(
                                                                     boxShadow: [
@@ -456,9 +446,12 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                         future: _myProvider.getNoteListView(
                                                                             keys,
                                                                             index),
-                                                                        builder:
-                                                                            (BuildContext context, AsyncSnapshot snapshot) {
-                                                                          if (snapshot.hasData) {
+                                                                        builder: (BuildContext
+                                                                                context,
+                                                                            AsyncSnapshot
+                                                                                snapshot) {
+                                                                          if (snapshot
+                                                                              .hasData) {
                                                                             return Column(
                                                                               children: [
                                                                                 snapshot.data.time != 0
@@ -472,9 +465,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                                               index,
                                                                                               context,
                                                                                             );
-                                                                                            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-                                                                                              return uiKit.MyTimer(SizeX: SizeX, SizeY: SizeY, noteBox: noteBox);
-                                                                                            }));
+                                                                                            Navigator.push(context, SliderTransition(uiKit.MyTimer(SizeX: SizeX, SizeY: SizeY, noteBox: noteBox)));
                                                                                           } else {
                                                                                             if (_timerState.index == index) {
                                                                                               // TODO Delete _myProvider.changeTimerStack();
@@ -483,9 +474,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                                                 index,
                                                                                                 context,
                                                                                               );
-                                                                                              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-                                                                                                return uiKit.MyTimer(SizeX: SizeX, SizeY: SizeY, noteBox: noteBox);
-                                                                                              }));
+                                                                                              Navigator.push(context, SliderTransition(uiKit.MyTimer(SizeX: SizeX, SizeY: SizeY, noteBox: noteBox)));
                                                                                             } else {
                                                                                               ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                                                                               ScaffoldMessenger.of(context).showSnackBar(uiKit.MySnackBar(uiKit.AppLocalizations.of(context).translate('timerOn'), false, context));
@@ -641,9 +630,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                                         ),
                                                                                         onTap: () {
                                                                                           _myProvider.loadNote(context, keys, index);
-                                                                                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-                                                                                            return uiKit.MyNotesEditing(SizeX: SizeX, SizeY: SizeY, noteBox: noteBox);
-                                                                                          }));
+                                                                                          Navigator.push(context, SliderTransition(uiKit.MyNotesEditing(SizeX: SizeX, SizeY: SizeY, noteBox: noteBox)));
                                                                                         },
                                                                                       ),
                                                                                       children: [
@@ -694,7 +681,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                               });
                                               var bnote = await notes
                                                   .get(keys[oldIndex]);
-    
+
                                               Note note = bnote;
                                               if (newIndex < oldIndex) {
                                                 for (int i = oldIndex;
@@ -726,8 +713,7 @@ class _MyRorderableState extends State<MyRorderable> {
                         );
                       } else {
                         return Container(
-                            child:
-                                Center(child: CircularProgressIndicator()));
+                            child: Center(child: CircularProgressIndicator()));
                       }
                     });
               })),

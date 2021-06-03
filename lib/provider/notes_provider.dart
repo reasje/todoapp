@@ -504,7 +504,7 @@ class myProvider extends ChangeNotifier {
   }
 
   // new Note clieked
-  void newNoteClicked(BuildContext context) {
+  Future<void> newNoteClicked(BuildContext context) {
     myContext = context;
     // When the add icon is tapped this function will be executed and
     // prepare the provider for the new Note
