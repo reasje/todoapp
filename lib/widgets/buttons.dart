@@ -163,10 +163,10 @@ class _MyButtonState extends State<MyButton> {
               //     });
               break;
             case 'save':
-              _myProvider.doneClicked();
+              _myProvider.doneClicked(context);
               break;
             case 'cancel':
-              _myProvider.cancelClicked();
+              _myProvider.cancelClicked(context);
               
               // Navigator.push(context,
               //     MaterialPageRoute(builder: (BuildContext context) {

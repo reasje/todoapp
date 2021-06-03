@@ -261,7 +261,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                         } else {
                           return FutureBuilder(
 
-                              future: _myProvider.getImageList(context),
+                              future: _myProvider.getImageList(),
                               builder: (context, snapShot) {
                                 if (snapShot.hasData) {
                                   return Dismissible(

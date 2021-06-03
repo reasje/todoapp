@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/model/note_model.dart';
-import 'package:todoapp/screens/note_editing_screen.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:undo/undo.dart';
@@ -549,7 +547,8 @@ class myProvider extends ChangeNotifier {
   }
 
   // executed when the user tapped on the check floating button (done icon FAB)
-  void doneClicked() async {
+  void doneClicked(BuildContext context) async {
+    myContext = context;
     // checking whether your going to update the note or add new one
     // that is done by chekcing the newNote true or false
     if (newNote) {
@@ -597,7 +596,8 @@ class myProvider extends ChangeNotifier {
   // When the clear Icon clicked or back button is tapped
   // this fucntion will be executed checking for changes
   // if the changes has been made it is going to show an alert
-  void cancelClicked() {
+  void cancelClicked(BuildContext context) {
+    myContext = context;
     if (isEdited()) {
       if (text.text.isNotEmpty || title.text.isNotEmpty) {
         if (notSaving == 0) {
@@ -634,6 +634,7 @@ class myProvider extends ChangeNotifier {
       changes.clearHistory();
       // changing the stacks and getting bavk to listview Screen !
       // TODO Delete changeStacks();
+      Navigator.pop(myContext);
       notifyListeners();
     }
   }
@@ -689,13 +690,13 @@ class myProvider extends ChangeNotifier {
     return bnote;
   }
 
-  Future<List<Uint8List>> getImageList(BuildContext context) async {
-    myContext = context;
+  Future<List<Uint8List>> getImageList() async {
+    //myContext = context;
     if (newNote) {
       return imageList;
     } else {
       var note = await noteBox.get(providerKeys[providerIndex]);
-      return note.imageList;
+      return imageList;
     }
   }
 
