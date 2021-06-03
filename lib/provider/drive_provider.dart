@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/model/note_model.dart';
-import 'package:todoapp/provider/GoogleAuthClient.dart';
+import 'package:todoapp/model/googleauthclient_model.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:google_sign_in/google_sign_in.dart' as signIn;
 import 'package:todoapp/provider/conn_provider.dart';
