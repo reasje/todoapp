@@ -500,7 +500,7 @@ class myProvider extends ChangeNotifier {
     Note note = Note(
         ntitle, nttext, newValue, nttime, ntcolor, ntlefttime, ntImageList);
     noteBox.put(providerKeys[providerIndex], note);
-    notifyListeners();
+    //notifyListeners();
   }
 
   // new Note clieked
@@ -512,8 +512,7 @@ class myProvider extends ChangeNotifier {
     clearDuration();
     newNote = true;
     takeSnapshot();
-    // TODO Delete changeStacks();
-    notifyListeners();
+    //notifyListeners();
   }
 
   // used indie list view after an elemt of listview is tapped
@@ -536,7 +535,7 @@ class myProvider extends ChangeNotifier {
     newNote = false;
     takeSnapshot();
     //changeStacks();
-    notifyListeners();
+    //notifyListeners();
   }
 
   // getting the color that was choosen by the user
@@ -582,15 +581,15 @@ class myProvider extends ChangeNotifier {
         noteBox.put(providerKeys[providerIndex], note);
         changes.clearHistory();
         Navigator.pop(myContext);
-        notifyListeners();
+        //notifyListeners();
       } else {
         noteBox.delete(providerKeys[providerIndex]);
         changes.clearHistory();
         Navigator.pop(myContext);
-        notifyListeners();
+        //notifyListeners();
       }
     }
-    notifyListeners();
+    //notifyListeners();
   }
 
   // When the clear Icon clicked or back button is tapped
@@ -612,10 +611,9 @@ class myProvider extends ChangeNotifier {
           });
         } else {
           notSaving = 0;
-          // TODO Delete changeStacks();
           Navigator.pop(myContext);
           changes.clearHistory();
-          notifyListeners();
+          //notifyListeners();
         }
       } else {
         ScaffoldMessenger.of(myContext).clearSnackBars();
@@ -625,7 +623,7 @@ class myProvider extends ChangeNotifier {
             myContext));
         // TODO Delete changeStacks();
         Navigator.pop(myContext);
-        notifyListeners();
+        //notifyListeners();
       }
     } else {
       // making all the changes that has been save for the
@@ -635,7 +633,7 @@ class myProvider extends ChangeNotifier {
       // changing the stacks and getting bavk to listview Screen !
       // TODO Delete changeStacks();
       Navigator.pop(myContext);
-      notifyListeners();
+      //notifyListeners();
     }
   }
 

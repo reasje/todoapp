@@ -21,6 +21,7 @@ String file_name = "NotesAppData";
 Future<String> upload(
     drive.DriveApi driveApi, drive.File driveFile, Box<Note> noteBox,
     [String file_id]) async {
+  // some lists are used to add 
   List<int> my_intlist = [];
   List<String> my_stringlist = [];
   List<List<int>> list = [];
