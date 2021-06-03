@@ -2,16 +2,20 @@ import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/conn_provider.dart';
 
 import 'package:todoapp/provider/drive_provider.dart';
 import 'package:todoapp/provider/notes_provider.dart';
 import 'package:todoapp/provider/signin_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
-import 'package:todoapp/screen/home_screen.dart';
+import 'package:todoapp/screens/home_screen.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:url_launcher/url_launcher.dart';
+
+import '../main.dart';
 
 //typedef function = void Function();
 const _url = 'https://idpay.ir/todoapp';
@@ -72,6 +76,9 @@ class _MyButtonState extends State<MyButton> {
           final _timerState = Provider.of<TimerState>(context, listen: false);
           final _signinState = Provider.of<SigninState>(context, listen: false);
           final _connState = Provider.of<ConnState>(context, listen: false);
+          double SizeX = MediaQuery.of(context).size.height;
+          double SizeY = MediaQuery.of(context).size.width;
+          LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
           switch (widget.id) {
             case 'dogedonate':
               copyDogeAdress();
@@ -79,11 +86,16 @@ class _MyButtonState extends State<MyButton> {
               break;
             case 'home':
               Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => Home()));
+                  context, MaterialPageRoute(builder: (context) => uiKit.MyRorderable()));
               _myProvider.changeFirstTime();
               break;
             case 'menu':
-              _myProvider.changeTimerStack();
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (BuildContext context) {
+              //   return uiKit.Home();
+              // }));
+              Navigator.pop(context);
+              // TODO Delete _myProvider.changeTimerStack();
               break;
             case 'start':
               _timerState.startTimer();
@@ -104,6 +116,11 @@ class _MyButtonState extends State<MyButton> {
               break;
             case 'new':
               _myProvider.newNoteClicked(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                return uiKit.MyNotesEditing(
+                    SizeX: SizeX, SizeY: SizeY, noteBox: noteBox);
+              }));
               break;
             case 'lamp':
               _myProvider.changeBrigness();
@@ -150,12 +167,20 @@ class _MyButtonState extends State<MyButton> {
               break;
             case 'cancel':
               _myProvider.cancelClicked();
+              
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (BuildContext context) {
+              //   return uiKit.Home();
+              // }));
               break;
             case 'coder':
-              _myProvider.gotoDonate(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                return uiKit.MyDoante(SizeX: SizeX, SizeY: SizeY);
+              }));
+              // TODO Delete _myProvider.gotoDonate(context);
               break;
             case 'donate':
-              print('object');
               _launchURL();
               break;
             case 'upload':
@@ -176,18 +201,30 @@ class _MyButtonState extends State<MyButton> {
                   context: context,
                   builder: (context) => CupertinoActionSheet(
                         actions: [
-                          CupertinoActionSheetAction(
-                              onPressed: () {
-                                _myProvider.imagePickerCamera();
-                                Navigator.pop(context);
-                              },
-                              child: Text('Camera')),
-                          CupertinoActionSheetAction(
-                              onPressed: () {
-                                _myProvider.imagePickerGalley();
-                                Navigator.pop(context);
-                              },
-                              child: Text('Gallery'))
+                          Container(
+                            decoration: BoxDecoration(
+                                color: _myProvider.mainColor,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            child: CupertinoActionSheetAction(
+                                onPressed: () {
+                                  _myProvider.imagePickerCamera();
+                                  Navigator.pop(context);
+                                },
+                                child: Text('Camera')),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: _myProvider.mainColor,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            child: CupertinoActionSheetAction(
+                                onPressed: () {
+                                  _myProvider.imagePickerGalley();
+                                  Navigator.pop(context);
+                                },
+                                child: Text('Gallery')),
+                          )
                         ],
                       ));
               break;
@@ -282,8 +319,7 @@ class _MyButtonState extends State<MyButton> {
                                   ? _myProvider.blueMaterial
                                   : _myProvider.textColor
                               : widget.id == 'save' || widget.id == 'cancel'
-                                  ? _myProvider.canUndo ||
-                                          _myProvider.isEdited()
+                                  ? _myProvider.canUndo || false
                                       ? _myProvider.blueMaterial
                                       : _myProvider.textColor
                                   : widget.id == 'timer'

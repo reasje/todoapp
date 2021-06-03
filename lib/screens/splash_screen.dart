@@ -5,9 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/provider/conn_provider.dart';
 import 'package:todoapp/provider/notes_provider.dart';
 import 'package:todoapp/provider/signin_provider.dart';
-import 'package:todoapp/screen/home_screen.dart';
 import 'package:splashscreen/splashscreen.dart';
-import 'package:todoapp/uikit.dart' as uiKit;
+import 'package:todoapp/uiKit.dart' as uiKit;
 import 'onboarding_screen.dart';
 
 class MySplashScreen extends StatefulWidget {
@@ -36,7 +35,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
     await _myprovider.initialColorsAndLan();
     await _signinState.checkSignin();
     await Future.delayed(Duration(seconds: 2));
-    return Future.value(_myprovider.isFirstTime ? Onboarding() : Home());
+    return Future.value(_myprovider.isFirstTime ? Onboarding() : uiKit.MyRorderable());
   }
 
   @override

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/model/note_model.dart';
+import 'package:todoapp/screens/note_editing_screen.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:undo/undo.dart';
@@ -308,7 +309,7 @@ class myProvider extends ChangeNotifier {
   // this is used for showing the SnackBar
   BuildContext myContext;
   // the index of the main stack and the floating stack
-  int stack_index = 0;
+  // TODO Delete this int stack_index = 0;
   int floating_index = 0;
   // to press the back button twice for getting back to the notes list ! without saving
   int notSaving = 0;
@@ -336,7 +337,7 @@ class myProvider extends ChangeNotifier {
   PickedFile _image;
   Note bnote;
   // Show the image picker dilog
-  void imagePickerGalley() async {
+  Future<void> imagePickerGalley() async {
     _image = await picker.getImage(source: ImageSource.gallery);
     if (_image != null) {
       var h = await _image.readAsBytes();
@@ -345,7 +346,7 @@ class myProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void imagePickerCamera() async {
+  Future<void> imagePickerCamera() async {
     _image = await picker.getImage(source: ImageSource.camera);
     if (_image != null) {
       var h = await _image.readAsBytes();
@@ -436,46 +437,51 @@ class myProvider extends ChangeNotifier {
   }
 
   // Updating the Stacks
-  void changeStacks() {
-    if (stack_index < 1) {
-      stack_index++;
-    } else {
-      stack_index = 0;
-    }
-    notifyListeners();
-  }
-
-  void goBackToMain() {
-    stack_index = 0;
-    notifyListeners();
-  }
-
-  void changeTimerStack() {
-    if (stack_index < 2) {
-      stack_index = 2;
-    } else {
-      stack_index = 0;
-    }
-    notifyListeners();
-  }
+  // TODO Delete
+  // void changeStacks() {
+  //   if (stack_index < 1) {
+  //     stack_index++;
+  //   } else {
+  //     stack_index = 0;
+  //   }
+  //   notifyListeners();
+  // }
+  // TODO Delete
+  // void goBackToMain() {
+  //   stack_index = 0;
+  //   notifyListeners();
+  // }
+  // TODO Delete
+  // void changeTimerStack() {
+  //   if (stack_index < 2) {
+  //     stack_index = 2;
+  //   } else {
+  //     stack_index = 0;
+  //   }
+  //   notifyListeners();
+  // }
 
   // getting the controller before the user enters the editing area
   // to detect the if any changes has been occured !
-  void takeSnapshot() {
+  void takeSnapshot() async {
     ttitle = title.text;
     ttext = text.text;
     old_value = text.text;
     time_snapshot = time_duration;
     begin_edit = false;
-    imageListSnapshot = bnote.imageList;
+    if (!newNote) {
+      imageListSnapshot = List.from(imageList);
+    }
   }
 
   // checks the snapsht that has been edited or not
   bool isEdited() {
+    // print('imageList : ${imageList}');
+    // print('imageListSnapshot : ${imageListSnapshot}');
     if (ttitle == title.text &&
         ttext == text.text &&
         time_duration == time_snapshot &&
-        IterableEquality().equals(imageList, imageListSnapshot)) {
+        ListEquality().equals(imageList, imageListSnapshot)) {
       return false;
     } else {
       return true;
@@ -508,12 +514,12 @@ class myProvider extends ChangeNotifier {
     clearDuration();
     newNote = true;
     takeSnapshot();
-    changeStacks();
+    // TODO Delete changeStacks();
     notifyListeners();
   }
 
   // used indie list view after an elemt of listview is tapped
-  void loadNote(List<int> keys, int index, BuildContext context) async {
+  void loadNote(BuildContext context, [List<int> keys, int index]) async {
     myContext = context;
     providerKeys = keys;
     providerIndex = index;
@@ -521,6 +527,7 @@ class myProvider extends ChangeNotifier {
     // getting the pics form the database.
     var bnote = await noteBox.get(providerKeys[providerIndex]);
     // if the note doesnot include any notes pass
+
     if (bnote.imageList.isNotEmpty) {
       imageList = bnote.imageList;
     }
@@ -530,9 +537,8 @@ class myProvider extends ChangeNotifier {
     noteColor = Color(bnote.color);
     newNote = false;
     takeSnapshot();
-    changeStacks();
+    //changeStacks();
     notifyListeners();
-    print('this is done ');
   }
 
   // getting the color that was choosen by the user
@@ -544,7 +550,6 @@ class myProvider extends ChangeNotifier {
 
   // executed when the user tapped on the check floating button (done icon FAB)
   void doneClicked() async {
-    print('object');
     // checking whether your going to update the note or add new one
     // that is done by chekcing the newNote true or false
     if (newNote) {
@@ -554,12 +559,11 @@ class myProvider extends ChangeNotifier {
         final String noteText = text.text;
         final int noteTime = time_duration.inSeconds;
         int leftTime = noteTime;
-        List<Uint8List> noteimages = imageList;
         Note note =
             Note(noteTitle, noteText, false, noteTime, 0, leftTime, imageList);
         noteBox.add(note);
         changes.clearHistory();
-        changeStacks();
+        Navigator.pop(myContext);
       } else {
         ScaffoldMessenger.of(myContext).showSnackBar(uiKit.MySnackBar(
           uiKit.AppLocalizations.of(myContext).translate('emptyFieldsAlert'),
@@ -578,12 +582,12 @@ class myProvider extends ChangeNotifier {
             time_duration.inSeconds, 0, time_duration.inSeconds, imageList);
         noteBox.put(providerKeys[providerIndex], note);
         changes.clearHistory();
-        changeStacks();
+        Navigator.pop(myContext);
         notifyListeners();
       } else {
         noteBox.delete(providerKeys[providerIndex]);
         changes.clearHistory();
-        changeStacks();
+        Navigator.pop(myContext);
         notifyListeners();
       }
     }
@@ -608,7 +612,8 @@ class myProvider extends ChangeNotifier {
           });
         } else {
           notSaving = 0;
-          changeStacks();
+          // TODO Delete changeStacks();
+          Navigator.pop(myContext);
           changes.clearHistory();
           notifyListeners();
         }
@@ -618,7 +623,8 @@ class myProvider extends ChangeNotifier {
             uiKit.AppLocalizations.of(myContext).translate('willingToDelete'),
             false,
             myContext));
-        changeStacks();
+        // TODO Delete changeStacks();
+        Navigator.pop(myContext);
         notifyListeners();
       }
     } else {
@@ -627,7 +633,7 @@ class myProvider extends ChangeNotifier {
       // causes !
       changes.clearHistory();
       // changing the stacks and getting bavk to listview Screen !
-      changeStacks();
+      // TODO Delete changeStacks();
       notifyListeners();
     }
   }
@@ -639,16 +645,16 @@ class myProvider extends ChangeNotifier {
     time_duration = duration;
     notifyListeners();
   }
-
-  void gotoDonate(BuildContext context) {
-    this.donateContext = context;
-    if (stack_index == 0) {
-      stack_index = 3;
-    } else {
-      stack_index = 0;
-    }
-    notifyListeners();
-  }
+  // TODO Delete
+  // void gotoDonate(BuildContext context) {
+  //   this.donateContext = context;
+  //   if (stack_index == 0) {
+  //     stack_index = 3;
+  //   } else {
+  //     stack_index = 0;
+  //   }
+  //   notifyListeners();
+  // }
 
   showDogeCopied() {
     ScaffoldMessenger.of(myContext).clearSnackBars();
@@ -676,12 +682,29 @@ class myProvider extends ChangeNotifier {
   }
 
   Future<Note> getNoteListView(List<int> keys, int index) async {
-    var bnote = await noteBox.get(keys[index]);
+    var note = await noteBox.get(keys[index]);
+    var bnote = Note(note.title, note.text, note.isChecked, note.time,
+        note.color, note.leftTime, null);
+
     return bnote;
   }
 
-  Future<Note> getNoteEditStack(List<int> keys, int index) async {
-    bnote = await noteBox.get(keys[index]);
+  Future<List<Uint8List>> getImageList(BuildContext context) async {
+    myContext = context;
+    if (newNote) {
+      return imageList;
+    } else {
+      var note = await noteBox.get(providerKeys[providerIndex]);
+      return note.imageList;
+    }
+  }
+
+  Future<Note> getNoteEditStack([List<int> keys, int index]) async {
+    if (keys?.isEmpty) {
+      bnote = await noteBox.get(providerKeys[providerIndex]);
+    } else {
+      bnote = await noteBox.get(keys[index]);
+    }
     return bnote;
   }
 }

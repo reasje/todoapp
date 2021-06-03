@@ -138,33 +138,34 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: _myProvider.mainColor,
-      body: WillPopScope(
-        onWillPop: () async {
-          // current index of the stack is editing stack
-          if (_myProvider.stack_index == 1) {
-            _myProvider.cancelClicked();
-          }
-          // if current stack is timer stack
-          else if (_myProvider.stack_index == 2) {
-            if (_timerState.isRunning.any((element) => element == true)) {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              ScaffoldMessenger.of(context).showSnackBar(uiKit.MySnackBar(
-                  uiKit.AppLocalizations.of(context).translate('cannotGoBack'),
-                  false,
-                  context));
-            } else {
-              _myProvider.changeTimerStack();
-            }
-          }
-          // if the current stack is the donate stack
-          else if (_myProvider.stack_index == 3) {
-            _myProvider.goBackToMain();
-          } else if (_myProvider.stack_index == 0) {
-            return true;
-          }
-          return true;
-        },
-        child: GestureDetector(
+      body: 
+      // WillPopScope(
+      //   onWillPop: () async {
+      //     // current index of the stack is editing stack
+      //     if (_myProvider.stack_index == 1) {
+      //       _myProvider.cancelClicked();
+      //     }
+      //     // if current stack is timer stack
+      //     else if (_myProvider.stack_index == 2) {
+      //       if (_timerState.isRunning.any((element) => element == true)) {
+      //         ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      //         ScaffoldMessenger.of(context).showSnackBar(uiKit.MySnackBar(
+      //             uiKit.AppLocalizations.of(context).translate('cannotGoBack'),
+      //             false,
+      //             context));
+      //       } else {
+      //         _myProvider.changeTimerStack();
+      //       }
+      //     }
+      //     // if the current stack is the donate stack
+      //     else if (_myProvider.stack_index == 3) {
+      //       _myProvider.goBackToMain();
+      //     } else if (_myProvider.stack_index == 0) {
+      //       return true;
+      //     }
+      //     return true;
+      //   },
+        GestureDetector(
           onTap: () {
             FocusScope.of(context).requestFocus(new FocusNode());
           },
@@ -184,41 +185,15 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                           height: SizeX * 0.98,
                           width: SizeY,
                           padding: EdgeInsets.only(),
-                          child: IndexedStack(
-                            index: _myProvider.stack_index,
-                            children: [
-                              Container(
-                                  width: SizeY,
-                                  height: SizeX,
-                                  child: Column(
-                                    children: [
-                                      uiKit.myRorderable(
-                                        SizeX: SizeX,
-                                        SizeY: SizeY,
-                                        noteBox: noteBox,
-                                      )
-                                    ],
-                                  )),
-                              Container(
-                                child: uiKit.MyNotesEditing(
-                                    SizeX: SizeX,
-                                    SizeY: SizeY,
-                                    noteBox: noteBox),
-                              ),
-                              Container(
-                                child: uiKit.MyTimer(
-                                    SizeX: SizeX,
-                                    SizeY: SizeY,
-                                    noteBox: noteBox),
-                              ),
-                              Container(
-                                child: uiKit.MyDoante(
-                                  SizeX: SizeX,
-                                  SizeY: SizeY,
-                                ),
-                              ),
-                            ],
-                          ));
+                          child: Container(
+                              width: SizeY,
+                              height: SizeX,
+                              child: Column(
+                                children: [
+                                  uiKit.MyRorderable(
+                                  )
+                                ],
+                              )));
                     } else {
                       return Container(
                           child: Center(child: CircularProgressIndicator()));
@@ -230,7 +205,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                 }),
           ),
         ),
-      ),
+      //),
     );
   }
 }
