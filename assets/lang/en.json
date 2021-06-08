@@ -43,6 +43,8 @@
   "noInternet": "Internet connection required ! ",
   "signIn": "Please signin first ! ",
   "noNotes": "No notes available !",
-  "undoImage":"Images deleted successfully !"
-
+  "undoImage":"Image deleted successfully !",
+  "undoVoice":"Voice deleted successfully !",
+  "voiceName":"Choose a name for the voice !",
+  "microphoneRequired" : "Microphone permission is requied !"
 }

@@ -66,7 +66,7 @@ class TimerState extends ChangeNotifier {
           var ntcolor = bnote.color;
           var ntlefttime = leftTime;
           Note note = Note(
-              ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, null);
+              ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, null , null);
           noteBox.put(keys[index], note);
           isRunning[index] = true;
           isOver = true;
@@ -87,7 +87,7 @@ class TimerState extends ChangeNotifier {
           var ntcolor = bnote.color;
           var ntlefttime = nttime;
           Note note = Note(
-              ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, null);
+              ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, null, null);
           noteBox.put(keys[index], note);
           isRunning[index] = true;
           notifyListeners();
@@ -102,7 +102,7 @@ class TimerState extends ChangeNotifier {
           var ntcolor = bnote.color;
           var ntlefttime = leftTime;
           Note note = Note(
-              ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, null);
+              ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, null ,null);
           noteBox.put(keys[index], note);
           isRunning[index] = true;
           notifyListeners();
@@ -151,7 +151,7 @@ class TimerState extends ChangeNotifier {
       ntlefttime = leftTime.abs();
     }
     Note note = Note(
-        ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, ntimages);
+        ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, ntimages ,null);
     noteBox.put(keys[index], note);
     if (_turnOn) {
       startTimer();
@@ -179,7 +179,7 @@ class TimerState extends ChangeNotifier {
     var ntimages = bnote.imageList;
     var ntlefttime = nttime;
     Note note = Note(
-        ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, ntimages);
+        ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, ntimages ,null);
     noteBox.put(keys[index], note);
     stopTimer();
     cancelAlarm();

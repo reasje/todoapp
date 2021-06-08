@@ -24,13 +24,14 @@ class NoteAdapter extends TypeAdapter<Note> {
       fields[4] as int,
       fields[5] as int,
       (fields[6] as List)?.cast<Uint8List>(),
+      (fields[7] as List)?.cast<Voice>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Note obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class NoteAdapter extends TypeAdapter<Note> {
       ..writeByte(5)
       ..write(obj.leftTime)
       ..writeByte(6)
-      ..write(obj.imageList);
+      ..write(obj.imageList)
+      ..writeByte(7)
+      ..write(obj.voiceList);
   }
 
   @override

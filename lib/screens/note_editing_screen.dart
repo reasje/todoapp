@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+//import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -9,6 +11,7 @@ import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/notes_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:todoapp/widgets/image.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 
 // TODO moving and reordering list view effect
 class MyNotesEditing extends StatefulWidget {
@@ -260,7 +263,6 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                           );
                         } else {
                           return FutureBuilder(
-
                               future: _myProvider.getImageList(),
                               builder: (context, snapShot) {
                                 if (snapShot.hasData) {
@@ -374,7 +376,444 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                               });
                         }
                       })),
-              Expanded(child: Container())
+              Expanded(
+                  child: ListView.builder(
+                      itemCount: _myProvider.voiceList != null
+                          ? _myProvider.voiceList.length + 1
+                          : 1,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        if (index ==
+                            (_myProvider.voiceList != null
+                                ? _myProvider.voiceList.length
+                                : 0)) {
+                          return _myProvider.flutterSoundRecorder.isStopped
+                              ? Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: SizeY * 0.1),
+                                  alignment: Alignment.centerLeft,
+                                  child: uiKit.MyButton(
+                                    sizePU: SizeX * 0.07,
+                                    sizePD: SizeX * 0.08,
+                                    iconSize: SizeX * SizeY * 0.00006,
+                                    iconData: FontAwesome.microphone,
+                                    id: 'newvoice',
+                                  ),
+                                )
+                              : _myProvider.flutterSoundRecorder.isRecording
+                                  ? Container(
+                                      width: SizeY * 0.5,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Container(
+                                            width: SizeY * 0.2,
+                                            padding: EdgeInsets.only(
+                                                left: SizeY * 0.04),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Text(
+                                                  '${((_myProvider.recorderDuration.inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}',
+                                                  style: TextStyle(
+                                                      color: _myProvider
+                                                          .blueMaterial,
+                                                      fontSize: SizeX *
+                                                          SizeY *
+                                                          0.0001),
+                                                ),
+                                                Text(
+                                                  ':',
+                                                  style: TextStyle(
+                                                      color: _myProvider
+                                                          .blueMaterial,
+                                                      fontSize: SizeX *
+                                                          SizeY *
+                                                          0.0001),
+                                                ),
+                                                Text(
+                                                  '${((_myProvider.recorderDuration.inSeconds) % 60).floor().toString().padLeft(2, '0')}',
+                                                  style: TextStyle(
+                                                      color: _myProvider
+                                                          .blueMaterial,
+                                                      fontSize: SizeX *
+                                                          SizeY *
+                                                          0.0001),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: SizeY * 0.05),
+                                                alignment: Alignment.centerLeft,
+                                                child: uiKit.MyButton(
+                                                  sizePU: SizeX * 0.05,
+                                                  sizePD: SizeX * 0.06,
+                                                  iconSize:
+                                                      SizeX * SizeY * 0.00006,
+                                                  iconData: FontAwesome.pause,
+                                                  id: 'pausevoice',
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: SizeY * 0.1),
+                                                alignment: Alignment.centerLeft,
+                                                child: uiKit.MyButton(
+                                                  sizePU: SizeX * 0.05,
+                                                  sizePD: SizeX * 0.06,
+                                                  iconSize:
+                                                      SizeX * SizeY * 0.00006,
+                                                  iconData: FontAwesome.stop,
+                                                  id: 'stopvoice',
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : Container(
+                                      width: SizeY * 0.5,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Container(
+                                            width: SizeY * 0.2,
+                                            padding: EdgeInsets.only(
+                                                left: SizeY * 0.04),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Text(
+                                                  '${((_myProvider.recorderDuration.inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}',
+                                                  style: TextStyle(
+                                                      color: _myProvider
+                                                          .blueMaterial,
+                                                      fontSize: SizeX *
+                                                          SizeY *
+                                                          0.0001),
+                                                ),
+                                                Text(
+                                                  ':',
+                                                  style: TextStyle(
+                                                      color: _myProvider
+                                                          .blueMaterial,
+                                                      fontSize: SizeX *
+                                                          SizeY *
+                                                          0.0001),
+                                                ),
+                                                Text(
+                                                  '${((_myProvider.recorderDuration.inSeconds) % 60).floor().toString().padLeft(2, '0')}',
+                                                  style: TextStyle(
+                                                      color: _myProvider
+                                                          .blueMaterial,
+                                                      fontSize: SizeX *
+                                                          SizeY *
+                                                          0.0001),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: SizeY * 0.1),
+                                                alignment: Alignment.centerLeft,
+                                                child: uiKit.MyButton(
+                                                  sizePU: SizeX * 0.05,
+                                                  sizePD: SizeX * 0.06,
+                                                  iconSize:
+                                                      SizeX * SizeY * 0.00006,
+                                                  iconData: FontAwesome.play,
+                                                  id: 'resumevoice',
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: SizeY * 0.1),
+                                                alignment: Alignment.centerLeft,
+                                                child: uiKit.MyButton(
+                                                  sizePU: SizeX * 0.05,
+                                                  sizePD: SizeX * 0.06,
+                                                  iconSize:
+                                                      SizeX * SizeY * 0.00006,
+                                                  iconData: FontAwesome.stop,
+                                                  id: 'stopvoice',
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                        } else {
+                          return FutureBuilder(
+                              future: _myProvider.getVoiceList(),
+                              builder: (context, snapShot) {
+                                if (snapShot.hasData) {
+                                  return Dismissible(
+                                    direction: DismissDirection.up,
+                                    key: UniqueKey(),
+                                    background: Center(
+                                      child: Container(
+                                        padding: EdgeInsets.only(
+                                            left: SizeY * 0.1,
+                                            bottom: SizeX * 0.01,
+                                            right: SizeY * 0.1),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(35)),
+                                          color: _myProvider.mainColor,
+                                        ),
+                                        alignment:
+                                            AlignmentDirectional.centerEnd,
+                                        child: Icon(
+                                          Icons.delete_sweep,
+                                          size: SizeX * SizeY * 0.00025,
+                                          color: _myProvider.textColor,
+                                        ),
+                                      ),
+                                    ),
+                                    onDismissed: (direction) {
+                                      ScaffoldMessenger.of(context)
+                                          .hideCurrentSnackBar();
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(uiKit.MySnackBar(
+                                              uiKit.AppLocalizations.of(context)
+                                                  .translate('undoVoice'),
+                                              true,
+                                              context,
+                                              index));
+                                      _myProvider.voiceDissmissed(index);
+                                    },
+                                    child: Container(
+                                        width: SizeY * 0.52,
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: SizeY * 0.03,
+                                            vertical: SizeX * 0.02),
+                                        decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: _myProvider
+                                                    .lightShadowColor,
+                                                spreadRadius: 1.0,
+                                                blurRadius: 1.0,
+                                                offset: Offset(-1,
+                                                    -1), // changes position of shadow
+                                              ),
+                                              BoxShadow(
+                                                color: _myProvider.shadowColor
+                                                    .withOpacity(0.17),
+                                                spreadRadius: 1.0,
+                                                blurRadius: 2.0,
+                                                offset: Offset(3,
+                                                    4), // changes position of shadow
+                                              ),
+                                            ],
+                                            color: _myProvider.mainColor,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(
+                                                    SizeX * 0.016))),
+                                        child: _myProvider.voiceList != null
+                                            ? Container(
+                                                alignment: Alignment.centerLeft,
+                                                width: SizeY * 0.35,
+                                                child: Row(
+                                                  children: [
+                                                    Column(
+                                                      children: [
+                                                        Container(
+                                                          width: SizeY * 0.41,
+                                                          child:
+                                                              Slider.adaptive(
+                                                            key: UniqueKey(),
+                                                            onChangeEnd:
+                                                                (value) {
+                                                              _myProvider
+                                                                  .seekPlayingRecorder(
+                                                                      value,
+                                                                      index);
+                                                            },
+                                                            value: _myProvider
+                                                                .voiceProgress[
+                                                                    index]
+                                                                .inSeconds
+                                                                .toDouble(),
+                                                            max: _myProvider
+                                                                    .voiceDuration[
+                                                                        index]
+                                                                    .inSeconds
+                                                                    .toDouble() +
+                                                                1,
+                                                            min: 0,
+                                                            onChanged:
+                                                                (value) {},
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          width: SizeY * 0.4,
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Container(
+                                                                margin: EdgeInsets.only(
+                                                                    left: SizeX *
+                                                                        0.02),
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .end,
+                                                                  children: [
+                                                                    Text(
+                                                                        "${((_myProvider.voiceProgress[index].inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}"),
+                                                                    Text(":"),
+                                                                    Text(
+                                                                        "${(_myProvider.voiceProgress[index].inSeconds % 60).floor().toString().padLeft(2, '0')}"),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              Container(
+                                                                child: Text(
+                                                                    _myProvider
+                                                                        .voiceList[
+                                                                            index]
+                                                                        .title),
+                                                              ),
+                                                              Container(
+                                                                margin: EdgeInsets.only(
+                                                                    right: SizeX *
+                                                                        0.015),
+                                                                child: Row(
+                                                                  children: [
+                                                                    Text(
+                                                                        "${((_myProvider.voiceDuration[index].inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}"),
+                                                                    Text(":"),
+                                                                    Text(
+                                                                        "${(_myProvider.voiceDuration[index].inSeconds % 60).floor().toString().padLeft(2, '0')}"),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                    Container(
+                                                        width: SizeY * 0.1,
+                                                        child: _myProvider
+                                                                        .soundPlayerState[
+                                                                    index] ==
+                                                                SoundPlayerState
+                                                                    .resumed
+                                                            ? InkWell(
+                                                                key:
+                                                                    UniqueKey(),
+                                                                onTap: () {
+                                                                  _myProvider
+                                                                      .pausePlayingRecorded(
+                                                                          index);
+                                                                },
+                                                                child: Icon(
+                                                                    FontAwesome
+                                                                        .pause,
+                                                                    color: _myProvider
+                                                                        .textColor,
+                                                                    size: SizeX *
+                                                                        SizeY *
+                                                                        0.00012),
+                                                              )
+                                                            : _myProvider.soundPlayerState[
+                                                                        index] ==
+                                                                    SoundPlayerState
+                                                                        .paused
+                                                                ? InkWell(
+                                                                    onTap: () {
+                                                                      _myProvider
+                                                                          .resumePlayingRecorded(
+                                                                              index);
+                                                                    },
+                                                                    child: Icon(
+                                                                        FontAwesome
+                                                                            .play,
+                                                                        color: _myProvider
+                                                                            .textColor,
+                                                                        size: SizeX *
+                                                                            SizeY *
+                                                                            0.00012),
+                                                                  )
+                                                                : _myProvider.soundPlayerState[
+                                                                            index] ==
+                                                                        SoundPlayerState
+                                                                            .stopped
+                                                                    ? InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          _myProvider
+                                                                              .startPlayingRecorded(index);
+                                                                        },
+                                                                        child: Icon(
+                                                                            FontAwesome
+                                                                                .play,
+                                                                            color: _myProvider
+                                                                                .textColor,
+                                                                            size: SizeX *
+                                                                                SizeY *
+                                                                                0.00012),
+                                                                      )
+                                                                    : Container())
+                                                  ],
+                                                ),
+                                              )
+                                            : Container()),
+                                  );
+                                } else {
+                                  return Container(
+                                      width: SizeX * 0.16,
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: SizeY * 0.03),
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: _myProvider.lightShadowColor,
+                                            spreadRadius: 1.0,
+                                            blurRadius: 1.0,
+                                            offset: Offset(-1,
+                                                -1), // changes position of shadow
+                                          ),
+                                          BoxShadow(
+                                            color: _myProvider.shadowColor
+                                                .withOpacity(0.17),
+                                            spreadRadius: 1.0,
+                                            blurRadius: 2.0,
+                                            offset: Offset(3,
+                                                4), // changes position of shadow
+                                          ),
+                                        ],
+                                        color: _myProvider.mainColor,
+                                        // borderRadius:
+                                        //     BorderRadius.all(Radius.circular(SizeX * 0.3))
+                                      ),
+                                      child: Center(
+                                          child: CircularProgressIndicator()));
+                                }
+                              });
+                        }
+                      })),
             ],
           ),
         ),

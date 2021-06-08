@@ -1,9 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sound/flutter_sound.dart';
+import 'package:flutter_sound/public/tau.dart';
 import 'package:hive/hive.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:todoapp/model/note_model.dart';
+import 'package:todoapp/model/voice_model.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:undo/undo.dart';
@@ -12,6 +18,15 @@ import 'package:collection/collection.dart';
 
 // TODO orginaing the providers and having multi providres having a separate
 // provider for check me .
+const stopped = 0;
+const paused = 1;
+const resumed = 2;
+enum SoundPlayerState {
+  stopped,
+  paused,
+  resumed,
+}
+
 class myProvider extends ChangeNotifier {
   myProvider() {
     initialColorsAndLan();
@@ -179,20 +194,19 @@ class myProvider extends ChangeNotifier {
     }
   }
 
-  void changeNoteTitleColor(bool isExpanded, int index) {
-    print(isExpanded);
-    if (isExpanded) {
-      noteTitleColor[index] = swachColor;
-    } else {
-      String theme = dateBox.get('theme');
-      if (theme == 'white') {
-        noteTitleColor[index] = whiteTextColor;
-      } else {
-        noteTitleColor[index] = blackTextColor;
-      }
-    }
-    notifyListeners();
-  }
+  // void changeNoteTitleColor(bool isExpanded, int index) {
+  //   if (isExpanded) {
+  //     noteTitleColor[index] = swachColor;
+  //   } else {
+  //     String theme = dateBox.get('theme');
+  //     if (theme == 'white') {
+  //       noteTitleColor[index] = whiteTextColor;
+  //     } else {
+  //       noteTitleColor[index] = blackTextColor;
+  //     }
+  //   }
+  //   //notifyListeners();
+  // }
 
   void changeLan() {
     String lan = dateBox.get('lan') ?? dateBox.put('lan', 'en');
@@ -248,8 +262,9 @@ class myProvider extends ChangeNotifier {
     var ntcolor = bnote.color;
     var ntchecked = bnote.isChecked;
     var ntimageList = bnote.imageList;
-    Note note = Note(
-        ntitle, nttext, ntchecked, nttime, ntcolor, ntlefttime, ntimageList);
+    var ntvoicewList = bnote.voiceList;
+    Note note = Note(ntitle, nttext, ntchecked, nttime, ntcolor, ntlefttime,
+        ntimageList, ntvoicewList);
     noteBox.put(keys[index], note);
   }
 
@@ -274,8 +289,9 @@ class myProvider extends ChangeNotifier {
             var ntcolor = bnote.color;
             var ntlefttime = bnote.leftTime;
             var ntImageList = bnote.imageList;
+            var ntVoiceList = bnote.voiceList;
             Note note = Note(ntitle, nttext, false, nttime, ntcolor, ntlefttime,
-                ntImageList);
+                ntImageList, ntVoiceList);
             noteBox.putAt(i, note);
           }
           dateBox.put('date',
@@ -322,10 +338,11 @@ class myProvider extends ChangeNotifier {
   TextEditingController get myTitle => title;
   TextEditingController get myText => text;
   bool newNote;
+  Note bnote;
   // note color is used for reloading the color selection selected
   Color noteColor;
   int indexOfSelectedColor;
-
+  // The image part
   // list of images that will be loaded on user tap
   List<Uint8List> imageList = [];
   List<Uint8List> imageListSnapshot = [];
@@ -333,7 +350,6 @@ class myProvider extends ChangeNotifier {
   // used for both loading images and taking images
   final picker = ImagePicker();
   PickedFile _image;
-  Note bnote;
   // Show the image picker dilog
   Future<void> imagePickerGalley() async {
     _image = await picker.getImage(source: ImageSource.gallery);
@@ -360,6 +376,186 @@ class myProvider extends ChangeNotifier {
   void imageRecover(index) {
     imageList.insert(index, dismissedImage);
     notifyListeners();
+  }
+
+  Future<Note> getNoteListView(List<int> keys, int index) async {
+    var note = await noteBox.get(keys[index]);
+    var bnote = Note(note.title, note.text, note.isChecked, note.time,
+        note.color, note.leftTime, null, null);
+
+    return bnote;
+  }
+
+  Future<List<Uint8List>> getImageList() async {
+    //myContext = context;
+    if (newNote) {
+      return imageList;
+    } else {
+      var note = await noteBox.get(providerKeys[providerIndex]);
+      return imageList;
+    }
+  }
+
+  // This function is used inside the notes_editing_screen as
+  // a future function to load the pictures
+  Future<Note> getNoteEditStack([List<int> keys, int index]) async {
+    if (keys?.isEmpty) {
+      bnote = await noteBox.get(providerKeys[providerIndex]);
+    } else {
+      bnote = await noteBox.get(keys[index]);
+    }
+    return bnote;
+  }
+
+  Future<List<Voice>> getVoiceList() async {
+    return voiceList;
+  }
+
+  // The voice note part
+  List<Voice> voiceList = [];
+  // Used to controll if the notes has been edited or not
+  List<Voice> voiceListSnapshot = [];
+  // This list is return to UI for details
+  // Below varriable is used to show the recorded time in the UI
+  Duration recorderDuration = Duration(seconds: 0);
+  // If any of the voices has been dismissed  It wil be saved in this varrable
+  Voice dismissedVoice;
+  // A name for any recordiing that will be used
+  String voiceName = 'tempraryFileName';
+  // A new Instance of FlutterSoundRecorder for recording
+  FlutterSoundRecorder flutterSoundRecorder = new FlutterSoundRecorder();
+  // A new Instance of FlutterSoundPlayer for playing USED AS LIST
+  List<FlutterSoundPlayer> flutterSoundPlayer =
+      List.filled(100, FlutterSoundPlayer());
+  // this varriable shows the progress of the voice
+  List<Duration> voiceProgress = List.filled(100, Duration(seconds: 0));
+  // This shows the total duration of the voice
+  List<Duration> voiceDuration = List.filled(100, Duration(seconds: 0));
+  // This is the periodical timer for incrementing the voiceProgress duration
+  List<Timer> timer = List.filled(100, Timer(Duration(), () {}));
+  // Used to control the playing voices
+  List<SoundPlayerState> soundPlayerState =
+      List.filled(100, SoundPlayerState.stopped);
+  //                              *** RECORDER ***                              //
+  Future<void> startRecorder() async {
+    PermissionStatus status = await Permission.microphone.request();
+    if (status != PermissionStatus.granted) {
+      throw RecordingPermissionException("Microphone permission not granted");
+    }
+    // StreamSink<Food> _playerSubscription;
+    // opening the session before starting the recorder is required .
+    await flutterSoundRecorder.openAudioSession();
+    // starting the recording session by adding the file name to
+    await flutterSoundRecorder.startRecorder(
+        toFile: voiceName, codec: Codec.defaultCodec);
+    // This stream updates the recording duration
+    flutterSoundRecorder.onProgress.listen((event) {
+      recorderDuration = event.duration;
+      notifyListeners();
+    });
+    notifyListeners();
+  }
+
+  Future<void> pauseRecorder() async {
+    await flutterSoundRecorder.pauseRecorder();
+    notifyListeners();
+  }
+
+  Future<void> resumeRecorder() async {
+    flutterSoundRecorder.resumeRecorder();
+    notifyListeners();
+  }
+
+  Future<void> stopRecorder() async {
+    // finishing up the recorded voice
+    String path = await flutterSoundRecorder.stopRecorder();
+    // time to save the file with path inside the
+    // datatbase as the Uint8List
+    File file = File(path);
+    var h = await file.readAsBytes();
+    var v = Voice('title', h);
+    voiceList.add(v);
+    // Time to delete the file to avoid space overflow
+    flutterSoundRecorder.deleteRecord(fileName: voiceName);
+    notifyListeners();
+  }
+
+  //                              *** PLAYER ***                              //
+  Future<void> startPlayingRecorded(int index) async {
+    await checkForPlayingPlayers();
+    flutterSoundPlayer[index].openAudioSession();
+    voiceDuration[index] = await flutterSoundPlayer[index]
+        .startPlayer(fromDataBuffer: voiceList[index].voice);
+    timerOn(index);
+  }
+
+  Future<void> checkForPlayingPlayers() async {
+    var runningElement;
+    var anyRunning = soundPlayerState.any((element) {
+      if (element == SoundPlayerState.resumed) {
+        runningElement = element;
+        return true;
+      } else {
+        return false;
+      }
+    });
+    if (anyRunning) {
+      var index = soundPlayerState.indexOf(runningElement);
+      print(' hh $index');
+      pausePlayingRecorded(index);
+    }
+  }
+
+  Future<void> timerOn(int index) async {
+    soundPlayerState[index] = SoundPlayerState.resumed;
+    timer[index] = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (voiceProgress[index] >= voiceDuration[index]) {
+        voiceProgress[index] = Duration(seconds: 0);
+        timerOff(index);
+        soundPlayerState[index] = SoundPlayerState.stopped;
+        notifyListeners();
+      } else {
+        voiceProgress[index] = voiceProgress[index] + Duration(seconds: 1);
+        notifyListeners();
+      }
+    });
+  }
+
+  void timerOff(int index) {
+    soundPlayerState[index] = SoundPlayerState.paused;
+    if (timer[index] != null) {
+      timer[index].cancel();
+    }
+    notifyListeners();
+  }
+
+  Future<void> resumePlayingRecorded(int index) async {
+    await checkForPlayingPlayers();
+    flutterSoundPlayer[index].resumePlayer();
+    timerOn(index);
+    notifyListeners();
+  }
+
+  Future<void> pausePlayingRecorded(int index) async {
+    flutterSoundPlayer[index].pausePlayer();
+    timerOff(index);
+    notifyListeners();
+  }
+
+  void seekPlayingRecorder(double value, int index) async {
+    if (soundPlayerState[index] == SoundPlayerState.paused ||
+        soundPlayerState[index] == SoundPlayerState.stopped) {
+      await startPlayingRecorded(index);
+    }
+    var duration = Duration(seconds: value.toInt());
+    //print('object $');
+    flutterSoundPlayer[index].seekToPlayer(duration);
+    voiceProgress[index] = duration;
+    notifyListeners();
+  }
+
+  void voiceDissmissed(index) {
+    dismissedVoice = voiceList.removeAt(index);
   }
 
   // This is used inside of Note textfield to control and save the changes for undo property
@@ -422,42 +618,14 @@ class myProvider extends ChangeNotifier {
   }
 
   // for the clear the form
-  void clearTitleAndTextAndImageList() {
+  void clearControllers() {
     imageList.clear();
     title.clear();
     text.clear();
-    notifyListeners();
-  }
-
-  void clearDuration() {
+    voiceList.clear();
     time_duration = Duration();
     notifyListeners();
   }
-
-  // Updating the Stacks
-  // TODO Delete
-  // void changeStacks() {
-  //   if (stack_index < 1) {
-  //     stack_index++;
-  //   } else {
-  //     stack_index = 0;
-  //   }
-  //   notifyListeners();
-  // }
-  // TODO Delete
-  // void goBackToMain() {
-  //   stack_index = 0;
-  //   notifyListeners();
-  // }
-  // TODO Delete
-  // void changeTimerStack() {
-  //   if (stack_index < 2) {
-  //     stack_index = 2;
-  //   } else {
-  //     stack_index = 0;
-  //   }
-  //   notifyListeners();
-  // }
 
   // getting the controller before the user enters the editing area
   // to detect the if any changes has been occured !
@@ -469,6 +637,7 @@ class myProvider extends ChangeNotifier {
     begin_edit = false;
     if (!newNote) {
       imageListSnapshot = List.from(imageList);
+      voiceListSnapshot = List.from(voiceList);
     }
   }
 
@@ -479,7 +648,8 @@ class myProvider extends ChangeNotifier {
     if (ttitle == title.text &&
         ttext == text.text &&
         time_duration == time_snapshot &&
-        ListEquality().equals(imageList, imageListSnapshot)) {
+        ListEquality().equals(imageList, imageListSnapshot) &&
+        ListEquality().equals(voiceList, voiceListSnapshot)) {
       return false;
     } else {
       return true;
@@ -497,8 +667,9 @@ class myProvider extends ChangeNotifier {
     var ntcolor = bnote.color;
     var ntlefttime = bnote.leftTime;
     var ntImageList = bnote.imageList;
-    Note note = Note(
-        ntitle, nttext, newValue, nttime, ntcolor, ntlefttime, ntImageList);
+    var ntVoiceList = bnote.voiceList;
+    Note note = Note(ntitle, nttext, newValue, nttime, ntcolor, ntlefttime,
+        ntImageList, ntVoiceList);
     noteBox.put(providerKeys[providerIndex], note);
     //notifyListeners();
   }
@@ -508,8 +679,7 @@ class myProvider extends ChangeNotifier {
     myContext = context;
     // When the add icon is tapped this function will be executed and
     // prepare the provider for the new Note
-    clearTitleAndTextAndImageList();
-    clearDuration();
+    clearControllers();
     newNote = true;
     takeSnapshot();
     //notifyListeners();
@@ -520,22 +690,23 @@ class myProvider extends ChangeNotifier {
     myContext = context;
     providerKeys = keys;
     providerIndex = index;
-    clearTitleAndTextAndImageList();
+    clearControllers();
     // getting the pics form the database.
     var bnote = await noteBox.get(providerKeys[providerIndex]);
     // if the note doesnot include any notes pass
-
     if (bnote.imageList.isNotEmpty) {
       imageList = bnote.imageList;
+    }
+    if (bnote.voiceList.isNotEmpty) {
+      voiceList = bnote.voiceList;
     }
     title.text = bnote.title;
     text.text = bnote.text;
     time_duration = Duration(seconds: bnote.time);
     noteColor = Color(bnote.color);
     newNote = false;
+    notifyListeners();
     takeSnapshot();
-    //changeStacks();
-    //notifyListeners();
   }
 
   // getting the color that was choosen by the user
@@ -551,45 +722,52 @@ class myProvider extends ChangeNotifier {
     // checking whether your going to update the note or add new one
     // that is done by chekcing the newNote true or false
     if (newNote) {
+      // One of the title or text fields must be filled for the new Note
       if (text.text.isNotEmpty || title.text.isNotEmpty) {
         String noteTitle;
         title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
         final String noteText = text.text;
         final int noteTime = time_duration.inSeconds;
         int leftTime = noteTime;
-        Note note =
-            Note(noteTitle, noteText, false, noteTime, 0, leftTime, imageList);
+        Note note = Note(noteTitle, noteText, false, noteTime, 0, leftTime,
+            imageList, voiceList);
         noteBox.add(note);
         changes.clearHistory();
         Navigator.pop(myContext);
       } else {
         ScaffoldMessenger.of(myContext).showSnackBar(uiKit.MySnackBar(
+          // TODO making better the emptyFieldAlert to title and text must not be null
           uiKit.AppLocalizations.of(myContext).translate('emptyFieldsAlert'),
           false,
           myContext,
         ));
       }
       // TODO find out why this is here
-      clearTitleAndTextAndImageList();
+      clearControllers();
     } else {
+      // One of the title or text fields must be filled
       if (text.text.isNotEmpty || title.text.isNotEmpty) {
         var bnote = await noteBox.get(providerKeys[providerIndex]);
         String noteTitle;
         title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
-        Note note = new Note(noteTitle, text.text, bnote.isChecked,
-            time_duration.inSeconds, 0, time_duration.inSeconds, imageList);
+        Note note = new Note(
+            noteTitle,
+            text.text,
+            bnote.isChecked,
+            time_duration.inSeconds,
+            0,
+            time_duration.inSeconds,
+            imageList,
+            voiceList);
         noteBox.put(providerKeys[providerIndex], note);
         changes.clearHistory();
         Navigator.pop(myContext);
-        //notifyListeners();
       } else {
         noteBox.delete(providerKeys[providerIndex]);
         changes.clearHistory();
         Navigator.pop(myContext);
-        //notifyListeners();
       }
     }
-    //notifyListeners();
   }
 
   // When the clear Icon clicked or back button is tapped
@@ -613,7 +791,6 @@ class myProvider extends ChangeNotifier {
           notSaving = 0;
           Navigator.pop(myContext);
           changes.clearHistory();
-          //notifyListeners();
         }
       } else {
         ScaffoldMessenger.of(myContext).clearSnackBars();
@@ -621,19 +798,15 @@ class myProvider extends ChangeNotifier {
             uiKit.AppLocalizations.of(myContext).translate('willingToDelete'),
             false,
             myContext));
-        // TODO Delete changeStacks();
         Navigator.pop(myContext);
-        //notifyListeners();
       }
     } else {
       // making all the changes that has been save for the
       // future undo will be deleted to prevent the future problem
       // causes !
       changes.clearHistory();
-      // changing the stacks and getting bavk to listview Screen !
-      // TODO Delete changeStacks();
+      // changing the stacks and getting back to listview Screen !
       Navigator.pop(myContext);
-      //notifyListeners();
     }
   }
 
@@ -642,18 +815,8 @@ class myProvider extends ChangeNotifier {
   void timerDurationChange(duration) {
     // updating the state and notifiung the listeners
     time_duration = duration;
-    notifyListeners();
+    // notifyListeners();
   }
-  // TODO Delete
-  // void gotoDonate(BuildContext context) {
-  //   this.donateContext = context;
-  //   if (stack_index == 0) {
-  //     stack_index = 3;
-  //   } else {
-  //     stack_index = 0;
-  //   }
-  //   notifyListeners();
-  // }
 
   showDogeCopied() {
     ScaffoldMessenger.of(myContext).clearSnackBars();
@@ -678,32 +841,5 @@ class myProvider extends ChangeNotifier {
     }
     listview_size = (without_timer * SizeX * 0.22) + (with_timer * SizeX * 0.5);
     return true;
-  }
-
-  Future<Note> getNoteListView(List<int> keys, int index) async {
-    var note = await noteBox.get(keys[index]);
-    var bnote = Note(note.title, note.text, note.isChecked, note.time,
-        note.color, note.leftTime, null);
-
-    return bnote;
-  }
-
-  Future<List<Uint8List>> getImageList() async {
-    //myContext = context;
-    if (newNote) {
-      return imageList;
-    } else {
-      var note = await noteBox.get(providerKeys[providerIndex]);
-      return imageList;
-    }
-  }
-
-  Future<Note> getNoteEditStack([List<int> keys, int index]) async {
-    if (keys?.isEmpty) {
-      bnote = await noteBox.get(providerKeys[providerIndex]);
-    } else {
-      bnote = await noteBox.get(keys[index]);
-    }
-    return bnote;
   }
 }

@@ -342,7 +342,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                         bnote.time,
                                                         bnote.color,
                                                         bnote.leftTime,
-                                                        bnote.imageList);
+                                                        bnote.imageList ,null);
                                                     notes.delete(keys[index]);
                                                     ScaffoldMessenger.of(
                                                             context)
@@ -573,24 +573,24 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                                       ],
                                                                                     ),
                                                                                     child: ExpansionTile(
-                                                                                      onExpansionChanged: (value) {
-                                                                                        _myProvider.changeNoteTitleColor(value, index);
-                                                                                        // used to animate
-                                                                                        // if (value) {
-                                                                                        //   _scrollController.animateTo(
-                                                                                        //       _scrollController
-                                                                                        //               .position
-                                                                                        //               .pixels +
-                                                                                        //           SizeX *
-                                                                                        //               0.1,
-                                                                                        //       duration:
-                                                                                        //           Duration(
-                                                                                        //               seconds:
-                                                                                        //                   1),
-                                                                                        //       curve: Curves
-                                                                                        //           .easeIn);
-                                                                                        // }
-                                                                                      },
+                                                                                      // onExpansionChanged: (value) {
+                                                                                      //   _myProvider.changeNoteTitleColor(value, index);
+                                                                                      //   // used to animate
+                                                                                      //   // if (value) {
+                                                                                      //   //   _scrollController.animateTo(
+                                                                                      //   //       _scrollController
+                                                                                      //   //               .position
+                                                                                      //   //               .pixels +
+                                                                                      //   //           SizeX *
+                                                                                      //   //               0.1,
+                                                                                      //   //       duration:
+                                                                                      //   //           Duration(
+                                                                                      //   //               seconds:
+                                                                                      //   //                   1),
+                                                                                      //   //       curve: Curves
+                                                                                      //   //           .easeIn);
+                                                                                      //   // }
+                                                                                      // },
                                                                                       initiallyExpanded: false,
                                                                                       // tried too hard to make the expanion color and
                                                                                       // collapsed color personalized but threre was  a problem

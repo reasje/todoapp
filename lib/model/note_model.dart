@@ -1,7 +1,7 @@
-import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:hive/hive.dart';
+import 'package:todoapp/model/voice_model.dart';
 // run flutter packages pub run build_runner build to generate the dependency
 part 'note_model.g.dart';
 
@@ -21,9 +21,10 @@ class Note {
   int leftTime;
   @HiveField(6)
   List<Uint8List> imageList;
-
+  @HiveField(7)
+  List<Voice> voiceList;
   Note(this.title, this.text, this.isChecked, this.time, this.color,
-      this.leftTime, this.imageList);
+      this.leftTime, this.imageList , this.voiceList);
 
   // factory Note.fromJson(Map<String, dynamic> json) {
   //   return Note(json['title'], json['text'], false, json['time'], null, null);

@@ -5,6 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
+import 'package:todoapp/model/voice_model.dart';
 import 'package:todoapp/provider/conn_provider.dart';
 import 'package:todoapp/provider/notes_provider.dart';
 import 'package:hive/hive.dart';
@@ -50,9 +51,10 @@ void main() async {
   // getting the path of the document in the device for accesing the database
   final document = await getApplicationDocumentsDirectory();
   print(document.uri);
-
   // Giving the path of the data base to the Hive
   Hive.init(document.path);
+    // registering the adapter
+  Hive.registerAdapter(VoiceAdapter());
   // registering the adapter
   Hive.registerAdapter(NoteAdapter());
   // opening the box

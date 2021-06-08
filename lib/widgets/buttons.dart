@@ -71,7 +71,7 @@ class _MyButtonState extends State<MyButton> {
     if (mounted) {
       setState(() {
         isPressed = true;
-        Future.delayed(Duration(milliseconds: 100), ()async {
+        Future.delayed(Duration(milliseconds: 100), () async {
           final _myProvider = Provider.of<myProvider>(context, listen: false);
           final _timerState = Provider.of<TimerState>(context, listen: false);
           final _signinState = Provider.of<SigninState>(context, listen: false);
@@ -86,8 +86,7 @@ class _MyButtonState extends State<MyButton> {
               break;
             case 'home':
               Navigator.pushReplacement(
-                  context,
-                  SliderTransition(uiKit.MyRorderable()));
+                  context, SliderTransition(uiKit.MyRorderable()));
               _myProvider.changeFirstTime();
               break;
             case 'menu':
@@ -175,8 +174,7 @@ class _MyButtonState extends State<MyButton> {
               break;
             case 'coder':
               Navigator.push(context,
-                  SliderTransition( uiKit.MyDoante(SizeX: SizeX, SizeY: SizeY)
-              ));
+                  SliderTransition(uiKit.MyDoante(SizeX: SizeX, SizeY: SizeY)));
               // TODO Delete _myProvider.gotoDonate(context);
               break;
             case 'donate':
@@ -226,6 +224,18 @@ class _MyButtonState extends State<MyButton> {
                           )
                         ],
                       ));
+              break;
+            case 'newvoice':
+              await _myProvider.startRecorder();
+              break;
+            case 'pausevoice':
+              await _myProvider.pauseRecorder();
+              break;
+            case 'stopvoice':
+              await _myProvider.stopRecorder();
+              break;
+            case 'resumevoice':
+              await _myProvider.resumeRecorder();
               break;
           }
         });
@@ -340,20 +350,20 @@ class SliderTransition extends PageRouteBuilder {
 
   SliderTransition(this.page)
       : super(
-      pageBuilder: (context, animation, anotherAnimation) => page,
-      transitionDuration: Duration(milliseconds: 1500),
-      reverseTransitionDuration: Duration(milliseconds: 400),
-      transitionsBuilder: (context, animation, anotherAnimation, child) {
-        animation = CurvedAnimation(
-            curve: Curves.fastLinearToSlowEaseIn,
-            parent: animation,
-            reverseCurve: Curves.fastOutSlowIn);
-        return SlideTransition(
-          position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-              .animate(animation),
-          child: page,
-        );
-      });
+            pageBuilder: (context, animation, anotherAnimation) => page,
+            transitionDuration: Duration(milliseconds: 1500),
+            reverseTransitionDuration: Duration(milliseconds: 400),
+            transitionsBuilder: (context, animation, anotherAnimation, child) {
+              animation = CurvedAnimation(
+                  curve: Curves.fastLinearToSlowEaseIn,
+                  parent: animation,
+                  reverseCurve: Curves.fastOutSlowIn);
+              return SlideTransition(
+                position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                    .animate(animation),
+                child: page,
+              );
+            });
 }
 
 void _launchURL() async =>

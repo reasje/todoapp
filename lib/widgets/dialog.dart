@@ -78,6 +78,122 @@ import 'package:todoapp/provider/drive_provider.dart';
 //         );
 //       });
 // }
+// Future showVoiceNameDialog(BuildContext context,
+//     [String id,
+//     drive.DriveApi driveApi,
+//     drive.File driveFile,
+//     Box<Note> noteBox,
+//     String file_id]) async {
+//   final TextEditingController _titleFieldController = TextEditingController();
+//   final TextEditingController _textFieldController = TextEditingController();
+//   var _myProvider = Provider.of<myProvider>(context, listen: false);
+//   return showDialog(
+//       context: context,
+//       builder: (context) {
+//         return StatefulBuilder(
+//           builder: (BuildContext context, setState) {
+//             return AlertDialog(
+//               backgroundColor: _myProvider.mainColor,
+//               title: Center(
+//                   child: Text(
+//                 id == "lan"
+//                     ? "Choose you language ! "
+//                     : id == "up"
+//                         ? uiKit.AppLocalizations.of(context)
+//                             .translate('fileExists')
+//                         : id == "internet"
+//                             ? uiKit.AppLocalizations.of(context)
+//                                 .translate('noInternet')
+//                             : id == "signIn"
+//                                 ? uiKit.AppLocalizations.of(context)
+//                                     .translate('signIn')
+//                                 : id == "noNotes"
+//                                     ? uiKit.AppLocalizations.of(context)
+//                                         .translate('noNotes')
+//                                     : uiKit.AppLocalizations.of(context)
+//                                         .translate('continue'),
+//                 style: TextStyle(
+//                   color: _myProvider.textColor,
+//                 ),
+//               )),
+//               content: Container(
+//                 height: 70,
+//                 decoration: BoxDecoration(
+//                     borderRadius: BorderRadius.all(Radius.circular(20))),
+//                 child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   children: [
+//                     Container(
+//                         alignment: Alignment.bottomRight,
+//                         height: 50,
+//                         width: 100,
+//                         decoration: BoxDecoration(
+//                             borderRadius: BorderRadius.circular(10),
+//                             color: _myProvider.textColor),
+//                         child: InkWell(
+//                           child: Center(
+//                               child: Text(
+//                             id == "lan"
+//                                 ? "فارسی"
+//                                 : id == "internet" ||
+//                                         id == "signIn" ||
+//                                         id == "noNotes"
+//                                     ? uiKit.AppLocalizations.of(context)
+//                                         .translate('ok')
+//                                     : uiKit.AppLocalizations.of(context)
+//                                         .translate('cancel'),
+//                             style: TextStyle(
+//                                 color: _myProvider.mainColor,
+//                                 fontWeight: FontWeight.bold),
+//                           )),
+//                           onTap: () {
+//                             id == "lan"
+//                                 ? _myProvider.changeLanToPersian()
+//                                 : null;
+//                             Navigator.pop(context);
+//                           },
+//                         )),
+//                     id != "internet" && id != "signIn" && id != "noNotes"
+//                         ? Container(
+//                             alignment: Alignment.bottomLeft,
+//                             height: 50,
+//                             width: 100,
+//                             //margin: EdgeInsets.only(right: 30),
+//                             decoration: BoxDecoration(
+//                                 borderRadius: BorderRadius.circular(10),
+//                                 color: _myProvider.textColor),
+//                             child: InkWell(
+//                                 child: Center(
+//                                     child: Text(
+//                                   id == "lan"
+//                                       ? "English"
+//                                       : uiKit.AppLocalizations.of(context)
+//                                           .translate('ok'),
+//                                   style: TextStyle(
+//                                       color: _myProvider.mainColor,
+//                                       fontWeight: FontWeight.bold),
+//                                 )),
+//                                 onTap: () {
+//                                   //_myProvider.changeLanToEnglish();
+//                                   id == "lan"
+//                                       ? _myProvider.changeLanToEnglish()
+//                                       : id == "up"
+//                                           ? upload(driveApi, driveFile, noteBox,
+//                                               file_id)
+//                                           : download(driveApi, driveFile,
+//                                               noteBox, file_id);
+//                                   Navigator.pop(context);
+//                                 }))
+//                         : Container()
+//                   ],
+//                 ),
+//               ),
+//             );
+//           },
+//         );
+//       });
+// }
+
 Future showAlertDialog(BuildContext context,
     [String id,
     drive.DriveApi driveApi,
@@ -110,81 +226,93 @@ Future showAlertDialog(BuildContext context,
                                 : id == "noNotes"
                                     ? uiKit.AppLocalizations.of(context)
                                         .translate('noNotes')
-                                    : uiKit.AppLocalizations.of(context)
-                                        .translate('continue'),
+                                    : id == 'microphoneRequired'
+                                        ? uiKit.AppLocalizations.of(context)
+                                            .translate('microphoneRequired')
+                                        : uiKit.AppLocalizations.of(context)
+                                            .translate('continue'),
                 style: TextStyle(
                   color: _myProvider.textColor,
                 ),
               )),
               content: Container(
-                height: 70,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                height: MediaQuery.of(context).size.height*0.5,
+                width: MediaQuery.of(context).size.width*0.7,
+                child: Column(
                   children: [
                     Container(
-                        alignment: Alignment.bottomRight,
-                        height: 50,
-                        width: 100,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: _myProvider.textColor),
-                        child: InkWell(
-                          child: Center(
-                              child: Text(
-                            id == "lan"
-                                ? "فارسی"
-                                : id == "internet" ||
-                                        id == "signIn" ||
-                                        id == "noNotes"
-                                    ? uiKit.AppLocalizations.of(context)
-                                        .translate('ok')
-                                    : uiKit.AppLocalizations.of(context)
-                                        .translate('cancel'),
-                            style: TextStyle(
-                                color: _myProvider.mainColor,
-                                fontWeight: FontWeight.bold),
-                          )),
-                          onTap: () {
-                            id == "lan"
-                                ? _myProvider.changeLanToPersian()
-                                : null;
-                            Navigator.pop(context);
-                          },
-                        )),
-                    id != "internet" && id != "signIn" && id != "noNotes"
-                        ? Container(
-                            alignment: Alignment.bottomLeft,
-                            height: 50,
-                            width: 100,
-                            //margin: EdgeInsets.only(right: 30),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: _myProvider.textColor),
-                            child: InkWell(
+                      height: 70,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                              alignment: Alignment.bottomRight,
+                              height: 50,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: _myProvider.textColor),
+                              child: InkWell(
                                 child: Center(
                                     child: Text(
                                   id == "lan"
-                                      ? "English"
-                                      : uiKit.AppLocalizations.of(context)
-                                          .translate('ok'),
+                                      ? "فارسی"
+                                      : id == "internet" ||
+                                              id == "signIn" ||
+                                              id == "noNotes" ||
+                                              id == "microphoneRequired"
+                                          ? uiKit.AppLocalizations.of(context)
+                                              .translate('ok')
+                                          : uiKit.AppLocalizations.of(context)
+                                              .translate('cancel'),
                                   style: TextStyle(
                                       color: _myProvider.mainColor,
                                       fontWeight: FontWeight.bold),
                                 )),
                                 onTap: () {
-                                  //_myProvider.changeLanToEnglish();
                                   id == "lan"
-                                      ? _myProvider.changeLanToEnglish()
-                                      : id == "up"
-                                          ? upload(driveApi, driveFile, noteBox,
-                                              file_id)
-                                          : download(driveApi, driveFile,
-                                              noteBox, file_id);
+                                      ? _myProvider.changeLanToPersian()
+                                      : null;
                                   Navigator.pop(context);
-                                }))
-                        : Container()
+                                },
+                              )),
+                          id != "internet" && id != "signIn" && id != "noNotes" && id != "microphoneRequired"
+                              ? Container(
+                                  alignment: Alignment.bottomLeft,
+                                  height: 50,
+                                  width: 100,
+                                  //margin: EdgeInsets.only(right: 30),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: _myProvider.textColor),
+                                  child: InkWell(
+                                      child: Center(
+                                          child: Text(
+                                        id == "lan"
+                                            ? "English"
+                                            : uiKit.AppLocalizations.of(context)
+                                                .translate('ok'),
+                                        style: TextStyle(
+                                            color: _myProvider.mainColor,
+                                            fontWeight: FontWeight.bold),
+                                      )),
+                                      onTap: () {
+                                        //_myProvider.changeLanToEnglish();
+                                        id == "lan"
+                                            ? _myProvider.changeLanToEnglish()
+                                            : id == "up"
+                                                ? upload(driveApi, driveFile, noteBox,
+                                                    file_id)
+                                                : download(driveApi, driveFile,
+                                                    noteBox, file_id);
+                                        Navigator.pop(context);
+                                      }))
+                              : Container()
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
