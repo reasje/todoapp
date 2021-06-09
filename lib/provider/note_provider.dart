@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_sound/public/tau.dart';
 import 'package:hive/hive.dart';
@@ -138,6 +139,30 @@ class NoteProvider extends ChangeNotifier {
     _image = await picker.getImage(source: ImageSource.gallery);
     if (_image != null) {
       var h = await _image.readAsBytes();
+      var fileSize = h.lengthInBytes;
+      if (fileSize > 1000000) {
+        if (fileSize < 5000000) {
+          h = await FlutterImageCompress.compressWithList(
+            h,
+            quality: 90,
+          );
+        } else if (fileSize < 10000000) {
+          h = await FlutterImageCompress.compressWithList(
+            h,
+            quality: 80,
+          );
+        } else if (fileSize < 15000000) {
+          h = await FlutterImageCompress.compressWithList(
+            h,
+            quality: 75,
+          );
+        } else {
+          h = await FlutterImageCompress.compressWithList(
+            h,
+            quality: 65,
+          );
+        }
+      }
       imageList.add(h);
     }
     notifyListeners();
@@ -147,6 +172,30 @@ class NoteProvider extends ChangeNotifier {
     _image = await picker.getImage(source: ImageSource.camera);
     if (_image != null) {
       var h = await _image.readAsBytes();
+      var fileSize = h.lengthInBytes;
+      if (fileSize > 1000000) {
+        if (fileSize < 5000000) {
+          h = await FlutterImageCompress.compressWithList(
+            h,
+            quality: 90,
+          );
+        } else if (fileSize < 10000000) {
+          h = await FlutterImageCompress.compressWithList(
+            h,
+            quality: 80,
+          );
+        } else if (fileSize < 15000000) {
+          h = await FlutterImageCompress.compressWithList(
+            h,
+            quality: 75,
+          );
+        } else {
+          h = await FlutterImageCompress.compressWithList(
+            h,
+            quality: 65,
+          );
+        }
+      }
       imageList.add(h);
     }
     notifyListeners();
@@ -349,10 +398,12 @@ class NoteProvider extends ChangeNotifier {
   void voiceDissmissed(index) {
     dismissedVoice = voiceList.removeAt(index);
   }
+
   void voiceRecover(index) {
     voiceList.insert(index, dismissedVoice);
     notifyListeners();
   }
+
   // This is used inside of Note textfield to control and save the changes for undo property
   void listenerActivated(newValue) {
     // This Line is used for prevent unusual behavior of the textfield
@@ -578,7 +629,7 @@ class NoteProvider extends ChangeNotifier {
           ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
               uiKit.AppLocalizations.of(noteContext)
                   .translate('notSavingAlert'),
-                  'notSavingAlert',
+              'notSavingAlert',
               false,
               noteContext));
           notSaving = notSaving + 1;

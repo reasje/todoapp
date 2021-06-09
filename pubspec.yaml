@@ -31,6 +31,7 @@ dependencies:
   connectivity: ^3.0.4
   flutter_easyloading: ^3.0.0
   flutter_icons: ^1.1.0
+  flutter_image_compress: ^1.0.0
   flutter_local_notifications: ^6.0.0
   flutter_sound: ^8.1.4
   flutter_staggered_animations: ^1.0.0
