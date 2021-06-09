@@ -232,7 +232,7 @@ class _MyButtonState extends State<MyButton> {
               await _myProvider.pauseRecorder();
               break;
             case 'stopvoice':
-              await _myProvider.stopRecorder(context);
+              await _myProvider.stopRecorder(context:  context);
               break;
             case 'resumevoice':
               await _myProvider.resumeRecorder();

@@ -16,6 +16,7 @@ import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:undo/undo.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:collection/collection.dart';
+import 'package:todoapp/screens/note_editing_screen.dart';
 
 // TODO orginaing the providers and having multi providres having a separate
 // provider for check me .
@@ -282,9 +283,15 @@ class NoteProvider extends ChangeNotifier {
     await flutterSoundRecorder.startRecorder(
         toFile: voiceName, codec: Codec.defaultCodec);
     // This stream updates the recording duration
-    flutterSoundRecorder.onProgress.listen((event) {
-      recorderDuration = event.duration;
-      notifyListeners();
+    StreamSubscription<RecordingDisposition> sub;
+    sub = flutterSoundRecorder.onProgress.listen((event) async {
+      if (event.duration > Duration(minutes: 58)) {
+        sub.cancel();
+        await stopRecorder();
+      } else {
+        recorderDuration = event.duration;
+        notifyListeners();
+      }
     });
     notifyListeners();
   }
@@ -299,10 +306,14 @@ class NoteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> stopRecorder(BuildContext context) async {
+  Future<void> stopRecorder({BuildContext context}) async {
     // finishing up the recorded voice
     String path = await flutterSoundRecorder.stopRecorder();
-    await uiKit.showAlertDialog(context, 'voiceTitle');
+    if (context != null) {
+      await uiKit.showAlertDialog(context, 'voiceTitle');
+    } else {
+      voiceTitle = "Err:time";
+    }
     // time to save the file with path inside the
     // datatbase as the Uint8List
     File file = File(path);

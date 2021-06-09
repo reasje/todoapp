@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
- import 'package:shimmer/shimmer.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';

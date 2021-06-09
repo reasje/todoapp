@@ -26,6 +26,7 @@ class PicDetail extends StatelessWidget {
               )),
             ),
           ),
+          
     );
   }
 }
