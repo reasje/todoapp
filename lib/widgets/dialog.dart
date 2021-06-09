@@ -198,11 +198,14 @@ Future showAlertDialog(BuildContext context,
     [String id,
     drive.DriveApi driveApi,
     drive.File driveFile,
-    Box<Note> noteBox,
+    LazyBox<Note> noteBox,
     String file_id]) async {
   final TextEditingController _titleFieldController = TextEditingController();
   final TextEditingController _textFieldController = TextEditingController();
   var _myProvider = Provider.of<myProvider>(context, listen: false);
+  TextEditingController voiceTitleController = TextEditingController(text: '');
+  double SizeX = MediaQuery.of(context).size.height;
+  double SizeY = MediaQuery.of(context).size.width;
   return showDialog(
       context: context,
       builder: (context) {
@@ -229,17 +232,54 @@ Future showAlertDialog(BuildContext context,
                                     : id == 'microphoneRequired'
                                         ? uiKit.AppLocalizations.of(context)
                                             .translate('microphoneRequired')
-                                        : uiKit.AppLocalizations.of(context)
-                                            .translate('continue'),
+                                        : id == 'voiceTitle'
+                                            ? uiKit.AppLocalizations.of(context)
+                                                .translate('voiceTitle')
+                                            : uiKit.AppLocalizations.of(context)
+                                                .translate('continue'),
                 style: TextStyle(
                   color: _myProvider.textColor,
                 ),
               )),
               content: Container(
-                height: MediaQuery.of(context).size.height*0.5,
-                width: MediaQuery.of(context).size.width*0.7,
+                height: id != 'voiceTitle' ? SizeX * 0.12 : SizeX * 0.23,
+                width: SizeY * 0.7,
                 child: Column(
                   children: [
+                    id == 'voiceTitle'
+                        ? TextField(
+                          autofocus: true,
+                            controller: voiceTitleController,
+                            maxLines: 1,
+                            maxLength: 10,
+                            cursorColor: _myProvider.swachColor,
+                            cursorHeight: SizeX * 0.052,
+                            style: TextStyle(
+                                color: _myProvider.textColor,
+                                fontSize: _myProvider.isEn
+                                    ? SizeX * SizeY * 0.0001
+                                    : SizeX * SizeY * 0.00008,
+                                fontWeight: FontWeight.w400),
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(_myProvider.isEn
+                                    ? SizeX * SizeY * 0.00001
+                                    : SizeX * SizeY * 0.00001),
+                                hintText: uiKit.AppLocalizations.of(context)
+                                    .translate('titleHint'),
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                                hintStyle: TextStyle(
+                                    color:
+                                        _myProvider.hintColor.withOpacity(0.12),
+                                    fontSize: _myProvider.isEn
+                                        ? SizeX * SizeY * 0.00012
+                                        : SizeX * SizeY * 0.0001,
+                                    fontWeight: FontWeight.w400)),
+                          )
+                        : Container(),
                     Container(
                       height: 70,
                       decoration: BoxDecoration(
@@ -274,11 +314,14 @@ Future showAlertDialog(BuildContext context,
                                 onTap: () {
                                   id == "lan"
                                       ? _myProvider.changeLanToPersian()
-                                      : null;
+                                       :null;
                                   Navigator.pop(context);
                                 },
                               )),
-                          id != "internet" && id != "signIn" && id != "noNotes" && id != "microphoneRequired"
+                          id != "internet" &&
+                                  id != "signIn" &&
+                                  id != "noNotes" &&
+                                  id != "microphoneRequired"
                               ? Container(
                                   alignment: Alignment.bottomLeft,
                                   height: 50,
@@ -303,9 +346,9 @@ Future showAlertDialog(BuildContext context,
                                         id == "lan"
                                             ? _myProvider.changeLanToEnglish()
                                             : id == "up"
-                                                ? upload(driveApi, driveFile, noteBox,
-                                                    file_id)
-                                                : download(driveApi, driveFile,
+                                                ? upload(driveApi, driveFile,
+                                                    noteBox, file_id)
+                                                : id == "voiceTitle" ?  _myProvider.setVoiceTitle(voiceTitleController.text): download(driveApi, driveFile,
                                                     noteBox, file_id);
                                         Navigator.pop(context);
                                       }))

@@ -402,18 +402,19 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                 )
                               : _myProvider.flutterSoundRecorder.isRecording
                                   ? Container(
-                                      width: SizeY * 0.5,
+                                      width: SizeY * 0.45,
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
                                           Container(
-                                            width: SizeY * 0.2,
+                                            width: SizeY * 0.15,
                                             padding: EdgeInsets.only(
-                                                left: SizeY * 0.04),
+                                                left: SizeY * 0.02),
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Text(
                                                   '${((_myProvider.recorderDuration.inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}',
@@ -422,7 +423,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                           .blueMaterial,
                                                       fontSize: SizeX *
                                                           SizeY *
-                                                          0.0001),
+                                                          0.00009),
                                                 ),
                                                 Text(
                                                   ':',
@@ -431,7 +432,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                           .blueMaterial,
                                                       fontSize: SizeX *
                                                           SizeY *
-                                                          0.0001),
+                                                          0.00009),
                                                 ),
                                                 Text(
                                                   '${((_myProvider.recorderDuration.inSeconds) % 60).floor().toString().padLeft(2, '0')}',
@@ -440,7 +441,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                           .blueMaterial,
                                                       fontSize: SizeX *
                                                           SizeY *
-                                                          0.0001),
+                                                          0.00009),
                                                 ),
                                               ],
                                             ),
@@ -451,7 +452,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                             children: [
                                               Container(
                                                 padding: EdgeInsets.symmetric(
-                                                    horizontal: SizeY * 0.05),
+                                                    horizontal: SizeY * 0.03),
                                                 alignment: Alignment.centerLeft,
                                                 child: uiKit.MyButton(
                                                   sizePU: SizeX * 0.05,
@@ -602,8 +603,8 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                     child: Container(
                                         width: SizeY * 0.52,
                                         margin: EdgeInsets.symmetric(
-                                            horizontal: SizeY * 0.03,
-                                            vertical: SizeX * 0.02),
+                                            horizontal: SizeY * 0.08,
+                                            vertical: SizeX * 0.03),
                                         decoration: BoxDecoration(
                                             boxShadow: [
                                               BoxShadow(
@@ -687,12 +688,17 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                                   ],
                                                                 ),
                                                               ),
-                                                              Container(
+                                                              FittedBox(
+                                                                fit: BoxFit
+                                                                    .cover,
                                                                 child: Text(
-                                                                    _myProvider
-                                                                        .voiceList[
-                                                                            index]
-                                                                        .title),
+                                                                  _myProvider
+                                                                      .voiceList[
+                                                                          index]
+                                                                      .title,
+                                                                  softWrap:
+                                                                      false,
+                                                                ),
                                                               ),
                                                               Container(
                                                                 margin: EdgeInsets.only(

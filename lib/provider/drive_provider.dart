@@ -19,7 +19,7 @@ import 'package:connectivity/connectivity.dart' as conn;
 String file_name = "NotesAppData";
 
 Future<String> upload(
-    drive.DriveApi driveApi, drive.File driveFile, Box<Note> noteBox,
+    drive.DriveApi driveApi, drive.File driveFile, LazyBox<Note> noteBox,
     [String file_id]) async {
   // some lists are used to add 
   List<int> my_intlist = [];
@@ -30,7 +30,7 @@ Future<String> upload(
     driveApi.files.emptyTrash();
   }
   for (int i = 0; i < noteBox.length; i++) {
-    var element = noteBox.getAt(i);
+    var element = await noteBox.getAt(i);
     var title = element.title;
     // hint uft8 charcters are not as bytes
     // like persian characters
@@ -72,10 +72,10 @@ Future<String> upload(
 }
 
 Future<void> download(drive.DriveApi driveApi, drive.File driveFile,
-    Box<Note> noteBox, String file_id) async {
+    LazyBox<Note> noteBox, String file_id) async {
   drive.Media media = await driveApi.files
       .get(file_id, downloadOptions: drive.DownloadOptions.fullMedia);
-  final subescription = media.stream.listen((event) {
+  media.stream.listen((event) {
     String string = String.fromCharCodes(event);
     var list = json.decode(string);
     for (int i = 0; i < list.length; i++) {
@@ -95,7 +95,7 @@ Future<void> login(bool command, BuildContext context) async {
   // At first we think that the file exists
   bool doesEx = true;
   // used to get infromation inside the boxu
-  final noteBox = Hive.box<Note>(noteBoxName);
+  final noteBox = Hive.lazyBox<Note>(noteBoxName);
   //used to sign in to google drive
   final _connState = Provider.of<ConnState>(context, listen: false);
   final _signinState = Provider.of<SigninState>(context, listen: false);

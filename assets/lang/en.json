@@ -45,6 +45,7 @@
   "noNotes": "No notes available !",
   "undoImage":"Image deleted successfully !",
   "undoVoice":"Voice deleted successfully !",
-  "voiceName":"Choose a name for the voice !",
+  "voiceTitle":"Choose a title for the voice !",
   "microphoneRequired" : "Microphone permission is requied !"
+
 }

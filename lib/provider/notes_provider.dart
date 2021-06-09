@@ -466,18 +466,27 @@ class myProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> stopRecorder() async {
+  Future<void> stopRecorder(BuildContext context) async {
     // finishing up the recorded voice
     String path = await flutterSoundRecorder.stopRecorder();
+    await uiKit.showAlertDialog(context, 'voiceTitle');
     // time to save the file with path inside the
     // datatbase as the Uint8List
     File file = File(path);
     var h = await file.readAsBytes();
-    var v = Voice('title', h);
+
+    var v = Voice(
+        (voiceTitle == null || voiceTitle == "") ? 'Unamed' : voiceTitle, h);
     voiceList.add(v);
+    voiceTitle = null;
     // Time to delete the file to avoid space overflow
     flutterSoundRecorder.deleteRecord(fileName: voiceName);
     notifyListeners();
+  }
+
+  String voiceTitle;
+  Future<void> setVoiceTitle(String title) {
+    voiceTitle = title;
   }
 
   //                              *** PLAYER ***                              //
