@@ -211,6 +211,11 @@ class NoteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void rotateImage(Uint8List image, int index) {
+    imageList[index] = image;
+    notifyListeners();
+  }
+
   Future<Note> getNoteListView(
       List<int> keys, int index, double SizeX, double SizeY) async {
     var note = await noteBox.get(keys[index]);

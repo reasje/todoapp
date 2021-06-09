@@ -44,9 +44,7 @@ class _PicDetailState extends State<PicDetail> {
           var result = await FlutterImageCompress.compressWithList(
               _myProvider.imageList[widget.index],
               rotate: 90);
-          setState(() {
-            _myProvider.imageList[widget.index] = result;
-          });
+          _myProvider.rotateImage(result, widget.index);
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
