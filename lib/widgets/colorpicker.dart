@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapp/provider/notes_provider.dart';
+
 
 // class ColorSlider extends StatefulWidget {
 //   final Color noteColor;

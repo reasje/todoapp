@@ -6,7 +6,8 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
-import 'package:todoapp/provider/notes_provider.dart';
+import 'package:todoapp/provider/note_provider.dart';
+import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:hive_flutter/hive_flutter.dart';
@@ -32,11 +33,12 @@ class _MyTimerState extends State<MyTimer> {
     double SizeX = widget.SizeX;
     double SizeY = widget.SizeY;
     LazyBox<Note> noteBox = widget.noteBox;
-    final _myProvider = Provider.of<myProvider>(context);
+    final _myProvider = Provider.of<NoteProvider>(context);
     final _timerState = Provider.of<TimerState>(context);
+    final _themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
           resizeToAvoidBottomInset: false,
-      backgroundColor: _myProvider.mainColor,
+      backgroundColor: _themeProvider.mainColor,
       body: ValueListenableBuilder(
           valueListenable: noteBox.listenable(),
           builder: (context, LazyBox<Note> notes, _) {
@@ -104,14 +106,14 @@ class _MyTimerState extends State<MyTimer> {
                                 decoration: BoxDecoration(
                                     boxShadow: [
                                       BoxShadow(
-                                        color: _myProvider.lightShadowColor,
+                                        color: _themeProvider .lightShadowColor,
                                         spreadRadius: 1.0,
                                         blurRadius: 1.0,
                                         offset: Offset(
                                             -1, -1), // changes position of shadow
                                       ),
                                       BoxShadow(
-                                        color: _myProvider.shadowColor
+                                        color: _themeProvider .shadowColor
                                             .withOpacity(0.17),
                                         spreadRadius: 1.0,
                                         blurRadius: 2.0,
@@ -120,12 +122,12 @@ class _MyTimerState extends State<MyTimer> {
                                       ),
                                     ],
                                     color: _timerState.isOver
-                                        ? _myProvider.overColor
+                                        ? _themeProvider.overColor
                                         : _timerState.isPaused
-                                            ? _myProvider.pausedColor
+                                            ? _themeProvider.pausedColor
                                             : _timerState.isRunning.any(
                                                     (element) => element == true)
-                                                ? _myProvider.runningColor
+                                                ? _themeProvider .runningColor
                                                 : null,
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(SizeX * 0.3))),
@@ -135,18 +137,18 @@ class _MyTimerState extends State<MyTimer> {
                                         Radius.circular(SizeX * 0.3)),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: _myProvider.lightShadowColor,
+                                        color: _themeProvider.lightShadowColor,
                                         offset: Offset(2, 2),
                                         blurRadius: 0.0,
                                         // changes position of shadow
                                       ),
                                       BoxShadow(
-                                        color: _myProvider.shadowColor
+                                        color: _themeProvider.shadowColor
                                             .withOpacity(0.14),
                                         offset: Offset(-1, -1),
                                       ),
                                       BoxShadow(
-                                        color: _myProvider.mainColor,
+                                        color: _themeProvider.mainColor,
                                         offset: Offset(5, 8),
                                         spreadRadius: -0.5,
                                         blurRadius: 14.0,
@@ -169,8 +171,8 @@ class _MyTimerState extends State<MyTimer> {
                                               color: _timerState.isRunning.any(
                                                       (element) =>
                                                           element == true)
-                                                  ? _myProvider.swachColor
-                                                  : _myProvider.textColor,
+                                                  ? _themeProvider.swachColor
+                                                  : _themeProvider.textColor,
                                               fontSize: SizeX * SizeY * 0.00015,
                                               fontFamily: "Ubuntu Condensed"),
                                         ),
@@ -189,8 +191,8 @@ class _MyTimerState extends State<MyTimer> {
                                               color: _timerState.isRunning.any(
                                                       (element) =>
                                                           element == true)
-                                                  ? _myProvider.swachColor
-                                                  : _myProvider.textColor,
+                                                  ? _themeProvider.swachColor
+                                                  : _themeProvider.textColor,
                                               fontSize: SizeX * SizeY * 0.00015,
                                               fontFamily: "Ubuntu Condensed"),
                                         ),
@@ -209,8 +211,8 @@ class _MyTimerState extends State<MyTimer> {
                                               color: _timerState.isRunning.any(
                                                       (element) =>
                                                           element == true)
-                                                  ? _myProvider.swachColor
-                                                  : _myProvider.textColor,
+                                                  ? _themeProvider.swachColor
+                                                  : _themeProvider.textColor,
                                               fontSize: SizeX * SizeY * 0.00015,
                                               fontFamily: "Ubuntu Condensed"),
                                         ),
@@ -262,14 +264,14 @@ class _MyTimerState extends State<MyTimer> {
                                 decoration: BoxDecoration(
                                     boxShadow: [
                                       BoxShadow(
-                                        color: _myProvider.lightShadowColor,
+                                        color: _themeProvider.lightShadowColor,
                                         spreadRadius: 1.0,
                                         blurRadius: 1.0,
                                         offset: Offset(
                                             -1, -1), // changes position of shadow
                                       ),
                                       BoxShadow(
-                                        color: _myProvider.shadowColor
+                                        color: _themeProvider.shadowColor
                                             .withOpacity(0.17),
                                         spreadRadius: 1.0,
                                         blurRadius: 2.0,
@@ -277,7 +279,7 @@ class _MyTimerState extends State<MyTimer> {
                                             3, 4), // changes position of shadow
                                       ),
                                     ],
-                                    color: _myProvider.mainColor,
+                                    color: _themeProvider.mainColor,
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10))),
                                 child: Center(
@@ -288,9 +290,9 @@ class _MyTimerState extends State<MyTimer> {
                                           ? ""
                                           : snapshot.data.title,
                                       style: TextStyle(
-                                          color: _myProvider.textColor,
+                                          color: _themeProvider.textColor,
                                           fontSize: SizeX * SizeY * 0.0001,
-                                          fontWeight: _myProvider.isEn
+                                          fontWeight: _themeProvider.isEn
                                               ? FontWeight.w100
                                               : FontWeight.w600),
                                     ),
@@ -305,14 +307,14 @@ class _MyTimerState extends State<MyTimer> {
                                       decoration: BoxDecoration(
                                           boxShadow: [
                                             BoxShadow(
-                                              color: _myProvider.lightShadowColor,
+                                              color: _themeProvider.lightShadowColor,
                                               spreadRadius: 1.0,
                                               blurRadius: 1.0,
                                               offset: Offset(-1,
                                                   -1), // changes position of shadow
                                             ),
                                             BoxShadow(
-                                              color: _myProvider.shadowColor
+                                              color: _themeProvider.shadowColor
                                                   .withOpacity(0.17),
                                               spreadRadius: 1.0,
                                               blurRadius: 2.0,
@@ -320,7 +322,7 @@ class _MyTimerState extends State<MyTimer> {
                                                   4), // changes position of shadow
                                             ),
                                           ],
-                                          color: _myProvider.mainColor,
+                                          color: _themeProvider.mainColor,
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(10))),
                                       child: Center(
@@ -331,9 +333,9 @@ class _MyTimerState extends State<MyTimer> {
                                                 ? ""
                                                 : snapshot.data.text,
                                             style: TextStyle(
-                                                color: _myProvider.textColor,
+                                                color:_themeProvider.textColor,
                                                 fontSize: SizeX * SizeY * 0.0001,
-                                                fontWeight: _myProvider.isEn
+                                                fontWeight: _themeProvider.isEn
                                                     ? FontWeight.w100
                                                     : FontWeight.w600),
                                           ),

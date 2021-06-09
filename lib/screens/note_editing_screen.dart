@@ -8,7 +8,8 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
-import 'package:todoapp/provider/notes_provider.dart';
+import 'package:todoapp/provider/note_provider.dart';
+import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:todoapp/widgets/image.dart';
 import 'package:flutter_sound/flutter_sound.dart';
@@ -34,11 +35,12 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
   Widget build(BuildContext context) {
     double SizeX = widget.SizeX;
     double SizeY = widget.SizeY;
-    final _myProvider = Provider.of<myProvider>(context);
+    final _myProvider = Provider.of<NoteProvider>(context);
+    final _themeProvider = Provider.of<ThemeProvider>(context);
     LazyBox<Note> noteBox = widget.noteBox;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: _myProvider.mainColor,
+      backgroundColor: _themeProvider.mainColor,
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
@@ -118,17 +120,17 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                         BorderRadius.all(Radius.circular(SizeX * 0.016)),
                     boxShadow: [
                       BoxShadow(
-                        color: _myProvider.lightShadowColor,
+                        color: _themeProvider.lightShadowColor,
                         offset: Offset(2, 2),
                         blurRadius: 0.0,
                         // changes position of shadow
                       ),
                       BoxShadow(
-                        color: _myProvider.shadowColor.withOpacity(0.14),
+                        color: _themeProvider.shadowColor.withOpacity(0.14),
                         offset: Offset(-1, -1),
                       ),
                       BoxShadow(
-                        color: _myProvider.mainColor,
+                        color: _themeProvider.mainColor,
                         offset: Offset(5, 8),
                         spreadRadius: -0.5,
                         blurRadius: 14.0,
@@ -141,16 +143,16 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                     focusNode: _myProvider.fTitle,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
-                    cursorColor: _myProvider.swachColor,
+                    cursorColor: _themeProvider.swachColor,
                     cursorHeight: SizeX * 0.055,
                     style: TextStyle(
-                        color: _myProvider.textColor,
-                        fontSize: _myProvider.isEn
+                        color: _themeProvider.textColor,
+                        fontSize: _themeProvider.isEn
                             ? SizeX * SizeY * 0.00012
                             : SizeX * SizeY * 0.0001,
                         fontWeight: FontWeight.w400),
                     decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(_myProvider.isEn
+                        contentPadding: EdgeInsets.all(_themeProvider.isEn
                             ? SizeX * SizeY * 0.00004
                             : SizeX * SizeY * 0.00003),
                         suffixIcon: IconButton(
@@ -167,8 +169,8 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         hintStyle: TextStyle(
-                            color: _myProvider.hintColor.withOpacity(0.12),
-                            fontSize: _myProvider.isEn
+                            color: _themeProvider.hintColor.withOpacity(0.12),
+                            fontSize: _themeProvider.isEn
                                 ? SizeX * SizeY * 0.00012
                                 : SizeX * SizeY * 0.0001,
                             fontWeight: FontWeight.w400)),
@@ -184,17 +186,17 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                         BorderRadius.all(Radius.circular(SizeX * 0.016)),
                     boxShadow: [
                       BoxShadow(
-                        color: _myProvider.lightShadowColor,
+                        color: _themeProvider.lightShadowColor,
                         offset: Offset(2, 2),
                         blurRadius: 0.0,
                         // changes position of shadow
                       ),
                       BoxShadow(
-                        color: _myProvider.shadowColor.withOpacity(0.14),
+                        color: _themeProvider.shadowColor.withOpacity(0.14),
                         offset: Offset(-1, -1),
                       ),
                       BoxShadow(
-                        color: _myProvider.mainColor,
+                        color: _themeProvider.mainColor,
                         offset: Offset(5, 8),
                         spreadRadius: -0.5,
                         blurRadius: 14.0,
@@ -210,10 +212,10 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                     },
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
-                    cursorColor: _myProvider.swachColor,
+                    cursorColor: _themeProvider.swachColor,
                     cursorHeight: SizeX * 0.045,
                     style: TextStyle(
-                        color: _myProvider.textColor,
+                        color: _themeProvider.textColor,
                         fontSize: SizeX * SizeY * 0.00009,
                         fontWeight: FontWeight.w400),
                     decoration: InputDecoration(
@@ -232,7 +234,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         hintStyle: TextStyle(
-                            color: _myProvider.hintColor.withOpacity(0.12),
+                            color: _themeProvider.hintColor.withOpacity(0.12),
                             fontSize: SizeX * SizeY * 0.00009,
                             fontWeight: FontWeight.w400)),
                   ),
@@ -277,13 +279,13 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(35)),
-                                        color: _myProvider.mainColor,
+                                        color:_themeProvider.mainColor,
                                       ),
                                       alignment: AlignmentDirectional.centerEnd,
                                       child: Icon(
                                         Icons.delete_sweep,
                                         size: SizeX * SizeY * 0.0001,
-                                        color: _myProvider.textColor,
+                                        color: _themeProvider.textColor,
                                       ),
                                     ),
                                     onDismissed: (direction) {
@@ -306,14 +308,14 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                           boxShadow: [
                                             BoxShadow(
                                               color:
-                                                  _myProvider.lightShadowColor,
+                                                  _themeProvider.lightShadowColor,
                                               spreadRadius: 1.0,
                                               blurRadius: 1.0,
                                               offset: Offset(-1,
                                                   -1), // changes position of shadow
                                             ),
                                             BoxShadow(
-                                              color: _myProvider.shadowColor
+                                              color: _themeProvider.shadowColor
                                                   .withOpacity(0.17),
                                               spreadRadius: 1.0,
                                               blurRadius: 2.0,
@@ -321,7 +323,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                   4), // changes position of shadow
                                             ),
                                           ],
-                                          color: _myProvider.mainColor,
+                                          color: _themeProvider.mainColor,
                                           // borderRadius:
                                           //     BorderRadius.all(Radius.circular(SizeX * 0.3))
                                         ),
@@ -351,14 +353,14 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                       decoration: BoxDecoration(
                                         boxShadow: [
                                           BoxShadow(
-                                            color: _myProvider.lightShadowColor,
+                                            color: _themeProvider.lightShadowColor,
                                             spreadRadius: 1.0,
                                             blurRadius: 1.0,
                                             offset: Offset(-1,
                                                 -1), // changes position of shadow
                                           ),
                                           BoxShadow(
-                                            color: _myProvider.shadowColor
+                                            color: _themeProvider.shadowColor
                                                 .withOpacity(0.17),
                                             spreadRadius: 1.0,
                                             blurRadius: 2.0,
@@ -366,7 +368,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                 4), // changes position of shadow
                                           ),
                                         ],
-                                        color: _myProvider.mainColor,
+                                        color: _themeProvider.mainColor,
                                         // borderRadius:
                                         //     BorderRadius.all(Radius.circular(SizeX * 0.3))
                                       ),
@@ -419,7 +421,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                 Text(
                                                   '${((_myProvider.recorderDuration.inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}',
                                                   style: TextStyle(
-                                                      color: _myProvider
+                                                      color: _themeProvider
                                                           .blueMaterial,
                                                       fontSize: SizeX *
                                                           SizeY *
@@ -428,7 +430,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                 Text(
                                                   ':',
                                                   style: TextStyle(
-                                                      color: _myProvider
+                                                      color: _themeProvider
                                                           .blueMaterial,
                                                       fontSize: SizeX *
                                                           SizeY *
@@ -437,7 +439,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                 Text(
                                                   '${((_myProvider.recorderDuration.inSeconds) % 60).floor().toString().padLeft(2, '0')}',
                                                   style: TextStyle(
-                                                      color: _myProvider
+                                                      color: _themeProvider
                                                           .blueMaterial,
                                                       fontSize: SizeX *
                                                           SizeY *
@@ -498,7 +500,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                 Text(
                                                   '${((_myProvider.recorderDuration.inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}',
                                                   style: TextStyle(
-                                                      color: _myProvider
+                                                      color: _themeProvider
                                                           .blueMaterial,
                                                       fontSize: SizeX *
                                                           SizeY *
@@ -507,7 +509,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                 Text(
                                                   ':',
                                                   style: TextStyle(
-                                                      color: _myProvider
+                                                      color: _themeProvider
                                                           .blueMaterial,
                                                       fontSize: SizeX *
                                                           SizeY *
@@ -516,7 +518,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                 Text(
                                                   '${((_myProvider.recorderDuration.inSeconds) % 60).floor().toString().padLeft(2, '0')}',
                                                   style: TextStyle(
-                                                      color: _myProvider
+                                                      color: _themeProvider
                                                           .blueMaterial,
                                                       fontSize: SizeX *
                                                           SizeY *
@@ -577,14 +579,14 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(35)),
-                                          color: _myProvider.mainColor,
+                                          color: _themeProvider.mainColor,
                                         ),
                                         alignment:
                                             AlignmentDirectional.centerEnd,
                                         child: Icon(
                                           Icons.delete_sweep,
                                           size: SizeX * SizeY * 0.00025,
-                                          color: _myProvider.textColor,
+                                          color: _themeProvider.textColor,
                                         ),
                                       ),
                                     ),
@@ -608,7 +610,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                         decoration: BoxDecoration(
                                             boxShadow: [
                                               BoxShadow(
-                                                color: _myProvider
+                                                color: _themeProvider
                                                     .lightShadowColor,
                                                 spreadRadius: 1.0,
                                                 blurRadius: 1.0,
@@ -616,7 +618,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                     -1), // changes position of shadow
                                               ),
                                               BoxShadow(
-                                                color: _myProvider.shadowColor
+                                                color: _themeProvider.shadowColor
                                                     .withOpacity(0.17),
                                                 spreadRadius: 1.0,
                                                 blurRadius: 2.0,
@@ -624,7 +626,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                     4), // changes position of shadow
                                               ),
                                             ],
-                                            color: _myProvider.mainColor,
+                                            color: _themeProvider.mainColor,
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(
                                                     SizeX * 0.016))),
@@ -737,7 +739,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                                 child: Icon(
                                                                     FontAwesome
                                                                         .pause,
-                                                                    color: _myProvider
+                                                                    color: _themeProvider
                                                                         .textColor,
                                                                     size: SizeX *
                                                                         SizeY *
@@ -756,7 +758,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                                     child: Icon(
                                                                         FontAwesome
                                                                             .play,
-                                                                        color: _myProvider
+                                                                        color: _themeProvider
                                                                             .textColor,
                                                                         size: SizeX *
                                                                             SizeY *
@@ -775,7 +777,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                                         child: Icon(
                                                                             FontAwesome
                                                                                 .play,
-                                                                            color: _myProvider
+                                                                            color: _themeProvider
                                                                                 .textColor,
                                                                             size: SizeX *
                                                                                 SizeY *
@@ -795,14 +797,14 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                       decoration: BoxDecoration(
                                         boxShadow: [
                                           BoxShadow(
-                                            color: _myProvider.lightShadowColor,
+                                            color: _themeProvider.lightShadowColor,
                                             spreadRadius: 1.0,
                                             blurRadius: 1.0,
                                             offset: Offset(-1,
                                                 -1), // changes position of shadow
                                           ),
                                           BoxShadow(
-                                            color: _myProvider.shadowColor
+                                            color: _themeProvider.shadowColor
                                                 .withOpacity(0.17),
                                             spreadRadius: 1.0,
                                             blurRadius: 2.0,
@@ -810,7 +812,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                 4), // changes position of shadow
                                           ),
                                         ],
-                                        color: _myProvider.mainColor,
+                                        color: _themeProvider.mainColor,
                                         // borderRadius:
                                         //     BorderRadius.all(Radius.circular(SizeX * 0.3))
                                       ),

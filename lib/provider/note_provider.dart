@@ -18,6 +18,10 @@ import 'package:collection/collection.dart';
 
 // TODO orginaing the providers and having multi providres having a separate
 // provider for check me .
+// flutter_sound had a serious problem with the states
+// and if more instances of that was made FlutterSoundPlayer's
+// state for example the isPlaying instance was true for all
+// even if Just one instance was playing
 const stopped = 0;
 const paused = 1;
 const resumed = 2;
@@ -27,250 +31,49 @@ enum SoundPlayerState {
   resumed,
 }
 
-class myProvider extends ChangeNotifier {
-  myProvider() {
-    initialColorsAndLan();
+class NoteProvider extends ChangeNotifier {
+  NoteProvider() {
     //checkDayChange();
     // setting the timer for only once
     Timer.periodic(Duration(seconds: 60), (timer) {
+      // check for if the day is changed
+      // if changed will handle the
+      // check box uncheck duty for
+      // new day .
       checkDayChange();
     });
   }
-
-  List<Color> noteTitleColor;
-
-  Color mainColor;
-  Color shadowColor;
-  Color lightShadowColor;
-  Color textColor;
-  Color titleColor;
-  Color hintColor;
-  Brightness brightness;
-  Color swachColor;
-  BuildContext donateContext;
-  bool isEn;
-  // this varrable is used to control the showcase
-  bool isFirstTime;
-  Locale locale;
-  String noTaskImage;
+  ////////////////////////         ** LAN , COLOR  AND THEMING ***         ////////////////////////
+  // This varrible is used to controll the listview size for the listview
+  // to not to be short
   double listview_size;
-  MaterialColor blueMaterial =
-      const MaterialColor(0xFF3694fc, const <int, Color>{
-    50: const Color(0x1A001b48),
-    100: const Color(0x33001b48),
-    200: const Color(0x4D001b48),
-    300: const Color(0x66001b48),
-    400: const Color(0x80001b48),
-    500: const Color(0x99001b48),
-    600: const Color(0xB3001b48),
-    700: const Color(0xCC001b48),
-    800: const Color(0xE6001b48),
-    900: const Color(0xFF001b48),
-  });
-
-  // Hiive database
-  final noteBox = Hive.lazyBox<Note>(noteBoxName);
-  // THEME MANAGMENT PART   /                ////                  /             ////           /
-  String splashImage;
-  Color whiteMainColor = Color(0xffe6ebf2);
-  Color blackMainColor = Color(0xff303234);
-  Color whiteShadowColor = Colors.black;
-  Color blackShadowColor = Color(0xff000000).withOpacity(0.4);
-  Color whiteLightShadowColor = Colors.white;
-  Color blackLightShadowColor = Color(0xff494949).withOpacity(0.4);
-  Color whiteTextColor = Colors.black.withOpacity(.5);
-  Color blackTextColor = Colors.white.withOpacity(.5);
-  Color whiteTitleColor = Colors.black;
-  Color blackTitleColor = Colors.white;
-  Color runningColor;
-  Color pausedColor;
-  Color overColor;
-  Color whiteNoteTitleColor = Colors.black.withOpacity(.5);
-  Color blackNoteTitleColor = Colors.white.withOpacity(.5);
-
-  // This was the date box but now I use it to store
+  // It is used to store
   // the theme status as string
-  final dateBox = Hive.box<String>(dateBoxName);
-
-  Future initialColorsAndLan() async {
-    String first_time;
-    if (dateBox.get('firstTime') != null) {
-      first_time = dateBox.get('firstTime');
-    } else {
-      dateBox.put('firstTime', "Yes");
-      first_time = "Yes";
-    }
-    if (first_time == "Yes") {
-      isFirstTime = true;
-    } else {
-      isFirstTime = false;
-    }
-    String lan;
-    if (dateBox.get('lan') != null) {
-      lan = dateBox.get('lan');
-    } else {
-      dateBox.put('lan', 'en');
-      lan = 'en';
-    }
-    if (lan == 'en') {
-      isEn = true;
-      locale = Locale("en", "US");
-    } else {
-      isEn = false;
-      locale = Locale("fa", "IR");
-    }
-    String theme;
-    if (dateBox.get('theme') != null) {
-      theme = dateBox.get('theme');
-    } else {
-      dateBox.put('theme', 'white');
-      theme = 'white';
-    }
-    noteTitleColor = List<Color>.filled(100, Colors.white);
-    runningColor = Colors.greenAccent[400];
-    pausedColor = blueMaterial.withOpacity(0.7);
-    overColor = Colors.redAccent[400];
-    if (theme == 'white') {
-      splashImage = 'assets/images/SplashScreenWhite.gif';
-      noTaskImage = "assets/images/notask.png";
-      mainColor = whiteMainColor;
-      shadowColor = whiteShadowColor;
-      lightShadowColor = whiteLightShadowColor;
-      textColor = whiteTextColor;
-      brightness = Brightness.light;
-      swachColor = blueMaterial.withOpacity(0.7);
-      hintColor = whiteTextColor.withOpacity(0.5);
-      titleColor = whiteTitleColor;
-      noteTitleColor.fillRange(0, 100, whiteNoteTitleColor);
-    } else {
-      splashImage = 'assets/images/SplashScreenBlack.gif';
-      noTaskImage = "assets/images/blacknotask.png";
-      mainColor = blackMainColor;
-      shadowColor = blackShadowColor;
-      lightShadowColor = blackLightShadowColor;
-      textColor = blackTextColor;
-      brightness = Brightness.dark;
-      titleColor = blackTitleColor;
-      noteTitleColor.fillRange(0, 100, blackNoteTitleColor);
-      hintColor = textColor.withOpacity(0.5);
-      swachColor = blueMaterial.withOpacity(0.7);
-    }
-    notifyListeners();
-  }
-
-  void changeBrigness() {
-    String theme = dateBox.get('theme');
-    runningColor = Colors.greenAccent[400];
-    pausedColor = blueMaterial.withOpacity(0.7);
-    overColor = Colors.redAccent[400];
-    if (theme == 'white') {
-      splashImage = 'assets/images/SplashScreenBlack.gif';
-      noTaskImage = "assets/images/blacknotask.png";
-      mainColor = blackMainColor;
-      shadowColor = blackShadowColor;
-      lightShadowColor = blackLightShadowColor;
-      textColor = blackTextColor;
-      brightness = Brightness.dark;
-      noteTitleColor.fillRange(0, 100, blackNoteTitleColor);
-      hintColor = textColor.withOpacity(0.5);
-      swachColor = blueMaterial.withOpacity(0.7);
-      titleColor = blackTitleColor;
-      dateBox.put('theme', 'black');
-      notifyListeners();
-    } else {
-      splashImage = 'assets/images/SplashScreenWhite.gif';
-      noTaskImage = "assets/images/notask.png";
-      mainColor = whiteMainColor;
-      shadowColor = whiteShadowColor;
-      lightShadowColor = whiteLightShadowColor;
-      textColor = whiteTextColor;
-      brightness = Brightness.light;
-      titleColor = whiteTitleColor;
-      noteTitleColor.fillRange(0, 100, whiteNoteTitleColor);
-      swachColor = blueMaterial.withOpacity(0.7);
-      hintColor = whiteTextColor.withOpacity(0.5);
-      dateBox.put('theme', 'white');
-      notifyListeners();
-    }
-  }
-
-  // void changeNoteTitleColor(bool isExpanded, int index) {
-  //   if (isExpanded) {
-  //     noteTitleColor[index] = swachColor;
-  //   } else {
-  //     String theme = dateBox.get('theme');
-  //     if (theme == 'white') {
-  //       noteTitleColor[index] = whiteTextColor;
-  //     } else {
-  //       noteTitleColor[index] = blackTextColor;
-  //     }
-  //   }
-  //   //notifyListeners();
+  final prefsBox = Hive.box<String>(prefsBoxName);
+  BuildContext donateContext;
+  // Hive box for notes
+  final noteBox = Hive.lazyBox<Note>(noteBoxName);
+  // TODO delete if does not effect app performance
+  // List<int> durationKeys;
+  // int duartionIndex;
+  // void saveDuration(List<int> keys, int index, int duration) async {
+  //   var bnote = await noteBox.get(keys[index]);
+  //   var ntitle = bnote.title;
+  //   var nttext = bnote.text;
+  //   var nttime = bnote.time;
+  //   var ntlefttime = duration;
+  //   var ntcolor = bnote.color;
+  //   var ntchecked = bnote.isChecked;
+  //   var ntimageList = bnote.imageList;
+  //   var ntvoicewList = bnote.voiceList;
+  //   Note note = Note(ntitle, nttext, ntchecked, nttime, ntcolor, ntlefttime,
+  //       ntimageList, ntvoicewList);
+  //   noteBox.put(keys[index], note);
   // }
-
-  void changeLan() {
-    String lan = dateBox.get('lan') ?? dateBox.put('lan', 'en');
-    if (lan == 'en') {
-      isEn = false;
-      dateBox.put('lan', 'fa');
-      locale = Locale("fa", "IR");
-    } else {
-      isEn = true;
-      dateBox.put('lan', 'en');
-      locale = Locale("en", "US");
-    }
-    notifyListeners();
-  }
-
-  void changeLanToPersian() {
-    isEn = false;
-    dateBox.put('lan', 'fa');
-    locale = Locale("fa", "IR");
-    notifyListeners();
-  }
-
-  void changeLanToEnglish() {
-    isEn = true;
-    dateBox.put('lan', 'en');
-    locale = Locale("en", "US");
-    notifyListeners();
-  }
-
-  bool boolIsWhite;
-  bool isWhite() {
-    String theme = dateBox.get('theme');
-    if (theme == 'white') {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  bool changeFirstTime() {
-    dateBox.put('firstTime', "No");
-    notifyListeners();
-  }
-
-  List<int> durationKeys;
-  int duartionIndex;
-  void saveDuration(List<int> keys, int index, int duration) async {
-    var bnote = await noteBox.get(keys[index]);
-    var ntitle = bnote.title;
-    var nttext = bnote.text;
-    var nttime = bnote.time;
-    var ntlefttime = duration;
-    var ntcolor = bnote.color;
-    var ntchecked = bnote.isChecked;
-    var ntimageList = bnote.imageList;
-    var ntvoicewList = bnote.voiceList;
-    Note note = Note(ntitle, nttext, ntchecked, nttime, ntcolor, ntlefttime,
-        ntimageList, ntvoicewList);
-    noteBox.put(keys[index], note);
-  }
 
   //////////////////////////////////// CHECKBOX CHECK PART///////////////////////////////////////////////////
   Future<void> checkDayChange() async {
-    String date = dateBox.get('date');
+    String date = prefsBox.get('date');
     var now = DateTime.now();
     if (date != null) {
       List<String> dateList = date.split(',');
@@ -294,12 +97,12 @@ class myProvider extends ChangeNotifier {
                 ntImageList, ntVoiceList);
             noteBox.putAt(i, note);
           }
-          dateBox.put('date',
+          prefsBox.put('date',
               "${DateTime.now().year},${DateTime.now().month},${DateTime.now().day}");
         }
       }
     } else {
-      dateBox.put('date',
+      prefsBox.put('date',
           "${DateTime.now().year},${DateTime.now().month},${DateTime.now().day}");
     }
     notifyListeners();
@@ -474,7 +277,6 @@ class myProvider extends ChangeNotifier {
     // datatbase as the Uint8List
     File file = File(path);
     var h = await file.readAsBytes();
-
     var v = Voice(
         (voiceTitle == null || voiceTitle == "") ? 'Unamed' : voiceTitle, h);
     voiceList.add(v);

@@ -8,7 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/conn_provider.dart';
 
-import 'package:todoapp/provider/notes_provider.dart';
+import 'package:todoapp/provider/note_provider.dart';
+import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:todoapp/widgets/buttons.dart';
@@ -33,16 +34,17 @@ class _MyRorderableState extends State<MyRorderable> {
 
   @override
   Widget build(BuildContext context) {
-    final _myProvider = Provider.of<myProvider>(context);
+    final _myProvider = Provider.of<NoteProvider>(context);
     final _timerState = Provider.of<TimerState>(context);
     final _connState = Provider.of<ConnState>(context);
+    final _themeProvider = Provider.of<ThemeProvider>(context);
     LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: _myProvider.mainColor,
+      backgroundColor: _themeProvider.mainColor,
       body: Container(
           padding: EdgeInsets.only(top: SizeX * 0.02),
           width: SizeX,
@@ -94,10 +96,10 @@ class _MyRorderableState extends State<MyRorderable> {
                                                           .translate(
                                                               'notesApp'),
                                                       style: TextStyle(
-                                                          color: _myProvider
+                                                          color: _themeProvider
                                                               .titleColor,
                                                           fontSize:
-                                                              _myProvider.isEn
+                                                              _themeProvider.isEn
                                                                   ? SizeX *
                                                                       SizeY *
                                                                       0.00012
@@ -236,7 +238,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                 height: SizeX * 0.45,
                                                 width: SizeY,
                                                 child: Image.asset(
-                                                  _myProvider.noTaskImage,
+                                                  _themeProvider.noTaskImage,
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),
@@ -255,7 +257,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                       .translate('NoNotesyet'),
                                                   style: TextStyle(
                                                       color:
-                                                          _myProvider.textColor,
+                                                          _themeProvider.textColor,
                                                       fontWeight:
                                                           FontWeight.w400,
                                                       fontSize: SizeX *
@@ -269,10 +271,10 @@ class _MyRorderableState extends State<MyRorderable> {
                                                           'addNewNotePlease'),
                                                   style: TextStyle(
                                                       color:
-                                                          _myProvider.textColor,
+                                                          _themeProvider.textColor,
                                                       fontWeight:
                                                           FontWeight.w500,
-                                                      fontSize: _myProvider.isEn
+                                                      fontSize: _themeProvider.isEn
                                                           ? SizeX *
                                                               SizeY *
                                                               0.00008
@@ -317,7 +319,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                               Radius.circular(
                                                                   35)),
                                                       color:
-                                                          _myProvider.mainColor,
+                                                          _themeProvider.mainColor,
                                                     ),
                                                     alignment:
                                                         AlignmentDirectional
@@ -328,7 +330,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                           SizeY *
                                                           0.0002,
                                                       color:
-                                                          _myProvider.textColor,
+                                                          _themeProvider.textColor,
                                                     ),
                                                   ),
                                                   onDismissed:
@@ -404,7 +406,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                 BoxDecoration(
                                                                     boxShadow: [
                                                                   BoxShadow(
-                                                                    color: _myProvider
+                                                                    color: _themeProvider
                                                                         .lightShadowColor,
                                                                     //spreadRadius: 1.0,
                                                                     blurRadius:
@@ -414,7 +416,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                         -3), // changes position of shadow
                                                                   ),
                                                                   BoxShadow(
-                                                                    color: _myProvider
+                                                                    color: _themeProvider
                                                                         .shadowColor
                                                                         .withOpacity(
                                                                             0.2),
@@ -426,7 +428,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                         12), // changes position of shadow
                                                                   ),
                                                                 ],
-                                                                    color: _myProvider
+                                                                    color: _themeProvider
                                                                         .mainColor,
                                                                     //border: Border.all(width: 1, color: uiKit.Colors.whiteSmoke),
                                                                     borderRadius:
@@ -438,7 +440,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                         context)
                                                                     .copyWith(
                                                                   unselectedWidgetColor:
-                                                                      _myProvider
+                                                                      _themeProvider
                                                                           .textColor,
                                                                 ),
                                                                 child:
@@ -488,17 +490,17 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                                               borderRadius: BorderRadius.all(Radius.circular(10)),
                                                                                               boxShadow: [
                                                                                                 BoxShadow(
-                                                                                                  color: _myProvider.lightShadowColor,
+                                                                                                  color: _themeProvider.lightShadowColor,
                                                                                                   offset: Offset(2, 2),
                                                                                                   blurRadius: 0.0,
                                                                                                   // changes position of shadow
                                                                                                 ),
                                                                                                 BoxShadow(
-                                                                                                  color: _myProvider.shadowColor.withOpacity(0.14),
+                                                                                                  color:_themeProvider.shadowColor.withOpacity(0.14),
                                                                                                   offset: Offset(-1, -1),
                                                                                                 ),
                                                                                                 BoxShadow(
-                                                                                                  color: _myProvider.mainColor,
+                                                                                                  color: _themeProvider.mainColor,
                                                                                                   offset: Offset(5, 8),
                                                                                                   spreadRadius: -0.5,
                                                                                                   blurRadius: 14.0,
@@ -515,23 +517,23 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                                                 children: [
                                                                                                   Text(
                                                                                                     ((snapshot.data.leftTime / 3600) % 60).floor().toString().padLeft(2, '0'),
-                                                                                                    style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
+                                                                                                    style: TextStyle(color: _timerState.isRunning[index] ? _themeProvider.swachColor : _themeProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
                                                                                                   ),
                                                                                                   Text(
                                                                                                     ':',
-                                                                                                    style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
+                                                                                                    style: TextStyle(color: _timerState.isRunning[index] ? _themeProvider.swachColor : _themeProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
                                                                                                   ),
                                                                                                   Text(
                                                                                                     ((snapshot.data.leftTime / 60) % 60).floor().toString().padLeft(2, '0'),
-                                                                                                    style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
+                                                                                                    style: TextStyle(color: _timerState.isRunning[index] ? _themeProvider.swachColor : _themeProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
                                                                                                   ),
                                                                                                   Text(
                                                                                                     ':',
-                                                                                                    style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
+                                                                                                    style: TextStyle(color: _timerState.isRunning[index] ? _themeProvider.swachColor : _themeProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
                                                                                                   ),
                                                                                                   Text(
                                                                                                     (snapshot.data.leftTime % 60).floor().toString().padLeft(2, '0'),
-                                                                                                    style: TextStyle(color: _timerState.isRunning[index] ? _myProvider.swachColor : _myProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
+                                                                                                    style: TextStyle(color: _timerState.isRunning[index] ? _themeProvider.swachColor : _themeProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
                                                                                                   ),
                                                                                                 ],
                                                                                               ),
@@ -554,17 +556,17 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                                       borderRadius: BorderRadius.all(Radius.circular(10)),
                                                                                       boxShadow: [
                                                                                         BoxShadow(
-                                                                                          color: _myProvider.lightShadowColor,
+                                                                                          color: _themeProvider.lightShadowColor,
                                                                                           offset: Offset(2, 2),
                                                                                           blurRadius: 0.0,
                                                                                           // changes position of shadow
                                                                                         ),
                                                                                         BoxShadow(
-                                                                                          color: _myProvider.shadowColor.withOpacity(0.14),
+                                                                                          color: _themeProvider.shadowColor.withOpacity(0.14),
                                                                                           offset: Offset(-1, -1),
                                                                                         ),
                                                                                         BoxShadow(
-                                                                                          color: _myProvider.mainColor,
+                                                                                          color: _themeProvider.mainColor,
                                                                                           offset: Offset(5, 4),
                                                                                           spreadRadius: -0.5,
                                                                                           blurRadius: 14.0,
@@ -606,9 +608,9 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                                             Expanded(
                                                                                               flex: 1,
                                                                                               child: Checkbox(
-                                                                                                  checkColor: _myProvider.textColor,
+                                                                                                  checkColor: _themeProvider.textColor,
                                                                                                   value: snapshot.data.isChecked,
-                                                                                                  activeColor: _myProvider.textColor,
+                                                                                                  activeColor: _themeProvider.textColor,
                                                                                                   onChanged: (bool newValue) {
                                                                                                     _myProvider.updateIsChecked(newValue, keys, index);
                                                                                                   }),
@@ -621,7 +623,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                                                   child: Text(
                                                                                                     snapshot.data.title.length >= (SizeY * 0.08).round() ? snapshot.data.title.substring(0, (SizeY * 0.08).round()) + "..." : snapshot.data.title,
                                                                                                     softWrap: false,
-                                                                                                    style: TextStyle(color: _myProvider.noteTitleColor[index], fontSize: _myProvider.isEn ? SizeX * SizeY * 0.00011 : SizeX * SizeY * 0.00009, fontWeight: _myProvider.isEn ? FontWeight.w100 : FontWeight.w600),
+                                                                                                    style: TextStyle(color: _themeProvider.noteTitleColor[index], fontSize: _themeProvider.isEn ? SizeX * SizeY * 0.00011 : SizeX * SizeY * 0.00009, fontWeight: _themeProvider.isEn ? FontWeight.w100 : FontWeight.w600),
                                                                                                   ),
                                                                                                 ),
                                                                                               ),
@@ -639,7 +641,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                                           child: Text(
                                                                                             snapshot.data.text,
                                                                                             style: TextStyle(
-                                                                                              color: _myProvider.textColor,
+                                                                                              color: _themeProvider.textColor,
                                                                                               fontSize: SizeX * SizeY * 0.00008,
                                                                                             ),
                                                                                           ),

@@ -1,7 +1,8 @@
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
-import 'package:todoapp/provider/notes_provider.dart';
+import 'package:todoapp/provider/note_provider.dart';
+import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uikit.dart' as uiKit;
 import 'package:flutter/material.dart';
 
@@ -35,24 +36,23 @@ Widget MySnackBar(
   List<int> keys,
   bool isWhite,
 ]) {
-  final _myProvider = Provider.of<myProvider>(context, listen: false);
-  bool isWhite = _myProvider.isWhite();
-  print('isWhite ${isWhite}');
+  final _themeProvider = Provider.of<ThemeProvider>(context);
+  final _myProvider = Provider.of<NoteProvider>(context);
   return SnackBar(
     elevation: 0,
     backgroundColor:
-        isWhite ? _myProvider.blackMainColor : _myProvider.whiteMainColor,
+        isWhite ? _themeProvider.blackMainColor : _themeProvider.whiteMainColor,
     behavior: SnackBarBehavior.floating,
     content: Text(
       text,
       style: TextStyle(
         color:
-            isWhite ? _myProvider.blackTitleColor : _myProvider.whiteTitleColor,
+            isWhite ? _themeProvider.blackTitleColor : _themeProvider.whiteTitleColor,
       ),
     ),
     action: isAction
         ? SnackBarAction(
-            textColor: _myProvider.swachColor,
+            textColor: _themeProvider.swachColor,
             label: uiKit.AppLocalizations.of(context).translate('undo'),
             onPressed: () {
               if (noteBox==null) {

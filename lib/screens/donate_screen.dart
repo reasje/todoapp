@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapp/provider/theme_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:todoapp/provider/notes_provider.dart';
+import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
 class MyDoante extends StatefulWidget {
@@ -17,12 +18,13 @@ class MyDoante extends StatefulWidget {
 class _MyDoanteState extends State<MyDoante> {
   @override
   Widget build(BuildContext context) {
-    final _myProvider = Provider.of<myProvider>(context);
+    final _myProvider = Provider.of<NoteProvider>(context);
+    final _themeProvider = Provider.of<ThemeProvider>(context);
     double SizeX = widget.SizeX;
     double SizeY = widget.SizeY;
     return Scaffold(
             resizeToAvoidBottomInset: false,
-      backgroundColor: _myProvider.mainColor,
+      backgroundColor: _themeProvider.mainColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -58,8 +60,8 @@ class _MyDoanteState extends State<MyDoante> {
                           Text(
                             uiKit.AppLocalizations.of(context).translate('donate'),
                             style: TextStyle(
-                                color: _myProvider.textColor,
-                                fontSize: _myProvider.isEn
+                                color: _themeProvider.textColor,
+                                fontSize: _themeProvider.isEn
                                     ? SizeX * SizeY * 0.00009
                                     : SizeX * SizeY * 0.000075,
                                 fontWeight: FontWeight.w100),
@@ -69,8 +71,8 @@ class _MyDoanteState extends State<MyDoante> {
                             child: Text(
                               '@Rezaaslejeddian@gmail.com',
                               style: TextStyle(
-                                  color: _myProvider.textColor,
-                                  fontSize: _myProvider.isEn
+                                  color: _themeProvider.textColor,
+                                  fontSize: _themeProvider.isEn
                                       ? SizeX * SizeY * 0.00005
                                       : SizeX * SizeY * 0.00006,
                                   fontWeight: FontWeight.w100),

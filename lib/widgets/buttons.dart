@@ -8,8 +8,9 @@ import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/conn_provider.dart';
 
 import 'package:todoapp/provider/drive_provider.dart';
-import 'package:todoapp/provider/notes_provider.dart';
+import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/signin_provider.dart';
+import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/screens/home_screen.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
@@ -57,8 +58,6 @@ class MyButton extends StatefulWidget {
 
 class _MyButtonState extends State<MyButton> {
   bool isPressed = false;
-  var _myProvider;
-  var _timerState;
   void onPressedUp(PointerUpEvent event) {
     if (mounted) {
       setState(() {
@@ -72,10 +71,11 @@ class _MyButtonState extends State<MyButton> {
       setState(() {
         isPressed = true;
         Future.delayed(Duration(milliseconds: 100), () async {
-          final _myProvider = Provider.of<myProvider>(context, listen: false);
+          final _myProvider = Provider.of<NoteProvider>(context, listen: false);
           final _timerState = Provider.of<TimerState>(context, listen: false);
           final _signinState = Provider.of<SigninState>(context, listen: false);
           final _connState = Provider.of<ConnState>(context, listen: false);
+          final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
           double SizeX = MediaQuery.of(context).size.height;
           double SizeY = MediaQuery.of(context).size.width;
           LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
@@ -87,7 +87,7 @@ class _MyButtonState extends State<MyButton> {
             case 'home':
               Navigator.pushReplacement(
                   context, SliderTransition(uiKit.MyRorderable()));
-              _myProvider.changeFirstTime();
+              _themeProvider.changeFirstTime();
               break;
             case 'menu':
               // Navigator.push(context,
@@ -112,7 +112,7 @@ class _MyButtonState extends State<MyButton> {
               _myProvider.canRedo ? _myProvider.changesRedo() : null;
               break;
             case 'lan':
-              _myProvider.changeLan();
+              _themeProvider.changeLan();
               break;
             case 'new':
               await _myProvider.newNoteClicked(context);
@@ -122,7 +122,7 @@ class _MyButtonState extends State<MyButton> {
                       SizeX: SizeX, SizeY: SizeY, noteBox: noteBox)));
               break;
             case 'lamp':
-              _myProvider.changeBrigness();
+              _themeProvider.changeBrigness();
               break;
             case 'undo':
               {
@@ -138,7 +138,7 @@ class _MyButtonState extends State<MyButton> {
                             actions: [uiKit.MyDatePicker(context)],
                             cancelButton: Container(
                               decoration: BoxDecoration(
-                                  color: _myProvider.mainColor,
+                                  color: _themeProvider.mainColor,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(10))),
                               child: CupertinoActionSheetAction(
@@ -200,7 +200,7 @@ class _MyButtonState extends State<MyButton> {
                         actions: [
                           Container(
                             decoration: BoxDecoration(
-                                color: _myProvider.mainColor,
+                                color: _themeProvider.mainColor,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
                             child: CupertinoActionSheetAction(
@@ -212,7 +212,7 @@ class _MyButtonState extends State<MyButton> {
                           ),
                           Container(
                             decoration: BoxDecoration(
-                                color: _myProvider.mainColor,
+                                color: _themeProvider.mainColor,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
                             child: CupertinoActionSheetAction(
@@ -245,9 +245,10 @@ class _MyButtonState extends State<MyButton> {
 
   @override
   Widget build(BuildContext context) {
-    final _myProvider = Provider.of<myProvider>(context);
+    final _myProvider = Provider.of<NoteProvider>(context);
     final _timerState = Provider.of<TimerState>(context);
     final _signinState = Provider.of<SigninState>(context);
+    final _themeProvider = Provider.of<ThemeProvider>(context);
     return Listener(
       onPointerUp: onPressedUp,
       onPointerDown: onPressedDown,
@@ -262,17 +263,17 @@ class _MyButtonState extends State<MyButton> {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   boxShadow: [
                     BoxShadow(
-                      color: _myProvider.lightShadowColor,
+                      color:_themeProvider.lightShadowColor,
                       offset: Offset(2, 2),
                       blurRadius: 0.0,
                       // changes position of shadow
                     ),
                     BoxShadow(
-                      color: _myProvider.shadowColor.withOpacity(0.14),
+                      color: _themeProvider.shadowColor.withOpacity(0.14),
                       offset: Offset(-1, -1),
                     ),
                     BoxShadow(
-                      color: _myProvider.mainColor,
+                      color: _themeProvider.mainColor,
                       offset: Offset(5, 8),
                       spreadRadius: -0.5,
                       blurRadius: 14.0,
@@ -288,7 +289,7 @@ class _MyButtonState extends State<MyButton> {
                     : Icon(
                         widget.iconData,
                         size: widget.iconSize,
-                        color: _myProvider.blueMaterial,
+                        color: _themeProvider.blueMaterial,
                       ),
               ),
             )
@@ -298,19 +299,19 @@ class _MyButtonState extends State<MyButton> {
               decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: _myProvider.lightShadowColor,
+                      color: _themeProvider.lightShadowColor,
                       spreadRadius: 1.0,
                       blurRadius: 1.0,
                       offset: Offset(-1, -1), // changes position of shadow
                     ),
                     BoxShadow(
-                      color: _myProvider.shadowColor.withOpacity(0.17),
+                      color: _themeProvider.shadowColor.withOpacity(0.17),
                       spreadRadius: 1.0,
                       blurRadius: 2.0,
                       offset: Offset(3, 4), // changes position of shadow
                     ),
                   ],
-                  color: _myProvider.mainColor,
+                  color: _themeProvider.mainColor,
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               child: widget.id == 'dogedonate'
                   ? Image.asset(
@@ -321,25 +322,25 @@ class _MyButtonState extends State<MyButton> {
                       size: widget.iconSize,
                       color: widget.id == 'undo'
                           ? _myProvider.canUndo
-                              ? _myProvider.blueMaterial
-                              : _myProvider.textColor
+                              ? _themeProvider.blueMaterial
+                              : _themeProvider.textColor
                           : widget.id == 'redo'
                               ? _myProvider.canRedo
-                                  ? _myProvider.blueMaterial
-                                  : _myProvider.textColor
+                                  ? _themeProvider.blueMaterial
+                                  : _themeProvider.textColor
                               : widget.id == 'save' || widget.id == 'cancel'
                                   ? _myProvider.canUndo || false
-                                      ? _myProvider.blueMaterial
-                                      : _myProvider.textColor
+                                      ? _themeProvider.blueMaterial
+                                      : _themeProvider.textColor
                                   : widget.id == 'timer'
                                       ? _myProvider.time_duration != Duration()
-                                          ? _myProvider.blueMaterial
-                                          : _myProvider.textColor
+                                          ? _themeProvider.blueMaterial
+                                          : _themeProvider.textColor
                                       : widget.id == 'google'
                                           ? _signinState.isSignedin
                                               ? Colors.green
                                               : Colors.red
-                                          : _myProvider.textColor),
+                                          : _themeProvider.textColor),
             ),
     );
   }

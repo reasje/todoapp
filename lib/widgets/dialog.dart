@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:hive/hive.dart';
-import 'package:todoapp/provider/notes_provider.dart';
+import 'package:todoapp/provider/note_provider.dart';
+import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import '../applocalizations.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
@@ -202,7 +203,8 @@ Future showAlertDialog(BuildContext context,
     String file_id]) async {
   final TextEditingController _titleFieldController = TextEditingController();
   final TextEditingController _textFieldController = TextEditingController();
-  var _myProvider = Provider.of<myProvider>(context, listen: false);
+  var _myProvider = Provider.of<NoteProvider>(context, listen: false);
+  final _themeProvider = Provider.of<ThemeProvider>(context);
   TextEditingController voiceTitleController = TextEditingController(text: '');
   double SizeX = MediaQuery.of(context).size.height;
   double SizeY = MediaQuery.of(context).size.width;
@@ -212,7 +214,7 @@ Future showAlertDialog(BuildContext context,
         return StatefulBuilder(
           builder: (BuildContext context, setState) {
             return AlertDialog(
-              backgroundColor: _myProvider.mainColor,
+              backgroundColor: _themeProvider.mainColor,
               title: Center(
                   child: Text(
                 id == "lan"
@@ -238,7 +240,7 @@ Future showAlertDialog(BuildContext context,
                                             : uiKit.AppLocalizations.of(context)
                                                 .translate('continue'),
                 style: TextStyle(
-                  color: _myProvider.textColor,
+                  color: _themeProvider.textColor,
                 ),
               )),
               content: Container(
@@ -252,16 +254,16 @@ Future showAlertDialog(BuildContext context,
                             controller: voiceTitleController,
                             maxLines: 1,
                             maxLength: 10,
-                            cursorColor: _myProvider.swachColor,
+                            cursorColor: _themeProvider.swachColor,
                             cursorHeight: SizeX * 0.052,
                             style: TextStyle(
-                                color: _myProvider.textColor,
-                                fontSize: _myProvider.isEn
+                                color: _themeProvider.textColor,
+                                fontSize: _themeProvider.isEn
                                     ? SizeX * SizeY * 0.0001
                                     : SizeX * SizeY * 0.00008,
                                 fontWeight: FontWeight.w400),
                             decoration: InputDecoration(
-                                contentPadding: EdgeInsets.all(_myProvider.isEn
+                                contentPadding: EdgeInsets.all(_themeProvider.isEn
                                     ? SizeX * SizeY * 0.00001
                                     : SizeX * SizeY * 0.00001),
                                 hintText: uiKit.AppLocalizations.of(context)
@@ -273,8 +275,8 @@ Future showAlertDialog(BuildContext context,
                                 disabledBorder: InputBorder.none,
                                 hintStyle: TextStyle(
                                     color:
-                                        _myProvider.hintColor.withOpacity(0.12),
-                                    fontSize: _myProvider.isEn
+                                        _themeProvider.hintColor.withOpacity(0.12),
+                                    fontSize: _themeProvider.isEn
                                         ? SizeX * SizeY * 0.00012
                                         : SizeX * SizeY * 0.0001,
                                     fontWeight: FontWeight.w400)),
@@ -293,7 +295,7 @@ Future showAlertDialog(BuildContext context,
                               width: 100,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: _myProvider.textColor),
+                                  color: _themeProvider.textColor),
                               child: InkWell(
                                 child: Center(
                                     child: Text(
@@ -308,12 +310,12 @@ Future showAlertDialog(BuildContext context,
                                           : uiKit.AppLocalizations.of(context)
                                               .translate('cancel'),
                                   style: TextStyle(
-                                      color: _myProvider.mainColor,
+                                      color: _themeProvider.mainColor,
                                       fontWeight: FontWeight.bold),
                                 )),
                                 onTap: () {
                                   id == "lan"
-                                      ? _myProvider.changeLanToPersian()
+                                      ? _themeProvider.changeLanToPersian()
                                        :null;
                                   Navigator.pop(context);
                                 },
@@ -329,7 +331,7 @@ Future showAlertDialog(BuildContext context,
                                   //margin: EdgeInsets.only(right: 30),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      color: _myProvider.textColor),
+                                      color: _themeProvider.textColor),
                                   child: InkWell(
                                       child: Center(
                                           child: Text(
@@ -338,13 +340,13 @@ Future showAlertDialog(BuildContext context,
                                             : uiKit.AppLocalizations.of(context)
                                                 .translate('ok'),
                                         style: TextStyle(
-                                            color: _myProvider.mainColor,
+                                            color: _themeProvider.mainColor,
                                             fontWeight: FontWeight.bold),
                                       )),
                                       onTap: () {
                                         //_myProvider.changeLanToEnglish();
                                         id == "lan"
-                                            ? _myProvider.changeLanToEnglish()
+                                            ? _themeProvider.changeLanToEnglish()
                                             : id == "up"
                                                 ? upload(driveApi, driveFile,
                                                     noteBox, file_id)

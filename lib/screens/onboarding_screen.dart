@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapp/provider/notes_provider.dart';
+import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
 class Onboarding extends StatefulWidget {
@@ -30,10 +30,10 @@ class _OnboardingState extends State<Onboarding> {
   Widget build(BuildContext context) {
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
-    final _myProvider = Provider.of<myProvider>(context);
+    final _themeProvider = Provider.of<ThemeProvider>(context);
     
     return Scaffold(
-      backgroundColor: _myProvider.mainColor,
+      backgroundColor: _themeProvider.mainColor,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

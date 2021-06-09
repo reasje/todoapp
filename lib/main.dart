@@ -7,9 +7,10 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/voice_model.dart';
 import 'package:todoapp/provider/conn_provider.dart';
-import 'package:todoapp/provider/notes_provider.dart';
+import 'package:todoapp/provider/note_provider.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/provider/signin_provider.dart';
+import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/screens/splash_screen.dart';
 import 'applocalizations.dart';
@@ -17,7 +18,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 const String noteBoxName = 'Note';
-const String dateBoxName = 'dates';
+const String prefsBoxName = 'prefs';
 
 // Flutter notifications
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -60,7 +61,7 @@ void main() async {
   // opening the box
   await Hive.openLazyBox<Note>(noteBoxName);
   // the database of time for day change recognizing
-  await Hive.openBox<String>(dateBoxName);
+  await Hive.openBox<String>(prefsBoxName);
   // Hydrated bloc for keeping the instances of the
   // blocs alive
   // Future.microtask(() async {
@@ -114,16 +115,17 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(
-            create: (context) => myProvider(),
+            create: (context) => NoteProvider(),
           ),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => ConnState()),
           ChangeNotifierProvider(create: (context) => SigninState()),
+          ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ],
-        child: Consumer<myProvider>(
-          builder: (context, _myProvider, _) {
+        child: Consumer<ThemeProvider>(
+          builder: (context, _themeProvider, _) {
             return new MaterialApp(
-              locale: _myProvider.locale,
+              locale: _themeProvider.locale,
               localizationsDelegates: [
                 AppLocalizations.delegate,
                 // A class which loads the strings form JSON files
@@ -152,7 +154,7 @@ class _MyAppState extends State<MyApp> {
               debugShowCheckedModeBanner: false,
               theme: ThemeData(
                   visualDensity: VisualDensity.adaptivePlatformDensity,
-                  fontFamily: _myProvider.isEn ? "Ubuntu Condensed" : "Dubai"),
+                  fontFamily: _themeProvider.isEn ? "Ubuntu Condensed" : "Dubai"),
               home: MySplashScreen(),
             );
           },
