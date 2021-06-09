@@ -141,26 +141,26 @@ class NoteProvider extends ChangeNotifier {
     if (_image != null) {
       var h = await _image.readAsBytes();
       var fileSize = h.lengthInBytes;
-      if (fileSize > 500000) {
+      if (fileSize > 300000) {
         if (fileSize < 5000000) {
           h = await FlutterImageCompress.compressWithList(
             h,
-            quality: 90,
+            quality: 60,
           );
         } else if (fileSize < 10000000) {
           h = await FlutterImageCompress.compressWithList(
             h,
-            quality: 80,
+            quality: 50,
           );
         } else if (fileSize < 15000000) {
           h = await FlutterImageCompress.compressWithList(
             h,
-            quality: 75,
+            quality: 40,
           );
         } else {
           h = await FlutterImageCompress.compressWithList(
             h,
-            quality: 65,
+            quality: 30,
           );
         }
       }
@@ -174,26 +174,26 @@ class NoteProvider extends ChangeNotifier {
     if (_image != null) {
       var h = await _image.readAsBytes();
       var fileSize = h.lengthInBytes;
-      if (fileSize > 500000) {
+      if (fileSize > 300000) {
         if (fileSize < 5000000) {
           h = await FlutterImageCompress.compressWithList(
             h,
-            quality: 90,
+            quality: 60,
           );
         } else if (fileSize < 10000000) {
           h = await FlutterImageCompress.compressWithList(
             h,
-            quality: 80,
+            quality: 50,
           );
         } else if (fileSize < 15000000) {
           h = await FlutterImageCompress.compressWithList(
             h,
-            quality: 75,
+            quality: 40,
           );
         } else {
           h = await FlutterImageCompress.compressWithList(
             h,
-            quality: 65,
+            quality: 30,
           );
         }
       }
