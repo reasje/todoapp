@@ -204,7 +204,7 @@ Future showAlertDialog(BuildContext context,
   final TextEditingController _titleFieldController = TextEditingController();
   final TextEditingController _textFieldController = TextEditingController();
   var _myProvider = Provider.of<NoteProvider>(context, listen: false);
-  final _themeProvider = Provider.of<ThemeProvider>(context);
+  final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
   TextEditingController voiceTitleController = TextEditingController(text: '');
   double SizeX = MediaQuery.of(context).size.height;
   double SizeY = MediaQuery.of(context).size.width;

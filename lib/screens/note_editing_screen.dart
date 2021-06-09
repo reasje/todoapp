@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
@@ -279,7 +280,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(35)),
-                                        color:_themeProvider.mainColor,
+                                        color: _themeProvider.mainColor,
                                       ),
                                       alignment: AlignmentDirectional.centerEnd,
                                       child: Icon(
@@ -295,6 +296,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                           .showSnackBar(uiKit.MySnackBar(
                                               uiKit.AppLocalizations.of(context)
                                                   .translate('undoImage'),
+                                                  'undoImage',
                                               true,
                                               context,
                                               index));
@@ -307,8 +309,8 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                         decoration: BoxDecoration(
                                           boxShadow: [
                                             BoxShadow(
-                                              color:
-                                                  _themeProvider.lightShadowColor,
+                                              color: _themeProvider
+                                                  .lightShadowColor,
                                               spreadRadius: 1.0,
                                               blurRadius: 1.0,
                                               offset: Offset(-1,
@@ -346,14 +348,19 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                             : Container()),
                                   );
                                 } else {
-                                  return Container(
+                                  return Shimmer.fromColors(
+                                    baseColor: _themeProvider.mainColor,
+                                    highlightColor: _themeProvider.shimmerColor,
+                                    child: Container(
                                       width: SizeX * 0.16,
                                       margin: EdgeInsets.symmetric(
                                           horizontal: SizeY * 0.03),
                                       decoration: BoxDecoration(
+                                        color: _themeProvider.mainColor,
                                         boxShadow: [
                                           BoxShadow(
-                                            color: _themeProvider.lightShadowColor,
+                                            color:
+                                                _themeProvider.lightShadowColor,
                                             spreadRadius: 1.0,
                                             blurRadius: 1.0,
                                             offset: Offset(-1,
@@ -368,12 +375,9 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                 4), // changes position of shadow
                                           ),
                                         ],
-                                        color: _themeProvider.mainColor,
-                                        // borderRadius:
-                                        //     BorderRadius.all(Radius.circular(SizeX * 0.3))
                                       ),
-                                      child: Center(
-                                          child: CircularProgressIndicator()));
+                                    ),
+                                  );
                                 }
                               });
                         }
@@ -597,6 +601,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                           .showSnackBar(uiKit.MySnackBar(
                                               uiKit.AppLocalizations.of(context)
                                                   .translate('undoVoice'),
+                                                  'undoVoice',
                                               true,
                                               context,
                                               index));
@@ -618,7 +623,8 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                                     -1), // changes position of shadow
                                               ),
                                               BoxShadow(
-                                                color: _themeProvider.shadowColor
+                                                color: _themeProvider
+                                                    .shadowColor
                                                     .withOpacity(0.17),
                                                 spreadRadius: 1.0,
                                                 blurRadius: 2.0,
@@ -797,7 +803,8 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                       decoration: BoxDecoration(
                                         boxShadow: [
                                           BoxShadow(
-                                            color: _themeProvider.lightShadowColor,
+                                            color:
+                                                _themeProvider.lightShadowColor,
                                             spreadRadius: 1.0,
                                             blurRadius: 1.0,
                                             offset: Offset(-1,

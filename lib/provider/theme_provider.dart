@@ -10,7 +10,7 @@ class ThemeProvider extends ChangeNotifier {
     initialColorsAndLan();
   }
   List<Color> noteTitleColor;
-
+  Color shimmerColor;
   Color mainColor;
   Color shadowColor;
   Color lightShadowColor;
@@ -43,6 +43,8 @@ class ThemeProvider extends ChangeNotifier {
   Color whiteMainColor = Color(0xffe6ebf2);
   Color blackMainColor = Color(0xff303234);
   Color whiteShadowColor = Colors.black;
+  Color whiteShimmer = Colors.grey.withOpacity(0.6);
+  Color blackShimmer = Colors.grey.withOpacity(0.5);
   Color blackShadowColor = Color(0xff000000).withOpacity(0.4);
   Color whiteLightShadowColor = Colors.white;
   Color blackLightShadowColor = Color(0xff494949).withOpacity(0.4);
@@ -137,6 +139,7 @@ class ThemeProvider extends ChangeNotifier {
     if (theme == 'white') {
       splashImage = 'assets/images/SplashScreenBlack.gif';
       noTaskImage = "assets/images/blacknotask.png";
+      shimmerColor = blackShimmer;
       mainColor = blackMainColor;
       shadowColor = blackShadowColor;
       lightShadowColor = blackLightShadowColor;
@@ -150,6 +153,7 @@ class ThemeProvider extends ChangeNotifier {
     } else {
       splashImage = 'assets/images/SplashScreenWhite.gif';
       noTaskImage = "assets/images/notask.png";
+      shimmerColor = whiteShimmer;
       mainColor = whiteMainColor;
       shadowColor = whiteShadowColor;
       lightShadowColor = whiteLightShadowColor;
@@ -162,6 +166,14 @@ class ThemeProvider extends ChangeNotifier {
       prefsBox.put('theme', 'white');
     }
     notifyListeners();
+  }
+
+  bool checkIsWhite(){
+    if (prefsBox.get('theme') == 'white') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   // Chnages the lan as soon as the user taps on lan button

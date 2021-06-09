@@ -5,6 +5,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/conn_provider.dart';
 
@@ -58,238 +59,203 @@ class _MyRorderableState extends State<MyRorderable> {
               builder: (context, LazyBox<Note> notes, _) {
                 List<int> keys = notes.keys.cast<int>().toList();
 
-                return FutureBuilder(
-                    future: _myProvider.updateListSize(keys, SizeX, SizeY),
-                    builder: (context, snapShot) {
-                      if (snapShot.hasData) {
-                        return Theme(
-                          data: Theme.of(context).copyWith(
-                            canvasColor: Colors.transparent,
-                            shadowColor: Colors.transparent,
-                          ),
-                          child: ScrollConfiguration(
-                            behavior: NoGlowBehaviour(),
-                            child: SingleChildScrollView(
-                              controller: _scrollController,
-                              child: Column(
-                                children: [
-                                  Column(
-                                    children: [
-                                      Directionality(
-                                        textDirection: TextDirection.ltr,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Container(
-                                                    padding: EdgeInsets.only(
-                                                        top: SizeX * 0.03,
-                                                        bottom: SizeX * 0.03,
-                                                        left: SizeX * 0.03),
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Text(
-                                                      uiKit.AppLocalizations.of(
-                                                              context)
-                                                          .translate(
-                                                              'notesApp'),
-                                                      style: TextStyle(
-                                                          color: _themeProvider
-                                                              .titleColor,
-                                                          fontSize:
-                                                              _themeProvider.isEn
-                                                                  ? SizeX *
-                                                                      SizeY *
-                                                                      0.00012
-                                                                  : SizeX *
-                                                                      SizeY *
-                                                                      0.0001),
-                                                    )),
-                                                Container(
-                                                  child: Icon(
-                                                    FontAwesome.dot_circle_o,
-                                                    size:
-                                                        SizeX * SizeY * 0.00005,
-                                                    color: _connState.is_conn
-                                                        ? Colors.green
-                                                        : Colors.red,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  padding: EdgeInsets.all(
-                                                      SizeX * 0.015),
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: uiKit.MyButton(
-                                                    sizePU: SizeX * 0.05,
-                                                    sizePD: SizeX * 0.06,
-                                                    iconSize:
-                                                        SizeX * SizeY * 0.00006,
-                                                    iconData:
-                                                        FontAwesome.download,
-                                                    id: 'download',
-                                                  ),
-                                                ),
-                                                Container(
-                                                  padding: EdgeInsets.all(
-                                                      SizeX * 0.015),
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: uiKit.MyButton(
-                                                    sizePU: SizeX * 0.05,
-                                                    sizePD: SizeX * 0.06,
-                                                    iconSize:
-                                                        SizeX * SizeY * 0.00006,
-                                                    iconData:
-                                                        FontAwesome.upload,
-                                                    id: 'upload',
-                                                  ),
-                                                ),
-                                                Container(
-                                                  padding: EdgeInsets.all(
-                                                      SizeX * 0.015),
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: uiKit.MyButton(
-                                                    sizePU: SizeX * 0.05,
-                                                    sizePD: SizeX * 0.06,
-                                                    iconSize:
-                                                        SizeX * SizeY * 0.00006,
-                                                    iconData:
-                                                        FontAwesome.google,
-                                                    id: 'google',
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Container(
-                                              padding:
-                                                  EdgeInsets.all(SizeX * 0.015),
-                                              alignment: Alignment.centerLeft,
-                                              child: uiKit.MyButton(
-                                                sizePU: SizeX * 0.05,
-                                                sizePD: SizeX * 0.06,
-                                                iconSize:
-                                                    SizeX * SizeY * 0.00006,
-                                                iconData: FontAwesome.code,
-                                                id: 'coder',
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.all(SizeX * 0.025),
-                                        child: Directionality(
-                                          textDirection: TextDirection.ltr,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              uiKit.MyButton(
-                                                sizePU: SizeX * 0.07,
-                                                sizePD: SizeX * 0.08,
-                                                iconSize:
-                                                    SizeX * SizeY * 0.0001,
-                                                iconData: FontAwesome.language,
-                                                id: 'lan',
-                                              ),
-                                              uiKit.MyButton(
-                                                sizePU: SizeX * 0.07,
-                                                sizePD: SizeX * 0.08,
-                                                iconSize:
-                                                    SizeX * SizeY * 0.0001,
-                                                iconData: FontAwesome.plus,
-                                                id: 'new',
-                                              ),
-                                              uiKit.MyButton(
-                                                sizePU: SizeX * 0.07,
-                                                sizePD: SizeX * 0.08,
-                                                iconSize:
-                                                    SizeX * SizeY * 0.0001,
-                                                iconData:
-                                                    FontAwesome.lightbulb_o,
-                                                id: 'lamp',
-                                              ),
-                                            ],
+                return Theme(
+                  data: Theme.of(context).copyWith(
+                    canvasColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                  ),
+                  child: ScrollConfiguration(
+                    behavior: NoGlowBehaviour(),
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Column(
+                        children: [
+                          Column(
+                            children: [
+                              Directionality(
+                                textDirection: TextDirection.ltr,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                            padding: EdgeInsets.only(
+                                                top: SizeX * 0.03,
+                                                bottom: SizeX * 0.03,
+                                                left: SizeX * 0.03),
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              uiKit.AppLocalizations.of(context)
+                                                  .translate('notesApp'),
+                                              style: TextStyle(
+                                                  color:
+                                                      _themeProvider.titleColor,
+                                                  fontSize: _themeProvider.isEn
+                                                      ? SizeX * SizeY * 0.00012
+                                                      : SizeX * SizeY * 0.0001),
+                                            )),
+                                        Container(
+                                          child: Icon(
+                                            FontAwesome.dot_circle_o,
+                                            size: SizeX * SizeY * 0.00005,
+                                            color: _connState.is_conn
+                                                ? Colors.green
+                                                : Colors.red,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          padding:
+                                              EdgeInsets.all(SizeX * 0.015),
+                                          alignment: Alignment.centerLeft,
+                                          child: uiKit.MyButton(
+                                            sizePU: SizeX * 0.05,
+                                            sizePD: SizeX * 0.06,
+                                            iconSize: SizeX * SizeY * 0.00006,
+                                            iconData: FontAwesome.download,
+                                            id: 'download',
                                           ),
                                         ),
+                                        Container(
+                                          padding:
+                                              EdgeInsets.all(SizeX * 0.015),
+                                          alignment: Alignment.centerLeft,
+                                          child: uiKit.MyButton(
+                                            sizePU: SizeX * 0.05,
+                                            sizePD: SizeX * 0.06,
+                                            iconSize: SizeX * SizeY * 0.00006,
+                                            iconData: FontAwesome.upload,
+                                            id: 'upload',
+                                          ),
+                                        ),
+                                        Container(
+                                          padding:
+                                              EdgeInsets.all(SizeX * 0.015),
+                                          alignment: Alignment.centerLeft,
+                                          child: uiKit.MyButton(
+                                            sizePU: SizeX * 0.05,
+                                            sizePD: SizeX * 0.06,
+                                            iconSize: SizeX * SizeY * 0.00006,
+                                            iconData: FontAwesome.google,
+                                            id: 'google',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(SizeX * 0.015),
+                                      alignment: Alignment.centerLeft,
+                                      child: uiKit.MyButton(
+                                        sizePU: SizeX * 0.05,
+                                        sizePD: SizeX * 0.06,
+                                        iconSize: SizeX * SizeY * 0.00006,
+                                        iconData: FontAwesome.code,
+                                        id: 'coder',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.all(SizeX * 0.025),
+                                child: Directionality(
+                                  textDirection: TextDirection.ltr,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      uiKit.MyButton(
+                                        sizePU: SizeX * 0.07,
+                                        sizePD: SizeX * 0.08,
+                                        iconSize: SizeX * SizeY * 0.0001,
+                                        iconData: FontAwesome.language,
+                                        id: 'lan',
+                                      ),
+                                      uiKit.MyButton(
+                                        sizePU: SizeX * 0.07,
+                                        sizePD: SizeX * 0.08,
+                                        iconSize: SizeX * SizeY * 0.0001,
+                                        iconData: FontAwesome.plus,
+                                        id: 'new',
+                                      ),
+                                      uiKit.MyButton(
+                                        sizePU: SizeX * 0.07,
+                                        sizePD: SizeX * 0.08,
+                                        iconSize: SizeX * SizeY * 0.0001,
+                                        iconData: FontAwesome.lightbulb_o,
+                                        id: 'lamp',
                                       ),
                                     ],
                                   ),
-                                  if (noteBox.isEmpty)
-                                    Container(
-                                      height: SizeX * 0.7,
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            height: SizeX * 0.45,
-                                            width: SizeY * 0.8,
-                                            child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: SizeX * 0.019),
-                                              child: Container(
-                                                height: SizeX * 0.45,
-                                                width: SizeY,
-                                                child: Image.asset(
-                                                  _themeProvider.noTaskImage,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                              child: Container(
-                                            //padding: EdgeInsets.only(bottom: SizeX * 0.2),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                Text(
-                                                  uiKit.AppLocalizations.of(
-                                                          context)
-                                                      .translate('NoNotesyet'),
-                                                  style: TextStyle(
-                                                      color:
-                                                          _themeProvider.textColor,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontSize: SizeX *
-                                                          SizeY *
-                                                          0.00008),
-                                                ),
-                                                Text(
-                                                  uiKit.AppLocalizations.of(
-                                                          context)
-                                                      .translate(
-                                                          'addNewNotePlease'),
-                                                  style: TextStyle(
-                                                      color:
-                                                          _themeProvider.textColor,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontSize: _themeProvider.isEn
-                                                          ? SizeX *
-                                                              SizeY *
-                                                              0.00008
-                                                          : SizeX *
-                                                              SizeY *
-                                                              0.00006),
-                                                ),
-                                              ],
-                                            ),
-                                          ))
-                                        ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          if (noteBox.isEmpty)
+                            Container(
+                              height: SizeX * 0.7,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: SizeX * 0.45,
+                                    width: SizeY * 0.8,
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.only(top: SizeX * 0.019),
+                                      child: Container(
+                                        height: SizeX * 0.45,
+                                        width: SizeY,
+                                        child: Image.asset(
+                                          _themeProvider.noTaskImage,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
-                                    )
-                                  else
-                                    Container(
+                                    ),
+                                  ),
+                                  Expanded(
+                                      child: Container(
+                                    //padding: EdgeInsets.only(bottom: SizeX * 0.2),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Text(
+                                          uiKit.AppLocalizations.of(context)
+                                              .translate('NoNotesyet'),
+                                          style: TextStyle(
+                                              color: _themeProvider.textColor,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize:
+                                                  SizeX * SizeY * 0.00008),
+                                        ),
+                                        Text(
+                                          uiKit.AppLocalizations.of(context)
+                                              .translate('addNewNotePlease'),
+                                          style: TextStyle(
+                                              color: _themeProvider.textColor,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: _themeProvider.isEn
+                                                  ? SizeX * SizeY * 0.00008
+                                                  : SizeX * SizeY * 0.00006),
+                                        ),
+                                      ],
+                                    ),
+                                  ))
+                                ],
+                              ),
+                            )
+                          else
+                            FutureBuilder(
+                                future: _myProvider.updateListSize(
+                                    keys, SizeX, SizeY),
+                                builder: (context, snapShot) {
+                                  if (snapShot.hasData) {
+                                    return Container(
                                       height: _myProvider.listview_size + 400.0,
                                       width: SizeY,
                                       child: ScrollConfiguration(
@@ -318,8 +284,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                           BorderRadius.all(
                                                               Radius.circular(
                                                                   35)),
-                                                      color:
-                                                          _themeProvider.mainColor,
+                                                      color: _themeProvider
+                                                          .mainColor,
                                                     ),
                                                     alignment:
                                                         AlignmentDirectional
@@ -329,8 +295,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                       size: SizeX *
                                                           SizeY *
                                                           0.0002,
-                                                      color:
-                                                          _themeProvider.textColor,
+                                                      color: _themeProvider
+                                                          .textColor,
                                                     ),
                                                   ),
                                                   onDismissed:
@@ -344,7 +310,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                         bnote.time,
                                                         bnote.color,
                                                         bnote.leftTime,
-                                                        bnote.imageList ,null);
+                                                        bnote.imageList,
+                                                        null);
                                                     notes.delete(keys[index]);
                                                     ScaffoldMessenger.of(
                                                             context)
@@ -357,6 +324,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                               context)
                                                           .translate(
                                                               'undoNote'),
+                                                              'undoNote',
                                                       true,
                                                       context,
                                                       index,
@@ -447,7 +415,9 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                     FutureBuilder(
                                                                         future: _myProvider.getNoteListView(
                                                                             keys,
-                                                                            index),
+                                                                            index,
+                                                                            SizeX,
+                                                                            SizeY),
                                                                         builder: (BuildContext
                                                                                 context,
                                                                             AsyncSnapshot
@@ -479,7 +449,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                                               Navigator.push(context, SliderTransition(uiKit.MyTimer(SizeX: SizeX, SizeY: SizeY, noteBox: noteBox)));
                                                                                             } else {
                                                                                               ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                                                                              ScaffoldMessenger.of(context).showSnackBar(uiKit.MySnackBar(uiKit.AppLocalizations.of(context).translate('timerOn'), false, context));
+                                                                                              ScaffoldMessenger.of(context).showSnackBar(uiKit.MySnackBar(uiKit.AppLocalizations.of(context).translate('timerOn'),'timerOn', false, context));
                                                                                             }
                                                                                           }
                                                                                         },
@@ -496,7 +466,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                                                   // changes position of shadow
                                                                                                 ),
                                                                                                 BoxShadow(
-                                                                                                  color:_themeProvider.shadowColor.withOpacity(0.14),
+                                                                                                  color: _themeProvider.shadowColor.withOpacity(0.14),
                                                                                                   offset: Offset(-1, -1),
                                                                                                 ),
                                                                                                 BoxShadow(
@@ -656,7 +626,44 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                               ],
                                                                             );
                                                                           } else {
-                                                                            return Container(child: Center(child: CircularProgressIndicator()));
+                                                                            return Container(
+                                                                                height: SizeX * 0.1,
+                                                                                child: Container(
+                                                                                    padding: EdgeInsets.all(4),
+                                                                                    child: Container(
+                                                                                      decoration: BoxDecoration(
+                                                                                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                                                                                        boxShadow: [
+                                                                                          BoxShadow(
+                                                                                            color: _themeProvider.lightShadowColor,
+                                                                                            offset: Offset(2, 2),
+                                                                                            blurRadius: 0.0,
+                                                                                            // changes position of shadow
+                                                                                          ),
+                                                                                          BoxShadow(
+                                                                                            color: _themeProvider.shadowColor.withOpacity(0.14),
+                                                                                            offset: Offset(-1, -1),
+                                                                                          ),
+                                                                                          BoxShadow(
+                                                                                            color: _themeProvider.mainColor,
+                                                                                            offset: Offset(5, 8),
+                                                                                            spreadRadius: -0.5,
+                                                                                            blurRadius: 14.0,
+                                                                                            // changes position of shadow
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                      child: Shimmer.fromColors(
+                                                                                        baseColor: _themeProvider.shimmerColor,
+                                                                                        highlightColor: Colors.white,
+                                                                                        child: Container(
+                                                                                            margin: EdgeInsets.all(10),
+                                                                                            decoration: BoxDecoration(
+                                                                                              color: _themeProvider.shimmerColor,
+                                                                                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                                                                                            )),
+                                                                                      ),
+                                                                                    )));
                                                                           }
                                                                         })),
                                                           ),
@@ -707,17 +714,19 @@ class _MyRorderableState extends State<MyRorderable> {
                                           ),
                                         ),
                                       ),
-                                    ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      } else {
-                        return Container(
-                            child: Center(child: CircularProgressIndicator()));
-                      }
-                    });
+                                    );
+                                  } else {
+                                    return Container(
+                                        child: Center(
+                                            child:
+                                                CircularProgressIndicator()));
+                                  }
+                                })
+                        ],
+                      ),
+                    ),
+                  ),
+                );
               })),
     );
   }

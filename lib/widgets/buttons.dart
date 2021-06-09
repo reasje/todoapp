@@ -82,7 +82,7 @@ class _MyButtonState extends State<MyButton> {
           switch (widget.id) {
             case 'dogedonate':
               copyDogeAdress();
-              _myProvider.showDogeCopied();
+              _myProvider.showDogeCopied(context);
               break;
             case 'home':
               Navigator.pushReplacement(

@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 
 Widget MySnackBar(
   String text,
+  String id,
   bool isAction, [
   BuildContext context,
   int index,
@@ -36,8 +37,9 @@ Widget MySnackBar(
   List<int> keys,
   bool isWhite,
 ]) {
-  final _themeProvider = Provider.of<ThemeProvider>(context);
-  final _myProvider = Provider.of<NoteProvider>(context);
+  final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+  final _myProvider = Provider.of<NoteProvider>(context, listen: false);
+  isWhite = _themeProvider.checkIsWhite();
   return SnackBar(
     elevation: 0,
     backgroundColor:
@@ -46,8 +48,9 @@ Widget MySnackBar(
     content: Text(
       text,
       style: TextStyle(
-        color:
-            isWhite ? _themeProvider.blackTitleColor : _themeProvider.whiteTitleColor,
+        color: isWhite
+            ? _themeProvider.blackTitleColor
+            : _themeProvider.whiteTitleColor,
       ),
     ),
     action: isAction
@@ -55,7 +58,10 @@ Widget MySnackBar(
             textColor: _themeProvider.swachColor,
             label: uiKit.AppLocalizations.of(context).translate('undo'),
             onPressed: () {
-              if (noteBox==null) {
+              if  (id == 'undoVoice'){
+                _myProvider.voiceRecover(index);
+                
+              } else if (noteBox == null) {
                 _myProvider.imageRecover(index);
               } else {
                 noteBox.put(keys[index], note);

@@ -43,35 +43,16 @@ class NoteProvider extends ChangeNotifier {
       checkDayChange();
     });
   }
-  ////////////////////////         ** LAN , COLOR  AND THEMING ***         ////////////////////////
   // This varrible is used to controll the listview size for the listview
   // to not to be short
   double listview_size;
   // It is used to store
   // the theme status as string
   final prefsBox = Hive.box<String>(prefsBoxName);
-  BuildContext donateContext;
+  //BuildContext donateContext;
   // Hive box for notes
   final noteBox = Hive.lazyBox<Note>(noteBoxName);
-  // TODO delete if does not effect app performance
-  // List<int> durationKeys;
-  // int duartionIndex;
-  // void saveDuration(List<int> keys, int index, int duration) async {
-  //   var bnote = await noteBox.get(keys[index]);
-  //   var ntitle = bnote.title;
-  //   var nttext = bnote.text;
-  //   var nttime = bnote.time;
-  //   var ntlefttime = duration;
-  //   var ntcolor = bnote.color;
-  //   var ntchecked = bnote.isChecked;
-  //   var ntimageList = bnote.imageList;
-  //   var ntvoicewList = bnote.voiceList;
-  //   Note note = Note(ntitle, nttext, ntchecked, nttime, ntcolor, ntlefttime,
-  //       ntimageList, ntvoicewList);
-  //   noteBox.put(keys[index], note);
-  // }
-
-  //////////////////////////////////// CHECKBOX CHECK PART///////////////////////////////////////////////////
+  //////////////////////////////////// *** CHECKBOX CHECK PART *** /////////////////////////////////////
   Future<void> checkDayChange() async {
     String date = prefsBox.get('date');
     var now = DateTime.now();
@@ -108,6 +89,7 @@ class NoteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  //////////////////////////////////// *** CHECKBOX CHECK PART *** /////////////////////////////////////
   final TextEditingController title = TextEditingController(text: '');
   final TextEditingController text = TextEditingController(text: '');
   // handeling changes to text textfield
@@ -124,10 +106,8 @@ class NoteProvider extends ChangeNotifier {
   final FocusNode fTitle = FocusNode();
   final FocusNode ftext = FocusNode();
   // this is used for showing the SnackBar
-  BuildContext myContext;
+  BuildContext noteContext;
   // the index of the main stack and the floating stack
-  // TODO Delete this int stack_index = 0;
-  int floating_index = 0;
   // to press the back button twice for getting back to the notes list ! without saving
   int notSaving = 0;
   // the chnage and edit controller
@@ -145,7 +125,7 @@ class NoteProvider extends ChangeNotifier {
   // note color is used for reloading the color selection selected
   Color noteColor;
   int indexOfSelectedColor;
-  // The image part
+  //////////////////////////////////// *** IMAGELIST PART *** /////////////////////////////////////
   // list of images that will be loaded on user tap
   List<Uint8List> imageList = [];
   List<Uint8List> imageListSnapshot = [];
@@ -181,11 +161,12 @@ class NoteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Note> getNoteListView(List<int> keys, int index) async {
+  Future<Note> getNoteListView(
+      List<int> keys, int index, double SizeX, double SizeY) async {
     var note = await noteBox.get(keys[index]);
     var bnote = Note(note.title, note.text, note.isChecked, note.time,
         note.color, note.leftTime, null, null);
-
+    updateListSize(keys, SizeX, SizeY);
     return bnote;
   }
 
@@ -368,7 +349,10 @@ class NoteProvider extends ChangeNotifier {
   void voiceDissmissed(index) {
     dismissedVoice = voiceList.removeAt(index);
   }
-
+  void voiceRecover(index) {
+    voiceList.insert(index, dismissedVoice);
+    notifyListeners();
+  }
   // This is used inside of Note textfield to control and save the changes for undo property
   void listenerActivated(newValue) {
     // This Line is used for prevent unusual behavior of the textfield
@@ -487,7 +471,7 @@ class NoteProvider extends ChangeNotifier {
 
   // new Note clieked
   Future<void> newNoteClicked(BuildContext context) {
-    myContext = context;
+    noteContext = context;
     // When the add icon is tapped this function will be executed and
     // prepare the provider for the new Note
     clearControllers();
@@ -498,7 +482,7 @@ class NoteProvider extends ChangeNotifier {
 
   // used indie list view after an elemt of listview is tapped
   void loadNote(BuildContext context, [List<int> keys, int index]) async {
-    myContext = context;
+    noteContext = context;
     providerKeys = keys;
     providerIndex = index;
     clearControllers();
@@ -529,7 +513,7 @@ class NoteProvider extends ChangeNotifier {
 
   // executed when the user tapped on the check floating button (done icon FAB)
   void doneClicked(BuildContext context) async {
-    myContext = context;
+    noteContext = context;
     // checking whether your going to update the note or add new one
     // that is done by chekcing the newNote true or false
     if (newNote) {
@@ -544,13 +528,14 @@ class NoteProvider extends ChangeNotifier {
             imageList, voiceList);
         noteBox.add(note);
         changes.clearHistory();
-        Navigator.pop(myContext);
+        Navigator.pop(noteContext);
       } else {
-        ScaffoldMessenger.of(myContext).showSnackBar(uiKit.MySnackBar(
+        ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
           // TODO making better the emptyFieldAlert to title and text must not be null
-          uiKit.AppLocalizations.of(myContext).translate('emptyFieldsAlert'),
+          uiKit.AppLocalizations.of(noteContext).translate('emptyFieldsAlert'),
+          'emptyFieldsAlert',
           false,
-          myContext,
+          noteContext,
         ));
       }
       // TODO find out why this is here
@@ -572,11 +557,11 @@ class NoteProvider extends ChangeNotifier {
             voiceList);
         noteBox.put(providerKeys[providerIndex], note);
         changes.clearHistory();
-        Navigator.pop(myContext);
+        Navigator.pop(noteContext);
       } else {
         noteBox.delete(providerKeys[providerIndex]);
         changes.clearHistory();
-        Navigator.pop(myContext);
+        Navigator.pop(noteContext);
       }
     }
   }
@@ -585,31 +570,34 @@ class NoteProvider extends ChangeNotifier {
   // this fucntion will be executed checking for changes
   // if the changes has been made it is going to show an alert
   void cancelClicked(BuildContext context) {
-    myContext = context;
+    noteContext = context;
     if (isEdited()) {
       if (text.text.isNotEmpty || title.text.isNotEmpty) {
         if (notSaving == 0) {
-          ScaffoldMessenger.of(myContext).clearSnackBars();
-          ScaffoldMessenger.of(myContext).showSnackBar(uiKit.MySnackBar(
-              uiKit.AppLocalizations.of(myContext).translate('notSavingAlert'),
+          ScaffoldMessenger.of(noteContext).clearSnackBars();
+          ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
+              uiKit.AppLocalizations.of(noteContext)
+                  .translate('notSavingAlert'),
+                  'notSavingAlert',
               false,
-              myContext));
+              noteContext));
           notSaving = notSaving + 1;
           Future.delayed(Duration(seconds: 10), () {
             notSaving = 0;
           });
         } else {
           notSaving = 0;
-          Navigator.pop(myContext);
+          Navigator.pop(noteContext);
           changes.clearHistory();
         }
       } else {
-        ScaffoldMessenger.of(myContext).clearSnackBars();
-        ScaffoldMessenger.of(myContext).showSnackBar(uiKit.MySnackBar(
-            uiKit.AppLocalizations.of(myContext).translate('willingToDelete'),
+        ScaffoldMessenger.of(noteContext).clearSnackBars();
+        ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
+            uiKit.AppLocalizations.of(noteContext).translate('willingToDelete'),
+            'willingToDelete',
             false,
-            myContext));
-        Navigator.pop(myContext);
+            noteContext));
+        Navigator.pop(noteContext);
       }
     } else {
       // making all the changes that has been save for the
@@ -617,7 +605,7 @@ class NoteProvider extends ChangeNotifier {
       // causes !
       changes.clearHistory();
       // changing the stacks and getting back to listview Screen !
-      Navigator.pop(myContext);
+      Navigator.pop(noteContext);
     }
   }
 
@@ -629,19 +617,20 @@ class NoteProvider extends ChangeNotifier {
     // notifyListeners();
   }
 
-  showDogeCopied() {
-    ScaffoldMessenger.of(myContext).clearSnackBars();
-    ScaffoldMessenger.of(donateContext).removeCurrentSnackBar();
-    ScaffoldMessenger.of(donateContext).showSnackBar(uiKit.MySnackBar(
-        uiKit.AppLocalizations.of(donateContext).translate('dogeAddressCopied'),
+  showDogeCopied(BuildContext context) {
+    noteContext = context;
+    ScaffoldMessenger.of(noteContext).clearSnackBars();
+    ScaffoldMessenger.of(noteContext).removeCurrentSnackBar();
+    ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
+        uiKit.AppLocalizations.of(noteContext).translate('dogeAddressCopied'),
+        'dogeAddressCopied',
         false,
-        donateContext));
+        noteContext));
   }
 
   Future<bool> updateListSize(List<int> keys, SizeX, SizeY) async {
     int with_timer = 0;
     int without_timer = 0;
-
     for (int i = 0; i < keys.length; i++) {
       var bnote = await noteBox.get(keys[i]);
       if (bnote.time == 0) {
