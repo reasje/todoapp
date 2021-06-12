@@ -593,7 +593,7 @@ class NoteProvider extends ChangeNotifier {
         int leftTime = noteTime;
         Note note = Note(noteTitle, noteText, false, noteTime, 0, leftTime,
             imageList, voiceList);
-        noteBox.add(note);
+        await noteBox.add(note);
         changes.clearHistory();
         Navigator.pop(noteContext);
       } else {
@@ -622,11 +622,11 @@ class NoteProvider extends ChangeNotifier {
             time_duration.inSeconds,
             imageList,
             voiceList);
-        noteBox.put(providerKeys[providerIndex], note);
+        await noteBox.put(providerKeys[providerIndex], note);
         changes.clearHistory();
         Navigator.pop(noteContext);
       } else {
-        noteBox.delete(providerKeys[providerIndex]);
+        await noteBox.delete(providerKeys[providerIndex]);
         changes.clearHistory();
         Navigator.pop(noteContext);
       }

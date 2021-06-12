@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:googleapis/mybusinesslodging/v1.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +10,7 @@ import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/googleauthclient_model.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:google_sign_in/google_sign_in.dart' as signIn;
+import 'package:todoapp/model/voice_model.dart';
 import 'package:todoapp/provider/conn_provider.dart';
 import 'package:todoapp/provider/signin_provider.dart';
 import 'dart:convert';
@@ -21,10 +25,16 @@ String file_name = "NotesAppData";
 Future<String> upload(
     drive.DriveApi driveApi, drive.File driveFile, LazyBox<Note> noteBox,
     [String file_id]) async {
-  // some lists are used to add 
-  List<int> my_intlist = [];
+  await EasyLoading.show(
+    dismissOnTap: false,
+  );
+  // String list is the list that the jsons of each note as a
+  // string will be saved in it
   List<String> my_stringlist = [];
-  List<List<int>> list = [];
+  // List<List<int>> list = [];
+  // int list is the list hloding the code characters
+  // of the String list
+  List<int> my_intlist = [];
   if (file_id != null) {
     driveApi.files.delete(file_id);
     driveApi.files.emptyTrash();
@@ -45,12 +55,26 @@ Future<String> upload(
     text = utf8.fuse(base64).encode(text);
     // time is type int and is an exception
     var time = element.time;
+    List<String> imageList = [];
+    for (int i = 0; i < element.imageList.length; i++) {
+      imageList.add(base64Encode(element.imageList[i]));
+    }
+    List<Voice> voiceList = List.from(element.voiceList);
+    List<String> voiceTitleList = [];
+    List<String> voiceVoiceList = [];
+    for (int i = 0; i < voiceList.length; i++) {
+      voiceTitleList.add(utf8.fuse(base64).encode(voiceList[i].title));
+      voiceVoiceList.add(base64Encode(voiceList[i].voice));
+    }
 
     /// converting this to json format string
     Map<String, dynamic> toJson() => {
           "title": title,
           "text": text,
           "time": time,
+          "imageList": imageList,
+          "voiceTitleList": voiceTitleList,
+          "voiceVoiceList": voiceVoiceList,
         };
     // completing all the string json format to real json
     var my_json = toJson();
@@ -58,8 +82,7 @@ Future<String> upload(
     my_stringlist.add(json.encode(my_json));
   }
   my_intlist = my_stringlist.toString().codeUnits;
-  list.add(my_intlist);
-  print(noteBox.length);
+  // list.add(my_intlist);
   final Stream<List<int>> mediaStream =
       Future.value(my_intlist).asStream().asBroadcastStream();
   var media = new drive.Media(mediaStream, my_intlist.length);
@@ -67,25 +90,50 @@ Future<String> upload(
   driveFile.mimeType = 'text';
   final result = await driveApi.files.create(driveFile, uploadMedia: media);
   String string = "Upload result: $result";
-  print("Upload result: $result");
+  await EasyLoading.dismiss();
   return string;
 }
 
 Future<void> download(drive.DriveApi driveApi, drive.File driveFile,
     LazyBox<Note> noteBox, String file_id) async {
+  await EasyLoading.show(
+    dismissOnTap: false,
+  );
+  String downloaded = "";
   drive.Media media = await driveApi.files
       .get(file_id, downloadOptions: drive.DownloadOptions.fullMedia);
-  media.stream.listen((event) {
-    String string = String.fromCharCodes(event);
-    var list = json.decode(string);
+  var sub = media.stream.listen((event) async {
+    downloaded = downloaded + String.fromCharCodes(event);
+    print(downloaded);
+  });
+  sub.onDone(() async {
+    sub.cancel();
+    var list = json.decode(downloaded);
     for (int i = 0; i < list.length; i++) {
       var title = list[i]['title'];
       title = utf8.fuse(base64).decode(title);
       var text = list[i]['text'];
       text = utf8.fuse(base64).decode(text);
       int time = list[i]['time'];
-      noteBox.add(Note(title, text, false, time, 0, time, null , null));
+      print(list[i]['imageList']);
+      var imageListDownloaded = List.from(list[i]['imageList']);
+      List<Uint8List> imageList = [];
+      for (int i = 0; i < imageListDownloaded.length; i++) {
+        imageList.add(base64.decode(imageListDownloaded[i]));
+      }
+      List<Voice> voiceList = [];
+      List<String> voiceTitleList = List.from(list[i]['voiceTitleList']);
+      List<String> voiceVoiceListDownloaded =
+          List.from(list[i]['voiceVoiceList']);
+      for (int i = 0; i < voiceTitleList.length; i++) {
+        Voice voice = Voice(utf8.fuse(base64).decode(voiceTitleList[i]),
+            base64.decode(voiceVoiceListDownloaded[i]));
+        voiceList.add(voice);
+      }
+      await noteBox
+          .add(Note(title, text, false, time, 0, time, imageList, voiceList));
     }
+    await EasyLoading.dismiss();
   });
 }
 

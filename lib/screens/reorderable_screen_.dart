@@ -42,7 +42,6 @@ class _MyRorderableState extends State<MyRorderable> {
     LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: _themeProvider.mainColor,

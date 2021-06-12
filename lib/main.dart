@@ -54,7 +54,7 @@ void main() async {
   print(document.uri);
   // Giving the path of the data base to the Hive
   Hive.init(document.path);
-    // registering the adapter
+  // registering the adapter
   Hive.registerAdapter(VoiceAdapter());
   // registering the adapter
   Hive.registerAdapter(NoteAdapter());
@@ -76,25 +76,24 @@ void main() async {
   ]).then((_) {
     runApp(MyApp());
   });
-  // configLoading();
+  configLoading();
   //await AndroidAlarmManager.periodic(const Duration(seconds: 1), 1, printHello, exact: true, wakeup: true);
 }
 
-// void configLoading() {
-//   EasyLoading.instance
-//     ..displayDuration = const Duration(milliseconds: 2000)
-//     ..indicatorType = EasyLoadingIndicatorType.fadingCircle
-//     ..loadingStyle = EasyLoadingStyle.dark
-//     ..indicatorSize = 45.0
-//     ..radius = 10.0
-//     ..progressColor = Colors.yellow
-//     ..backgroundColor = Colors.green
-//     ..indicatorColor = Colors.yellow
-//     ..textColor = Colors.yellow
-//     ..maskColor = Colors.blue.withOpacity(0.5)
-//     ..userInteractions = true
-//     ..customAnimation = CustomAnimation();
-// }
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.yellow
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.yellow
+    ..textColor = Colors.yellow
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = false;
+}
 
 class MyApp extends StatefulWidget {
   MyApp({Key key}) : super(key: key);
@@ -154,8 +153,10 @@ class _MyAppState extends State<MyApp> {
               debugShowCheckedModeBanner: false,
               theme: ThemeData(
                   visualDensity: VisualDensity.adaptivePlatformDensity,
-                  fontFamily: _themeProvider.isEn ? "Ubuntu Condensed" : "Dubai"),
+                  fontFamily:
+                      _themeProvider.isEn ? "Ubuntu Condensed" : "Dubai"),
               home: MySplashScreen(),
+              builder: EasyLoading.init(),
             );
           },
         ));
