@@ -53,6 +53,7 @@ class TimerState extends ChangeNotifier {
       target = now.add(duration);
       leftTime = leftTime - 1;
       timer = Timer.periodic(Duration(seconds: 1), (timer) async {
+        var bnote = await noteBox.get(keys[index]);
         int leftTime = bnote.leftTime;
         print('Left Time : ${leftTime}');
         leftTime = leftTime - 1;
@@ -69,7 +70,7 @@ class TimerState extends ChangeNotifier {
           var ntlefttime = leftTime;
           Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
               ntlefttime, null, null);
-          noteBox.put(keys[index], note);
+          await noteBox.put(keys[index], note);
           isRunning[index] = true;
           isOver = true;
           // Future.microtask(() {
@@ -90,7 +91,7 @@ class TimerState extends ChangeNotifier {
           var ntlefttime = nttime;
           Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
               ntlefttime, null, null);
-          noteBox.put(keys[index], note);
+          await noteBox.put(keys[index], note);
           isRunning[index] = true;
           notifyListeners();
         } else {
@@ -103,9 +104,11 @@ class TimerState extends ChangeNotifier {
           var ntisChecked = bnote.isChecked;
           var ntcolor = bnote.color;
           var ntlefttime = leftTime;
+          var ntimages = bnote.imageList;
+          var ntvoices = bnote.voiceList;
           Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
-              ntlefttime, null, null);
-          noteBox.put(keys[index], note);
+              ntlefttime, ntimages, ntvoices);
+          await noteBox.put(keys[index], note);
           isRunning[index] = true;
           notifyListeners();
         }
@@ -125,6 +128,7 @@ class TimerState extends ChangeNotifier {
     var ntisChecked = bnote.isChecked;
     var ntcolor = bnote.color;
     var ntimages = bnote.imageList;
+    var ntvoices = bnote.voiceList;
     var ntlefttime;
     if (leftTime >= 0) {
       ntlefttime = 0;
@@ -149,8 +153,8 @@ class TimerState extends ChangeNotifier {
       ntlefttime = leftTime.abs();
     }
     Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime,
-        ntimages, null);
-    noteBox.put(keys[index], note);
+        ntimages, ntvoices);
+    await noteBox.put(keys[index], note);
     if (_turnOn) {
       startTimer();
     }
@@ -175,10 +179,11 @@ class TimerState extends ChangeNotifier {
     var ntisChecked = bnote.isChecked;
     var ntcolor = bnote.color;
     var ntimages = bnote.imageList;
+    var ntvoices = bnote.voiceList;
     var ntlefttime = nttime;
     Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime,
-        ntimages, null);
-    noteBox.put(keys[index], note);
+        ntimages, ntvoices);
+    await noteBox.put(keys[index], note);
     stopTimer();
   }
 
@@ -187,24 +192,26 @@ class TimerState extends ChangeNotifier {
     this.keys = keys;
     this.index = index;
     this.my_context = context;
-        if (bnote.imageList?.isNotEmpty  ?? false ) {
+    if (bnote.imageList?.isNotEmpty ?? false) {
       imageList = bnote.imageList;
     }
     if (bnote.imageList?.isNotEmpty ?? false) {
       voiceList = bnote.voiceList;
     }
-    title = uiKit.AppLocalizations.of(context).translate('notesapp');
-    text = uiKit.AppLocalizations.of(context).translate('taskOver');
+    title = uiKit.AppLocalizations.of(my_context).translate('notesapp');
+    text = uiKit.AppLocalizations.of(my_context).translate('taskOver');
     leftTime = bnote.leftTime;
   }
-  Future<List<Uint8List>> getImageList() async {
-    //myContext = context;
-    return imageList;
-  }
-    Future<List<Voice>> getVoiceList() async {
-    //myContext = context;
-    return voiceList;
-  }
+
+  // Used when there was a timer screen
+  // Future<List<Uint8List>> getImageList() async {
+  //   //myContext = context;
+  //   return imageList;
+  // }
+  //   Future<List<Voice>> getVoiceList() async {
+  //   //myContext = context;
+  //   return voiceList;
+  // }
   Future<void> startAlarm() async {
     Future.delayed(Duration(seconds: 0), () async {
       // var scheduledNotificationDateTime =
