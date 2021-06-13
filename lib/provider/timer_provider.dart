@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'package:android_alarm_manager/android_alarm_manager.dart';
+import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/model/note_model.dart';
+import 'package:todoapp/model/voice_model.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
@@ -30,6 +31,8 @@ class TimerState extends ChangeNotifier {
   String title = "";
   String text = "";
   var target;
+  List<Voice> voiceList = [];
+  List<Uint8List> imageList = [];
   final noteBox = Hive.lazyBox<Note>(noteBoxName);
   void startTimer() async {
     if (timer == null || !timer?.isActive) {
@@ -48,7 +51,6 @@ class TimerState extends ChangeNotifier {
       Duration duration =
           Duration(hours: hour, minutes: minute, seconds: second);
       target = now.add(duration);
-      await AndroidAlarmManager.oneShotAt(target, 0, startAlarm);
       leftTime = leftTime - 1;
       timer = Timer.periodic(Duration(seconds: 1), (timer) async {
         int leftTime = bnote.leftTime;
@@ -65,8 +67,8 @@ class TimerState extends ChangeNotifier {
           var ntisChecked = bnote.isChecked;
           var ntcolor = bnote.color;
           var ntlefttime = leftTime;
-          Note note = Note(
-              ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, null , null);
+          Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
+              ntlefttime, null, null);
           noteBox.put(keys[index], note);
           isRunning[index] = true;
           isOver = true;
@@ -86,8 +88,8 @@ class TimerState extends ChangeNotifier {
           var ntisChecked = bnote.isChecked;
           var ntcolor = bnote.color;
           var ntlefttime = nttime;
-          Note note = Note(
-              ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, null, null);
+          Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
+              ntlefttime, null, null);
           noteBox.put(keys[index], note);
           isRunning[index] = true;
           notifyListeners();
@@ -101,18 +103,14 @@ class TimerState extends ChangeNotifier {
           var ntisChecked = bnote.isChecked;
           var ntcolor = bnote.color;
           var ntlefttime = leftTime;
-          Note note = Note(
-              ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, null ,null);
+          Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
+              ntlefttime, null, null);
           noteBox.put(keys[index], note);
           isRunning[index] = true;
           notifyListeners();
         }
       });
     }
-  }
-
-  void cancelAlarm() async {
-    await AndroidAlarmManager.cancel(0);
   }
 
   void updateTimer() async {
@@ -150,8 +148,8 @@ class TimerState extends ChangeNotifier {
       _turnOn = true;
       ntlefttime = leftTime.abs();
     }
-    Note note = Note(
-        ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, ntimages ,null);
+    Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime,
+        ntimages, null);
     noteBox.put(keys[index], note);
     if (_turnOn) {
       startTimer();
@@ -178,11 +176,10 @@ class TimerState extends ChangeNotifier {
     var ntcolor = bnote.color;
     var ntimages = bnote.imageList;
     var ntlefttime = nttime;
-    Note note = Note(
-        ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime, ntimages ,null);
+    Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime,
+        ntimages, null);
     noteBox.put(keys[index], note);
     stopTimer();
-    cancelAlarm();
   }
 
   void loadTimer(List<int> keys, int index, BuildContext context) async {
@@ -190,11 +187,24 @@ class TimerState extends ChangeNotifier {
     this.keys = keys;
     this.index = index;
     this.my_context = context;
+        if (bnote.imageList?.isNotEmpty  ?? false ) {
+      imageList = bnote.imageList;
+    }
+    if (bnote.imageList?.isNotEmpty ?? false) {
+      voiceList = bnote.voiceList;
+    }
     title = uiKit.AppLocalizations.of(context).translate('notesapp');
     text = uiKit.AppLocalizations.of(context).translate('taskOver');
     leftTime = bnote.leftTime;
   }
-
+  Future<List<Uint8List>> getImageList() async {
+    //myContext = context;
+    return imageList;
+  }
+    Future<List<Voice>> getVoiceList() async {
+    //myContext = context;
+    return voiceList;
+  }
   Future<void> startAlarm() async {
     Future.delayed(Duration(seconds: 0), () async {
       // var scheduledNotificationDateTime =

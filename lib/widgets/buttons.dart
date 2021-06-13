@@ -1,4 +1,4 @@
-import 'package:android_alarm_manager/android_alarm_manager.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,10 +27,7 @@ Future<void> copyDogeAdress() async {
   await Clipboard.setData(data);
 }
 
-Future<void> startTimer() async {
-  print('started');
-  await AndroidAlarmManager.oneShotAt(DateTime(2021, 5, 7, 12, 05), 0, printMe);
-}
+
 
 void printMe() {
   print('Hell');
@@ -103,7 +100,6 @@ class _MyButtonState extends State<MyButton> {
               break;
             case 'stop':
               _timerState.stopTimer();
-              _timerState.cancelAlarm();
               break;
             case 'reset':
               _timerState.resetTimer();
@@ -118,8 +114,7 @@ class _MyButtonState extends State<MyButton> {
               await _myProvider.newNoteClicked(context);
               Navigator.push(
                   context,
-                  SliderTransition(uiKit.MyNotesEditing(
-                      SizeX: SizeX, SizeY: SizeY, noteBox: noteBox)));
+                  SliderTransition(uiKit.MyNotesEditing( noteBox: noteBox)));
               break;
             case 'lamp':
               _themeProvider.changeBrigness();
@@ -174,7 +169,7 @@ class _MyButtonState extends State<MyButton> {
               break;
             case 'coder':
               Navigator.push(context,
-                  SliderTransition(uiKit.MyDoante(SizeX: SizeX, SizeY: SizeY)));
+                  SliderTransition(uiKit.MyDoante()));
               // TODO Delete _myProvider.gotoDonate(context);
               break;
             case 'donate':

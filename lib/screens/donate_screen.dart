@@ -7,9 +7,7 @@ import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
 class MyDoante extends StatefulWidget {
-  double SizeX;
-  double SizeY;
-  MyDoante({Key key, this.SizeX, this.SizeY}) : super(key: key);
+  MyDoante({Key key}) : super(key: key);
 
   @override
   _MyDoanteState createState() => _MyDoanteState();
@@ -20,8 +18,8 @@ class _MyDoanteState extends State<MyDoante> {
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<NoteProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
-    double SizeX = widget.SizeX;
-    double SizeY = widget.SizeY;
+    double SizeX = MediaQuery.of(context).size.height;
+    double SizeY = MediaQuery.of(context).size.width;
     return Scaffold(
             resizeToAvoidBottomInset: false,
       backgroundColor: _themeProvider.mainColor,

@@ -12,3 +12,5 @@ export 'screens/timer_screen.dart';
 export 'screens/donate_screen.dart';
 export 'widgets/dialog.dart';
 export 'screens/home_screen.dart';
+export 'screens/image_screen.dart';
+

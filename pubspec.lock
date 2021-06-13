@@ -22,13 +22,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.1"
-  android_alarm_manager:
-    dependency: "direct main"
-    description:
-      name: android_alarm_manager
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.2"
   archive:
     dependency: transitive
     description:
@@ -57,13 +50,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2"
-  audio_video_progress_bar:
-    dependency: "direct main"
-    description:
-      name: audio_video_progress_bar
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.0"
   boolean_selector:
     dependency: transitive
     description:

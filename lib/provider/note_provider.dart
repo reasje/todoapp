@@ -278,7 +278,7 @@ class NoteProvider extends ChangeNotifier {
   //                              *** RECORDER ***                              //
   Future<void> startRecorder() async {
     PermissionStatus status = await Permission.microphone.request();
-    if (status != PermissionStatus.granted) {
+    if (status != PermissionStatus.denied) {
       throw RecordingPermissionException("Microphone permission not granted");
     }
     // StreamSink<Food> _playerSubscription;
@@ -558,6 +558,7 @@ class NoteProvider extends ChangeNotifier {
     // if the note doesnot include any notes pass
     if (bnote.imageList?.isNotEmpty  ?? false ) {
       imageList = bnote.imageList;
+      print('object');
     }
     if (bnote.imageList?.isNotEmpty ?? false) {
       voiceList = bnote.voiceList;
