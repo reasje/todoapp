@@ -556,10 +556,10 @@ class NoteProvider extends ChangeNotifier {
     // getting the pics form the database.
     var bnote = await noteBox.get(providerKeys[providerIndex]);
     // if the note doesnot include any notes pass
-    if (bnote.imageList.isNotEmpty) {
+    if (bnote.imageList?.isNotEmpty  ?? false ) {
       imageList = bnote.imageList;
     }
-    if (bnote.voiceList.isNotEmpty) {
+    if (bnote.imageList?.isNotEmpty ?? false) {
       voiceList = bnote.voiceList;
     }
     title.text = bnote.title;
