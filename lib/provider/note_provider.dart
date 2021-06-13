@@ -556,7 +556,7 @@ class NoteProvider extends ChangeNotifier {
     // getting the pics form the database.
     var bnote = await noteBox.get(providerKeys[providerIndex]);
     // if the note doesnot include any notes pass
-    if (bnote.imageList?.isNotEmpty  ?? false ) {
+    if (bnote.imageList?.isNotEmpty ?? false) {
       imageList = bnote.imageList;
       print('object');
     }
@@ -565,6 +565,9 @@ class NoteProvider extends ChangeNotifier {
     }
     title.text = bnote.title;
     text.text = bnote.text;
+    ftext.requestFocus();
+    text.selection =
+        TextSelection.fromPosition(TextPosition(offset: text.text.length));
     time_duration = Duration(seconds: bnote.time);
     noteColor = Color(bnote.color);
     newNote = false;

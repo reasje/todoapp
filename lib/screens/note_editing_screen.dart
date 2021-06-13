@@ -43,8 +43,8 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
             child: Container(
               height: SizeX,
               width: isLandscape ? SizeY * 0.8 : SizeY,
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              // padding: EdgeInsets.only(
+              //     bottom: MediaQuery.of(context).viewInsets.bottom),
               child: ScrollConfiguration(
                 behavior: uiKit.NoGlowBehaviour(),
                 child: ListView(
