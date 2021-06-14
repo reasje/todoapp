@@ -276,10 +276,12 @@ class NoteProvider extends ChangeNotifier {
   List<SoundPlayerState> soundPlayerState =
       List.filled(100, SoundPlayerState.stopped);
   //                              *** RECORDER ***                              //
-  Future<void> startRecorder() async {
+  Future<void> startRecorder(BuildContext context) async {
     PermissionStatus status = await Permission.microphone.request();
-    if (status != PermissionStatus.denied) {
-      throw RecordingPermissionException("Microphone permission not granted");
+    if (status == PermissionStatus.permanentlyDenied  || status == PermissionStatus.denied ) {
+      //throw RecordingPermissionException("Microphone permission not granted");
+      uiKit.showAlertDialog(context, 'microphoneRequired');
+      return;
     }
     // StreamSink<Food> _playerSubscription;
     // opening the session before starting the recorder is required .

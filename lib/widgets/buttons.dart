@@ -218,7 +218,7 @@ class _MyButtonState extends State<MyButton> {
                       ));
               break;
             case 'newvoice':
-              await _myProvider.startRecorder();
+              await _myProvider.startRecorder(context);
               break;
             case 'pausevoice':
               await _myProvider.pauseRecorder();
