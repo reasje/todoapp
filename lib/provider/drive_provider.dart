@@ -21,12 +21,14 @@ import 'package:connectivity/connectivity.dart' as conn;
 // used to upload the file and check wether the file
 // exisstce or not and
 String file_name = "NotesAppData";
-
-Future<String> upload(
-    drive.DriveApi driveApi, drive.File driveFile, LazyBox<Note> noteBox,
+BuildContext driverContext; 
+Future<void> upload(
+    drive.DriveApi driveApi, drive.File driveFile, LazyBox<Note> noteBox,String uploadiung,
+    String downloadDone, 
     [String file_id]) async {
   await EasyLoading.show(
     dismissOnTap: false,
+    status: uploadiung,
   );
   // String list is the list that the jsons of each note as a
   // string will be saved in it
@@ -88,23 +90,22 @@ Future<String> upload(
   var media = new drive.Media(mediaStream, my_intlist.length);
   driveFile.name = file_name;
   driveFile.mimeType = 'text';
-  final result = await driveApi.files.create(driveFile, uploadMedia: media);
-  String string = "Upload result: $result";
+  await driveApi.files.create(driveFile, uploadMedia: media);
   await EasyLoading.dismiss();
-  return string;
+  await EasyLoading.showSuccess(downloadDone);
 }
 
-Future<void> download(drive.DriveApi driveApi, drive.File driveFile,
+Future<void> download(drive.DriveApi driveApi, drive.File driveFile,String downloading,String downloadDone,
     LazyBox<Note> noteBox, String file_id) async {
   await EasyLoading.show(
     dismissOnTap: false,
+    status: downloading,
   );
   String downloaded = "";
   drive.Media media = await driveApi.files
       .get(file_id, downloadOptions: drive.DownloadOptions.fullMedia);
   var sub = media.stream.listen((event) async {
     downloaded = downloaded + String.fromCharCodes(event);
-    print(downloaded);
   });
   sub.onDone(() async {
     sub.cancel();
@@ -134,6 +135,7 @@ Future<void> download(drive.DriveApi driveApi, drive.File driveFile,
           .add(Note(title, text, false, time, 0, time, imageList, voiceList));
     }
     await EasyLoading.dismiss();
+    await EasyLoading.showSuccess(downloadDone);
   });
 }
 
@@ -152,7 +154,6 @@ Future<void> login(bool command, BuildContext context) async {
   } else {
     if (!_connState.is_conn) {
       // I am connected to a mobile network or wifi.
-      print("No connection has been stablished");
       uiKit.showAlertDialog(context, "internet");
     } else {
       _signinState.checkSignin();
@@ -163,7 +164,6 @@ Future<void> login(bool command, BuildContext context) async {
         final signIn.GoogleSignInAccount account = await googleSignIn.signIn();
         // getting the signinded account information
         if (account == null) {
-          print("null account : $account ");
           uiKit.showAlertDialog(context, "internet");
         } else {
           try {
@@ -177,7 +177,7 @@ Future<void> login(bool command, BuildContext context) async {
             if (command) {
               if (file_id == null) {
                 // file does not existce
-                await upload(driveApi, driveFile, noteBox);
+                await upload(driveApi, driveFile, noteBox,uiKit.AppLocalizations.of(context).translate('uploading'), uiKit.AppLocalizations.of(context).translate('uploadDone'));
               } else {
                 // show continue dialog
                 uiKit.showAlertDialog(
@@ -187,7 +187,7 @@ Future<void> login(bool command, BuildContext context) async {
               // The command is download
               if (file_id == null) {
                 // file does not existce
-                await download(driveApi, driveFile, noteBox, file_id);
+                await download(driveApi, driveFile,uiKit.AppLocalizations.of(context).translate('downloading'),uiKit.AppLocalizations.of(context).translate('downloadDone'), noteBox, file_id,);
               } else {
                 // show continue dialog
                 uiKit.showAlertDialog(

@@ -316,7 +316,7 @@ Future showAlertDialog(BuildContext context,
                                 onTap: () {
                                   id == "lan"
                                       ? _themeProvider.changeLanToPersian()
-                                       :null;
+                                      :null;
                                   Navigator.pop(context);
                                 },
                               )),
@@ -348,9 +348,8 @@ Future showAlertDialog(BuildContext context,
                                         id == "lan"
                                             ? _themeProvider.changeLanToEnglish()
                                             : id == "up"
-                                                ? upload(driveApi, driveFile,
-                                                    noteBox, file_id)
-                                                : id == "voiceTitle" ?  _myProvider.setVoiceTitle(voiceTitleController.text): download(driveApi, driveFile,
+                                                ? upload(driveApi, driveFile, noteBox,uiKit.AppLocalizations.of(context).translate('uploading'), uiKit.AppLocalizations.of(context).translate('uploadDone'), file_id )
+                                                : id == "voiceTitle" ?  _myProvider.setVoiceTitle(voiceTitleController.text): download(driveApi, driveFile ,uiKit.AppLocalizations.of(context).translate('downloading'),uiKit.AppLocalizations.of(context).translate('downloadDone'),
                                                     noteBox, file_id);
                                         Navigator.pop(context);
                                       }))

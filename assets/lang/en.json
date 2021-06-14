@@ -46,6 +46,9 @@
   "undoImage":"Image deleted successfully !",
   "undoVoice":"Voice deleted successfully !",
   "voiceTitle":"Choose a title for the voice !",
-  "microphoneRequired" : "Microphone permission is requied !"
-
+  "microphoneRequired" : "Microphone permission is requied !",
+  "uploadDone" : "Upload succeeded",
+  "downloadDone" : "Download succeeded",
+  "downloading" : "Downloading ...",
+  "uploading" : "Uploading ..."
 }

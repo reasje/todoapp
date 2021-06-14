@@ -45,5 +45,9 @@
     "undoImage":"عکس با موفقیت حذف شد !",
     "undoVoice":"ویس با موفقیت حذف شد !",
     "voiceTitle":"یک عنوان برای ویس نوت خود انتخاب کنید !",
-    "microphoneRequired" : "دسترسی به میکروفن نیاز هست !"
+    "microphoneRequired" : "دسترسی به میکروفن نیاز هست !",
+    "uploadDone" : "آپلود موفق بود !",
+    "downloadDone" : "دانلود موفق بود",
+    "downloading" : "در حال دانلود ...",
+    "uploading" : "در حال آپلود ..."
 }
