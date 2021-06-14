@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
@@ -16,7 +15,6 @@ import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:undo/undo.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:collection/collection.dart';
-import 'package:todoapp/screens/note_editing_screen.dart';
 
 // TODO orginaing the providers and having multi providres having a separate
 // provider for check me .

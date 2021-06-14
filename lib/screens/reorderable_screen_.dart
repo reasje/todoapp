@@ -43,6 +43,8 @@ class _MyRorderableState extends State<MyRorderable> {
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     double SizeXSizeY = SizeX * SizeY;
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: _themeProvider.mainColor,
@@ -367,9 +369,9 @@ class _MyRorderableState extends State<MyRorderable> {
                                                             margin:
                                                                 EdgeInsets.only(
                                                                     bottom:
-                                                                        SizeX *
+                                                                         SizeX *
                                                                             0.04,
-                                                                    top: SizeX *
+                                                                    top: isLandscape ? SizeY * 0.1 : SizeX *
                                                                         0.01),
                                                             decoration:
                                                                 BoxDecoration(
