@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,8 +25,6 @@ Future<void> copyDogeAdress() async {
   print(data.text);
   await Clipboard.setData(data);
 }
-
-
 
 void printMe() {
   print('Hell');
@@ -72,7 +69,8 @@ class _MyButtonState extends State<MyButton> {
           final _timerState = Provider.of<TimerState>(context, listen: false);
           final _signinState = Provider.of<SigninState>(context, listen: false);
           final _connState = Provider.of<ConnState>(context, listen: false);
-          final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+          final _themeProvider =
+              Provider.of<ThemeProvider>(context, listen: false);
           double SizeX = MediaQuery.of(context).size.height;
           double SizeY = MediaQuery.of(context).size.width;
           LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
@@ -112,9 +110,8 @@ class _MyButtonState extends State<MyButton> {
               break;
             case 'new':
               await _myProvider.newNoteClicked(context);
-              Navigator.push(
-                  context,
-                  SliderTransition(uiKit.MyNotesEditing( noteBox: noteBox)));
+              Navigator.push(context,
+                  SliderTransition(uiKit.MyNotesEditing(noteBox: noteBox)));
               break;
             case 'lamp':
               _themeProvider.changeBrigness();
@@ -140,6 +137,7 @@ class _MyButtonState extends State<MyButton> {
                                 child: Text(uiKit.AppLocalizations.of(context)
                                     .translate('done')),
                                 onPressed: () {
+                                  _myProvider.timerDone();
                                   Navigator.pop(context);
                                 },
                               ),
@@ -168,8 +166,7 @@ class _MyButtonState extends State<MyButton> {
               // }));
               break;
             case 'coder':
-              Navigator.push(context,
-                  SliderTransition(uiKit.MyDoante()));
+              Navigator.push(context, SliderTransition(uiKit.MyDoante()));
               // TODO Delete _myProvider.gotoDonate(context);
               break;
             case 'donate':
@@ -227,7 +224,7 @@ class _MyButtonState extends State<MyButton> {
               await _myProvider.pauseRecorder();
               break;
             case 'stopvoice':
-              await _myProvider.stopRecorder(context:  context);
+              await _myProvider.stopRecorder(context: context);
               break;
             case 'resumevoice':
               await _myProvider.resumeRecorder();
@@ -258,7 +255,7 @@ class _MyButtonState extends State<MyButton> {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   boxShadow: [
                     BoxShadow(
-                      color:_themeProvider.lightShadowColor,
+                      color: _themeProvider.lightShadowColor,
                       offset: Offset(2, 2),
                       blurRadius: 0.0,
                       // changes position of shadow

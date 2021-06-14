@@ -412,15 +412,15 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                               MainAxisAlignment.spaceAround,
                                           children: [
                                             uiKit.MyButton(
-                                              sizePU: SizeX * 0.1,
-                                              sizePD: SizeX * 0.1,
-                                              iconSize: SizeX * SizeY * 0.00014,
+                                              sizePU: SizeXSizeY * 0.00024,
+                                              sizePD: SizeXSizeY * 0.00025,
+                                              iconSize: SizeXSizeY * 0.00014,
                                               iconData: FontAwesome.refresh,
                                               id: 'reset',
                                             ),
                                             uiKit.MyButton(
-                                              sizePU: SizeX * 0.1,
-                                              sizePD: SizeX * 0.1,
+                                              sizePU: SizeXSizeY * 0.00024,
+                                              sizePD: SizeXSizeY * 0.00025,
                                               iconSize: SizeX * SizeY * 0.00014,
                                               iconData: FontAwesome.stop,
                                               id: 'stop',
@@ -429,8 +429,8 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                         )
                                       : Center(
                                           child: uiKit.MyButton(
-                                            sizePU: SizeX * 0.1,
-                                            sizePD: SizeX * 0.1,
+                                              sizePU: SizeXSizeY * 0.00024,
+                                              sizePD: SizeXSizeY * 0.00025,
                                             iconSize: SizeX * SizeY * 0.00014,
                                             iconData: FontAwesome.play,
                                             id: 'start',

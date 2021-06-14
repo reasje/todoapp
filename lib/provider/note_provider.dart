@@ -617,15 +617,8 @@ class NoteProvider extends ChangeNotifier {
         var bnote = await noteBox.get(providerKeys[providerIndex]);
         String noteTitle;
         title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
-        Note note = new Note(
-            noteTitle,
-            text.text,
-            bnote.isChecked,
-            time_duration.inSeconds,
-            0,
-            time_duration.inSeconds,
-            imageList,
-            voiceList);
+        Note note = new Note(noteTitle, text.text, bnote.isChecked,
+            time_duration.inSeconds, 0, bnote.leftTime, imageList, voiceList);
         await noteBox.put(providerKeys[providerIndex], note);
         changes.clearHistory();
         Navigator.pop(noteContext);
@@ -686,6 +679,26 @@ class NoteProvider extends ChangeNotifier {
     // updating the state and notifiung the listeners
     time_duration = duration;
     // notifyListeners();
+  }
+
+  void timerDone() async {
+    if (time_duration != time_snapshot) {
+      // timer has been updated so that
+      // We must update the left time too
+      var bnote = await noteBox.get(providerKeys[providerIndex]);
+      var ntitle = bnote.title;
+      var nttext = bnote.text;
+      var ntischecked = bnote.isChecked;
+      var nttime = time_duration.inSeconds;
+      var ntcolor = bnote.color;
+      var ntlefttime = time_duration.inSeconds;
+      var ntImageList = bnote.imageList;
+      var ntVoiceList = bnote.voiceList;
+      Note note = Note(ntitle, nttext, ntischecked, nttime, ntcolor, ntlefttime,
+          ntImageList, ntVoiceList);
+      noteBox.put(providerKeys[providerIndex], note);
+      notifyListeners();
+    }
   }
 
   showDogeCopied(BuildContext context) {
