@@ -314,7 +314,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                         bnote.color,
                                                         bnote.leftTime,
                                                         bnote.imageList,
-                                                        null);
+                                                        bnote.voiceList,bnote.taskList);
                                                     notes.delete(keys[index]);
                                                     ScaffoldMessenger.of(
                                                             context)

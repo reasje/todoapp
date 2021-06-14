@@ -131,8 +131,9 @@ Future<void> download(drive.DriveApi driveApi, drive.File driveFile,String downl
             base64.decode(voiceVoiceListDownloaded[i]));
         voiceList.add(voice);
       }
+      // TODO adding the task list uplaod and download
       await noteBox
-          .add(Note(title, text, false, time, 0, time, imageList, voiceList));
+          .add(Note(title, text, false, time, 0, time, imageList, voiceList, null));
     }
     await EasyLoading.dismiss();
     await EasyLoading.showSuccess(downloadDone);

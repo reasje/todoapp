@@ -68,8 +68,11 @@ class TimerState extends ChangeNotifier {
           var ntisChecked = bnote.isChecked;
           var ntcolor = bnote.color;
           var ntlefttime = leftTime;
+          var ntImageList = bnote.imageList;
+          var ntVoiceList = bnote.voiceList;
+          var ntTaskList = bnote.taskList;
           Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
-              ntlefttime, null, null);
+              ntlefttime, ntImageList, ntVoiceList, ntTaskList);
           await noteBox.put(keys[index], note);
           isRunning[index] = true;
           isOver = true;
@@ -89,8 +92,11 @@ class TimerState extends ChangeNotifier {
           var ntisChecked = bnote.isChecked;
           var ntcolor = bnote.color;
           var ntlefttime = nttime;
+          var ntImageList = bnote.imageList;
+          var ntVoiceList = bnote.voiceList;
+          var ntTaskList = bnote.taskList;
           Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
-              ntlefttime, null, null);
+              ntlefttime, ntImageList, ntVoiceList, ntTaskList);
           await noteBox.put(keys[index], note);
           isRunning[index] = true;
           notifyListeners();
@@ -104,10 +110,11 @@ class TimerState extends ChangeNotifier {
           var ntisChecked = bnote.isChecked;
           var ntcolor = bnote.color;
           var ntlefttime = leftTime;
-          var ntimages = bnote.imageList;
-          var ntvoices = bnote.voiceList;
+          var ntImageList = bnote.imageList;
+          var ntVoiceList = bnote.voiceList;
+          var ntTaskList = bnote.taskList;
           Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
-              ntlefttime, ntimages, ntvoices);
+              ntlefttime, ntImageList, ntVoiceList, ntTaskList);
           await noteBox.put(keys[index], note);
           isRunning[index] = true;
           notifyListeners();
@@ -129,6 +136,7 @@ class TimerState extends ChangeNotifier {
     var ntcolor = bnote.color;
     var ntimages = bnote.imageList;
     var ntvoices = bnote.voiceList;
+    var nttasks = bnote.taskList;
     var ntlefttime;
     if (leftTime >= 0) {
       ntlefttime = 0;
@@ -153,7 +161,7 @@ class TimerState extends ChangeNotifier {
       ntlefttime = leftTime.abs();
     }
     Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime,
-        ntimages, ntvoices);
+        ntimages, ntvoices ,nttasks);
     await noteBox.put(keys[index], note);
     if (_turnOn) {
       startTimer();
@@ -180,9 +188,10 @@ class TimerState extends ChangeNotifier {
     var ntcolor = bnote.color;
     var ntimages = bnote.imageList;
     var ntvoices = bnote.voiceList;
+    var nttasks = bnote.taskList;
     var ntlefttime = nttime;
     Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime,
-        ntimages, ntvoices);
+        ntimages, ntvoices, nttasks);
     await noteBox.put(keys[index], note);
     stopTimer();
   }

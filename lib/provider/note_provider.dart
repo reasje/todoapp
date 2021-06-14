@@ -9,6 +9,7 @@ import 'package:flutter_sound/public/tau.dart';
 import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:todoapp/model/note_model.dart';
+import 'package:todoapp/model/task_model.dart';
 import 'package:todoapp/model/voice_model.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
@@ -74,8 +75,9 @@ class NoteProvider extends ChangeNotifier {
             var ntlefttime = bnote.leftTime;
             var ntImageList = bnote.imageList;
             var ntVoiceList = bnote.voiceList;
+            var ntTaskList = bnote.taskList;
             Note note = Note(ntitle, nttext, false, nttime, ntcolor, ntlefttime,
-                ntImageList, ntVoiceList);
+                ntImageList, ntVoiceList, ntTaskList);
             noteBox.putAt(i, note);
           }
           prefsBox.put('date',
@@ -218,7 +220,7 @@ class NoteProvider extends ChangeNotifier {
       List<int> keys, int index, double SizeX, double SizeY) async {
     var note = await noteBox.get(keys[index]);
     var bnote = Note(note.title, note.text, note.isChecked, note.time,
-        note.color, note.leftTime, null, null);
+        note.color, note.leftTime, null, null, null);
     updateListSize(keys, SizeX, SizeY);
     return bnote;
   }
@@ -248,6 +250,14 @@ class NoteProvider extends ChangeNotifier {
     return voiceList;
   }
 
+  //////////////////////////////////// *** TASK LIST  PART *** /////////////////////////////////////
+  List<Task> taskList;
+
+  List<Task> getTaskList() {
+    return taskList;
+  }
+
+  //////////////////////////////////// *** VOICE LIST PART *** /////////////////////////////////////
   // The voice note part
   List<Voice> voiceList = [];
   // Used to controll if the notes has been edited or not
@@ -276,7 +286,8 @@ class NoteProvider extends ChangeNotifier {
   //                              *** RECORDER ***                              //
   Future<void> startRecorder(BuildContext context) async {
     PermissionStatus status = await Permission.microphone.request();
-    if (status == PermissionStatus.permanentlyDenied  || status == PermissionStatus.denied ) {
+    if (status == PermissionStatus.permanentlyDenied ||
+        status == PermissionStatus.denied) {
       //throw RecordingPermissionException("Microphone permission not granted");
       uiKit.showAlertDialog(context, 'microphoneRequired');
       return;
@@ -530,14 +541,15 @@ class NoteProvider extends ChangeNotifier {
     var ntlefttime = bnote.leftTime;
     var ntImageList = bnote.imageList;
     var ntVoiceList = bnote.voiceList;
+    var ntTaskList = bnote.taskList;
     Note note = Note(ntitle, nttext, newValue, nttime, ntcolor, ntlefttime,
-        ntImageList, ntVoiceList);
+        ntImageList, ntVoiceList, ntTaskList);
     noteBox.put(providerKeys[providerIndex], note);
     //notifyListeners();
   }
 
   // new Note clieked
-  Future<void> newNoteClicked(BuildContext context) {
+  void newNoteClicked(BuildContext context) {
     noteContext = context;
     // When the add icon is tapped this function will be executed and
     // prepare the provider for the new Note
@@ -596,7 +608,7 @@ class NoteProvider extends ChangeNotifier {
         final int noteTime = time_duration.inSeconds;
         int leftTime = noteTime;
         Note note = Note(noteTitle, noteText, false, noteTime, 0, leftTime,
-            imageList, voiceList);
+            imageList, voiceList , taskList);
         await noteBox.add(note);
         changes.clearHistory();
         Navigator.pop(noteContext);
@@ -618,7 +630,7 @@ class NoteProvider extends ChangeNotifier {
         String noteTitle;
         title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
         Note note = new Note(noteTitle, text.text, bnote.isChecked,
-            time_duration.inSeconds, 0, bnote.leftTime, imageList, voiceList);
+            time_duration.inSeconds, 0, bnote.leftTime, imageList, voiceList, taskList);
         await noteBox.put(providerKeys[providerIndex], note);
         changes.clearHistory();
         Navigator.pop(noteContext);
@@ -694,8 +706,9 @@ class NoteProvider extends ChangeNotifier {
       var ntlefttime = time_duration.inSeconds;
       var ntImageList = bnote.imageList;
       var ntVoiceList = bnote.voiceList;
+      var ntTaskList = bnote.taskList;
       Note note = Note(ntitle, nttext, ntischecked, nttime, ntcolor, ntlefttime,
-          ntImageList, ntVoiceList);
+          ntImageList, ntVoiceList , ntTaskList);
       noteBox.put(providerKeys[providerIndex], note);
       notifyListeners();
     }

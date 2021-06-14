@@ -3,6 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
+import 'package:todoapp/model/task_model.dart';
 import 'package:todoapp/model/voice_model.dart';
 import 'package:todoapp/provider/conn_provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
@@ -53,6 +54,8 @@ void main() async {
   // Giving the path of the data base to the Hive
   Hive.init(document.path);
   // registering the adapter
+  Hive.registerAdapter(TaskAdapter());
+  // registering the adapter
   Hive.registerAdapter(VoiceAdapter());
   // registering the adapter
   Hive.registerAdapter(NoteAdapter());
@@ -66,7 +69,7 @@ void main() async {
   //   await myProvider().initialColorsAndLan();
   // });
   // android alarm manager services
-  final int helloAlarmID = 0;
+  // final int helloAlarmID = 0;
   // SystemChrome.setPreferredOrientations([
   //   DeviceOrientation.portraitUp,
   //   DeviceOrientation.portraitDown,
