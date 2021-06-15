@@ -9,6 +9,7 @@ import 'package:flutter_sound/public/tau.dart';
 import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:todoapp/model/note_model.dart';
+import 'package:todoapp/model/taskController.dart';
 import 'package:todoapp/model/task_model.dart';
 import 'package:todoapp/model/voice_model.dart';
 import '../main.dart';
@@ -251,10 +252,66 @@ class NoteProvider extends ChangeNotifier {
   }
 
   //////////////////////////////////// *** TASK LIST  PART *** /////////////////////////////////////
-  List<Task> taskList;
+  List<Task> taskList = [];
+  // This is the controller assigned to the textfield inside
+  // so the
+  // List<TextEditingController> taskTextList = [];
+  TaskController dissmissedTask;
+  List<TaskController> taskControllerList = [];
+  Future<List<TaskController>> getTaskList() async {
+    return taskControllerList;
+  }
 
-  List<Task> getTaskList() {
-    return taskList;
+  void taskCheckBoxChanged(bool value, index) {
+    taskControllerList[index].isDone = value;
+    notifyListeners();
+  }
+
+  void checkListOnSubmit(index) {
+    taskControllerList.insert(
+        index + 1,
+        TaskController(
+            TextEditingController(text: ""),
+            false,
+            FocusNode(),
+            PageStorageKey<String>(
+                'pageKey ${DateTime.now().microsecondsSinceEpoch}')));
+    taskControllerList[index + 1].focusNode.requestFocus();
+    notifyListeners();
+  }
+
+  void taskDissmissed(int index) {
+    dissmissedTask = taskControllerList.removeAt(index);
+  }
+
+  void taskRecover(int index) {
+    dissmissedTask.key = PageStorageKey<String>(
+        'pageKey ${DateTime.now().microsecondsSinceEpoch}');
+    taskControllerList.insert(index, dissmissedTask);
+    notifyListeners();
+  }
+
+  void reorder(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    var taskController = taskControllerList.elementAt(oldIndex);
+    if (newIndex < oldIndex) {
+      for (int i = oldIndex; i > newIndex; i--) {
+        var taskController2 = taskControllerList.elementAt(i - 1);
+        taskControllerList[i] = taskController2;
+        //taskControllerList.insert(i, );
+      }
+    } else {
+      for (int i = oldIndex; i < newIndex; i++) {
+        var taskController = taskControllerList.elementAt(i + 1);
+        taskControllerList[i] = taskController;
+        //taskControllerList.insert(i, taskController);
+      }
+    }
+    taskControllerList[newIndex] = taskController;
+    //taskControllerList.insert(newIndex, taskController);
+    notifyListeners();
   }
 
   //////////////////////////////////// *** VOICE LIST PART *** /////////////////////////////////////
@@ -496,6 +553,8 @@ class NoteProvider extends ChangeNotifier {
     title.clear();
     text.clear();
     voiceList.clear();
+    taskControllerList.clear();
+    taskList.clear();
     time_duration = Duration();
     notifyListeners();
   }
@@ -554,9 +613,11 @@ class NoteProvider extends ChangeNotifier {
     // When the add icon is tapped this function will be executed and
     // prepare the provider for the new Note
     clearControllers();
+    taskControllerList.add(TaskController(TextEditingController(text: ""),
+        false, FocusNode(), PageStorageKey<String>('pageKey 0')));
     newNote = true;
     takeSnapshot();
-    //notifyListeners();
+    notifyListeners();
   }
 
   // used indie list view after an elemt of listview is tapped
@@ -574,6 +635,24 @@ class NoteProvider extends ChangeNotifier {
     }
     if (bnote.imageList?.isNotEmpty ?? false) {
       voiceList = bnote.voiceList;
+    }
+    if (bnote.taskList?.isNotEmpty ?? false) {
+      taskList = bnote.taskList;
+      for (int i = 0; i < taskList.length; i++) {
+        taskControllerList.add(TaskController(
+            TextEditingController(text: taskList[i].title),
+            taskList[i].isDone,
+            FocusNode(),
+            PageStorageKey<String>(
+                'pageKey ${DateTime.now().microsecondsSinceEpoch}')));
+      }
+      // clearing the taskList because
+      // the needed information has been
+      // obtained
+      taskList.clear();
+    } else {
+      taskControllerList.add(TaskController(TextEditingController(text: ""),
+          false, FocusNode(), PageStorageKey<String>('pageKey 0')));
     }
     title.text = bnote.title;
     text.text = bnote.text;
@@ -607,8 +686,17 @@ class NoteProvider extends ChangeNotifier {
         final String noteText = text.text;
         final int noteTime = time_duration.inSeconds;
         int leftTime = noteTime;
+        if (taskControllerList.isNotEmpty) {
+          for (int i = 0; i < taskControllerList.length; i++) {
+            if (taskControllerList[i].textEditingController.text != '') {
+              taskList.add(Task(
+                  taskControllerList[i].textEditingController.text,
+                  taskControllerList[i].isDone));
+            }
+          }
+        }
         Note note = Note(noteTitle, noteText, false, noteTime, 0, leftTime,
-            imageList, voiceList , taskList);
+            imageList, voiceList, taskList);
         await noteBox.add(note);
         changes.clearHistory();
         Navigator.pop(noteContext);
@@ -629,14 +717,33 @@ class NoteProvider extends ChangeNotifier {
         var bnote = await noteBox.get(providerKeys[providerIndex]);
         String noteTitle;
         title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
-        Note note = new Note(noteTitle, text.text, bnote.isChecked,
-            time_duration.inSeconds, 0, bnote.leftTime, imageList, voiceList, taskList);
+        if (taskControllerList.isNotEmpty) {
+          for (int i = 0; i < taskControllerList.length; i++) {
+            if (taskControllerList[i].textEditingController.text != '') {
+              taskList.add(Task(
+                  taskControllerList[i].textEditingController.text,
+                  taskControllerList[i].isDone));
+            }
+          }
+        }
+        Note note = new Note(
+            noteTitle,
+            text.text,
+            bnote.isChecked,
+            time_duration.inSeconds,
+            0,
+            bnote.leftTime,
+            imageList,
+            voiceList,
+            taskList);
         await noteBox.put(providerKeys[providerIndex], note);
         changes.clearHistory();
+        clearControllers();
         Navigator.pop(noteContext);
       } else {
         await noteBox.delete(providerKeys[providerIndex]);
         changes.clearHistory();
+        clearControllers();
         Navigator.pop(noteContext);
       }
     }
@@ -665,6 +772,7 @@ class NoteProvider extends ChangeNotifier {
           notSaving = 0;
           Navigator.pop(noteContext);
           changes.clearHistory();
+          clearControllers();
         }
       } else {
         ScaffoldMessenger.of(noteContext).clearSnackBars();
@@ -674,6 +782,7 @@ class NoteProvider extends ChangeNotifier {
             false,
             noteContext));
         Navigator.pop(noteContext);
+        clearControllers();
       }
     } else {
       // making all the changes that has been save for the
@@ -681,6 +790,7 @@ class NoteProvider extends ChangeNotifier {
       // causes !
       changes.clearHistory();
       // changing the stacks and getting back to listview Screen !
+      clearControllers();
       Navigator.pop(noteContext);
     }
   }
@@ -708,7 +818,7 @@ class NoteProvider extends ChangeNotifier {
       var ntVoiceList = bnote.voiceList;
       var ntTaskList = bnote.taskList;
       Note note = Note(ntitle, nttext, ntischecked, nttime, ntcolor, ntlefttime,
-          ntImageList, ntVoiceList , ntTaskList);
+          ntImageList, ntVoiceList, ntTaskList);
       noteBox.put(providerKeys[providerIndex], note);
       notifyListeners();
     }

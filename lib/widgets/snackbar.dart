@@ -58,13 +58,12 @@ Widget MySnackBar(
             textColor: _themeProvider.swachColor,
             label: uiKit.AppLocalizations.of(context).translate('undo'),
             onPressed: () {
-              if  (id == 'undoVoice'){
+              if (id == 'undoVoice') {
                 _myProvider.voiceRecover(index);
-                
+              } else if (id == 'undoTask') {
+                _myProvider.taskRecover(index);
               } else if (noteBox == null) {
                 _myProvider.imageRecover(index);
-              } else if (id == 'undotask') {
-                _myProvider.taskRecover(index);
               } else {
                 noteBox.put(keys[index], note);
               }
