@@ -63,6 +63,8 @@ Widget MySnackBar(
                 
               } else if (noteBox == null) {
                 _myProvider.imageRecover(index);
+              } else if (id == 'undotask') {
+                _myProvider.taskRecover(index);
               } else {
                 noteBox.put(keys[index], note);
               }

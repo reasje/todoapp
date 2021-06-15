@@ -49,5 +49,6 @@
     "uploadDone" : "آپلود موفق بود !",
     "downloadDone" : "دانلود موفق بود",
     "downloading" : "در حال دانلود ...",
-    "uploading" : "در حال آپلود ..."
+    "uploading" : "در حال آپلود ...",
+    "undoTask" : "تسک با موفقیت حذف شد !"
 }

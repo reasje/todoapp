@@ -50,5 +50,6 @@
   "uploadDone" : "Upload succeeded",
   "downloadDone" : "Download succeeded",
   "downloading" : "Downloading ...",
-  "uploading" : "Uploading ..."
+  "uploading" : "Uploading ...",
+  "undoTask" : "Task deleted successfully !"
 }
