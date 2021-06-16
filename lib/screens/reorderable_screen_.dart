@@ -200,58 +200,7 @@ class _MyRorderableState extends State<MyRorderable> {
                             ],
                           ),
                           if (noteBox.isEmpty)
-                            Container(
-                              height: SizeX * 0.7,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: SizeX * 0.45,
-                                    width: SizeY * 0.8,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(top: SizeX * 0.019),
-                                      child: Container(
-                                        height: SizeX * 0.45,
-                                        width: SizeY,
-                                        child: Image.asset(
-                                          _themeProvider.noTaskImage,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                      child: Container(
-                                    //padding: EdgeInsets.only(bottom: SizeX * 0.2),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Text(
-                                          uiKit.AppLocalizations.of(context)
-                                              .translate('NoNotesyet'),
-                                          style: TextStyle(
-                                              color: _themeProvider.textColor,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize:
-                                                  SizeX * SizeY * 0.00008),
-                                        ),
-                                        Text(
-                                          uiKit.AppLocalizations.of(context)
-                                              .translate('addNewNotePlease'),
-                                          style: TextStyle(
-                                              color: _themeProvider.textColor,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: _themeProvider.isEn
-                                                  ? SizeX * SizeY * 0.00008
-                                                  : SizeX * SizeY * 0.00006),
-                                        ),
-                                      ],
-                                    ),
-                                  ))
-                                ],
-                              ),
-                            )
+                            uiKit.noNotes(SizeX: SizeX, SizeY: SizeY, themeProvider: _themeProvider)
                           else
                             FutureBuilder(
                                 future: _myProvider.updateListSize(
@@ -431,7 +380,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                               children: [
                                                                                 snapshot.data.time != 0
                                                                                     ? InkWell(
-                                                                                        key: new PageStorageKey<String>(snapshot.data.title),
+                                                                                        key: new PageStorageKey<String>('pageKey ${DateTime.now().microsecondsSinceEpoch}'),
                                                                                         onTap: () {
                                                                                           if (!(_timerState.isRunning.any((element) => element == true))) {
                                                                                             //_myProvider.changeTimerStack();
@@ -741,6 +690,8 @@ class _MyRorderableState extends State<MyRorderable> {
     );
   }
 }
+
+
 
 class NoGlowBehaviour extends ScrollBehavior {
   @override
