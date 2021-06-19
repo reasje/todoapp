@@ -14,12 +14,14 @@ class BottomNavWidget extends StatefulWidget {
 
 class _BottomNavWidgetState extends State<BottomNavWidget> {
   int selectedIndex = 0;
-  Color backgroundColor = Colors.white;
+  // Color backgroundColor = Colors.white;
   List<NavigationItem> items = [
-    NavigationItem(Icon(Icons.text_fields), Text('Text')),
-    NavigationItem(Icon(FontAwesome.hourglass), Text("Timer")),
-    NavigationItem(Icon(FontAwesome.image), Text("Image")),
-    NavigationItem(Icon(FontAwesome.music), Text('Voice')),
+    NavigationItem(Icon(Icons.text_fields), Text('Text'), Color(0xffaa66cc)),
+    NavigationItem(
+        Icon(Icons.hourglass_empty), Text("Timer"), Color(0xFFff4444)),
+    NavigationItem(
+        Icon(Icons.image_outlined), Text("Image"), Color(0xFFffbb33)),
+    NavigationItem(Icon(Icons.voicemail), Text('Voice'), Color(0xFF33b5e5)),
   ];
 
   Widget _buildItem(
@@ -30,26 +32,39 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
     return AnimatedContainer(
       duration: Duration(milliseconds: 450),
       height: double.maxFinite,
-      width: isSelected ? SizeY*0.25 : SizeY*0.1,
-      padding: isSelected ? EdgeInsets.only(left: SizeY*0.03, right: SizeY*0.02) : null,
+      width: isSelected ? SizeY * 0.25 : SizeY * 0.1,
+      padding: isSelected
+          ? EdgeInsets.only(left: SizeY * 0.03, right: SizeY * 0.02)
+          : null,
       decoration: isSelected
           ? BoxDecoration(
-              color: Colors.green,
+              color: item.color.withOpacity(0.2),
               borderRadius: BorderRadius.all(Radius.circular(50)))
           : null,
-      child: Row(
+      child: ListView(
+        scrollDirection: Axis.horizontal,
         children: [
-          IconTheme(
-              data: IconThemeData(
-                  size: 18, color: isSelected ? backgroundColor : Colors.black),
-              child: item.icon),
-          Padding(
-            padding: EdgeInsets.only(left:SizeY*0.03),
-            child: isSelected
-                ? DefaultTextStyle.merge(
-                    style: TextStyle(color: backgroundColor), child: item.title)
-                : Container(),
-          )
+          Row(
+            children: [
+              IconTheme(
+                  data: IconThemeData(
+                      size: 18,
+                      color:
+                          isSelected ? item.color : _themeProvider.textColor),
+                  child: item.icon),
+              Padding(
+                padding: EdgeInsets.only(left: SizeY * 0.03),
+                child: isSelected
+                    ? DefaultTextStyle.merge(
+                        style: TextStyle(
+                            color: isSelected
+                                ? item.color
+                                : _themeProvider.textColor),
+                        child: item.title)
+                    : Container(),
+              )
+            ],
+          ),
         ],
       ),
     );
@@ -75,7 +90,7 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
         children: items.map((item) {
           var itemIndex = items.indexOf(item);
           return GestureDetector(
-            child: _buildItem(item, selectedIndex == itemIndex , context),
+            child: _buildItem(item, selectedIndex == itemIndex, context),
             onTap: () {
               setState(() {
                 selectedIndex = itemIndex;
@@ -91,5 +106,6 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
 class NavigationItem {
   final Icon icon;
   final Text title;
-  NavigationItem(this.icon, this.title);
+  final Color color;
+  NavigationItem(this.icon, this.title, this.color);
 }

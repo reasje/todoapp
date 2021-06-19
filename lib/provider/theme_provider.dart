@@ -38,7 +38,16 @@ class ThemeProvider extends ChangeNotifier {
     800: const Color(0xE6001b48),
     900: const Color(0xFF001b48),
   });
-
+  Color red = Color(0xFFff4444);
+  Color green = Color(0xFF00c851);
+  Color yellow = Color(0xFFffbb33);
+  Color blue = Color(0xFF33b5e5);
+  Color purple = Color(0xffaa66cc);
+  Color redShade = Color(0xFFff4444);
+  Color greenShade = Color(0xFF00c851);
+  Color yellowShade = Color(0xFFffbb33);
+  Color blueShade = Color(0xFF33b5e5);
+  Color purpleShade = Color(0xffaa66cc);
   String splashImage;
   Color whiteMainColor = Color(0xffe6ebf2);
   Color blackMainColor = Color(0xff303234);
@@ -168,7 +177,7 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool checkIsWhite(){
+  bool checkIsWhite() {
     if (prefsBox.get('theme') == 'white') {
       return true;
     } else {
