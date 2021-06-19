@@ -253,25 +253,6 @@ class _MyButtonState extends State<MyButton> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: _themeProvider.lightShadowColor,
-                      offset: Offset(2, 2),
-                      blurRadius: 0.0,
-                      // changes position of shadow
-                    ),
-                    BoxShadow(
-                      color: _themeProvider.shadowColor.withOpacity(0.14),
-                      offset: Offset(-1, -1),
-                    ),
-                    BoxShadow(
-                      color: _themeProvider.mainColor,
-                      offset: Offset(5, 8),
-                      spreadRadius: -0.5,
-                      blurRadius: 14.0,
-                      // changes position of shadow
-                    ),
-                  ],
                 ),
                 child: widget.id == 'dogedonate'
                     ? Image.asset(
@@ -289,20 +270,6 @@ class _MyButtonState extends State<MyButton> {
               height: widget.sizePU,
               width: widget.sizePU,
               decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: _themeProvider.lightShadowColor,
-                      spreadRadius: 1.0,
-                      blurRadius: 1.0,
-                      offset: Offset(-1, -1), // changes position of shadow
-                    ),
-                    BoxShadow(
-                      color: _themeProvider.shadowColor.withOpacity(0.17),
-                      spreadRadius: 1.0,
-                      blurRadius: 2.0,
-                      offset: Offset(3, 4), // changes position of shadow
-                    ),
-                  ],
                   color: _themeProvider.mainColor,
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               child: widget.id == 'dogedonate'
@@ -340,7 +307,6 @@ class _MyButtonState extends State<MyButton> {
 
 class SliderTransition extends PageRouteBuilder {
   final Widget page;
-
   SliderTransition(this.page)
       : super(
             pageBuilder: (context, animation, anotherAnimation) => page,

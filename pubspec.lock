@@ -272,6 +272,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  flutter_k_chart:
+    dependency: "direct main"
+    description:
+      name: flutter_k_chart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -515,6 +522,13 @@ packages:
     dependency: transitive
     description:
       name: just_audio_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.1"
+  k_chart:
+    dependency: "direct main"
+    description:
+      name: k_chart
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.1"

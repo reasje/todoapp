@@ -232,7 +232,6 @@ class _MyAppState extends State<MyApp> {
                 Locale("en", "US"),
                 Locale("fa", "IR"),
               ],
-
               // Return a locale which will be used by the app
               // localeResolutionCallback: (locale, supportedLocales) {
               //   // Check if the current device locale is supported

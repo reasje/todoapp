@@ -28,25 +28,6 @@ class textTextField extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius:
             BorderRadius.all(Radius.circular(SizeX * 0.016)),
-        boxShadow: [
-          BoxShadow(
-            color: _themeProvider.lightShadowColor,
-            offset: Offset(2, 2),
-            blurRadius: 0.0,
-            // changes position of shadow
-          ),
-          BoxShadow(
-            color: _themeProvider.shadowColor.withOpacity(0.14),
-            offset: Offset(-1, -1),
-          ),
-          BoxShadow(
-            color: _themeProvider.mainColor,
-            offset: Offset(5, 8),
-            spreadRadius: -0.5,
-            blurRadius: 14.0,
-            // changes position of shadow
-          ),
-        ],
       ),
       child: TextField(
         controller: _myProvider.text,

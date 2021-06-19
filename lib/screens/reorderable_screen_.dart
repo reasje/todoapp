@@ -109,46 +109,46 @@ class _MyRorderableState extends State<MyRorderable> {
                                         )
                                       ],
                                     ),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.all(
-                                              SizeXSizeY * 0.00004),
-                                          alignment: Alignment.centerLeft,
-                                          child: uiKit.MyButton(
-                                            sizePU: SizeXSizeY * 0.00012,
-                                            sizePD: SizeXSizeY * 0.00013,
-                                            iconSize: SizeX * SizeY * 0.00006,
-                                            iconData: FontAwesome.download,
-                                            id: 'download',
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.all(
-                                              SizeXSizeY * 0.00004),
-                                          alignment: Alignment.centerLeft,
-                                          child: uiKit.MyButton(
-                                            sizePU: SizeXSizeY * 0.00012,
-                                            sizePD: SizeXSizeY * 0.00013,
-                                            iconSize: SizeX * SizeY * 0.00006,
-                                            iconData: FontAwesome.upload,
-                                            id: 'upload',
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.all(
-                                              SizeXSizeY * 0.00004),
-                                          alignment: Alignment.centerLeft,
-                                          child: uiKit.MyButton(
-                                            sizePU: SizeXSizeY * 0.00012,
-                                            sizePD: SizeXSizeY * 0.00013,
-                                            iconSize: SizeX * SizeY * 0.00006,
-                                            iconData: FontAwesome.google,
-                                            id: 'google',
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                    // Row(
+                                    //   children: [
+                                    //     Container(
+                                    //       padding: EdgeInsets.all(
+                                    //           SizeXSizeY * 0.00004),
+                                    //       alignment: Alignment.centerLeft,
+                                    //       child: uiKit.MyButton(
+                                    //         sizePU: SizeXSizeY * 0.00012,
+                                    //         sizePD: SizeXSizeY * 0.00013,
+                                    //         iconSize: SizeX * SizeY * 0.00006,
+                                    //         iconData: FontAwesome.download,
+                                    //         id: 'download',
+                                    //       ),
+                                    //     ),
+                                    //     Container(
+                                    //       padding: EdgeInsets.all(
+                                    //           SizeXSizeY * 0.00004),
+                                    //       alignment: Alignment.centerLeft,
+                                    //       child: uiKit.MyButton(
+                                    //         sizePU: SizeXSizeY * 0.00012,
+                                    //         sizePD: SizeXSizeY * 0.00013,
+                                    //         iconSize: SizeX * SizeY * 0.00006,
+                                    //         iconData: FontAwesome.upload,
+                                    //         id: 'upload',
+                                    //       ),
+                                    //     ),
+                                    //     Container(
+                                    //       padding: EdgeInsets.all(
+                                    //           SizeXSizeY * 0.00004),
+                                    //       alignment: Alignment.centerLeft,
+                                    //       child: uiKit.MyButton(
+                                    //         sizePU: SizeXSizeY * 0.00012,
+                                    //         sizePD: SizeXSizeY * 0.00013,
+                                    //         iconSize: SizeX * SizeY * 0.00006,
+                                    //         iconData: FontAwesome.google,
+                                    //         id: 'google',
+                                    //       ),
+                                    //     ),
+                                    //   ],
+                                    // ),
                                     Container(
                                       padding:
                                           EdgeInsets.all(SizeXSizeY * 0.00004),
@@ -164,43 +164,46 @@ class _MyRorderableState extends State<MyRorderable> {
                                   ],
                                 ),
                               ),
-                              Container(
-                                margin: EdgeInsets.all(SizeX * 0.025),
-                                child: Directionality(
-                                  textDirection: TextDirection.ltr,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      uiKit.MyButton(
-                                        sizePU: SizeXSizeY * 0.00017,
-                                        sizePD: SizeXSizeY * 0.00018,
-                                        iconSize: SizeX * SizeY * 0.0001,
-                                        iconData: FontAwesome.language,
-                                        id: 'lan',
-                                      ),
-                                      uiKit.MyButton(
-                                        sizePU: SizeXSizeY * 0.00017,
-                                        sizePD: SizeXSizeY * 0.00018,
-                                        iconSize: SizeX * SizeY * 0.0001,
-                                        iconData: FontAwesome.plus,
-                                        id: 'new',
-                                      ),
-                                      uiKit.MyButton(
-                                        sizePU: SizeXSizeY * 0.00017,
-                                        sizePD: SizeXSizeY * 0.00018,
-                                        iconSize: SizeX * SizeY * 0.0001,
-                                        iconData: FontAwesome.lightbulb_o,
-                                        id: 'lamp',
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              // Container(
+                              //   margin: EdgeInsets.all(SizeX * 0.025),
+                              //   child: Directionality(
+                              //     textDirection: TextDirection.ltr,
+                              //     child: Row(
+                              //       mainAxisAlignment:
+                              //           MainAxisAlignment.spaceAround,
+                              //       children: [
+                              //         uiKit.MyButton(
+                              //           sizePU: SizeXSizeY * 0.00017,
+                              //           sizePD: SizeXSizeY * 0.00018,
+                              //           iconSize: SizeX * SizeY * 0.0001,
+                              //           iconData: FontAwesome.language,
+                              //           id: 'lan',
+                              //         ),
+                              //         uiKit.MyButton(
+                              //           sizePU: SizeXSizeY * 0.00017,
+                              //           sizePD: SizeXSizeY * 0.00018,
+                              //           iconSize: SizeX * SizeY * 0.0001,
+                              //           iconData: FontAwesome.plus,
+                              //           id: 'new',
+                              //         ),
+                              //         uiKit.MyButton(
+                              //           sizePU: SizeXSizeY * 0.00017,
+                              //           sizePD: SizeXSizeY * 0.00018,
+                              //           iconSize: SizeX * SizeY * 0.0001,
+                              //           iconData: FontAwesome.lightbulb_o,
+                              //           id: 'lamp',
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                           if (noteBox.isEmpty)
-                            uiKit.noNotes(SizeX: SizeX, SizeY: SizeY, themeProvider: _themeProvider)
+                            uiKit.noNotes(
+                                SizeX: SizeX,
+                                SizeY: SizeY,
+                                themeProvider: _themeProvider)
                           else
                             FutureBuilder(
                                 future: _myProvider.updateListSize(
@@ -263,7 +266,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                         bnote.color,
                                                         bnote.leftTime,
                                                         bnote.imageList,
-                                                        bnote.voiceList,bnote.taskList);
+                                                        bnote.voiceList,
+                                                        bnote.taskList);
                                                     notes.delete(keys[index]);
                                                     ScaffoldMessenger.of(
                                                             context)
@@ -315,12 +319,13 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                     vertical:
                                                                         SizeY *
                                                                             0.04),
-                                                            margin:
-                                                                EdgeInsets.only(
-                                                                    bottom:
-                                                                         SizeX *
-                                                                            0.04,
-                                                                    top: isLandscape ? SizeY * 0.1 : SizeX *
+                                                            margin: EdgeInsets.only(
+                                                                bottom: SizeX *
+                                                                    0.04,
+                                                                top: isLandscape
+                                                                    ? SizeY *
+                                                                        0.1
+                                                                    : SizeX *
                                                                         0.01),
                                                             decoration:
                                                                 BoxDecoration(
@@ -687,11 +692,21 @@ class _MyRorderableState extends State<MyRorderable> {
                   ),
                 );
               })),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: _themeProvider.mainColor,
+        child: Icon(
+          FontAwesome.plus,
+          color: _themeProvider.textColor,
+        ),
+        onPressed: () {
+          _myProvider.newNoteClicked(context);
+          Navigator.push(context,
+              SliderTransition(uiKit.MyNotesEditing(noteBox: noteBox)));
+        },
+      ),
     );
   }
 }
-
-
 
 class NoGlowBehaviour extends ScrollBehavior {
   @override
