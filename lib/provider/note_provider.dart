@@ -666,6 +666,11 @@ class NoteProvider extends ChangeNotifier {
     takeSnapshot();
   }
 
+  void noteColorSelected(Color color) {
+    noteColor = color;
+    notifyListeners();
+  }
+
   // getting the color that was choosen by the user
   void changeNoteColor(Color selectedColor, int index) {
     noteColor = selectedColor;

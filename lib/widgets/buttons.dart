@@ -122,30 +122,68 @@ class _MyButtonState extends State<MyButton> {
               }
               break;
             case 'timer':
-              {
-                showCupertinoModalPopup(
-                    context: context,
-                    builder: (context) => Container(
-                          child: CupertinoActionSheet(
-                            actions: [uiKit.MyDatePicker(context)],
-                            cancelButton: Container(
-                              decoration: BoxDecoration(
-                                  color: _themeProvider.mainColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10))),
-                              child: CupertinoActionSheetAction(
-                                child: Text(uiKit.AppLocalizations.of(context)
-                                    .translate('done')),
-                                onPressed: () {
-                                  _myProvider.timerDone();
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ),
-                          ),
-                        ));
-              }
-
+              // {
+              //   showCupertinoModalPopup(
+              //       context: context,
+              //       builder: (context) => Container(
+              //             child: CupertinoActionSheet(
+              //               actions: [uiKit.MyDatePicker(context)],
+              //               cancelButton: Container(
+              //                 decoration: BoxDecoration(
+              //                     color: _themeProvider.mainColor,
+              //                     borderRadius:
+              //                         BorderRadius.all(Radius.circular(10))),
+              //                 child: CupertinoActionSheetAction(
+              //                   child: Text(uiKit.AppLocalizations.of(context)
+              //                       .translate('done')),
+              //                   onPressed: () {
+              //                     _myProvider.timerDone();
+              //                     Navigator.pop(context);
+              //                   },
+              //                 ),
+              //               ),
+              //             ),
+              //           ));
+              // }
+              List<Color> colors = _themeProvider.getNoteColors();
+              showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Container(
+                      color: Color(0xFF737373),
+                      height: SizeX * 0.07,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: _themeProvider.mainColor,
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(20),
+                                topLeft: Radius.circular(20))),
+                        child: GridView(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  mainAxisSpacing: SizeX * 0.08,
+                                  crossAxisSpacing: SizeX * 0.08,
+                                  crossAxisCount: 5),
+                          padding: EdgeInsets.all(SizeX * 0.01),
+                          children: colors
+                              .map((color) => InkWell(
+                                    onTap: () {
+                                      _myProvider.noteColorSelected(color);
+                                    },
+                                    child: Container(
+                                      height: SizeX * 0.05,
+                                      width: SizeX * 0.05,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(40),
+                                          color: color),
+                                    ),
+                                  ))
+                              .toList(),
+                        ),
+                      ),
+                    );
+                  });
               break;
             case 'color':
               // showModalBottomSheet(

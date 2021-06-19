@@ -43,11 +43,23 @@ class ThemeProvider extends ChangeNotifier {
   Color yellow = Color(0xFFffbb33);
   Color blue = Color(0xFF33b5e5);
   Color purple = Color(0xffaa66cc);
+
   Color redShade = Color(0xFFff4444);
   Color greenShade = Color(0xFF00c851);
   Color yellowShade = Color(0xFFffbb33);
   Color blueShade = Color(0xFF33b5e5);
   Color purpleShade = Color(0xffaa66cc);
+  List<Color> shadedColors = [];
+  List<Color> getNoteColors() {
+    shadedColors.clear();
+    shadedColors.add(redShade);
+    shadedColors.add(greenShade);
+    shadedColors.add(yellowShade);
+    shadedColors.add(blueShade);
+    shadedColors.add(purpleShade);
+    return shadedColors;
+  }
+
   String splashImage;
   Color whiteMainColor = Color(0xffe6ebf2);
   Color blackMainColor = Color(0xff303234);
