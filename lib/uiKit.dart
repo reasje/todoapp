@@ -20,5 +20,6 @@ export 'widgets/note_edidting_widgets/text_textfield_widget.dart';
 export 'widgets/note_edidting_widgets/voice_listview_widget.dart';
 export 'widgets/note_edidting_widgets/image_listview_widget.dart';
 export 'widgets/note_edidting_widgets/task_listview_widget.dart';
+export 'widgets/note_edidting_widgets/bottomnav_widget.dart';
 
 

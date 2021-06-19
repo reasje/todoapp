@@ -134,6 +134,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  circular_menu:
+    dependency: "direct main"
+    description:
+      name: circular_menu
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.2"
   cli_util:
     dependency: transitive
     description:
@@ -546,6 +553,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  myket_iap:
+    dependency: "direct main"
+    description:
+      name: myket_iap
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   nested:
     dependency: transitive
     description:

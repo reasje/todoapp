@@ -34,6 +34,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
     return Scaffold(
       //resizeToAvoidBottomInset: false,
       backgroundColor: _themeProvider.mainColor,
+      bottomNavigationBar: uiKit.BottomNavWidget(),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
