@@ -50,7 +50,6 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                 Container(
                   height: SizeX*0.05,
                   width: double.maxFinite,
-                  padding: EdgeInsets.symmetric(vertical: SizeX * 0.03),
                   child: Row(
                     textDirection: TextDirection.ltr,
                     mainAxisAlignment: MainAxisAlignment.start,

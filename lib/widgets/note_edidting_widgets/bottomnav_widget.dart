@@ -83,9 +83,7 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
             child:
                 _buildItem(item, _myProvider.selectedTab == itemIndex, context),
             onTap: () {
-              setState(() {
                 _myProvider.newTabSelected(itemIndex);
-              });
             },
           );
         }).toList(),

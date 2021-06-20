@@ -715,15 +715,22 @@ class NoteProvider extends ChangeNotifier {
             sizePU: SizeXSizeY * 0.00017,
             sizePD: SizeXSizeY * 0.00018,
             iconSize: SizeX * SizeY * 0.00008,
-            iconData: FontAwesome.undo,
+            iconData: Icons.undo_rounded,
             id: 'undo',
           ),
           uiKit.MyButton(
             sizePU: SizeXSizeY * 0.00017,
             sizePD: SizeXSizeY * 0.00018,
             iconSize: SizeX * SizeY * 0.00008,
-            iconData: FontAwesome.rotate_right,
+            iconData: Icons.redo_rounded,
             id: 'redo',
+          ),
+          uiKit.MyButton(
+            sizePU: SizeXSizeY * 0.00017,
+            sizePD: SizeXSizeY * 0.00018,
+            iconSize: SizeX * SizeY * 0.00008,
+            iconData: Icons.color_lens_outlined,
+            id: 'color',
           ),
         ]));
     tabs.add(Tab(
@@ -741,7 +748,7 @@ class NoteProvider extends ChangeNotifier {
             sizePU: SizeXSizeY * 0.00017,
             sizePD: SizeXSizeY * 0.00018,
             iconSize: SizeX * SizeY * 0.00008,
-            iconData: FontAwesome.hourglass,
+            iconData: Icons.hourglass_empty,
             id: 'timer',
           ),
         ]));

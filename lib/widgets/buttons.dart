@@ -122,29 +122,33 @@ class _MyButtonState extends State<MyButton> {
               }
               break;
             case 'timer':
-              // {
-              //   showCupertinoModalPopup(
-              //       context: context,
-              //       builder: (context) => Container(
-              //             child: CupertinoActionSheet(
-              //               actions: [uiKit.MyDatePicker(context)],
-              //               cancelButton: Container(
-              //                 decoration: BoxDecoration(
-              //                     color: _themeProvider.mainColor,
-              //                     borderRadius:
-              //                         BorderRadius.all(Radius.circular(10))),
-              //                 child: CupertinoActionSheetAction(
-              //                   child: Text(uiKit.AppLocalizations.of(context)
-              //                       .translate('done')),
-              //                   onPressed: () {
-              //                     _myProvider.timerDone();
-              //                     Navigator.pop(context);
-              //                   },
-              //                 ),
-              //               ),
-              //             ),
-              //           ));
-              // }
+              {
+                showCupertinoModalPopup(
+                    context: context,
+                    builder: (context) => Container(
+                          child: CupertinoActionSheet(
+                            actions: [uiKit.MyDatePicker(context)],
+                            cancelButton: Container(
+                              decoration: BoxDecoration(
+                                  color: _themeProvider.mainColor,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              child: CupertinoActionSheetAction(
+                                child: Text(uiKit.AppLocalizations.of(context)
+                                    .translate('done')),
+                                onPressed: () {
+                                  _myProvider.timerDone();
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                          ),
+                        ));
+              }
+
+              break;
+            
+            case 'color':
               List<Color> colors = _themeProvider.getNoteColors();
               showModalBottomSheet(
                   context: context,
@@ -184,13 +188,6 @@ class _MyButtonState extends State<MyButton> {
                       ),
                     );
                   });
-              break;
-            case 'color':
-              // showModalBottomSheet(
-              //     context: context,
-              //     builder: (BuildContext ctx) {
-              //       return uiKit.ColorSlider(context);
-              //     });
               break;
             case 'save':
               _myProvider.doneClicked(context);
