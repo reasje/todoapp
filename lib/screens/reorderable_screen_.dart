@@ -92,8 +92,9 @@ class _MyRorderableState extends State<MyRorderable> {
                                               uiKit.AppLocalizations.of(context)
                                                   .translate('notesApp'),
                                               style: TextStyle(
-                                                  color:
-                                                      _themeProvider.titleColor,
+                                                  color: _themeProvider
+                                                      .titleColor
+                                                      .withOpacity(0.6),
                                                   fontSize: _themeProvider.isEn
                                                       ? SizeX * SizeY * 0.00012
                                                       : SizeX * SizeY * 0.0001),
@@ -103,12 +104,15 @@ class _MyRorderableState extends State<MyRorderable> {
                                             FontAwesome.dot_circle_o,
                                             size: SizeX * SizeY * 0.00005,
                                             color: _connState.is_conn
-                                                ? Colors.green
-                                                : Colors.red,
+                                                ? Colors.green.withOpacity(0.6)
+                                                : Colors.red.withOpacity(0.6),
                                           ),
-                                        )
+                                        ),
+                                        
                                       ],
+                                      
                                     ),
+
                                     // Row(
                                     //   children: [
                                     //     Container(
@@ -149,18 +153,32 @@ class _MyRorderableState extends State<MyRorderable> {
                                     //     ),
                                     //   ],
                                     // ),
-                                    Container(
-                                      padding:
-                                          EdgeInsets.all(SizeXSizeY * 0.00004),
-                                      alignment: Alignment.centerLeft,
-                                      child: uiKit.MyButton(
-                                        backgroundColor: _themeProvider.mainColor,
-                                        sizePU: SizeXSizeY * 0.00012,
-                                        sizePD: SizeXSizeY * 0.00013,
-                                        iconSize: SizeX * SizeY * 0.00006,
-                                        iconData: FontAwesome.code,
-                                        id: 'coder',
-                                      ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                                                                                                    uiKit.MyButton(
+                                          backgroundColor:
+                                              _themeProvider.textColor,
+                                          iconData: Icons.settings,
+                                          iconSize: SizeX * SizeY * 0.00005,
+                                          sizePD: SizeX * SizeY * 0.00012,
+                                          sizePU: SizeX * SizeY * 0.00012,
+                                        ),
+                                        Container(
+                                          padding:
+                                              EdgeInsets.all(SizeXSizeY * 0.00004),
+                                          alignment: Alignment.centerLeft,
+                                          child: uiKit.MyButton(
+                                            backgroundColor:
+                                                _themeProvider.textColor,
+                                            sizePU: SizeXSizeY * 0.00012,
+                                            sizePD: SizeXSizeY * 0.00013,
+                                            iconSize: SizeX * SizeY * 0.00006,
+                                            iconData: FontAwesome.code,
+                                            id: 'coder',
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -311,327 +329,243 @@ class _MyRorderableState extends State<MyRorderable> {
                                                               .fastLinearToSlowEaseIn,
                                                           flipAxis: FlipAxis.y,
                                                           child: Container(
-                                                            width: SizeY * 0.9,
-                                                            padding: EdgeInsets
-                                                                .symmetric(
-                                                                    horizontal:
-                                                                        SizeY *
-                                                                            0.009,
-                                                                    vertical:
-                                                                        SizeY *
-                                                                            0.04),
-                                                            margin: EdgeInsets.only(
-                                                                bottom: SizeX *
-                                                                    0.04,
-                                                                top: isLandscape
-                                                                    ? SizeY *
-                                                                        0.1
-                                                                    : SizeX *
-                                                                        0.01),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                                    boxShadow: [
-                                                                  BoxShadow(
-                                                                    color: _themeProvider
-                                                                        .lightShadowColor,
-                                                                    //spreadRadius: 1.0,
-                                                                    blurRadius:
-                                                                        5.0,
-                                                                    offset: Offset(
-                                                                        -6,
-                                                                        -3), // changes position of shadow
+                                                              width:
+                                                                  SizeY * 0.9,
+                                                              padding: EdgeInsets.symmetric(
+                                                                  horizontal:
+                                                                      SizeY *
+                                                                          0.009,
+                                                                  vertical:
+                                                                      SizeY *
+                                                                          0.04),
+                                                              margin: EdgeInsets.only(
+                                                                  bottom:
+                                                                      SizeX *
+                                                                          0.04,
+                                                                  top: isLandscape
+                                                                      ? SizeY *
+                                                                          0.1
+                                                                      : SizeX *
+                                                                          0.01),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                      color: Color(snapShot.data[index].color).withOpacity(
+                                                                              0.5) ??
+                                                                          Colors
+                                                                              .white,
+                                                                      //border: Border.all(width: 1, color: uiKit.Colors.whiteSmoke),
+                                                                      borderRadius:
+                                                                          BorderRadius.all(
+                                                                              Radius.circular(10))),
+                                                              //clipBehavior: Clip.antiAlias,
+                                                              child: Theme(
+                                                                  data: Theme.of(context).copyWith(
+                                                                    unselectedWidgetColor:
+                                                                        _themeProvider
+                                                                            .textColor,
                                                                   ),
-                                                                  BoxShadow(
-                                                                    color: _themeProvider
-                                                                        .shadowColor
-                                                                        .withOpacity(
-                                                                            0.2),
-                                                                    //spreadRadius: 1.0,
-                                                                    blurRadius:
-                                                                        5.0,
-                                                                    offset: Offset(
-                                                                        6,
-                                                                        12), // changes position of shadow
-                                                                  ),
-                                                                ],
-                                                                    color: _themeProvider
-                                                                        .mainColor,
-                                                                    //border: Border.all(width: 1, color: uiKit.Colors.whiteSmoke),
-                                                                    borderRadius:
-                                                                        BorderRadius.all(
-                                                                            Radius.circular(10))),
-                                                            //clipBehavior: Clip.antiAlias,
-                                                            child: Theme(
-                                                                data: Theme.of(
-                                                                        context)
-                                                                    .copyWith(
-                                                                  unselectedWidgetColor:
-                                                                      _themeProvider
-                                                                          .textColor,
-                                                                ),
-                                                                child:
-                                                                    FutureBuilder(
-                                                                        future: _myProvider.getNoteListView(
-                                                                            keys,
-                                                                            index,
-                                                                            SizeX,
-                                                                            SizeY),
-                                                                        builder: (BuildContext
-                                                                                context,
-                                                                            AsyncSnapshot
-                                                                                snapshot) {
-                                                                          if (snapshot
-                                                                              .hasData) {
-                                                                            return Column(
-                                                                              children: [
-                                                                                snapshot.data.time != 0
-                                                                                    ? InkWell(
-                                                                                        key: new PageStorageKey<String>('pageKey ${DateTime.now().microsecondsSinceEpoch}'),
-                                                                                        onTap: () {
-                                                                                          if (!(_timerState.isRunning.any((element) => element == true))) {
-                                                                                            //_myProvider.changeTimerStack();
-                                                                                            _timerState.loadTimer(
-                                                                                              keys,
-                                                                                              index,
-                                                                                              context,
-                                                                                            );
-                                                                                            _myProvider.loadNote(context, keys, index);
-                                                                                            Navigator.push(context, SliderTransition(uiKit.MyNotesEditing(noteBox: noteBox)));
-                                                                                          } else {
-                                                                                            if (_timerState.index == index) {
-                                                                                              // TODO Delete _myProvider.changeTimerStack();
-                                                                                              _timerState.loadTimer(
-                                                                                                keys,
-                                                                                                index,
-                                                                                                context,
-                                                                                              );
-                                                                                              _myProvider.loadNote(context, keys, index);
-                                                                                              Navigator.push(context, SliderTransition(uiKit.MyNotesEditing(noteBox: noteBox)));
-                                                                                            } else {
-                                                                                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                                                                              ScaffoldMessenger.of(context).showSnackBar(uiKit.MySnackBar(uiKit.AppLocalizations.of(context).translate('timerOn'), 'timerOn', false, context));
-                                                                                            }
-                                                                                          }
-                                                                                        },
-                                                                                        child: Container(
-                                                                                          padding: EdgeInsets.all(4),
-                                                                                          child: Container(
-                                                                                            decoration: BoxDecoration(
-                                                                                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                                                                                              boxShadow: [
-                                                                                                BoxShadow(
-                                                                                                  color: _themeProvider.lightShadowColor,
-                                                                                                  offset: Offset(2, 2),
-                                                                                                  blurRadius: 0.0,
-                                                                                                  // changes position of shadow
-                                                                                                ),
-                                                                                                BoxShadow(
-                                                                                                  color: _themeProvider.shadowColor.withOpacity(0.14),
-                                                                                                  offset: Offset(-1, -1),
-                                                                                                ),
-                                                                                                BoxShadow(
-                                                                                                  color: _themeProvider.mainColor,
-                                                                                                  offset: Offset(5, 8),
-                                                                                                  spreadRadius: -0.5,
-                                                                                                  blurRadius: 14.0,
-                                                                                                  // changes position of shadow
-                                                                                                ),
-                                                                                              ],
-                                                                                            ),
-                                                                                            child: Directionality(
-                                                                                              textDirection: TextDirection.ltr,
-                                                                                              child: Row(
-                                                                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                                                mainAxisSize: MainAxisSize.max,
-                                                                                                children: [
-                                                                                                  Text(
-                                                                                                    ((snapshot.data.leftTime / 3600) % 60).floor().toString().padLeft(2, '0'),
-                                                                                                    style: TextStyle(color: _timerState.isRunning[index] ? _themeProvider.swachColor : _themeProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
-                                                                                                  ),
-                                                                                                  Text(
-                                                                                                    ':',
-                                                                                                    style: TextStyle(color: _timerState.isRunning[index] ? _themeProvider.swachColor : _themeProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
-                                                                                                  ),
-                                                                                                  Text(
-                                                                                                    ((snapshot.data.leftTime / 60) % 60).floor().toString().padLeft(2, '0'),
-                                                                                                    style: TextStyle(color: _timerState.isRunning[index] ? _themeProvider.swachColor : _themeProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
-                                                                                                  ),
-                                                                                                  Text(
-                                                                                                    ':',
-                                                                                                    style: TextStyle(color: _timerState.isRunning[index] ? _themeProvider.swachColor : _themeProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
-                                                                                                  ),
-                                                                                                  Text(
-                                                                                                    (snapshot.data.leftTime % 60).floor().toString().padLeft(2, '0'),
-                                                                                                    style: TextStyle(color: _timerState.isRunning[index] ? _themeProvider.swachColor : _themeProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
-                                                                                                  ),
-                                                                                                ],
-                                                                                              ),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ),
-                                                                                      )
-                                                                                    // In this case the note doesnt have a
-                                                                                    : Container(),
-                                                                                snapshot.data.time != 0
-                                                                                    ? Container(
-                                                                                        width: double.infinity,
-                                                                                        height: SizeX * 0.02,
-                                                                                      )
-                                                                                    : Container(),
-                                                                                Container(
-                                                                                  padding: EdgeInsets.all(2),
-                                                                                  child: Container(
-                                                                                    decoration: BoxDecoration(
-                                                                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                                                                      boxShadow: [
-                                                                                        BoxShadow(
-                                                                                          color: _themeProvider.lightShadowColor,
-                                                                                          offset: Offset(2, 2),
-                                                                                          blurRadius: 0.0,
-                                                                                          // changes position of shadow
-                                                                                        ),
-                                                                                        BoxShadow(
-                                                                                          color: _themeProvider.shadowColor.withOpacity(0.14),
-                                                                                          offset: Offset(-1, -1),
-                                                                                        ),
-                                                                                        BoxShadow(
-                                                                                          color: _themeProvider.mainColor,
-                                                                                          offset: Offset(5, 4),
-                                                                                          spreadRadius: -0.5,
-                                                                                          blurRadius: 14.0,
-                                                                                          // changes position of shadow
-                                                                                        ),
-                                                                                      ],
-                                                                                    ),
-                                                                                    child: ExpansionTile(
-                                                                                      // onExpansionChanged: (value) {
-                                                                                      //   _myProvider.changeNoteTitleColor(value, index);
-                                                                                      //   // used to animate
-                                                                                      //   // if (value) {
-                                                                                      //   //   _scrollController.animateTo(
-                                                                                      //   //       _scrollController
-                                                                                      //   //               .position
-                                                                                      //   //               .pixels +
-                                                                                      //   //           SizeX *
-                                                                                      //   //               0.1,
-                                                                                      //   //       duration:
-                                                                                      //   //           Duration(
-                                                                                      //   //               seconds:
-                                                                                      //   //                   1),
-                                                                                      //   //       curve: Curves
-                                                                                      //   //           .easeIn);
-                                                                                      //   // }
-                                                                                      // },
-                                                                                      initiallyExpanded: false,
-                                                                                      // tried too hard to make the expanion color and
-                                                                                      // collapsed color personalized but threre was  a problem
-                                                                                      // Every widget when We call the notifier in the provider
-                                                                                      // as I called one is ExpansionTile the Tile will be
-                                                                                      // recreated so We have to defin this spesific listTile
-                                                                                      // a key that the widget won't be changed !
-                                                                                      key: new PageStorageKey<String>(snapshot.data.title),
-                                                                                      title: InkWell(
-                                                                                        child: Row(
-                                                                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                                          children: [
-                                                                                            Expanded(
-                                                                                              flex: 1,
-                                                                                              child: Checkbox(
-                                                                                                  checkColor: _themeProvider.textColor,
-                                                                                                  value: snapshot.data.isChecked,
-                                                                                                  activeColor: _themeProvider.textColor,
-                                                                                                  onChanged: (bool newValue) {
-                                                                                                    _myProvider.updateIsChecked(newValue, keys, index);
-                                                                                                  }),
-                                                                                            ),
-                                                                                            Expanded(
-                                                                                              flex: 8,
-                                                                                              child: Center(
-                                                                                                child: FittedBox(
-                                                                                                  fit: BoxFit.cover,
-                                                                                                  child: Text(
-                                                                                                    snapshot.data.title.length >= (SizeY * 0.08).round() ? snapshot.data.title.substring(0, (SizeY * 0.08).round()) + "..." : snapshot.data.title,
-                                                                                                    softWrap: false,
-                                                                                                    style: TextStyle(color: _themeProvider.noteTitleColor[index], fontSize: _themeProvider.isEn ? SizeX * SizeY * 0.00011 : SizeX * SizeY * 0.00009, fontWeight: _themeProvider.isEn ? FontWeight.w100 : FontWeight.w600),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
-                                                                                          ],
-                                                                                        ),
-                                                                                        onTap: () {
-                                                                                          _timerState.loadTimer(
-                                                                                            keys,
-                                                                                            index,
-                                                                                            context,
-                                                                                          );
-                                                                                          _myProvider.loadNote(context, keys, index);
-                                                                                          Navigator.push(context, SliderTransition(uiKit.MyNotesEditing(noteBox: noteBox)));
-                                                                                        },
-                                                                                      ),
+                                                                  child: Column(
+                                                                    children: [
+                                                                      snapShot.data[index].time !=
+                                                                              0
+                                                                          ? InkWell(
+                                                                              key: new PageStorageKey<String>('pageKey ${DateTime.now().microsecondsSinceEpoch}'),
+                                                                              onTap: () {
+                                                                                if (!(_timerState.isRunning.any((element) => element == true))) {
+                                                                                  //_myProvider.changeTimerStack();
+                                                                                  _timerState.loadTimer(
+                                                                                    keys,
+                                                                                    index,
+                                                                                    context,
+                                                                                  );
+                                                                                  _myProvider.loadNote(context, keys, index);
+                                                                                  Navigator.push(context, SliderTransition(uiKit.MyNotesEditing(noteBox: noteBox)));
+                                                                                } else {
+                                                                                  if (_timerState.index == index) {
+                                                                                    // TODO Delete _myProvider.changeTimerStack();
+                                                                                    _timerState.loadTimer(
+                                                                                      keys,
+                                                                                      index,
+                                                                                      context,
+                                                                                    );
+                                                                                    _myProvider.loadNote(context, keys, index);
+                                                                                    Navigator.push(context, SliderTransition(uiKit.MyNotesEditing(noteBox: noteBox)));
+                                                                                  } else {
+                                                                                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                                                                    ScaffoldMessenger.of(context).showSnackBar(uiKit.MySnackBar(uiKit.AppLocalizations.of(context).translate('timerOn'), 'timerOn', false, context));
+                                                                                  }
+                                                                                }
+                                                                              },
+                                                                              child: Container(
+                                                                                padding: EdgeInsets.all(4),
+                                                                                child: Container(
+                                                                                  decoration: BoxDecoration(
+                                                                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                                                                  ),
+                                                                                  child: Directionality(
+                                                                                    textDirection: TextDirection.ltr,
+                                                                                    child: Row(
+                                                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                                      mainAxisSize: MainAxisSize.max,
                                                                                       children: [
-                                                                                        Container(
-                                                                                          padding: EdgeInsets.all(SizeY * 0.05),
-                                                                                          child: Text(
-                                                                                            snapshot.data.text,
-                                                                                            style: TextStyle(
-                                                                                              color: _themeProvider.textColor,
-                                                                                              fontSize: SizeX * SizeY * 0.00008,
-                                                                                            ),
-                                                                                          ),
+                                                                                        Text(
+                                                                                          ((snapShot.data[index].leftTime / 3600) % 60).floor().toString().padLeft(2, '0'),
+                                                                                          style: TextStyle(color: _timerState.isRunning[index] ? _themeProvider.swachColor : _themeProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
+                                                                                        ),
+                                                                                        Text(
+                                                                                          ':',
+                                                                                          style: TextStyle(color: _timerState.isRunning[index] ? _themeProvider.swachColor : _themeProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
+                                                                                        ),
+                                                                                        Text(
+                                                                                          ((snapShot.data[index].leftTime / 60) % 60).floor().toString().padLeft(2, '0'),
+                                                                                          style: TextStyle(color: _timerState.isRunning[index] ? _themeProvider.swachColor : _themeProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
+                                                                                        ),
+                                                                                        Text(
+                                                                                          ':',
+                                                                                          style: TextStyle(color: _timerState.isRunning[index] ? _themeProvider.swachColor : _themeProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
+                                                                                        ),
+                                                                                        Text(
+                                                                                          (snapShot.data[index].leftTime % 60).floor().toString().padLeft(2, '0'),
+                                                                                          style: TextStyle(color: _timerState.isRunning[index] ? _themeProvider.swachColor : _themeProvider.textColor, fontSize: SizeX * SizeY * 0.00012, fontFamily: "Ubuntu Condensed"),
                                                                                         ),
                                                                                       ],
-                                                                                      // onTap: () {
-                                                                                      //   _myProvider.loadNote(keys, index, context);
-                                                                                      // },
                                                                                     ),
                                                                                   ),
                                                                                 ),
-                                                                              ],
-                                                                            );
-                                                                          } else {
-                                                                            return Container(
-                                                                                height: SizeX * 0.1,
-                                                                                child: Container(
-                                                                                    padding: EdgeInsets.all(4),
-                                                                                    child: Container(
-                                                                                      decoration: BoxDecoration(
-                                                                                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                                                                                        boxShadow: [
-                                                                                          BoxShadow(
-                                                                                            color: _themeProvider.lightShadowColor,
-                                                                                            offset: Offset(2, 2),
-                                                                                            blurRadius: 0.0,
-                                                                                            // changes position of shadow
-                                                                                          ),
-                                                                                          BoxShadow(
-                                                                                            color: _themeProvider.shadowColor.withOpacity(0.14),
-                                                                                            offset: Offset(-1, -1),
-                                                                                          ),
-                                                                                          BoxShadow(
-                                                                                            color: _themeProvider.mainColor,
-                                                                                            offset: Offset(5, 8),
-                                                                                            spreadRadius: -0.5,
-                                                                                            blurRadius: 14.0,
-                                                                                            // changes position of shadow
-                                                                                          ),
-                                                                                        ],
+                                                                              ),
+                                                                            )
+                                                                          // In this case the note doesnt have a
+                                                                          : Container(),
+                                                                      snapShot.data[index].time !=
+                                                                              0
+                                                                          ? Container(
+                                                                              width: double.infinity,
+                                                                              height: SizeX * 0.02,
+                                                                            )
+                                                                          : Container(),
+                                                                      Container(
+                                                                        padding:
+                                                                            EdgeInsets.all(2),
+                                                                        child:
+                                                                            Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.all(Radius.circular(10)),
+                                                                          ),
+                                                                          child:
+                                                                              ExpansionTile(
+                                                                            // onExpansionChanged: (value) {
+                                                                            //   _myProvider.changeNoteTitleColor(value, index);
+                                                                            //   // used to animate
+                                                                            //   // if (value) {
+                                                                            //   //   _scrollController.animateTo(
+                                                                            //   //       _scrollController
+                                                                            //   //               .position
+                                                                            //   //               .pixels +
+                                                                            //   //           SizeX *
+                                                                            //   //               0.1,
+                                                                            //   //       duration:
+                                                                            //   //           Duration(
+                                                                            //   //               seconds:
+                                                                            //   //                   1),
+                                                                            //   //       curve: Curves
+                                                                            //   //           .easeIn);
+                                                                            //   // }
+                                                                            // },
+                                                                            initiallyExpanded:
+                                                                                false,
+                                                                            // tried too hard to make the expanion color and
+                                                                            // collapsed color personalized but threre was  a problem
+                                                                            // Every widget when We call the notifier in the provider
+                                                                            // as I called one is ExpansionTile the Tile will be
+                                                                            // recreated so We have to defin this spesific listTile
+                                                                            // a key that the widget won't be changed !
+                                                                            key:
+                                                                                new PageStorageKey<String>(snapShot.data[index].title),
+                                                                            title:
+                                                                                InkWell(
+                                                                              child: Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                                children: [
+                                                                                  Expanded(
+                                                                                    flex: 1,
+                                                                                    child: Checkbox(
+                                                                                        checkColor: _themeProvider.textColor,
+                                                                                        value: snapShot.data[index].isChecked,
+                                                                                        activeColor: _themeProvider.textColor,
+                                                                                        onChanged: (bool newValue) {
+                                                                                          _myProvider.updateIsChecked(newValue, keys, index);
+                                                                                        }),
+                                                                                  ),
+                                                                                  Expanded(
+                                                                                    flex: 8,
+                                                                                    child: Center(
+                                                                                      child: FittedBox(
+                                                                                        fit: BoxFit.cover,
+                                                                                        child: Text(
+                                                                                          snapShot.data[index].title.length >= (SizeY * 0.08).round() ? snapShot.data[index].title.substring(0, (SizeY * 0.08).round()) + "..." : snapShot.data[index].title,
+                                                                                          softWrap: false,
+                                                                                          style: TextStyle(color: _themeProvider.noteTitleColor[index], fontSize: _themeProvider.isEn ? SizeX * SizeY * 0.00011 : SizeX * SizeY * 0.00009, fontWeight: _themeProvider.isEn ? FontWeight.w100 : FontWeight.w600),
+                                                                                        ),
                                                                                       ),
-                                                                                      child: Shimmer.fromColors(
-                                                                                        baseColor: _themeProvider.shimmerColor,
-                                                                                        highlightColor: Colors.white,
-                                                                                        child: Container(
-                                                                                            margin: EdgeInsets.all(10),
-                                                                                            decoration: BoxDecoration(
-                                                                                              color: _themeProvider.shimmerColor,
-                                                                                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                                                                                            )),
-                                                                                      ),
-                                                                                    )));
-                                                                          }
-                                                                        })),
-                                                          ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                              onTap: () {
+                                                                                _timerState.loadTimer(
+                                                                                  keys,
+                                                                                  index,
+                                                                                  context,
+                                                                                );
+                                                                                _myProvider.loadNote(context, keys, index);
+                                                                                Navigator.push(context, SliderTransition(uiKit.MyNotesEditing(noteBox: noteBox)));
+                                                                              },
+                                                                            ),
+                                                                            children: [
+                                                                              Container(
+                                                                                padding: EdgeInsets.all(SizeY * 0.05),
+                                                                                child: Text(
+                                                                                  snapShot.data[index].text,
+                                                                                  style: TextStyle(
+                                                                                    color: _themeProvider.textColor,
+                                                                                    fontSize: SizeX * SizeY * 0.00008,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                            // onTap: () {
+                                                                            //   _myProvider.loadNote(keys, index, context);
+                                                                            // },
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  )
+
+                                                                  // return Container(
+                                                                  //     height: SizeX * 0.1,
+                                                                  //     child: Container(
+                                                                  //         padding: EdgeInsets.all(4),
+                                                                  //         child: Container(
+                                                                  //           decoration: BoxDecoration(
+                                                                  //             borderRadius: BorderRadius.all(Radius.circular(10)),
+                                                                  //           ),
+                                                                  //           child: Shimmer.fromColors(
+                                                                  //             baseColor: _themeProvider.shimmerColor,
+                                                                  //             highlightColor: Colors.white,
+                                                                  //             child: Container(
+                                                                  //                 margin: EdgeInsets.all(10),
+                                                                  //                 decoration: BoxDecoration(
+                                                                  //                   color: _themeProvider.shimmerColor,
+                                                                  //                   borderRadius: BorderRadius.all(Radius.circular(10)),
+                                                                  //                 )),
+                                                                  //           ),
+                                                                  //         )));
+
+                                                                  )),
                                                         ),
                                                       ),
                                                     ),
@@ -696,7 +630,7 @@ class _MyRorderableState extends State<MyRorderable> {
       floatingActionButton: FloatingActionButton(
         elevation: 0,
         highlightElevation: 0,
-        backgroundColor: _themeProvider.textColor.withOpacity(0.2),
+        backgroundColor: _themeProvider.textColor.withOpacity(0.1),
         child: Icon(
           FontAwesome.plus,
           color: _themeProvider.textColor,

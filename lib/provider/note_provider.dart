@@ -698,7 +698,7 @@ class NoteProvider extends ChangeNotifier {
   ];
   void initialTabs() {
     tabs.add(Tab(
-      'Text',
+        'Text',
         [
           uiKit.titleTextField(),
           uiKit.textTextField(),
@@ -739,7 +739,7 @@ class NoteProvider extends ChangeNotifier {
           ),
         ]));
     tabs.add(Tab(
-      "Timer",
+        "Timer",
         [uiKit.TimerWidget()],
         items[1].color,
         [
@@ -761,7 +761,7 @@ class NoteProvider extends ChangeNotifier {
           ),
         ]));
     tabs.add(Tab(
-      "Image",
+        "Image",
         [uiKit.imageLisView()],
         items[2].color,
         [
@@ -777,7 +777,7 @@ class NoteProvider extends ChangeNotifier {
           ),
         ]));
     tabs.add(Tab(
-      'Voice',
+        'Voice',
         [uiKit.voiceListView(backGroundColor: items[3].color)],
         items[3].color,
         [
@@ -793,8 +793,12 @@ class NoteProvider extends ChangeNotifier {
           ),
         ]));
     tabs.add(Tab(
-      'Task',
-        [uiKit.taskListView(color: items[4].color,)],
+        'Task',
+        [
+          uiKit.taskListView(
+            color: items[4].color,
+          )
+        ],
         items[4].color,
         [
           Container(
@@ -835,7 +839,20 @@ class NoteProvider extends ChangeNotifier {
     // that is done by chekcing the newNote true or false
     if (newNote) {
       // One of the title or text fields must be filled for the new Note
-      if (text.text.isNotEmpty || title.text.isNotEmpty) {
+      if (text.text.isEmpty &&
+          title.text.isEmpty &&
+          taskList.isEmpty &&
+          imageList.isEmpty &&
+          voiceList.isEmpty &&
+          time_duration == Duration()) {
+        ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
+          // TODO making better the emptyFieldAlert to title and text must not be null
+          uiKit.AppLocalizations.of(noteContext).translate('emptyFieldsAlert'),
+          'emptyFieldsAlert',
+          false,
+          noteContext,
+        ));
+      } else {
         String noteTitle;
         title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
         final String noteText = text.text;
@@ -850,19 +867,11 @@ class NoteProvider extends ChangeNotifier {
             }
           }
         }
-        Note note = Note(noteTitle, noteText, false, noteTime, 0, leftTime,
-            imageList, voiceList, taskList);
+        Note note = Note(noteTitle, noteText, false, noteTime, noteColor.value,
+            leftTime, imageList, voiceList, taskList);
         await noteBox.add(note);
         changes.clearHistory();
         Navigator.pop(noteContext);
-      } else {
-        ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
-          // TODO making better the emptyFieldAlert to title and text must not be null
-          uiKit.AppLocalizations.of(noteContext).translate('emptyFieldsAlert'),
-          'emptyFieldsAlert',
-          false,
-          noteContext,
-        ));
       }
       // TODO find out why this is here
       clearControllers();
@@ -886,7 +895,7 @@ class NoteProvider extends ChangeNotifier {
             text.text,
             bnote.isChecked,
             time_duration.inSeconds,
-            0,
+            noteColor.value,
             bnote.leftTime,
             imageList,
             voiceList,
@@ -990,11 +999,13 @@ class NoteProvider extends ChangeNotifier {
         noteContext));
   }
 
-  Future<bool> updateListSize(List<int> keys, SizeX, SizeY) async {
+  Future<List<Note>> updateListSize(List<int> keys, SizeX, SizeY) async {
     int with_timer = 0;
     int without_timer = 0;
+    List<Note> noteList = [];
     for (int i = 0; i < keys.length; i++) {
       var bnote = await noteBox.get(keys[i]);
+      noteList.add(bnote);
       if (bnote.time == 0) {
         without_timer = without_timer + 1;
       } else {
@@ -1002,7 +1013,7 @@ class NoteProvider extends ChangeNotifier {
       }
     }
     listview_size = (without_timer * SizeX * 0.22) + (with_timer * SizeX * 0.5);
-    return true;
+    return noteList;
   }
 }
 
@@ -1012,5 +1023,5 @@ class Tab {
   Color color;
   List<Widget> buttons;
 
-  Tab(this.title , this.tabs, this.color, this.buttons);
+  Tab(this.title, this.tabs, this.color, this.buttons);
 }

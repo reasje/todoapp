@@ -175,6 +175,7 @@ class _MyButtonState extends State<MyButton> {
                               .map((color) => InkWell(
                                     onTap: () {
                                       _myProvider.noteColorSelected(color);
+                                      Navigator.pop(context);
                                     },
                                     child: Container(
                                       height: SizeX * 0.05,
@@ -279,19 +280,24 @@ class _MyButtonState extends State<MyButton> {
     final _signinState = Provider.of<SigninState>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
     Color backgroundColor = widget.backgroundColor;
-    bool floating =  widget.id == 'newpic' || widget.id == 'newvoice'||widget.id =='pausevoice' ||widget.id =='stopvoice' ||widget.id == 'resumevoice';
-    var shaded= floating ? Colors.transparent : backgroundColor.withOpacity(0.2);
+    bool floating = widget.id == 'newpic' ||
+        widget.id == 'newvoice' ||
+        widget.id == 'pausevoice' ||
+        widget.id == 'stopvoice' ||
+        widget.id == 'resumevoice';
+    var shaded =
+        floating ? Colors.transparent : backgroundColor.withOpacity(0.1);
     return Listener(
       onPointerUp: onPressedUp,
       onPointerDown: onPressedDown,
       // TODO if hovered more then the funrciton not to be executed
       child: isPressed
-          ? Container(
+          ? AnimatedContainer(
+            duration: Duration(seconds: 3),
               height: widget.sizePD,
               width: widget.sizePD,
               padding: EdgeInsets.all(4),
               child: Container(
-                
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: shaded,
@@ -304,19 +310,26 @@ class _MyButtonState extends State<MyButton> {
                       )
                     : Icon(
                         widget.iconData,
-                        size: widget.iconSize,
-                        color: _themeProvider.blueMaterial,
+                        size: widget.iconSize*0.8,
+                        color: widget.id == 'google'
+                          ? _signinState.isSignedin
+                              ? Colors.green
+                              : Colors.red
+                          : floating
+                              ? backgroundColor
+                              : backgroundColor,
                       ),
               ),
             )
-          : Container(
+          : AnimatedContainer(
+                        duration: Duration(seconds: 3),
               height: widget.sizePU,
               width: widget.sizePU,
               decoration: BoxDecoration(
-                  color: shaded,
-                  shape: BoxShape.circle,
-                  //borderRadius: BorderRadius.all(Radius.circular(10))
-                  ),
+                color: shaded,
+                shape: BoxShape.circle,
+                //borderRadius: BorderRadius.all(Radius.circular(10))
+              ),
               child: widget.id == 'dogedonate'
                   ? Image.asset(
                       'assets/images/dogecoin.png',
@@ -325,10 +338,12 @@ class _MyButtonState extends State<MyButton> {
                   : Icon(widget.iconData,
                       size: widget.iconSize,
                       color: widget.id == 'google'
-                                          ? _signinState.isSignedin
-                                              ? Colors.green
-                                              : Colors.red
-                                          : floating ? backgroundColor : backgroundColor),
+                          ? _signinState.isSignedin
+                              ? Colors.green
+                              : Colors.red
+                          : floating
+                              ? backgroundColor
+                              : backgroundColor),
             ),
     );
   }
