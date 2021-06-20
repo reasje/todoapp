@@ -775,7 +775,7 @@ class NoteProvider extends ChangeNotifier {
         ]));
     tabs.add(Tab(
       'Voice',
-        [uiKit.voiceListView()],
+        [uiKit.voiceListView(backGroundColor: items[3].color)],
         items[3].color,
         [
           Container(
