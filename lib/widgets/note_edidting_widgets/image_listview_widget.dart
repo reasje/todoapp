@@ -37,16 +37,7 @@ class imageLisView extends StatelessWidget {
                       ? _myProvider.imageList.length
                       : 0)) {
                 return Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: SizeY * 0.1),
-                  alignment: Alignment.centerLeft,
-                  child: uiKit.MyButton(
-                    sizePU: SizeXSizeY * 0.00017,
-                    sizePD: SizeXSizeY * 0.00018,
-                    iconSize: SizeX * SizeY * 0.00006,
-                    iconData: FontAwesome.plus,
-                    id: 'newpic',
-                  ),
+
                 );
               } else {
                 return FutureBuilder(

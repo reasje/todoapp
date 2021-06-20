@@ -19,7 +19,6 @@ class MyNotesEditing extends StatefulWidget {
 }
 
 class _MyNotesEditingState extends State<MyNotesEditing> {
-
   @override
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<NoteProvider>(context);
@@ -48,7 +47,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
             child: ListView(
               children: [
                 Container(
-                  height: SizeX*0.05,
+                  height: SizeX * 0.05,
                   width: double.maxFinite,
                   child: Row(
                     textDirection: TextDirection.ltr,
@@ -64,9 +63,23 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
           ),
         ),
       ),
-      //bottomSheet: uiKit.BottomNavWidget(),
+      floatingActionButton: _myProvider.tabs[_myProvider.selectedTab].title ==
+              "Image"
+          ? FloatingActionButton(
+            elevation: 0,
+              onPressed: () {},
+              backgroundColor: _myProvider.tabs[_myProvider.selectedTab].color.withOpacity(0.3),
+              child: uiKit.MyButton(
+                //backgroundColor: _myProvider.tabs[_myProvider.selectedTab].color.withOpacity(0.3),
+                sizePU: SizeXSizeY * 0.00017,
+                sizePD: SizeXSizeY * 0.00018,
+                iconSize: SizeX * SizeY * 0.00006,
+                iconData: FontAwesome.plus,
+                id: 'newpic',
+              ),
+            )
+          : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
-
-

@@ -698,6 +698,7 @@ class NoteProvider extends ChangeNotifier {
   ];
   void initialTabs() {
     tabs.add(Tab(
+      'Text',
         [
           uiKit.titleTextField(),
           uiKit.textTextField(),
@@ -705,6 +706,7 @@ class NoteProvider extends ChangeNotifier {
         items[0].color,
         [
           uiKit.MyButton(
+            backgroundColor: items[0].color.withOpacity(0.3),
             sizePU: SizeXSizeY * 0.00017,
             sizePD: SizeXSizeY * 0.00018,
             iconSize: SizeX * SizeY * 0.00008,
@@ -712,6 +714,7 @@ class NoteProvider extends ChangeNotifier {
             id: 'save',
           ),
           uiKit.MyButton(
+            backgroundColor: items[0].color.withOpacity(0.3),
             sizePU: SizeXSizeY * 0.00017,
             sizePD: SizeXSizeY * 0.00018,
             iconSize: SizeX * SizeY * 0.00008,
@@ -719,6 +722,7 @@ class NoteProvider extends ChangeNotifier {
             id: 'undo',
           ),
           uiKit.MyButton(
+            backgroundColor: items[0].color.withOpacity(0.3),
             sizePU: SizeXSizeY * 0.00017,
             sizePD: SizeXSizeY * 0.00018,
             iconSize: SizeX * SizeY * 0.00008,
@@ -726,6 +730,7 @@ class NoteProvider extends ChangeNotifier {
             id: 'redo',
           ),
           uiKit.MyButton(
+            backgroundColor: items[0].color.withOpacity(0.3),
             sizePU: SizeXSizeY * 0.00017,
             sizePD: SizeXSizeY * 0.00018,
             iconSize: SizeX * SizeY * 0.00008,
@@ -734,6 +739,7 @@ class NoteProvider extends ChangeNotifier {
           ),
         ]));
     tabs.add(Tab(
+      "Timer",
         [uiKit.TimerWidget()],
         items[1].color,
         [
@@ -753,6 +759,7 @@ class NoteProvider extends ChangeNotifier {
           ),
         ]));
     tabs.add(Tab(
+      "Image",
         [uiKit.imageLisView()],
         items[2].color,
         [
@@ -767,6 +774,7 @@ class NoteProvider extends ChangeNotifier {
           ),
         ]));
     tabs.add(Tab(
+      'Voice',
         [uiKit.voiceListView()],
         items[3].color,
         [
@@ -781,6 +789,7 @@ class NoteProvider extends ChangeNotifier {
           ),
         ]));
     tabs.add(Tab(
+      'Task',
         [uiKit.taskListView()],
         items[4].color,
         [
@@ -993,8 +1002,10 @@ class NoteProvider extends ChangeNotifier {
 }
 
 class Tab {
+  String title;
   List<Widget> tabs;
   Color color;
   List<Widget> buttons;
-  Tab(this.tabs, this.color, this.buttons);
+
+  Tab(this.title , this.tabs, this.color, this.buttons);
 }
