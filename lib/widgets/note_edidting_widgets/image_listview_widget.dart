@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
+import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
 class imageLisView extends StatelessWidget {
   const imageLisView({
     Key key,
-    @required this.isLandscape,
-    @required this.SizeY,
-    @required this.SizeX,
-    @required NoteProvider myProvider,
-    @required this.SizeXSizeY,
-    @required ThemeProvider themeProvider,
-  }) : _myProvider = myProvider, _themeProvider = themeProvider, super(key: key);
+  }) :super(key: key);
 
-  final bool isLandscape;
-  final double SizeY;
-  final double SizeX;
-  final NoteProvider _myProvider;
-  final double SizeXSizeY;
-  final ThemeProvider _themeProvider;
+
 
   @override
   Widget build(BuildContext context) {
+        final _timerState = Provider.of<TimerState>(context);
+        final _myProvider = Provider.of<NoteProvider>(context);
+    final _themeProvider = Provider.of<ThemeProvider>(context);
+        double SizeX = MediaQuery.of(context).size.height;
+    double SizeY = MediaQuery.of(context).size.width;
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+            double SizeXSizeY = SizeX * SizeY;
     return Container(
         height: isLandscape ? SizeY * 0.2 : SizeX * 0.2,
         child: ListView.builder(

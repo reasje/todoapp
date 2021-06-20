@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 class titleTextField extends StatelessWidget {
   const titleTextField({
     Key key,
-    @required this.isLandscape,
-    @required this.SizeY,
-    @required this.SizeX,
-    @required ThemeProvider themeProvider,
-    @required NoteProvider myProvider,
-  }) : _themeProvider = themeProvider, _myProvider = myProvider, super(key: key);
 
-  final bool isLandscape;
-  final double SizeY;
-  final double SizeX;
-  final ThemeProvider _themeProvider;
-  final NoteProvider _myProvider;
+  }) : super(key: key);
+
+
 
   @override
   Widget build(BuildContext context) {
+            final _myProvider = Provider.of<NoteProvider>(context);
+    final _themeProvider = Provider.of<ThemeProvider>(context);
+        double SizeX = MediaQuery.of(context).size.height;
+    double SizeY = MediaQuery.of(context).size.width;
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     return Container(
-      height: isLandscape ? SizeY * 0.09 : SizeX * 0.09,
-      margin: EdgeInsets.all(SizeX * 0.02),
+      
+      height: isLandscape ? SizeY * 0.06 : SizeX * 0.06,
+      margin: EdgeInsets.only(top: SizeX* 0.04),
       decoration: BoxDecoration(
         borderRadius:
             BorderRadius.all(Radius.circular(SizeX * 0.016)),
@@ -35,13 +35,14 @@ class titleTextField extends StatelessWidget {
         cursorColor: _themeProvider.swachColor,
         cursorHeight: SizeX * 0.055,
         style: TextStyle(
+            
             color: _themeProvider.textColor,
             fontSize: _themeProvider.isEn
-                ? SizeX * SizeY * 0.00012
-                : SizeX * SizeY * 0.0001,
-            fontWeight: FontWeight.w400),
+                ? SizeX * SizeY * 0.00008
+                : SizeX * SizeY * 0.00006,
+            fontWeight: FontWeight.w600),
         decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(_themeProvider.isEn
+            contentPadding: EdgeInsets.symmetric(horizontal:  _themeProvider.isEn
                 ? SizeX * SizeY * 0.00004
                 : SizeX * SizeY * 0.00003),
             suffixIcon: IconButton(
@@ -61,8 +62,8 @@ class titleTextField extends StatelessWidget {
                 color:
                     _themeProvider.hintColor.withOpacity(0.12),
                 fontSize: _themeProvider.isEn
-                    ? SizeX * SizeY * 0.00012
-                    : SizeX * SizeY * 0.0001,
+                    ?  SizeX * SizeY * 0.00008
+                    :  SizeX * SizeY * 0.00006,
                 fontWeight: FontWeight.w400)),
       ),
     );

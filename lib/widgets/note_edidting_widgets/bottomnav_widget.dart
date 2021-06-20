@@ -13,16 +13,7 @@ class BottomNavWidget extends StatefulWidget {
 }
 
 class _BottomNavWidgetState extends State<BottomNavWidget> {
-  int selectedIndex = 0;
   // Color backgroundColor = Colors.white;
-  List<NavigationItem> items = [
-    NavigationItem(Icon(Icons.text_fields), Text('Text'), Color(0xffaa66cc)),
-    NavigationItem(
-        Icon(Icons.hourglass_empty), Text("Timer"), Color(0xFFff4444)),
-    NavigationItem(
-        Icon(Icons.image_outlined), Text("Image"), Color(0xFFffbb33)),
-    NavigationItem(Icon(Icons.voicemail), Text('Voice'), Color(0xFF33b5e5)),
-  ];
 
   Widget _buildItem(
       NavigationItem item, bool isSelected, BuildContext context) {
@@ -75,7 +66,6 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     final _myProvider = Provider.of<NoteProvider>(context);
-    final _timerState = Provider.of<TimerState>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -87,13 +77,14 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: items.map((item) {
-          var itemIndex = items.indexOf(item);
+        children: _myProvider.items.map((item) {
+          var itemIndex = _myProvider.items.indexOf(item);
           return GestureDetector(
-            child: _buildItem(item, selectedIndex == itemIndex, context),
+            child:
+                _buildItem(item, _myProvider.selectedTab == itemIndex, context),
             onTap: () {
               setState(() {
-                selectedIndex = itemIndex;
+                _myProvider.newTabSelected(itemIndex);
               });
             },
           );

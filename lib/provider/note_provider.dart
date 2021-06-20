@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_sound/public/tau.dart';
@@ -12,6 +13,7 @@ import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/taskController.dart';
 import 'package:todoapp/model/task_model.dart';
 import 'package:todoapp/model/voice_model.dart';
+import 'package:todoapp/widgets/note_edidting_widgets/bottomnav_widget.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:undo/undo.dart';
@@ -262,8 +264,12 @@ class NoteProvider extends ChangeNotifier {
     return taskControllerList;
   }
 
-  void taskCheckBoxChanged(bool value, index) {
-    taskControllerList[index].isDone = value;
+  void taskCheckBoxChanged(int index) {
+    if (taskControllerList[index].isDone) {
+      taskControllerList[index].isDone = false;
+    } else {
+      taskControllerList[index].isDone = true;
+    }
     notifyListeners();
   }
 
@@ -616,6 +622,11 @@ class NoteProvider extends ChangeNotifier {
     taskControllerList.add(TaskController(TextEditingController(text: ""),
         false, FocusNode(), PageStorageKey<String>('pageKey 0')));
     newNote = true;
+    SizeX = MediaQuery.of(context).size.height;
+    SizeY = MediaQuery.of(context).size.width;
+    SizeXSizeY = SizeX * SizeY;
+    print('SizeX ${SizeX}');
+    initialTabs();
     takeSnapshot();
     notifyListeners();
   }
@@ -662,12 +673,130 @@ class NoteProvider extends ChangeNotifier {
     time_duration = Duration(seconds: bnote.time);
     noteColor = Color(bnote.color);
     newNote = false;
+    SizeX = MediaQuery.of(context).size.height;
+    SizeY = MediaQuery.of(context).size.width;
+    SizeXSizeY = SizeX * SizeY;
+    initialTabs();
     notifyListeners();
     takeSnapshot();
   }
 
+  //  Note editing tabs and colors managment
+  double SizeX;
+  double SizeY;
+  double SizeXSizeY;
+  int selectedTab = 0;
+  List<Tab> tabs = [];
+  List<NavigationItem> items = [
+    NavigationItem(Icon(Icons.text_fields), Text('Text'), Color(0xffaa66cc)),
+    NavigationItem(
+        Icon(Icons.hourglass_empty), Text("Timer"), Color(0xFFff4444)),
+    NavigationItem(
+        Icon(Icons.image_outlined), Text("Image"), Color(0xFFffbb33)),
+    NavigationItem(Icon(Icons.voicemail), Text('Voice'), Color(0xFF33b5e5)),
+    NavigationItem(Icon(Icons.check), Text('Task'), Color(0xFF00c851)),
+  ];
+  void initialTabs() {
+    tabs.add(Tab(
+        [
+          uiKit.titleTextField(),
+          uiKit.textTextField(),
+        ],
+        items[0].color,
+        [
+          uiKit.MyButton(
+            sizePU: SizeXSizeY * 0.00017,
+            sizePD: SizeXSizeY * 0.00018,
+            iconSize: SizeX * SizeY * 0.00008,
+            iconData: Icons.arrow_back_ios,
+            id: 'save',
+          ),
+          uiKit.MyButton(
+            sizePU: SizeXSizeY * 0.00017,
+            sizePD: SizeXSizeY * 0.00018,
+            iconSize: SizeX * SizeY * 0.00008,
+            iconData: FontAwesome.undo,
+            id: 'undo',
+          ),
+          uiKit.MyButton(
+            sizePU: SizeXSizeY * 0.00017,
+            sizePD: SizeXSizeY * 0.00018,
+            iconSize: SizeX * SizeY * 0.00008,
+            iconData: FontAwesome.rotate_right,
+            id: 'redo',
+          ),
+        ]));
+    tabs.add(Tab(
+        [uiKit.TimerWidget()],
+        items[1].color,
+        [
+          uiKit.MyButton(
+            sizePU: SizeXSizeY * 0.00017,
+            sizePD: SizeXSizeY * 0.00018,
+            iconSize: SizeX * SizeY * 0.00008,
+            iconData: Icons.arrow_back_ios,
+            id: 'save',
+          ),
+          uiKit.MyButton(
+            sizePU: SizeXSizeY * 0.00017,
+            sizePD: SizeXSizeY * 0.00018,
+            iconSize: SizeX * SizeY * 0.00008,
+            iconData: FontAwesome.hourglass,
+            id: 'timer',
+          ),
+        ]));
+    tabs.add(Tab(
+        [uiKit.imageLisView()],
+        items[2].color,
+        [
+          Container(
+            child: uiKit.MyButton(
+              sizePU: SizeXSizeY * 0.00017,
+              sizePD: SizeXSizeY * 0.00018,
+              iconSize: SizeX * SizeY * 0.00008,
+              iconData: Icons.arrow_back_ios,
+              id: 'save',
+            ),
+          ),
+        ]));
+    tabs.add(Tab(
+        [uiKit.voiceListView()],
+        items[3].color,
+        [
+          Container(
+            child: uiKit.MyButton(
+              sizePU: SizeXSizeY * 0.00017,
+              sizePD: SizeXSizeY * 0.00018,
+              iconSize: SizeX * SizeY * 0.00008,
+              iconData: Icons.arrow_back_ios,
+              id: 'save',
+            ),
+          ),
+        ]));
+    tabs.add(Tab(
+        [uiKit.taskListView()],
+        items[4].color,
+        [
+          Container(
+            child: uiKit.MyButton(
+              sizePU: SizeXSizeY * 0.00017,
+              sizePD: SizeXSizeY * 0.00018,
+              iconSize: SizeX * SizeY * 0.00008,
+              iconData: Icons.arrow_back_ios,
+              id: 'save',
+            ),
+          ),
+        ]));
+    notifyListeners();
+  }
+
   void noteColorSelected(Color color) {
     noteColor = color;
+    notifyListeners();
+  }
+
+  void newTabSelected(int index) {
+    selectedTab = index;
     notifyListeners();
   }
 
@@ -854,4 +983,11 @@ class NoteProvider extends ChangeNotifier {
     listview_size = (without_timer * SizeX * 0.22) + (with_timer * SizeX * 0.5);
     return true;
   }
+}
+
+class Tab {
+  List<Widget> tabs;
+  Color color;
+  List<Widget> buttons;
+  Tab(this.tabs, this.color, this.buttons);
 }

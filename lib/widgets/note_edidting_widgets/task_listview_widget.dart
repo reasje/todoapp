@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
@@ -7,25 +8,19 @@ import 'package:todoapp/uiKit.dart' as uiKit;
 class taskListView extends StatelessWidget {
   const taskListView({
     Key key,
-    @required this.isLandscape,
-    @required this.SizeY,
-    @required this.SizeX,
-    @required NoteProvider myProvider,
-    @required ThemeProvider themeProvider,
-    @required this.SizeXSizeY,
-  }) : _myProvider = myProvider, _themeProvider = themeProvider, super(key: key);
-
-  final bool isLandscape;
-  final double SizeY;
-  final double SizeX;
-  final NoteProvider _myProvider;
-  final ThemeProvider _themeProvider;
-  final double SizeXSizeY;
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _myProvider = Provider.of<NoteProvider>(context);
+    final _themeProvider = Provider.of<ThemeProvider>(context);
+    double SizeX = MediaQuery.of(context).size.height;
+    double SizeY = MediaQuery.of(context).size.width;
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+    double SizeXSizeY = SizeX * SizeY;
     return Container(
-      height: isLandscape ? SizeY * 0.7 : SizeX * 0.7,
+      height: isLandscape ? SizeY * 0.7 : SizeX * 0.8,
       margin: EdgeInsets.all(SizeX * 0.02),
       child: FutureBuilder(
         future: _myProvider.getTaskList(),
@@ -40,32 +35,30 @@ class taskListView extends StatelessWidget {
                   onReorder: (oldIndex, newIndex) {
                     _myProvider.reorder(oldIndex, newIndex);
                   },
-                  children: List.generate(snapshot.data.length,
-                      (index) {
+                  children: List.generate(snapshot.data.length, (index) {
                     return AnimatedContainer(
                       key: snapshot.data[index].key,
                       duration: Duration(seconds: 5),
                       child: Dismissible(
-                        key: snapshot.data[index].key,
+                          key: snapshot.data[index].key,
                           background: Container(
                             padding: EdgeInsets.only(
                                 left: SizeY * 0.1,
                                 bottom: SizeX * 0.01,
                                 right: SizeY * 0.1),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(35)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(35)),
                               color: _themeProvider.mainColor,
                             ),
-                            alignment:
-                                AlignmentDirectional.centerEnd,
+                            alignment: AlignmentDirectional.centerEnd,
                             child: Container(
                               height: SizeX * SizeY * 0.0002,
                               width: SizeX * SizeY * 0.0002,
                               decoration: BoxDecoration(
                                 color: _themeProvider.textColor,
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(30)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)),
                               ),
                               child: Icon(
                                 Icons.delete_sweep,
@@ -75,12 +68,10 @@ class taskListView extends StatelessWidget {
                             ),
                           ),
                           onDismissed: (direction) {
-                            ScaffoldMessenger.of(context)
-                                .hideCurrentSnackBar();
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(uiKit.MySnackBar(
-                                    uiKit.AppLocalizations.of(
-                                            context)
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                uiKit.MySnackBar(
+                                    uiKit.AppLocalizations.of(context)
                                         .translate('undoTask'),
                                     'undoTask',
                                     true,
@@ -90,77 +81,78 @@ class taskListView extends StatelessWidget {
                           },
                           child: Container(
                             height: SizeXSizeY * 0.00022,
+                            margin: EdgeInsets.only(top: SizeX * 0.02, ),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Checkbox(
-                                  value:
-                                      snapshot.data[index].isDone,
-                                  onChanged: (value) {
-                                    _myProvider
-                                        .taskCheckBoxChanged(
-                                            value, index);
+                                InkWell(
+                                  onTap: () {
+                                    _myProvider.taskCheckBoxChanged(index);
                                   },
+                                  child: Container(
+                                      height: SizeX * 0.03,
+                                      width: SizeX * 0.03,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(color:Colors.red ,width: 1.5 ),
+                                          color: snapshot.data[index].isDone ?? false ? Colors.red:null),
+                                      child:
+                                          snapshot.data[index].isDone ?? false
+                                              ? Icon(
+                                                  Icons.check_rounded,
+                                                  size: SizeX * 0.028,
+                                                  color: Colors.white,
+                                                )
+                                              : Container()
+                                      // child: Checkbox(
+                                      //   value:
+                                      //       snapshot.data[index].isDone,
+                                      //   onChanged: (value) {
+                                      //     _myProvider
+                                      //         .taskCheckBoxChanged(
+                                      //             value, index);
+                                      //   },
+                                      // ),
+                                      ),
                                 ),
                                 Container(
                                   height: SizeXSizeY * 0.00022,
-                                  width: SizeY * 0.8,
+                                  width: SizeY * 0.75,
                                   alignment: Alignment.center,
-                                  padding: EdgeInsets.only(
-                                      top: SizeX * 0.01),
                                   child: TextField(
                                     controller: snapshot
-                                        .data[index]
-                                        .textEditingController,
+                                        .data[index].textEditingController,
                                     onSubmitted: (value) {
-                                      _myProvider
-                                          .checkListOnSubmit(
-                                              index);
+                                      _myProvider.checkListOnSubmit(index);
                                     },
-                                    focusNode: snapshot
-                                        .data[index].focusNode,
-                                    cursorColor:
-                                        _themeProvider.swachColor,
-                                    cursorHeight: SizeX * 0.055,
+                                    focusNode: snapshot.data[index].focusNode,
+                                    cursorColor: _themeProvider.swachColor,
+                                    cursorHeight: SizeX * 0.04,
                                     style: TextStyle(
-                                        color: _themeProvider
-                                            .textColor,
-                                        fontSize:
-                                            _themeProvider.isEn
-                                                ? SizeX *
-                                                    SizeY *
-                                                    0.00011
-                                                : SizeX *
-                                                    SizeY *
-                                                    0.00009,
-                                        fontWeight:
-                                            FontWeight.w200),
+                                        color: _themeProvider.textColor,
+                                        fontSize: _themeProvider.isEn
+                                            ? SizeX * SizeY * 0.00008
+                                            : SizeX * SizeY * 0.00006,
+                                        fontWeight: FontWeight.w200),
                                     decoration: InputDecoration(
                                         contentPadding: EdgeInsets.all(
                                             _themeProvider.isEn
-                                                ? SizeX *
-                                                    SizeY *
-                                                    0.00001
-                                                : SizeX *
-                                                    SizeY *
-                                                    0.000008),
-                                        hintText: uiKit.AppLocalizations.of(context).translate(
-                                            'titleHint'),
+                                                ? SizeX * SizeY * 0.00001
+                                                : SizeX * SizeY * 0.000008),
+                                        hintText:
+                                            uiKit.AppLocalizations.of(context)
+                                                .translate('titleHint'),
                                         border: InputBorder.none,
-                                        focusedBorder:
-                                            InputBorder.none,
-                                        enabledBorder:
-                                            InputBorder.none,
-                                        errorBorder:
-                                            InputBorder.none,
-                                        disabledBorder:
-                                            InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        errorBorder: InputBorder.none,
+                                        disabledBorder: InputBorder.none,
                                         hintStyle: TextStyle(
                                             color: _themeProvider.hintColor
-                                                .withOpacity(
-                                                    0.12),
+                                                .withOpacity(0.12),
                                             fontSize: _themeProvider.isEn
-                                                ? SizeX * SizeY * 0.00011
-                                                : SizeX * SizeY * 0.0001,
+                                                ? SizeX * SizeY * 0.00008
+                                                : SizeX * SizeY * 0.00006,
                                             fontWeight: FontWeight.w200)),
                                   ),
                                 )
