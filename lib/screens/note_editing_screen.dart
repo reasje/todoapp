@@ -66,9 +66,11 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
       floatingActionButton: _myProvider.tabs[_myProvider.selectedTab].title ==
               "Image"
           ? FloatingActionButton(
-            elevation: 0,
+              focusColor: Colors.transparent,
+              elevation: 0,
               onPressed: () {},
-              backgroundColor: _myProvider.tabs[_myProvider.selectedTab].color.withOpacity(0.3),
+              backgroundColor: _myProvider.tabs[_myProvider.selectedTab].color
+                  .withOpacity(0.3),
               child: uiKit.MyButton(
                 //backgroundColor: _myProvider.tabs[_myProvider.selectedTab].color.withOpacity(0.3),
                 sizePU: SizeXSizeY * 0.00017,
@@ -78,7 +80,157 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                 id: 'newpic',
               ),
             )
-          : null,
+          : _myProvider.tabs[_myProvider.selectedTab].title == "Voice"
+              ? _myProvider.flutterSoundRecorder.isStopped
+                  ? FloatingActionButton(
+                      highlightElevation: 0,
+                      elevation: 0,
+                      onPressed: () {},
+                      backgroundColor: _myProvider
+                          .tabs[_myProvider.selectedTab].color
+                          .withOpacity(0.3),
+                      child: uiKit.MyButton(
+                        sizePU: SizeXSizeY * 0.00017,
+                        sizePD: SizeXSizeY * 0.00018,
+                        iconSize: SizeX * SizeY * 0.00006,
+                        iconData: FontAwesome.microphone,
+                        id: 'newvoice',
+                      ))
+                  : _myProvider.flutterSoundRecorder.isRecording
+                      ? Container(
+                          width: SizeY*0.8,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              FloatingActionButton(
+                                highlightElevation: 0,
+                                elevation: 0,
+                                onPressed: () {},
+                                backgroundColor: _myProvider
+                                    .tabs[_myProvider.selectedTab].color
+                                    .withOpacity(0.3),
+                                child: uiKit.MyButton(
+                                  sizePU: SizeXSizeY * 0.00012,
+                                  sizePD: SizeXSizeY * 0.00013,
+                                  iconSize: SizeX * SizeY * 0.00006,
+                                  iconData: FontAwesome.pause,
+                                  id: 'pausevoice',
+                                ),
+                              ),
+                              Container(
+                                width: SizeY * 0.4,
+                                padding: EdgeInsets.symmetric(vertical: SizeY * 0.04, horizontal:SizeY * 0.04 ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '${((_myProvider.recorderDuration.inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}',
+                                      style: TextStyle(
+                                          color: _themeProvider.blueMaterial,
+                                          fontSize: SizeX * SizeY * 0.0001),
+                                    ),
+                                    Text(
+                                      ':',
+                                      style: TextStyle(
+                                          color: _themeProvider.blueMaterial,
+                                          fontSize: SizeX * SizeY * 0.0001),
+                                    ),
+                                    Text(
+                                      '${((_myProvider.recorderDuration.inSeconds) % 60).floor().toString().padLeft(2, '0')}',
+                                      style: TextStyle(
+                                          color: _themeProvider.blueMaterial,
+                                          fontSize: SizeX * SizeY * 0.0001),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              FloatingActionButton(
+                                highlightElevation: 0,
+                                elevation: 0,
+                                onPressed: () {},
+                                backgroundColor: _myProvider
+                                    .tabs[_myProvider.selectedTab].color
+                                    .withOpacity(0.3),
+                                child: uiKit.MyButton(
+                                  sizePU: SizeXSizeY * 0.00012,
+                                  sizePD: SizeXSizeY * 0.00013,
+                                  iconSize: SizeX * SizeY * 0.00006,
+                                  iconData: FontAwesome.stop,
+                                  id: 'stopvoice',
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container(
+                          width: SizeY * 0.8,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              FloatingActionButton(
+                                highlightElevation: 0,
+                                elevation: 0,
+                                onPressed: () {},
+                                backgroundColor: _myProvider
+                                    .tabs[_myProvider.selectedTab].color
+                                    .withOpacity(0.3),
+                                child: uiKit.MyButton(
+                                  sizePU: SizeX * 0.05,
+                                  sizePD: SizeX * 0.06,
+                                  iconSize: SizeX * SizeY * 0.00006,
+                                  iconData: FontAwesome.play,
+                                  id: 'resumevoice',
+                                ),
+                              ),
+                              Container(
+                                width: SizeY * 0.4,
+                                padding: EdgeInsets.symmetric(vertical: SizeY * 0.02, horizontal:SizeY * 0.02 ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      '${((_myProvider.recorderDuration.inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}',
+                                      style: TextStyle(
+                                          color: _themeProvider.blueMaterial,
+                                          fontSize: SizeX * SizeY * 0.0001),
+                                    ),
+                                    Text(
+                                      ':',
+                                      style: TextStyle(
+                                          color: _themeProvider.blueMaterial,
+                                          fontSize: SizeX * SizeY * 0.0001),
+                                    ),
+                                    Text(
+                                      '${((_myProvider.recorderDuration.inSeconds) % 60).floor().toString().padLeft(2, '0')}',
+                                      style: TextStyle(
+                                          color: _themeProvider.blueMaterial,
+                                          fontSize: SizeX * SizeY * 0.0001),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              FloatingActionButton(
+                                highlightElevation: 0,
+                                elevation: 0,
+                                onPressed: () {},
+                                backgroundColor: _myProvider
+                                    .tabs[_myProvider.selectedTab].color
+                                    .withOpacity(0.3),
+                                child: uiKit.MyButton(
+                                  sizePU: SizeX * 0.05,
+                                  sizePD: SizeX * 0.06,
+                                  iconSize: SizeX * SizeY * 0.00006,
+                                  iconData: FontAwesome.stop,
+                                  id: 'stopvoice',
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+              : null,
+
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
