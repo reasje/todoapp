@@ -706,7 +706,7 @@ class NoteProvider extends ChangeNotifier {
         items[0].color,
         [
           uiKit.MyButton(
-            backgroundColor: items[0].color.withOpacity(0.3),
+            backgroundColor: items[0].color,
             sizePU: SizeXSizeY * 0.00017,
             sizePD: SizeXSizeY * 0.00018,
             iconSize: SizeX * SizeY * 0.00008,
@@ -714,7 +714,7 @@ class NoteProvider extends ChangeNotifier {
             id: 'save',
           ),
           uiKit.MyButton(
-            backgroundColor: items[0].color.withOpacity(0.3),
+            backgroundColor: items[0].color,
             sizePU: SizeXSizeY * 0.00017,
             sizePD: SizeXSizeY * 0.00018,
             iconSize: SizeX * SizeY * 0.00008,
@@ -722,7 +722,7 @@ class NoteProvider extends ChangeNotifier {
             id: 'undo',
           ),
           uiKit.MyButton(
-            backgroundColor: items[0].color.withOpacity(0.3),
+            backgroundColor: items[0].color,
             sizePU: SizeXSizeY * 0.00017,
             sizePD: SizeXSizeY * 0.00018,
             iconSize: SizeX * SizeY * 0.00008,
@@ -730,7 +730,7 @@ class NoteProvider extends ChangeNotifier {
             id: 'redo',
           ),
           uiKit.MyButton(
-            backgroundColor: items[0].color.withOpacity(0.3),
+            backgroundColor: items[0].color,
             sizePU: SizeXSizeY * 0.00017,
             sizePD: SizeXSizeY * 0.00018,
             iconSize: SizeX * SizeY * 0.00008,
@@ -744,6 +744,7 @@ class NoteProvider extends ChangeNotifier {
         items[1].color,
         [
           uiKit.MyButton(
+            backgroundColor: items[1].color,
             sizePU: SizeXSizeY * 0.00017,
             sizePD: SizeXSizeY * 0.00018,
             iconSize: SizeX * SizeY * 0.00008,
@@ -751,6 +752,7 @@ class NoteProvider extends ChangeNotifier {
             id: 'save',
           ),
           uiKit.MyButton(
+            backgroundColor: items[1].color,
             sizePU: SizeXSizeY * 0.00017,
             sizePD: SizeXSizeY * 0.00018,
             iconSize: SizeX * SizeY * 0.00008,
@@ -765,6 +767,7 @@ class NoteProvider extends ChangeNotifier {
         [
           Container(
             child: uiKit.MyButton(
+              backgroundColor: items[2].color,
               sizePU: SizeXSizeY * 0.00017,
               sizePD: SizeXSizeY * 0.00018,
               iconSize: SizeX * SizeY * 0.00008,
@@ -780,6 +783,7 @@ class NoteProvider extends ChangeNotifier {
         [
           Container(
             child: uiKit.MyButton(
+              backgroundColor: items[3].color,
               sizePU: SizeXSizeY * 0.00017,
               sizePD: SizeXSizeY * 0.00018,
               iconSize: SizeX * SizeY * 0.00008,
@@ -790,11 +794,12 @@ class NoteProvider extends ChangeNotifier {
         ]));
     tabs.add(Tab(
       'Task',
-        [uiKit.taskListView()],
+        [uiKit.taskListView(color: items[4].color,)],
         items[4].color,
         [
           Container(
             child: uiKit.MyButton(
+              backgroundColor: items[4].color,
               sizePU: SizeXSizeY * 0.00017,
               sizePD: SizeXSizeY * 0.00018,
               iconSize: SizeX * SizeY * 0.00008,

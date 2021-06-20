@@ -6,8 +6,9 @@ import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
 class taskListView extends StatelessWidget {
+  final Color color;
   const taskListView({
-    Key key,
+    Key key, this.color,
   }) : super(key: key);
 
   @override
@@ -81,7 +82,9 @@ class taskListView extends StatelessWidget {
                           },
                           child: Container(
                             height: SizeXSizeY * 0.00022,
-                            margin: EdgeInsets.only(top: SizeX * 0.02, ),
+                            margin: EdgeInsets.only(
+                              top: SizeX * 0.02,
+                            ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
@@ -94,8 +97,12 @@ class taskListView extends StatelessWidget {
                                       width: SizeX * 0.03,
                                       decoration: BoxDecoration(
                                           shape: BoxShape.circle,
-                                          border: Border.all(color:Colors.red ,width: 1.5 ),
-                                          color: snapshot.data[index].isDone ?? false ? Colors.red:null),
+                                          border: Border.all(
+                                              color: color, width: 1.5),
+                                          color: snapshot.data[index].isDone ??
+                                                  false
+                                              ? color
+                                              : null),
                                       child:
                                           snapshot.data[index].isDone ?? false
                                               ? Icon(

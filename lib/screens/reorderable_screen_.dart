@@ -154,6 +154,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                           EdgeInsets.all(SizeXSizeY * 0.00004),
                                       alignment: Alignment.centerLeft,
                                       child: uiKit.MyButton(
+                                        backgroundColor: _themeProvider.mainColor,
                                         sizePU: SizeXSizeY * 0.00012,
                                         sizePD: SizeXSizeY * 0.00013,
                                         iconSize: SizeX * SizeY * 0.00006,

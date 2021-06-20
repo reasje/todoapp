@@ -49,6 +49,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                 Container(
                   height: SizeX * 0.05,
                   width: double.maxFinite,
+                  margin: EdgeInsets.only(top: SizeX*0.02),
                   child: Row(
                     textDirection: TextDirection.ltr,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -67,12 +68,13 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
               "Image"
           ? FloatingActionButton(
               focusColor: Colors.transparent,
+              highlightElevation: 0,
               elevation: 0,
               onPressed: () {},
               backgroundColor: _myProvider.tabs[_myProvider.selectedTab].color
                   .withOpacity(0.3),
               child: uiKit.MyButton(
-                //backgroundColor: _myProvider.tabs[_myProvider.selectedTab].color.withOpacity(0.3),
+                backgroundColor: _myProvider.tabs[_myProvider.selectedTab].color,
                 sizePU: SizeXSizeY * 0.00017,
                 sizePD: SizeXSizeY * 0.00018,
                 iconSize: SizeX * SizeY * 0.00006,
@@ -86,10 +88,12 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                       highlightElevation: 0,
                       elevation: 0,
                       onPressed: () {},
+                      
                       backgroundColor: _myProvider
                           .tabs[_myProvider.selectedTab].color
                           .withOpacity(0.3),
                       child: uiKit.MyButton(
+                        backgroundColor: _myProvider.tabs[_myProvider.selectedTab].color,
                         sizePU: SizeXSizeY * 0.00017,
                         sizePD: SizeXSizeY * 0.00018,
                         iconSize: SizeX * SizeY * 0.00006,
@@ -110,6 +114,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                     .tabs[_myProvider.selectedTab].color
                                     .withOpacity(0.3),
                                 child: uiKit.MyButton(
+                                  backgroundColor: _myProvider.tabs[_myProvider.selectedTab].color,
                                   sizePU: SizeXSizeY * 0.00012,
                                   sizePD: SizeXSizeY * 0.00013,
                                   iconSize: SizeX * SizeY * 0.00006,
@@ -153,6 +158,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                     .tabs[_myProvider.selectedTab].color
                                     .withOpacity(0.3),
                                 child: uiKit.MyButton(
+                                  backgroundColor: _myProvider.tabs[_myProvider.selectedTab].color,
                                   sizePU: SizeXSizeY * 0.00012,
                                   sizePD: SizeXSizeY * 0.00013,
                                   iconSize: SizeX * SizeY * 0.00006,
@@ -176,6 +182,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                     .tabs[_myProvider.selectedTab].color
                                     .withOpacity(0.3),
                                 child: uiKit.MyButton(
+                                  backgroundColor: _myProvider.tabs[_myProvider.selectedTab].color,
                                   sizePU: SizeX * 0.05,
                                   sizePD: SizeX * 0.06,
                                   iconSize: SizeX * SizeY * 0.00006,
@@ -219,6 +226,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                     .tabs[_myProvider.selectedTab].color
                                     .withOpacity(0.3),
                                 child: uiKit.MyButton(
+                                  backgroundColor: _myProvider.tabs[_myProvider.selectedTab].color,
                                   sizePU: SizeX * 0.05,
                                   sizePD: SizeX * 0.06,
                                   iconSize: SizeX * SizeY * 0.00006,

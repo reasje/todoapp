@@ -279,6 +279,8 @@ class _MyButtonState extends State<MyButton> {
     final _signinState = Provider.of<SigninState>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
     Color backgroundColor = widget.backgroundColor;
+    bool floating =  widget.id == 'newpic' || widget.id == 'newvoice'||widget.id =='pausevoice' ||widget.id =='stopvoice' ||widget.id == 'resumevoice';
+    var shaded= floating ? Colors.transparent : backgroundColor.withOpacity(0.2);
     return Listener(
       onPointerUp: onPressedUp,
       onPointerDown: onPressedDown,
@@ -292,7 +294,7 @@ class _MyButtonState extends State<MyButton> {
                 
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: backgroundColor,
+                  color: shaded,
                   //borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child: widget.id == 'dogedonate'
@@ -311,7 +313,7 @@ class _MyButtonState extends State<MyButton> {
               height: widget.sizePU,
               width: widget.sizePU,
               decoration: BoxDecoration(
-                  color: backgroundColor,
+                  color: shaded,
                   shape: BoxShape.circle,
                   //borderRadius: BorderRadius.all(Radius.circular(10))
                   ),
@@ -325,24 +327,24 @@ class _MyButtonState extends State<MyButton> {
                       color: widget.id == 'undo'
                           ? _myProvider.canUndo
                               ? _themeProvider.blueMaterial
-                              : _themeProvider.textColor
+                              : backgroundColor
                           : widget.id == 'redo'
                               ? _myProvider.canRedo
                                   ? _themeProvider.blueMaterial
-                                  : _themeProvider.textColor
+                                  : backgroundColor
                               : widget.id == 'save' || widget.id == 'cancel'
                                   ? _myProvider.canUndo || false
                                       ? _themeProvider.blueMaterial
-                                      : _themeProvider.textColor
+                                      : backgroundColor
                                   : widget.id == 'timer'
                                       ? _myProvider.time_duration != Duration()
                                           ? _themeProvider.blueMaterial
-                                          : _themeProvider.textColor
+                                          : backgroundColor
                                       : widget.id == 'google'
                                           ? _signinState.isSignedin
                                               ? Colors.green
                                               : Colors.red
-                                          : _themeProvider.textColor),
+                                          : floating ? backgroundColor : backgroundColor),
             ),
     );
   }
