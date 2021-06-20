@@ -324,23 +324,7 @@ class _MyButtonState extends State<MyButton> {
                     )
                   : Icon(widget.iconData,
                       size: widget.iconSize,
-                      color: widget.id == 'undo'
-                          ? _myProvider.canUndo
-                              ? _themeProvider.blueMaterial
-                              : backgroundColor
-                          : widget.id == 'redo'
-                              ? _myProvider.canRedo
-                                  ? _themeProvider.blueMaterial
-                                  : backgroundColor
-                              : widget.id == 'save' || widget.id == 'cancel'
-                                  ? _myProvider.canUndo || false
-                                      ? _themeProvider.blueMaterial
-                                      : backgroundColor
-                                  : widget.id == 'timer'
-                                      ? _myProvider.time_duration != Duration()
-                                          ? _themeProvider.blueMaterial
-                                          : backgroundColor
-                                      : widget.id == 'google'
+                      color: widget.id == 'google'
                                           ? _signinState.isSignedin
                                               ? Colors.green
                                               : Colors.red

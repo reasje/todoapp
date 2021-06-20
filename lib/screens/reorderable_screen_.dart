@@ -694,7 +694,9 @@ class _MyRorderableState extends State<MyRorderable> {
                 );
               })),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: _themeProvider.mainColor,
+        elevation: 0,
+        highlightElevation: 0,
+        backgroundColor: _themeProvider.textColor.withOpacity(0.2),
         child: Icon(
           FontAwesome.plus,
           color: _themeProvider.textColor,
