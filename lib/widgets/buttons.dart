@@ -175,7 +175,8 @@ class _MyButtonState extends State<MyButton> {
                                       Navigator.pop(context);
                                     },
                                     child: Text(
-                                      'Done',
+                                      uiKit.AppLocalizations.of(context)
+                                    .translate('done'),
                                       style: TextStyle(
                                           color: _themeProvider.titleColor
                                               .withOpacity(0.6),
@@ -324,7 +325,7 @@ class _MyButtonState extends State<MyButton> {
                                     Navigator.pop(context);
                                   },
                                   child: Text(
-                                    'Camera',
+                                    uiKit.AppLocalizations.of(context).translate('camera'),
                                     style: TextStyle(
                                         color: _themeProvider.titleColor
                                             .withOpacity(0.6),
@@ -344,7 +345,7 @@ class _MyButtonState extends State<MyButton> {
                                     Navigator.pop(context);
                                   },
                                   child: Text(
-                                    'Gallery',
+                                    uiKit.AppLocalizations.of(context).translate('gallery'),
                                     style: TextStyle(
                                         color: _themeProvider.titleColor
                                             .withOpacity(0.6),
