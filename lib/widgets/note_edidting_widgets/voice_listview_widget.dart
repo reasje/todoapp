@@ -28,7 +28,6 @@ class voiceListView extends StatelessWidget {
         child: ScrollConfiguration(
           behavior: uiKit.NoGlowBehaviour(),
           child: ListView.builder(
-        
               itemCount: _myProvider.voiceList != null
                   ? _myProvider.voiceList.length + 1
                   : 1,
@@ -102,8 +101,10 @@ class voiceListView extends StatelessWidget {
                                                 Container(
                                                   width: SizeY * 0.7,
                                                   child: Slider.adaptive(
-                                                    key: UniqueKey(),
-                                                    
+                                                    key: PageStorageKey<String>(
+                                                      'pageKey ${DateTime.now().microsecondsSinceEpoch}'),
+                                                    inactiveColor: backGroundColor.withOpacity(0.1),
+                                                    activeColor: backGroundColor,
                                                     onChangeEnd: (value) {
                                                       _myProvider
                                                           .seekPlayingRecorder(
@@ -241,24 +242,7 @@ class voiceListView extends StatelessWidget {
                               margin:
                                   EdgeInsets.symmetric(horizontal: SizeY * 0.03),
                               decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: _themeProvider.lightShadowColor,
-                                    spreadRadius: 1.0,
-                                    blurRadius: 1.0,
-                                    offset: Offset(
-                                        -1, -1), // changes position of shadow
-                                  ),
-                                  BoxShadow(
-                                    color: _themeProvider.shadowColor
-                                        .withOpacity(0.17),
-                                    spreadRadius: 1.0,
-                                    blurRadius: 2.0,
-                                    offset: Offset(
-                                        3, 4), // changes position of shadow
-                                  ),
-                                ],
-                                color: _themeProvider.mainColor,
+                                color: backGroundColor,
                                 // borderRadius:
                                 //     BorderRadius.all(Radius.circular(SizeX * 0.3))
                               ),

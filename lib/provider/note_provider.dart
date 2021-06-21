@@ -130,6 +130,7 @@ class NoteProvider extends ChangeNotifier {
   Note bnote;
   // note color is used for reloading the color selection selected
   Color noteColor;
+  Color colorSnapShot;
   int indexOfSelectedColor;
   //////////////////////////////////// *** IMAGELIST PART *** /////////////////////////////////////
   // list of images that will be loaded on user tap
@@ -262,6 +263,7 @@ class NoteProvider extends ChangeNotifier {
   // List<TextEditingController> taskTextList = [];
   TaskController dissmissedTask;
   List<TaskController> taskControllerList = [];
+  List<TaskController> taskControllerListSnapShot = [];
   Future<List<TaskController>> getTaskList() async {
     return taskControllerList;
   }
@@ -565,7 +567,6 @@ class NoteProvider extends ChangeNotifier {
     taskList.clear();
     time_duration = Duration();
     note_duration = Duration();
-
     notifyListeners();
   }
 
@@ -576,10 +577,12 @@ class NoteProvider extends ChangeNotifier {
     ttext = text.text;
     old_value = text.text;
     time_snapshot = note_duration;
+    colorSnapShot = noteColor;
     begin_edit = false;
     if (!newNote) {
       imageListSnapshot = List.from(imageList);
       voiceListSnapshot = List.from(voiceList);
+      taskControllerList = List.from(taskControllerList);
     }
   }
 
@@ -591,7 +594,8 @@ class NoteProvider extends ChangeNotifier {
         ttext == text.text &&
         time_duration == time_snapshot &&
         ListEquality().equals(imageList, imageListSnapshot) &&
-        ListEquality().equals(voiceList, voiceListSnapshot)) {
+        ListEquality().equals(voiceList, voiceListSnapshot) &&
+        ListEquality().equals(taskControllerList, taskControllerListSnapShot)) {
       return false;
     } else {
       return true;
@@ -1002,7 +1006,7 @@ class NoteProvider extends ChangeNotifier {
         Navigator.pop(noteContext);
       }
       // TODO find out why this is here
-      clearControllers();
+      //clearControllers();
     } else {
       // One of the title or text fields must be filled
       if (text.text.isNotEmpty || title.text.isNotEmpty) {
@@ -1048,7 +1052,21 @@ class NoteProvider extends ChangeNotifier {
   void cancelClicked(BuildContext context) {
     noteContext = context;
     if (isEdited()) {
-      if (text.text.isNotEmpty || title.text.isNotEmpty) {
+      if (text.text.isEmpty &&
+          title.text.isEmpty &&
+          taskControllerList[0].textEditingController.text == "" &&
+          imageList.isEmpty &&
+          voiceList.isEmpty &&
+          note_duration == Duration()) {
+        ScaffoldMessenger.of(noteContext).clearSnackBars();
+        ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
+            uiKit.AppLocalizations.of(noteContext).translate('willingToDelete'),
+            'willingToDelete',
+            false,
+            noteContext));
+        Navigator.pop(noteContext);
+        clearControllers();
+      } else {
         if (notSaving == 0) {
           ScaffoldMessenger.of(noteContext).clearSnackBars();
           ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
@@ -1067,15 +1085,6 @@ class NoteProvider extends ChangeNotifier {
           changes.clearHistory();
           clearControllers();
         }
-      } else {
-        ScaffoldMessenger.of(noteContext).clearSnackBars();
-        ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
-            uiKit.AppLocalizations.of(noteContext).translate('willingToDelete'),
-            'willingToDelete',
-            false,
-            noteContext));
-        Navigator.pop(noteContext);
-        clearControllers();
       }
     } else {
       // making all the changes that has been save for the
