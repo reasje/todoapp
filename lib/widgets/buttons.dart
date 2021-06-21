@@ -113,7 +113,7 @@ class _MyButtonState extends State<MyButton> {
             case 'new':
               await _myProvider.newNoteClicked(context);
               Navigator.push(context,
-                  SliderTransition(uiKit.MyNotesEditing(noteBox: noteBox)));
+                  SliderTransition(uiKit.MyNotesEditing()));
               break;
             case 'lamp':
               _themeProvider.changeBrigness();

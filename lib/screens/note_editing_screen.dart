@@ -9,10 +9,12 @@ import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
+import '../main.dart';
+
 // TODO moving and reordering list view effect
 class MyNotesEditing extends StatefulWidget {
-  final LazyBox<Note> noteBox;
-  MyNotesEditing({@required this.noteBox, Key key}) : super(key: key);
+
+  MyNotesEditing({ Key key}) : super(key: key);
 
   @override
   _MyNotesEditingState createState() => _MyNotesEditingState();
@@ -28,8 +30,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     double SizeXSizeY = SizeX * SizeY;
-    LazyBox<Note> noteBox = widget.noteBox;
-
+    LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
     return Scaffold(
       //resizeToAvoidBottomInset: false,
       backgroundColor: _themeProvider.mainColor,

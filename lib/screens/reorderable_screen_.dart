@@ -144,10 +144,7 @@ class _MyRorderableState extends State<MyRorderable> {
                             ],
                           ),
                           if (noteBox.isEmpty)
-                            uiKit.noNotes(
-                                SizeX: SizeX,
-                                SizeY: SizeY,
-                                themeProvider: _themeProvider)
+                            uiKit.noNotes()
                           else
                             FutureBuilder(
                                 future: _myProvider.updateListSize(
@@ -172,7 +169,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                   index < keys.length;
                                                   index++)
                                                 Dismissible(
-                                                  key: UniqueKey(),
+                                                  key: PageStorageKey<String>(
+                                                      'pageKey ${DateTime.now().microsecondsSinceEpoch}'),
                                                   background: Container(
                                                     padding: EdgeInsets.only(
                                                         left: SizeY * 0.1,
@@ -304,7 +302,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                                     context,
                                                                                   );
                                                                                   _myProvider.loadNote(context, keys, index);
-                                                                                  Navigator.push(context, SliderTransition(uiKit.MyNotesEditing(noteBox: noteBox)));
+                                                                                  Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
                                                                                 } else {
                                                                                   if (_timerState.index == index) {
                                                                                     // TODO Delete _myProvider.changeTimerStack();
@@ -314,7 +312,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                                       context,
                                                                                     );
                                                                                     _myProvider.loadNote(context, keys, index);
-                                                                                    Navigator.push(context, SliderTransition(uiKit.MyNotesEditing(noteBox: noteBox)));
+                                                                                    Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
                                                                                   } else {
                                                                                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                                                                     ScaffoldMessenger.of(context).showSnackBar(uiKit.MySnackBar(uiKit.AppLocalizations.of(context).translate('timerOn'), 'timerOn', false, context));
@@ -408,7 +406,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                             // recreated so We have to defin this spesific listTile
                                                                             // a key that the widget won't be changed !
                                                                             key:
-                                                                                new PageStorageKey<String>(snapShot.data[index].title),
+                                                                                PageStorageKey<String>('pageKey ${DateTime.now().microsecondsSinceEpoch}'),
                                                                             title:
                                                                                 InkWell(
                                                                               child: Row(
@@ -446,7 +444,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                                   context,
                                                                                 );
                                                                                 _myProvider.loadNote(context, keys, index);
-                                                                                Navigator.push(context, SliderTransition(uiKit.MyNotesEditing(noteBox: noteBox)));
+                                                                                Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
                                                                               },
                                                                             ),
                                                                             children: [
@@ -563,8 +561,7 @@ class _MyRorderableState extends State<MyRorderable> {
         onPressed: () {
           _myProvider.newNoteClicked(context);
           _timerState.clearControllers();
-          Navigator.push(context,
-              SliderTransition(uiKit.MyNotesEditing(noteBox: noteBox)));
+          Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
         },
       ),
     );

@@ -767,10 +767,10 @@ class NoteProvider extends ChangeNotifier {
                 ],
               ),
             ),
-            Container(
-              alignment: Alignment.centerRight,
-              child: Expanded(
-                flex: 1,
+            Expanded(
+              flex: 1,
+              child: Container(
+                alignment: Alignment.centerRight,
                 child: uiKit.MyButton(
                   backgroundColor: items[0].color,
                   sizePU: SizeXSizeY * 0.00017,
@@ -965,9 +965,10 @@ class NoteProvider extends ChangeNotifier {
     // that is done by chekcing the newNote true or false
     if (newNote) {
       // One of the title or text fields must be filled for the new Note
+
       if (text.text.isEmpty &&
           title.text.isEmpty &&
-          taskList.isEmpty &&
+          taskControllerList.isEmpty &&
           imageList.isEmpty &&
           voiceList.isEmpty &&
           note_duration == Duration()) {
@@ -996,6 +997,7 @@ class NoteProvider extends ChangeNotifier {
         final String noteText = text.text;
         final int noteTime = note_duration.inSeconds;
         int leftTime = noteTime;
+        var color = noteColor?.value ?? tabColors[0].value;
         if (taskControllerList.isNotEmpty) {
           for (int i = 0; i < taskControllerList.length; i++) {
             if (taskControllerList[i].textEditingController.text != '') {
@@ -1005,7 +1007,7 @@ class NoteProvider extends ChangeNotifier {
             }
           }
         }
-        Note note = Note(noteTitle, noteText, false, noteTime, noteColor.value,
+        Note note = Note(noteTitle, noteText, false, noteTime, color,
             leftTime, imageList, voiceList, taskList);
         await noteBox.add(note);
         changes.clearHistory();
@@ -1019,6 +1021,7 @@ class NoteProvider extends ChangeNotifier {
         var bnote = await noteBox.get(providerKeys[providerIndex]);
         String noteTitle;
         title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
+        var color = noteColor?.value ?? tabColors[0].value;
         if (taskControllerList.isNotEmpty) {
           for (int i = 0; i < taskControllerList.length; i++) {
             if (taskControllerList[i].textEditingController.text != '') {
@@ -1033,7 +1036,7 @@ class NoteProvider extends ChangeNotifier {
             text.text,
             bnote.isChecked,
             note_duration.inSeconds,
-            noteColor.value,
+            color,
             bnote.leftTime,
             imageList,
             voiceList,
