@@ -703,140 +703,241 @@ class NoteProvider extends ChangeNotifier {
 
   void initialTabs() {
     tabColors.shuffle();
+    //tabColors.
+    print('tabColors ${tabColors}');
     items = [
       NavigationItem(Icon(Icons.text_fields), Text('Text'), tabColors[0]),
-      NavigationItem(
-        Icon(Icons.hourglass_empty),
-        Text("Timer"),tabColors[1]
-      ),
-      NavigationItem(
-        Icon(Icons.image_outlined),
-        Text("Image"),tabColors[2]
-      ),
-      NavigationItem(
-        Icon(Icons.voicemail),
-        Text('Voice'),tabColors[3]
-      ),
-      NavigationItem(
-        Icon(Icons.check),
-        Text('Task'),tabColors[4]
-      ),
+      NavigationItem(Icon(Icons.hourglass_empty), Text("Timer"), tabColors[1]),
+      NavigationItem(Icon(Icons.image_outlined), Text("Image"), tabColors[2]),
+      NavigationItem(Icon(Icons.voicemail), Text('Voice'), tabColors[3]),
+      NavigationItem(Icon(Icons.check), Text('Task'), tabColors[4]),
     ];
-    tabs.add(Tab(
-        'Text',
-        [
-          uiKit.titleTextField(),
-          uiKit.textTextField(),
-        ],
-        items[0].color,
-        [
-          uiKit.MyButton(
-            backgroundColor: items[0].color,
-            sizePU: SizeXSizeY * 0.00017,
-            sizePD: SizeXSizeY * 0.00018,
-            iconSize: SizeX * SizeY * 0.00008,
-            iconData: Icons.arrow_back_ios,
-            id: 'save',
-          ),
-          uiKit.MyButton(
-            backgroundColor: items[0].color,
-            sizePU: SizeXSizeY * 0.00017,
-            sizePD: SizeXSizeY * 0.00018,
-            iconSize: SizeX * SizeY * 0.00008,
-            iconData: Icons.undo_rounded,
-            id: 'undo',
-          ),
-          uiKit.MyButton(
-            backgroundColor: items[0].color,
-            sizePU: SizeXSizeY * 0.00017,
-            sizePD: SizeXSizeY * 0.00018,
-            iconSize: SizeX * SizeY * 0.00008,
-            iconData: Icons.redo_rounded,
-            id: 'redo',
-          ),
-          uiKit.MyButton(
-            backgroundColor: items[0].color,
-            sizePU: SizeXSizeY * 0.00017,
-            sizePD: SizeXSizeY * 0.00018,
-            iconSize: SizeX * SizeY * 0.00008,
-            iconData: Icons.color_lens_outlined,
-            id: 'color',
-          ),
-        ]));
-    tabs.add(Tab(
-        "Timer",
-        [uiKit.TimerWidget()],
-        items[1].color,
-        [
-          uiKit.MyButton(
-            backgroundColor: items[1].color,
-            sizePU: SizeXSizeY * 0.00017,
-            sizePD: SizeXSizeY * 0.00018,
-            iconSize: SizeX * SizeY * 0.00008,
-            iconData: Icons.arrow_back_ios,
-            id: 'save',
-          ),
-          uiKit.MyButton(
-            backgroundColor: items[1].color,
-            sizePU: SizeXSizeY * 0.00017,
-            sizePD: SizeXSizeY * 0.00018,
-            iconSize: SizeX * SizeY * 0.00008,
-            iconData: Icons.hourglass_empty,
-            id: 'timer',
-          ),
-        ]));
-    tabs.add(Tab(
-        "Image",
-        [uiKit.imageLisView()],
-        items[2].color,
-        [
-          Container(
-            child: uiKit.MyButton(
-              backgroundColor: items[2].color,
-              sizePU: SizeXSizeY * 0.00017,
-              sizePD: SizeXSizeY * 0.00018,
-              iconSize: SizeX * SizeY * 0.00008,
-              iconData: Icons.arrow_back_ios,
-              id: 'save',
+
+    tabs = [
+      Tab(
+          'Text',
+          [
+            uiKit.titleTextField(),
+            uiKit.textTextField(),
+          ],
+          items[0].color,
+          [
+            Expanded(
+              flex: 1,
+              child: Container(
+                alignment: Alignment.centerLeft,
+                child: uiKit.MyButton(
+                  backgroundColor: items[0].color,
+                  sizePU: SizeXSizeY * 0.00017,
+                  sizePD: SizeXSizeY * 0.00018,
+                  iconSize: SizeX * SizeY * 0.00008,
+                  iconData: Icons.arrow_back_ios_new_rounded,
+                  id: 'save',
+                ),
+              ),
             ),
-          ),
-        ]));
-    tabs.add(Tab(
-        'Voice',
-        [uiKit.voiceListView(backGroundColor: items[3].color)],
-        items[3].color,
-        [
-          Container(
-            child: uiKit.MyButton(
-              backgroundColor: items[3].color,
-              sizePU: SizeXSizeY * 0.00017,
-              sizePD: SizeXSizeY * 0.00018,
-              iconSize: SizeX * SizeY * 0.00008,
-              iconData: Icons.arrow_back_ios,
-              id: 'save',
+            Expanded(
+              flex: 2,
+              child: Row(
+                children: [
+                  uiKit.MyButton(
+                    backgroundColor: items[0].color,
+                    sizePU: SizeXSizeY * 0.00017,
+                    sizePD: SizeXSizeY * 0.00018,
+                    iconSize: SizeX * SizeY * 0.00008,
+                    iconData: Icons.undo_rounded,
+                    id: 'undo',
+                  ),
+                  uiKit.MyButton(
+                    backgroundColor: items[0].color,
+                    sizePU: SizeXSizeY * 0.00017,
+                    sizePD: SizeXSizeY * 0.00018,
+                    iconSize: SizeX * SizeY * 0.00008,
+                    iconData: Icons.redo_rounded,
+                    id: 'redo',
+                  ),
+                  uiKit.MyButton(
+                    backgroundColor: items[0].color,
+                    sizePU: SizeXSizeY * 0.00017,
+                    sizePD: SizeXSizeY * 0.00018,
+                    iconSize: SizeX * SizeY * 0.00008,
+                    iconData: Icons.color_lens_outlined,
+                    id: 'color',
+                  ),
+                ],
+              ),
             ),
-          ),
-        ]));
-    tabs.add(Tab(
-        'Task',
-        [
-          uiKit.taskListView(
-            color: items[4].color,
-          )
-        ],
-        items[4].color,
-        [
-          Container(
-            child: uiKit.MyButton(
-              backgroundColor: items[4].color,
-              sizePU: SizeXSizeY * 0.00017,
-              sizePD: SizeXSizeY * 0.00018,
-              iconSize: SizeX * SizeY * 0.00008,
-              iconData: Icons.arrow_back_ios,
-              id: 'save',
+            Container(
+              alignment: Alignment.centerRight,
+              child: Expanded(
+                flex: 1,
+                child: uiKit.MyButton(
+                  backgroundColor: items[0].color,
+                  sizePU: SizeXSizeY * 0.00017,
+                  sizePD: SizeXSizeY * 0.00018,
+                  iconSize: SizeX * SizeY * 0.00008,
+                  iconData: Icons.close_rounded,
+                  id: 'cancel',
+                ),
+              ),
             ),
-          ),
-        ]));
+          ]),
+      Tab(
+          "Timer",
+          [uiKit.TimerWidget()],
+          items[1].color,
+          [
+            Expanded(
+              child: Container(
+                alignment: Alignment.centerLeft,
+                child: uiKit.MyButton(
+                  backgroundColor: items[1].color,
+                  sizePU: SizeXSizeY * 0.00017,
+                  sizePD: SizeXSizeY * 0.00018,
+                  iconSize: SizeX * SizeY * 0.00008,
+                  iconData: Icons.arrow_back_ios_new_rounded,
+                  id: 'save',
+                ),
+              ),
+            ),
+            Expanded(
+              child: uiKit.MyButton(
+                backgroundColor: items[1].color,
+                sizePU: SizeXSizeY * 0.00017,
+                sizePD: SizeXSizeY * 0.00018,
+                iconSize: SizeX * SizeY * 0.00008,
+                iconData: Icons.hourglass_empty,
+                id: 'timer',
+              ),
+            ),
+            Expanded(
+              child: Container(
+                alignment: Alignment.centerRight,
+                child: Expanded(
+                  flex: 1,
+                  child: uiKit.MyButton(
+                    backgroundColor: items[1].color,
+                    sizePU: SizeXSizeY * 0.00017,
+                    sizePD: SizeXSizeY * 0.00018,
+                    iconSize: SizeX * SizeY * 0.00008,
+                    iconData: Icons.close_rounded,
+                    id: 'cancel',
+                  ),
+                ),
+              ),
+            ),
+          ]),
+      Tab(
+          "Image",
+          [uiKit.imageLisView()],
+          items[2].color,
+          [
+            Expanded(
+              child: Container(
+                alignment: Alignment.centerLeft,
+                child: uiKit.MyButton(
+                  backgroundColor: items[2].color,
+                  sizePU: SizeXSizeY * 0.00017,
+                  sizePD: SizeXSizeY * 0.00018,
+                  iconSize: SizeX * SizeY * 0.00008,
+                  iconData: Icons.arrow_back_ios_new_rounded,
+                  id: 'save',
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                alignment: Alignment.centerRight,
+                child: Expanded(
+                  flex: 1,
+                  child: uiKit.MyButton(
+                    backgroundColor: items[2].color,
+                    sizePU: SizeXSizeY * 0.00017,
+                    sizePD: SizeXSizeY * 0.00018,
+                    iconSize: SizeX * SizeY * 0.00008,
+                    iconData: Icons.close_rounded,
+                    id: 'cancel',
+                  ),
+                ),
+              ),
+            ),
+          ]),
+      Tab(
+          'Voice',
+          [uiKit.voiceListView(backGroundColor: items[3].color)],
+          items[3].color,
+          [
+            Expanded(
+              child: Container(
+                alignment: Alignment.centerLeft,
+                child: uiKit.MyButton(
+                  backgroundColor: items[3].color,
+                  sizePU: SizeXSizeY * 0.00017,
+                  sizePD: SizeXSizeY * 0.00018,
+                  iconSize: SizeX * SizeY * 0.00008,
+                  iconData: Icons.arrow_back_ios_new_rounded,
+                  id: 'save',
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                alignment: Alignment.centerRight,
+                child: Expanded(
+                  flex: 1,
+                  child: uiKit.MyButton(
+                    backgroundColor: items[3].color,
+                    sizePU: SizeXSizeY * 0.00017,
+                    sizePD: SizeXSizeY * 0.00018,
+                    iconSize: SizeX * SizeY * 0.00008,
+                    iconData: Icons.close_rounded,
+                    id: 'cancel',
+                  ),
+                ),
+              ),
+            ),
+          ]),
+      Tab(
+          'Task',
+          [
+            uiKit.taskListView(
+              color: items[4].color,
+            )
+          ],
+          items[4].color,
+          [
+            Expanded(
+              child: Container(
+                alignment: Alignment.centerLeft,
+                child: uiKit.MyButton(
+                  backgroundColor: items[4].color,
+                  sizePU: SizeXSizeY * 0.00017,
+                  sizePD: SizeXSizeY * 0.00018,
+                  iconSize: SizeX * SizeY * 0.00008,
+                  iconData: Icons.arrow_back_ios_new_rounded,
+                  id: 'save',
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                alignment: Alignment.centerRight,
+                child: Expanded(
+                  flex: 1,
+                  child: uiKit.MyButton(
+                    backgroundColor: items[4].color,
+                    sizePU: SizeXSizeY * 0.00017,
+                    sizePD: SizeXSizeY * 0.00018,
+                    iconSize: SizeX * SizeY * 0.00008,
+                    iconData: Icons.close_rounded,
+                    id: 'cancel',
+                  ),
+                ),
+              ),
+            ),
+          ])
+    ];
+
     notifyListeners();
   }
 

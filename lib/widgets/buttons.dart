@@ -296,7 +296,7 @@ class _MyButtonState extends State<MyButton> {
       // TODO if hovered more then the funrciton not to be executed
       child: isPressed
           ? AnimatedContainer(
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 1),
               height: widget.sizePD,
               width: widget.sizePD,
               padding: EdgeInsets.all(4),
@@ -325,7 +325,7 @@ class _MyButtonState extends State<MyButton> {
               ),
             )
           : AnimatedContainer(
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 1),
               height: widget.sizePU,
               width: widget.sizePU,
               decoration: BoxDecoration(
