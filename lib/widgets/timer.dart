@@ -57,6 +57,7 @@ class _TimerWidgetState extends State<TimerWidget> {
                         Container(
                           height: SizeY * 0.85,
                           width: SizeY * 0.85,
+                                                      margin: EdgeInsets.only(top: SizeX*0.05),
                           padding: EdgeInsets.all(SizeX * 0.03),
                           decoration: BoxDecoration(
                               color: _timerState.isOver
@@ -72,6 +73,7 @@ class _TimerWidgetState extends State<TimerWidget> {
                               borderRadius: BorderRadius.all(Radius.circular(
                                   isLandscape ? SizeY * 0.4 : SizeX * 0.3))),
                           child: Container(
+
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(
                                   isLandscape ? SizeY * 0.4 : SizeX * 0.3)),
@@ -153,7 +155,7 @@ class _TimerWidgetState extends State<TimerWidget> {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.all(SizeXSizeY * 0.0003),
+                          padding: EdgeInsets.all(SizeXSizeY * 0.0002),
                           child: _timerState.isRunning
                                       .any((element) => element == true) ==
                                   true
