@@ -20,27 +20,32 @@ class _MyDoanteState extends State<MyDoante> {
     final _themeProvider = Provider.of<ThemeProvider>(context);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
+    double SizeXSizeY = SizeX * SizeY;
     return Scaffold(
             resizeToAvoidBottomInset: false,
       backgroundColor: _themeProvider.mainColor,
       body: SafeArea(
         child: Column(
           children: [
-            Expanded(
-              flex: 1,
-              child: Container(
-                alignment: Alignment.centerRight,
-                margin: EdgeInsets.only(top: SizeX*0.0008, right: 30),
-                child: uiKit.MyButton(
-                  backgroundColor: _themeProvider.textColor,
-                  sizePU: SizeX * 0.07,
-                  sizePD: SizeX * 0.08,
-                  iconSize: SizeX * SizeY * 0.0001,
-                  iconData: FontAwesome.check,
-                  id: 'menu',
+              Container(
+                height: SizeX * 0.05,
+                width: double.maxFinite,
+                margin: EdgeInsets.only(top: SizeX * 0.02),
+                child: Row(
+                  textDirection: TextDirection.ltr,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    uiKit.MyButton(
+                      backgroundColor: _themeProvider.textColor,
+                      sizePU: SizeXSizeY * 0.00017,
+                      sizePD: SizeXSizeY * 0.00018,
+                      iconSize: SizeX * SizeY * 0.00008,
+                      iconData: Icons.arrow_back_ios,
+                      id: 'menu',
+                    ),
+                  ],
                 ),
               ),
-            ),
             Expanded(
               flex: 3,
               child: Center(
