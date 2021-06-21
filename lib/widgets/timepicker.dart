@@ -22,6 +22,7 @@ Widget MyDatePicker(@required BuildContext context) {
         child: CupertinoTimerPicker(
           alignment: Alignment.center,
           backgroundColor: _themeProvider.mainColor,
+          
           onTimerDurationChanged: (value) {
             _myprovider.timerDurationChange(value);
           },

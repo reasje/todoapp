@@ -112,8 +112,7 @@ class _MyButtonState extends State<MyButton> {
               break;
             case 'new':
               await _myProvider.newNoteClicked(context);
-              Navigator.push(context,
-                  SliderTransition(uiKit.MyNotesEditing()));
+              Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
               break;
             case 'lamp':
               _themeProvider.changeBrigness();
@@ -125,29 +124,74 @@ class _MyButtonState extends State<MyButton> {
               break;
             case 'timer':
               {
-                showCupertinoModalPopup(
-                    context: context,
-                    builder: (context) => Container(
-                          child: CupertinoActionSheet(
-                            actions: [uiKit.MyDatePicker(context)],
-                            cancelButton: Container(
-                              decoration: BoxDecoration(
-                                  color: _themeProvider.mainColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10))),
-                              child: CupertinoActionSheetAction(
-                                child: Text(uiKit.AppLocalizations.of(context)
-                                    .translate('done')),
-                                onPressed: () {
-                                  _myProvider.timerDone();
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ),
-                          ),
-                        ));
-              }
+                // showCupertinoModalPopup(
+                //     context: context,
+                //     builder: (context) => Container(
+                //           child: CupertinoActionSheet(
+                //             actions: [uiKit.MyDatePicker(context)],
+                //             cancelButton: Container(
+                //               decoration: BoxDecoration(
+                //                   color: _themeProvider.mainColor,
+                //                   borderRadius:
+                //                       BorderRadius.all(Radius.circular(10))),
+                //               child: CupertinoActionSheetAction(
+                //                 child: Text(uiKit.AppLocalizations.of(context)
+                //                     .translate('done')),
+                //                 onPressed: () {
+                //                   _myProvider.timerDone();
+                //                   Navigator.pop(context);
+                //                 },
+                //               ),
+                //             ),
+                //           ),
+                //         ));
 
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Container(
+                        color: Color(0xFF737373),
+                        height: SizeX * 0.3,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: _themeProvider.mainColor,
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(20),
+                                  topLeft: Radius.circular(20))),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 4,
+                                child: Center(
+                                  child: uiKit.MyDatePicker(context),
+                                ),
+                              ),
+                              Divider(),
+                              Expanded(
+                                child: Center(
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      'Done',
+                                      style: TextStyle(
+                                          color: _themeProvider.titleColor
+                                              .withOpacity(0.6),
+                                          fontSize: _themeProvider.isEn
+                                              ? SizeX * SizeY * 0.00007
+                                              : SizeX * SizeY * 0.00006),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    }).then((value) => _myProvider.timerDone());
+              }
               break;
 
             case 'color':
@@ -157,7 +201,7 @@ class _MyButtonState extends State<MyButton> {
                   builder: (context) {
                     return Container(
                       color: Color(0xFF737373),
-                      height: SizeX * 0.07,
+                      height: SizeX * 0.1,
                       child: Container(
                         decoration: BoxDecoration(
                             color: _themeProvider.mainColor,
@@ -167,8 +211,8 @@ class _MyButtonState extends State<MyButton> {
                         child: GridView(
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                                  mainAxisSpacing: SizeX * 0.08,
-                                  crossAxisSpacing: SizeX * 0.08,
+                                  mainAxisSpacing: SizeX * 0.05,
+                                  crossAxisSpacing: SizeX * 0.06,
                                   crossAxisCount: 5),
                           padding: EdgeInsets.all(SizeX * 0.01),
                           children: colors
@@ -227,36 +271,95 @@ class _MyButtonState extends State<MyButton> {
               }
               break;
             case 'newpic':
-              showCupertinoModalPopup(
+              // showCupertinoModalPopup(
+              //     context: context,
+              //     builder: (context) => CupertinoActionSheet(
+              //           actions: [
+              //             Container(
+              //               decoration: BoxDecoration(
+              //                   color: _themeProvider.mainColor,
+              //                   borderRadius:
+              //                       BorderRadius.all(Radius.circular(10))),
+              //               child: CupertinoActionSheetAction(
+              //                   onPressed: () {
+              //                     _myProvider.imagePickerCamera();
+              //                     Navigator.pop(context);
+              //                   },
+              //                   child: Text('Camera')),
+              //             ),
+              //             Container(
+              //               decoration: BoxDecoration(
+              //                   color: _themeProvider.mainColor,
+              //                   borderRadius:
+              //                       BorderRadius.all(Radius.circular(10))),
+              //               child: CupertinoActionSheetAction(
+              //                   onPressed: () {
+              //                     _myProvider.imagePickerGalley();
+              //                     Navigator.pop(context);
+              //                   },
+              //                   child: Text('Gallery')),
+              //             )
+              //           ],
+              //         ));
+              showModalBottomSheet(
                   context: context,
-                  builder: (context) => CupertinoActionSheet(
-                        actions: [
-                          Container(
-                            decoration: BoxDecoration(
-                                color: _themeProvider.mainColor,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            child: CupertinoActionSheetAction(
-                                onPressed: () {
-                                  _myProvider.imagePickerCamera();
-                                  Navigator.pop(context);
-                                },
-                                child: Text('Camera')),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                color: _themeProvider.mainColor,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            child: CupertinoActionSheetAction(
-                                onPressed: () {
-                                  _myProvider.imagePickerGalley();
-                                  Navigator.pop(context);
-                                },
-                                child: Text('Gallery')),
-                          )
-                        ],
-                      ));
+                  builder: (context) {
+                    return Container(
+                      color: Color(0xFF737373),
+                      height: SizeX * 0.2,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: _themeProvider.mainColor,
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(20),
+                                topLeft: Radius.circular(20))),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Center(
+                                child: InkWell(
+                                  onTap: () {
+                                    _myProvider.imagePickerCamera();
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    'Camera',
+                                    style: TextStyle(
+                                        color: _themeProvider.titleColor
+                                            .withOpacity(0.6),
+                                        fontSize: _themeProvider.isEn
+                                            ? SizeX * SizeY * 0.00008
+                                            : SizeX * SizeY * 0.00007),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Divider(),
+                            Expanded(
+                              child: Center(
+                                child: InkWell(
+                                  onTap: () {
+                                    _myProvider.imagePickerGalley();
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    'Gallery',
+                                    style: TextStyle(
+                                        color: _themeProvider.titleColor
+                                            .withOpacity(0.6),
+                                        fontSize: _themeProvider.isEn
+                                            ? SizeX * SizeY * 0.00008
+                                            : SizeX * SizeY * 0.00007),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  });
               break;
             case 'newvoice':
               await _myProvider.startRecorder(context);

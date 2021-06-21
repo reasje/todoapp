@@ -1099,6 +1099,12 @@ class NoteProvider extends ChangeNotifier {
 
   // This function  is used to handle the changes that has been
   // occured to the time picker !
+  Duration saved_duration = Duration();
+  Duration saved_note_duration= Duration();
+  void saveDuration(){
+    saved_duration = time_duration;
+    saved_note_duration = note_duration;
+  }
   void timerDurationChange(duration) {
     // updating the state and notifiung the listeners
 
@@ -1107,7 +1113,6 @@ class NoteProvider extends ChangeNotifier {
 
     // notifyListeners();
   }
-
   void updateDuration(int leftTime) {
     time_duration = Duration(seconds: leftTime);
   }
