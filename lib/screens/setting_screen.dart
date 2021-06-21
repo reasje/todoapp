@@ -64,7 +64,9 @@ class _SettingScreenState extends State<SettingScreen> {
                                 .translate('googleBackup'),
                             style: TextStyle(
                                 color: _themeProvider.textColor,
-                                fontSize: SizeXSizeY * 0.0001),
+                                fontSize: _themeProvider.isEn
+                                            ? SizeX * SizeY * 0.00008
+                                            : SizeX * SizeY * 0.00007),
                           ),
                         )),
                     Container(
@@ -117,7 +119,7 @@ class _SettingScreenState extends State<SettingScreen> {
               ),
               Container(
                   height: SizeXSizeY * 0.00025,
-                  width: SizeXSizeY * 0.0006,
+                  width: SizeXSizeY * 0.0004,
                   decoration: BoxDecoration(
                       color: _themeProvider.textColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(SizeXSizeY * 0.0001)),
@@ -127,7 +129,9 @@ class _SettingScreenState extends State<SettingScreen> {
                           .translate('theme'),
                       style: TextStyle(
                           color: _themeProvider.textColor,
-                          fontSize: SizeXSizeY * 0.0001),
+                          fontSize: _themeProvider.isEn
+                                            ? SizeX * SizeY * 0.00008
+                                            : SizeX * SizeY * 0.00007),
                     ),
                   )),
               Container(

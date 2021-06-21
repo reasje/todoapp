@@ -710,11 +710,11 @@ class NoteProvider extends ChangeNotifier {
     //tabColors.
     print('tabColors ${tabColors}');
     items = [
-      NavigationItem(Icon(Icons.text_fields), Text('Text'), tabColors[0]),
-      NavigationItem(Icon(Icons.hourglass_empty), Text("Timer"), tabColors[1]),
-      NavigationItem(Icon(Icons.image_outlined), Text("Image"), tabColors[2]),
-      NavigationItem(Icon(Icons.voicemail), Text('Voice'), tabColors[3]),
-      NavigationItem(Icon(Icons.check), Text('Task'), tabColors[4]),
+      NavigationItem(Icon(Icons.text_fields), Text(uiKit.AppLocalizations.of(noteContext).translate('text')), tabColors[0]),
+      NavigationItem(Icon(Icons.hourglass_empty), Text(uiKit.AppLocalizations.of(noteContext).translate('timer')), tabColors[1]),
+      NavigationItem(Icon(Icons.image_outlined), Text(uiKit.AppLocalizations.of(noteContext).translate('image')), tabColors[2]),
+      NavigationItem(Icon(Icons.voicemail), Text(uiKit.AppLocalizations.of(noteContext).translate('voice')), tabColors[3]),
+      NavigationItem(Icon(Icons.check), Text(uiKit.AppLocalizations.of(noteContext).translate('task')), tabColors[4]),
     ];
 
     tabs = [

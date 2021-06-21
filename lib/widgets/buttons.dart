@@ -443,6 +443,7 @@ class _MyButtonState extends State<MyButton> {
                       fit: BoxFit.fill,
                     )
                   : Icon(widget.iconData,
+                  textDirection: TextDirection.ltr,
                       size: widget.iconSize,
                       color: widget.id == 'google'
                           ? _signinState.isSignedin

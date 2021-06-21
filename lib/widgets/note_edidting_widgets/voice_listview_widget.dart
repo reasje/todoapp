@@ -93,6 +93,7 @@ class voiceListView extends StatelessWidget {
                                         alignment: Alignment.centerLeft,
                                         
                                         child: Row(
+                                          textDirection: TextDirection.ltr,
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
@@ -100,32 +101,37 @@ class voiceListView extends StatelessWidget {
                                               children: [
                                                 Container(
                                                   width: SizeY * 0.7,
-                                                  child: Slider.adaptive(
-                                                    key: PageStorageKey<String>(
-                                                      'pageKey ${DateTime.now().microsecondsSinceEpoch}'),
-                                                    inactiveColor: backGroundColor.withOpacity(0.1),
-                                                    activeColor: backGroundColor,
-                                                    onChangeEnd: (value) {
-                                                      _myProvider
-                                                          .seekPlayingRecorder(
-                                                              value, index);
-                                                    },
-                                                    value: _myProvider
-                                                        .voiceProgress[index]
-                                                        .inSeconds
-                                                        .toDouble(),
-                                                    max: _myProvider
-                                                            .voiceDuration[index]
-                                                            .inSeconds
-                                                            .toDouble() +
-                                                        1,
-                                                    min: 0,
-                                                    onChanged: (value) {},
+                                                  child: Directionality(
+                                                    textDirection: TextDirection.ltr,
+                                                    child: Slider(
+                                                      
+                                                      key: PageStorageKey<String>(
+                                                        'pageKey ${DateTime.now().microsecondsSinceEpoch}'),
+                                                      inactiveColor: backGroundColor.withOpacity(0.1),
+                                                      activeColor: backGroundColor,
+                                                      onChangeEnd: (value) {
+                                                        _myProvider
+                                                            .seekPlayingRecorder(
+                                                                value, index);
+                                                      },
+                                                      value: _myProvider
+                                                          .voiceProgress[index]
+                                                          .inSeconds
+                                                          .toDouble(),
+                                                      max: _myProvider
+                                                              .voiceDuration[index]
+                                                              .inSeconds
+                                                              .toDouble() +
+                                                          1,
+                                                      min: 0,
+                                                      onChanged: (value) {},
+                                                    ),
                                                   ),
                                                 ),
                                                 Container(
                                                   width: SizeY * 0.4,
                                                   child: Row(
+                                                    textDirection: TextDirection.ltr,
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
                                                             .spaceBetween,
@@ -134,6 +140,7 @@ class voiceListView extends StatelessWidget {
                                                         margin: EdgeInsets.only(
                                                             left: SizeX * 0.02),
                                                         child: Row(
+                                                          textDirection: TextDirection.ltr,
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
                                                                   .end,
@@ -159,6 +166,7 @@ class voiceListView extends StatelessWidget {
                                                         margin: EdgeInsets.only(
                                                             right: SizeX * 0.015),
                                                         child: Row(
+                                                          textDirection: TextDirection.ltr,
                                                           children: [
                                                             Text(
                                                                 "${((_myProvider.voiceDuration[index].inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}"),
@@ -174,6 +182,8 @@ class voiceListView extends StatelessWidget {
                                               ],
                                             ),
                                             Container(
+                                             key: PageStorageKey<String>(
+                                                      'pageKey ${DateTime.now().microsecondsSinceEpoch}'),
                                                 width: SizeY * 0.1,
                                                 padding: EdgeInsets.only(right: SizeY*0.02),
                                                 child: _myProvider

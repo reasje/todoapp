@@ -110,6 +110,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                       ? Container(
                           width: SizeY * 0.8,
                           child: Row(
+                            textDirection: TextDirection.ltr,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               FloatingActionButton(
@@ -135,6 +136,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                     vertical: SizeY * 0.04,
                                     horizontal: SizeY * 0.04),
                                 child: Row(
+                                  textDirection: TextDirection.ltr,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
@@ -182,6 +184,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                       : Container(
                           width: SizeY * 0.8,
                           child: Row(
+                            textDirection: TextDirection.ltr,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               FloatingActionButton(
@@ -207,6 +210,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                                     vertical: SizeY * 0.02,
                                     horizontal: SizeY * 0.02),
                                 child: Row(
+                                  textDirection: TextDirection.ltr,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [

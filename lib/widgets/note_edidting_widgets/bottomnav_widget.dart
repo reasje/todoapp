@@ -36,6 +36,7 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
         scrollDirection: Axis.horizontal,
         children: [
           Row(
+            textDirection: TextDirection.ltr,
             children: [
               IconTheme(
                   data: IconThemeData(
@@ -76,6 +77,7 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
         color: _themeProvider.mainColor,
       ),
       child: Row(
+        textDirection: TextDirection.ltr,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: _myProvider.items.map((item) {
           var itemIndex = _myProvider.items.indexOf(item);

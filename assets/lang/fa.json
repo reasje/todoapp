@@ -54,5 +54,10 @@
     "googleBackup" : "پشتیبان گیری گوگل",
     "theme" : "تم",
     "camera" : "دوربین",
-    "galley" : "گالری"
+    "gallery" : "گالری",
+    "text" : "متن",
+    "timer" : "تایمر",
+    "image" : "عکس",
+    "voice" : "ویس",
+    "task" : "تسک"
 }
