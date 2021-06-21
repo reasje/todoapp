@@ -813,16 +813,13 @@ class NoteProvider extends ChangeNotifier {
             Expanded(
               child: Container(
                 alignment: Alignment.centerRight,
-                child: Expanded(
-                  flex: 1,
-                  child: uiKit.MyButton(
-                    backgroundColor: items[1].color,
-                    sizePU: SizeXSizeY * 0.00017,
-                    sizePD: SizeXSizeY * 0.00018,
-                    iconSize: SizeX * SizeY * 0.00008,
-                    iconData: Icons.close_rounded,
-                    id: 'cancel',
-                  ),
+                child: uiKit.MyButton(
+                  backgroundColor: items[1].color,
+                  sizePU: SizeXSizeY * 0.00017,
+                  sizePD: SizeXSizeY * 0.00018,
+                  iconSize: SizeX * SizeY * 0.00008,
+                  iconData: Icons.close_rounded,
+                  id: 'cancel',
                 ),
               ),
             ),
@@ -848,16 +845,13 @@ class NoteProvider extends ChangeNotifier {
             Expanded(
               child: Container(
                 alignment: Alignment.centerRight,
-                child: Expanded(
-                  flex: 1,
-                  child: uiKit.MyButton(
-                    backgroundColor: items[2].color,
-                    sizePU: SizeXSizeY * 0.00017,
-                    sizePD: SizeXSizeY * 0.00018,
-                    iconSize: SizeX * SizeY * 0.00008,
-                    iconData: Icons.close_rounded,
-                    id: 'cancel',
-                  ),
+                child: uiKit.MyButton(
+                  backgroundColor: items[2].color,
+                  sizePU: SizeXSizeY * 0.00017,
+                  sizePD: SizeXSizeY * 0.00018,
+                  iconSize: SizeX * SizeY * 0.00008,
+                  iconData: Icons.close_rounded,
+                  id: 'cancel',
                 ),
               ),
             ),
@@ -883,16 +877,13 @@ class NoteProvider extends ChangeNotifier {
             Expanded(
               child: Container(
                 alignment: Alignment.centerRight,
-                child: Expanded(
-                  flex: 1,
-                  child: uiKit.MyButton(
-                    backgroundColor: items[3].color,
-                    sizePU: SizeXSizeY * 0.00017,
-                    sizePD: SizeXSizeY * 0.00018,
-                    iconSize: SizeX * SizeY * 0.00008,
-                    iconData: Icons.close_rounded,
-                    id: 'cancel',
-                  ),
+                child: uiKit.MyButton(
+                  backgroundColor: items[3].color,
+                  sizePU: SizeXSizeY * 0.00017,
+                  sizePD: SizeXSizeY * 0.00018,
+                  iconSize: SizeX * SizeY * 0.00008,
+                  iconData: Icons.close_rounded,
+                  id: 'cancel',
                 ),
               ),
             ),
@@ -922,16 +913,13 @@ class NoteProvider extends ChangeNotifier {
             Expanded(
               child: Container(
                 alignment: Alignment.centerRight,
-                child: Expanded(
-                  flex: 1,
-                  child: uiKit.MyButton(
-                    backgroundColor: items[4].color,
-                    sizePU: SizeXSizeY * 0.00017,
-                    sizePD: SizeXSizeY * 0.00018,
-                    iconSize: SizeX * SizeY * 0.00008,
-                    iconData: Icons.close_rounded,
-                    id: 'cancel',
-                  ),
+                child: uiKit.MyButton(
+                  backgroundColor: items[4].color,
+                  sizePU: SizeXSizeY * 0.00017,
+                  sizePD: SizeXSizeY * 0.00018,
+                  iconSize: SizeX * SizeY * 0.00008,
+                  iconData: Icons.close_rounded,
+                  id: 'cancel',
                 ),
               ),
             ),
@@ -968,7 +956,7 @@ class NoteProvider extends ChangeNotifier {
 
       if (text.text.isEmpty &&
           title.text.isEmpty &&
-          taskControllerList.isEmpty &&
+          taskControllerList[0].textEditingController.text == "" &&
           imageList.isEmpty &&
           voiceList.isEmpty &&
           note_duration == Duration()) {
@@ -1007,8 +995,8 @@ class NoteProvider extends ChangeNotifier {
             }
           }
         }
-        Note note = Note(noteTitle, noteText, false, noteTime, color,
-            leftTime, imageList, voiceList, taskList);
+        Note note = Note(noteTitle, noteText, false, noteTime, color, leftTime,
+            imageList, voiceList, taskList);
         await noteBox.add(note);
         changes.clearHistory();
         Navigator.pop(noteContext);
