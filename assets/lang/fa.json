@@ -50,5 +50,7 @@
     "downloadDone" : "دانلود موفق بود",
     "downloading" : "در حال دانلود ...",
     "uploading" : "در حال آپلود ...",
-    "undoTask" : "تسک با موفقیت حذف شد !"
+    "undoTask" : "تسک با موفقیت حذف شد !",
+    "googleBackup" : "پشتیبان گیری گوگل",
+    "theme" : "تم"
 }

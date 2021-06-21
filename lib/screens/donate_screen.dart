@@ -32,6 +32,7 @@ class _MyDoanteState extends State<MyDoante> {
                 alignment: Alignment.centerRight,
                 margin: EdgeInsets.only(top: SizeX*0.0008, right: 30),
                 child: uiKit.MyButton(
+                  backgroundColor: _themeProvider.textColor,
                   sizePU: SizeX * 0.07,
                   sizePD: SizeX * 0.08,
                   iconSize: SizeX * SizeY * 0.0001,
@@ -92,6 +93,7 @@ class _MyDoanteState extends State<MyDoante> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         uiKit.MyButton(
+                          backgroundColor: _themeProvider.textColor,
                           sizePU: SizeX * 0.1,
                           sizePD: SizeX * 0.1,
                           iconSize: SizeX * SizeY * 0.00014,
@@ -114,6 +116,7 @@ class _MyDoanteState extends State<MyDoante> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         uiKit.MyButton(
+                          backgroundColor: _themeProvider.textColor,
                           sizePU: SizeX * 0.1,
                           sizePD: SizeX * 0.1,
                           iconSize: SizeX * SizeY * 0.00014,

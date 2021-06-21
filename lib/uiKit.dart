@@ -21,5 +21,6 @@ export 'widgets/note_edidting_widgets/voice_listview_widget.dart';
 export 'widgets/note_edidting_widgets/image_listview_widget.dart';
 export 'widgets/note_edidting_widgets/task_listview_widget.dart';
 export 'widgets/note_edidting_widgets/bottomnav_widget.dart';
+export 'screens/setting_screen.dart';
 
 

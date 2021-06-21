@@ -51,5 +51,7 @@
   "downloadDone" : "Download succeeded",
   "downloading" : "Downloading ...",
   "uploading" : "Uploading ...",
-  "undoTask" : "Task deleted successfully !"
+  "undoTask" : "Task deleted successfully !",
+  "googleBackup" : "Google Backup",
+  "theme" : "Theme"
 }

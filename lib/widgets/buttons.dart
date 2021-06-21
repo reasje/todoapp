@@ -213,6 +213,9 @@ class _MyButtonState extends State<MyButton> {
             case 'upload':
               login(true, context);
               break;
+            case 'setting':
+              Navigator.push(context, SliderTransition(uiKit.SettingScreen()));
+              break;
             case 'download':
               login(false, context);
               break;
@@ -293,7 +296,7 @@ class _MyButtonState extends State<MyButton> {
       // TODO if hovered more then the funrciton not to be executed
       child: isPressed
           ? AnimatedContainer(
-            duration: Duration(seconds: 3),
+              duration: Duration(seconds: 3),
               height: widget.sizePD,
               width: widget.sizePD,
               padding: EdgeInsets.all(4),
@@ -310,19 +313,19 @@ class _MyButtonState extends State<MyButton> {
                       )
                     : Icon(
                         widget.iconData,
-                        size: widget.iconSize*0.8,
+                        size: widget.iconSize * 0.8,
                         color: widget.id == 'google'
-                          ? _signinState.isSignedin
-                              ? Colors.green
-                              : Colors.red
-                          : floating
-                              ? backgroundColor
-                              : backgroundColor,
+                            ? _signinState.isSignedin
+                                ? Colors.green
+                                : Colors.red
+                            : floating
+                                ? backgroundColor
+                                : backgroundColor,
                       ),
               ),
             )
           : AnimatedContainer(
-                        duration: Duration(seconds: 3),
+              duration: Duration(seconds: 3),
               height: widget.sizePU,
               width: widget.sizePU,
               decoration: BoxDecoration(

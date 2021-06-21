@@ -845,6 +845,7 @@ class NoteProvider extends ChangeNotifier {
           imageList.isEmpty &&
           voiceList.isEmpty &&
           time_duration == Duration()) {
+                    if (notSaving == 0) {
         ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
           // TODO making better the emptyFieldAlert to title and text must not be null
           uiKit.AppLocalizations.of(noteContext).translate('emptyFieldsAlert'),
@@ -852,6 +853,17 @@ class NoteProvider extends ChangeNotifier {
           false,
           noteContext,
         ));
+                  notSaving = notSaving + 1;
+          Future.delayed(Duration(seconds: 10), () {
+            notSaving = 0;
+          });
+        } else {
+          notSaving = 0;
+          Navigator.pop(noteContext);
+          changes.clearHistory();
+          clearControllers();
+        }
+
       } else {
         String noteTitle;
         title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
