@@ -108,27 +108,23 @@ class _MyRorderableState extends State<MyRorderable> {
                                                 : Colors.red.withOpacity(0.6),
                                           ),
                                         ),
-                                        
                                       ],
-                                      
                                     ),
-
-
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                                                                                                    uiKit.MyButton(
+                                        uiKit.MyButton(
                                           backgroundColor:
                                               _themeProvider.textColor,
                                           iconData: Icons.settings,
                                           iconSize: SizeX * SizeY * 0.00005,
                                           sizePD: SizeX * SizeY * 0.00012,
                                           sizePU: SizeX * SizeY * 0.00012,
-                                                                                      id: 'setting',
+                                          id: 'setting',
                                         ),
                                         Container(
-                                          padding:
-                                              EdgeInsets.all(SizeXSizeY * 0.00004),
+                                          padding: EdgeInsets.all(
+                                              SizeXSizeY * 0.00004),
                                           alignment: Alignment.centerLeft,
                                           child: uiKit.MyButton(
                                             backgroundColor:
@@ -145,7 +141,6 @@ class _MyRorderableState extends State<MyRorderable> {
                                   ],
                                 ),
                               ),
-
                             ],
                           ),
                           if (noteBox.isEmpty)
@@ -567,6 +562,7 @@ class _MyRorderableState extends State<MyRorderable> {
         ),
         onPressed: () {
           _myProvider.newNoteClicked(context);
+          _timerState.clearControllers();
           Navigator.push(context,
               SliderTransition(uiKit.MyNotesEditing(noteBox: noteBox)));
         },

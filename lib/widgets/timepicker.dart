@@ -25,7 +25,7 @@ Widget MyDatePicker(@required BuildContext context) {
           onTimerDurationChanged: (value) {
             _myprovider.timerDurationChange(value);
           },
-          initialTimerDuration: _myprovider.time_duration ?? Duration(seconds: 0),
+          initialTimerDuration: _myprovider.note_duration ?? Duration(seconds: 0),
           mode: CupertinoTimerPickerMode.hms,
           minuteInterval: 1,
           secondInterval: 1,

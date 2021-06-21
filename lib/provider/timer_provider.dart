@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/voice_model.dart';
+import 'package:todoapp/provider/note_provider.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
@@ -18,10 +20,11 @@ class TimerState extends ChangeNotifier {
     this.keys = [];
     this.keys.add(0);
     this.index = 0;
+    isRunning = List<bool>.filled(noteBox.length + 1, false);
   }
 
   BuildContext my_context;
-  List<bool> isRunning = List<bool>.filled(100, false);
+  List<bool> isRunning = [];
   bool isOver = false;
   bool isPaused = true;
   var timer;
@@ -30,14 +33,23 @@ class TimerState extends ChangeNotifier {
   int index;
   String title = "";
   String text = "";
+  int newIndex;
   var target;
   List<Voice> voiceList = [];
   List<Uint8List> imageList = [];
+  bool newNote = false;
   final noteBox = Hive.lazyBox<Note>(noteBoxName);
-  void startTimer() async {
+  void startTimer(BuildContext context) async {
+    final _myProvider = Provider.of<NoteProvider>(context, listen: false);
     if (timer == null || !timer?.isActive) {
-      var bnote = await noteBox.get(keys[index]);
-      int leftTime = bnote.leftTime;
+      var bnote = keys == null ? null : await noteBox.get(keys[index]);
+
+      
+      bnote?.leftTime == null ? newNote = true : newNote = false;
+            if (newNote) {
+        newIndex = noteBox.length;
+      }
+      int leftTime = bnote?.leftTime ?? _myProvider.time_duration.inSeconds;
       var now = DateTime.now();
       if (leftTime > 900) {
         leftTime = leftTime - 180;
@@ -52,29 +64,37 @@ class TimerState extends ChangeNotifier {
           Duration(hours: hour, minutes: minute, seconds: second);
       target = now.add(duration);
       leftTime = leftTime - 1;
+      _myProvider.updateDuration(leftTime);
       timer = Timer.periodic(Duration(seconds: 1), (timer) async {
-        var bnote = await noteBox.get(keys[index]);
-        int leftTime = bnote.leftTime;
+        var bnote = keys == null ? null : await noteBox.get(keys[index]);
+        bnote?.leftTime == null ? newNote = true : newNote = false;
+        int leftTime = bnote?.leftTime ?? _myProvider.time_duration.inSeconds;
         print('Left Time : ${leftTime}');
         leftTime = leftTime - 1;
+        _myProvider.updateDuration(leftTime);
         // If the timer finishes
         if (leftTime == 0) {
           isOver = true;
           stopTimer();
-          var bnote = await noteBox.get(keys[index]);
-          var ntitle = bnote.title;
-          var nttext = bnote.text;
-          var nttime = bnote.time;
-          var ntisChecked = bnote.isChecked;
-          var ntcolor = bnote.color;
-          var ntlefttime = leftTime;
-          var ntImageList = bnote.imageList;
-          var ntVoiceList = bnote.voiceList;
-          var ntTaskList = bnote.taskList;
-          Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
-              ntlefttime, ntImageList, ntVoiceList, ntTaskList);
-          await noteBox.put(keys[index], note);
-          isRunning[index] = true;
+          if (!newNote) {
+            var bnote = await noteBox.get(keys[index]);
+            var ntitle = bnote.title;
+            var nttext = bnote.text;
+            var nttime = bnote.time;
+            var ntisChecked = bnote.isChecked;
+            var ntcolor = bnote.color;
+            var ntlefttime = leftTime;
+            var ntImageList = bnote.imageList;
+            var ntVoiceList = bnote.voiceList;
+            var ntTaskList = bnote.taskList;
+            Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
+                ntlefttime, ntImageList, ntVoiceList, ntTaskList);
+            await noteBox.put(keys[index], note);
+            isRunning[index] = true;
+          } else {
+            isRunning[newIndex] = true;
+          }
+
           isOver = true;
           // Future.microtask(() {
           //   startAlarm();
@@ -103,24 +123,34 @@ class TimerState extends ChangeNotifier {
         } else {
           isPaused = false;
           isOver = false;
-          var bnote = await noteBox.get(keys[index]);
-          var ntitle = bnote.title;
-          var nttext = bnote.text;
-          var nttime = bnote.time;
-          var ntisChecked = bnote.isChecked;
-          var ntcolor = bnote.color;
-          var ntlefttime = leftTime;
-          var ntImageList = bnote.imageList;
-          var ntVoiceList = bnote.voiceList;
-          var ntTaskList = bnote.taskList;
-          Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
-              ntlefttime, ntImageList, ntVoiceList, ntTaskList);
-          await noteBox.put(keys[index], note);
-          isRunning[index] = true;
+          if (!newNote) {
+            var bnote = await noteBox.get(keys[index]);
+            var ntitle = bnote.title;
+            var nttext = bnote.text;
+            var nttime = bnote.time;
+            var ntisChecked = bnote.isChecked;
+            var ntcolor = bnote.color;
+            var ntlefttime = leftTime;
+            var ntImageList = bnote.imageList;
+            var ntVoiceList = bnote.voiceList;
+            var ntTaskList = bnote.taskList;
+            Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
+                ntlefttime, ntImageList, ntVoiceList, ntTaskList);
+            await noteBox.put(keys[index], note);
+            isRunning[index] = true;
+          } else {
+            isRunning[newIndex] = true;
+          }
+
           notifyListeners();
         }
       });
     }
+  }
+
+  void clearControllers() {
+    keys = null;
+    index = null;
   }
 
   void updateTimer() async {
@@ -143,7 +173,8 @@ class TimerState extends ChangeNotifier {
       isPaused = true;
       isOver = true;
       stopTimer();
-      isRunning[index] = true;
+      newNote ? isRunning[newIndex] = true : isRunning[index] = true;
+
       _turnOn = false;
       notifyListeners();
     } else if (leftTime == -1) {
@@ -151,7 +182,7 @@ class TimerState extends ChangeNotifier {
       isPaused = true;
       isOver = true;
       stopTimer();
-      isRunning[index] = true;
+      newNote ? isRunning[newIndex] = true : isRunning[index] = true;
       _turnOn = false;
       notifyListeners();
     } else {
@@ -161,38 +192,45 @@ class TimerState extends ChangeNotifier {
       ntlefttime = leftTime.abs();
     }
     Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime,
-        ntimages, ntvoices ,nttasks);
+        ntimages, ntvoices, nttasks);
     await noteBox.put(keys[index], note);
     if (_turnOn) {
-      startTimer();
+      startTimer(my_context);
     }
   }
 
   void stopTimer() {
     isPaused = true;
-    if (isRunning[index]) {
+    if (newNote ? isRunning[newIndex] : isRunning[index]) {
       timer.cancel();
-      isRunning[index] = false;
+      newNote ? isRunning[newIndex] = false : isRunning[index] = false;
       notifyListeners();
     }
   }
 
-  void resetTimer() async {
+  void resetTimer(BuildContext context) async {
+    final _myProvider = Provider.of<NoteProvider>(context, listen: false);
     isPaused = true;
     isOver = false;
-    var bnote = await noteBox.get(keys[index]);
-    var ntitle = bnote.title;
-    var nttext = bnote.text;
-    var nttime = bnote.time;
-    var ntisChecked = bnote.isChecked;
-    var ntcolor = bnote.color;
-    var ntimages = bnote.imageList;
-    var ntvoices = bnote.voiceList;
-    var nttasks = bnote.taskList;
-    var ntlefttime = nttime;
-    Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime,
-        ntimages, ntvoices, nttasks);
-    await noteBox.put(keys[index], note);
+    if (!newNote) {
+      var bnote = await noteBox.get(keys[index]);
+      var ntitle = bnote.title;
+      var nttext = bnote.text;
+      var nttime = bnote.time;
+      var ntisChecked = bnote.isChecked;
+      var ntcolor = bnote.color;
+      var ntimages = bnote.imageList;
+      var ntvoices = bnote.voiceList;
+      var nttasks = bnote.taskList;
+      var ntlefttime = nttime;
+      Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime,
+          ntimages, ntvoices, nttasks);
+      await noteBox.put(keys[index], note);
+      _myProvider.updateDuration(_myProvider.note_duration.inSeconds);
+    } else {
+      _myProvider.updateDuration(_myProvider.note_duration.inSeconds);
+    }
+    //notifyListeners();
     stopTimer();
   }
 

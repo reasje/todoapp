@@ -95,14 +95,14 @@ class _MyButtonState extends State<MyButton> {
               // TODO Delete _myProvider.changeTimerStack();
               break;
             case 'start':
-              _timerState.startTimer();
+              _timerState.startTimer(context);
               //startTimer();
               break;
             case 'stop':
               _timerState.stopTimer();
               break;
             case 'reset':
-              _timerState.resetTimer();
+              _timerState.resetTimer(context);
               break;
             case 'redo':
               _myProvider.canRedo ? _myProvider.changesRedo() : null;

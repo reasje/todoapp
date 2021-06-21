@@ -101,6 +101,7 @@ class NoteProvider extends ChangeNotifier {
   var changes = new ChangeStack();
   // The Time picker dialog controller
   Duration time_duration = Duration();
+  Duration note_duration = Duration();
   // this varriable is used in snapshot to chacke
   // that no changes has been made
   Duration time_snapshot;
@@ -240,13 +241,14 @@ class NoteProvider extends ChangeNotifier {
 
   // This function is used inside the notes_editing_screen as
   // a future function to load the pictures
-  Future<Note> getNoteEditStack([List<int> keys, int index]) async {
-    if (keys?.isEmpty) {
-      bnote = await noteBox.get(providerKeys[providerIndex]);
-    } else {
-      bnote = await noteBox.get(keys[index]);
-    }
-    return bnote;
+  Future<int> getNoteEditStack([List<int> keys, int index]) async {
+    // if (keys?.isEmpty) {
+    //   bnote = await noteBox.get(providerKeys[providerIndex]);
+    // } else {
+    //   bnote = await noteBox.get(keys[index]);
+    // }
+    // return bnote.leftTime;
+    return time_duration.inSeconds;
   }
 
   Future<List<Voice>> getVoiceList() async {
@@ -552,7 +554,6 @@ class NoteProvider extends ChangeNotifier {
     text.clear();
     notifyListeners();
   }
-
   // for the clear the form
   void clearControllers() {
     imageList.clear();
@@ -562,6 +563,8 @@ class NoteProvider extends ChangeNotifier {
     taskControllerList.clear();
     taskList.clear();
     time_duration = Duration();
+    note_duration = Duration();
+    
     notifyListeners();
   }
 
@@ -571,7 +574,7 @@ class NoteProvider extends ChangeNotifier {
     ttitle = title.text;
     ttext = text.text;
     old_value = text.text;
-    time_snapshot = time_duration;
+    time_snapshot = note_duration;
     begin_edit = false;
     if (!newNote) {
       imageListSnapshot = List.from(imageList);
@@ -670,7 +673,8 @@ class NoteProvider extends ChangeNotifier {
     ftext.requestFocus();
     text.selection =
         TextSelection.fromPosition(TextPosition(offset: text.text.length));
-    time_duration = Duration(seconds: bnote.time);
+    time_duration = Duration(seconds: bnote.leftTime);
+    note_duration = Duration(seconds: bnote.time);
     noteColor = Color(bnote.color);
     newNote = false;
     SizeX = MediaQuery.of(context).size.height;
@@ -844,16 +848,17 @@ class NoteProvider extends ChangeNotifier {
           taskList.isEmpty &&
           imageList.isEmpty &&
           voiceList.isEmpty &&
-          time_duration == Duration()) {
-                    if (notSaving == 0) {
-        ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
-          // TODO making better the emptyFieldAlert to title and text must not be null
-          uiKit.AppLocalizations.of(noteContext).translate('emptyFieldsAlert'),
-          'emptyFieldsAlert',
-          false,
-          noteContext,
-        ));
-                  notSaving = notSaving + 1;
+          note_duration == Duration()) {
+        if (notSaving == 0) {
+          ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
+            // TODO making better the emptyFieldAlert to title and text must not be null
+            uiKit.AppLocalizations.of(noteContext)
+                .translate('emptyFieldsAlert'),
+            'emptyFieldsAlert',
+            false,
+            noteContext,
+          ));
+          notSaving = notSaving + 1;
           Future.delayed(Duration(seconds: 10), () {
             notSaving = 0;
           });
@@ -863,12 +868,11 @@ class NoteProvider extends ChangeNotifier {
           changes.clearHistory();
           clearControllers();
         }
-
       } else {
         String noteTitle;
         title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
         final String noteText = text.text;
-        final int noteTime = time_duration.inSeconds;
+        final int noteTime = note_duration.inSeconds;
         int leftTime = noteTime;
         if (taskControllerList.isNotEmpty) {
           for (int i = 0; i < taskControllerList.length; i++) {
@@ -906,7 +910,7 @@ class NoteProvider extends ChangeNotifier {
             noteTitle,
             text.text,
             bnote.isChecked,
-            time_duration.inSeconds,
+            note_duration.inSeconds,
             noteColor.value,
             bnote.leftTime,
             imageList,
@@ -975,28 +979,39 @@ class NoteProvider extends ChangeNotifier {
   // occured to the time picker !
   void timerDurationChange(duration) {
     // updating the state and notifiung the listeners
+
     time_duration = duration;
+    note_duration = duration;
+
     // notifyListeners();
+  }
+  void updateDuration(int leftTime) {
+    time_duration = Duration(seconds: leftTime);
   }
 
   void timerDone() async {
-    if (time_duration != time_snapshot) {
+    if (note_duration != time_snapshot) {
       // timer has been updated so that
       // We must update the left time too
-      var bnote = await noteBox.get(providerKeys[providerIndex]);
-      var ntitle = bnote.title;
-      var nttext = bnote.text;
-      var ntischecked = bnote.isChecked;
-      var nttime = time_duration.inSeconds;
-      var ntcolor = bnote.color;
-      var ntlefttime = time_duration.inSeconds;
-      var ntImageList = bnote.imageList;
-      var ntVoiceList = bnote.voiceList;
-      var ntTaskList = bnote.taskList;
-      Note note = Note(ntitle, nttext, ntischecked, nttime, ntcolor, ntlefttime,
-          ntImageList, ntVoiceList, ntTaskList);
-      noteBox.put(providerKeys[providerIndex], note);
-      notifyListeners();
+      if (!newNote) {
+        print('Provider Keys : ${providerKeys}');
+        var bnote = await noteBox.get(providerKeys[providerIndex]);
+        var ntitle = bnote.title;
+        var nttext = bnote.text;
+        var ntischecked = bnote.isChecked;
+        var nttime = note_duration.inSeconds;
+        var ntcolor = bnote.color;
+        var ntlefttime = note_duration.inSeconds;
+        var ntImageList = bnote.imageList;
+        var ntVoiceList = bnote.voiceList;
+        var ntTaskList = bnote.taskList;
+        Note note = Note(ntitle, nttext, ntischecked, nttime, ntcolor,
+            ntlefttime, ntImageList, ntVoiceList, ntTaskList);
+        noteBox.put(providerKeys[providerIndex], note);
+        notifyListeners();
+      } else {
+        notifyListeners();
+      }
     }
   }
 
