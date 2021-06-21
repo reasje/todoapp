@@ -554,6 +554,7 @@ class NoteProvider extends ChangeNotifier {
     text.clear();
     notifyListeners();
   }
+
   // for the clear the form
   void clearControllers() {
     imageList.clear();
@@ -564,7 +565,7 @@ class NoteProvider extends ChangeNotifier {
     taskList.clear();
     time_duration = Duration();
     note_duration = Duration();
-    
+
     notifyListeners();
   }
 
@@ -691,16 +692,36 @@ class NoteProvider extends ChangeNotifier {
   double SizeXSizeY;
   int selectedTab = 0;
   List<Tab> tabs = [];
-  List<NavigationItem> items = [
-    NavigationItem(Icon(Icons.text_fields), Text('Text'), Color(0xffaa66cc)),
-    NavigationItem(
-        Icon(Icons.hourglass_empty), Text("Timer"), Color(0xFFff4444)),
-    NavigationItem(
-        Icon(Icons.image_outlined), Text("Image"), Color(0xFFffbb33)),
-    NavigationItem(Icon(Icons.voicemail), Text('Voice'), Color(0xFF33b5e5)),
-    NavigationItem(Icon(Icons.check), Text('Task'), Color(0xFF00c851)),
+  List<Color> tabColors = [
+    Color(0xffaa66cc),
+    Color(0xFFff4444),
+    Color(0xFFffbb33),
+    Color(0xFF33b5e5),
+    Color(0xFF00c851)
   ];
+  List<NavigationItem> items;
+
   void initialTabs() {
+    tabColors.shuffle();
+    items = [
+      NavigationItem(Icon(Icons.text_fields), Text('Text'), tabColors[0]),
+      NavigationItem(
+        Icon(Icons.hourglass_empty),
+        Text("Timer"),tabColors[1]
+      ),
+      NavigationItem(
+        Icon(Icons.image_outlined),
+        Text("Image"),tabColors[2]
+      ),
+      NavigationItem(
+        Icon(Icons.voicemail),
+        Text('Voice'),tabColors[3]
+      ),
+      NavigationItem(
+        Icon(Icons.check),
+        Text('Task'),tabColors[4]
+      ),
+    ];
     tabs.add(Tab(
         'Text',
         [
@@ -985,6 +1006,7 @@ class NoteProvider extends ChangeNotifier {
 
     // notifyListeners();
   }
+
   void updateDuration(int leftTime) {
     time_duration = Duration(seconds: leftTime);
   }

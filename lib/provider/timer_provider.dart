@@ -43,8 +43,6 @@ class TimerState extends ChangeNotifier {
     final _myProvider = Provider.of<NoteProvider>(context, listen: false);
     if (timer == null || !timer?.isActive) {
       var bnote = keys == null ? null : await noteBox.get(keys[index]);
-
-      
       bnote?.leftTime == null ? newNote = true : newNote = false;
             if (newNote) {
         newIndex = noteBox.length;
