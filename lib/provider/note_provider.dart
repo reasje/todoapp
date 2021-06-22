@@ -621,6 +621,8 @@ class NoteProvider extends ChangeNotifier {
     //notifyListeners();
   }
 
+  PageController pageController;
+
   // new Note clieked
   void newNoteClicked(BuildContext context) {
     noteContext = context;
@@ -632,6 +634,8 @@ class NoteProvider extends ChangeNotifier {
     newNote = true;
     SizeX = MediaQuery.of(context).size.height;
     SizeY = MediaQuery.of(context).size.width;
+    pageController =
+        new PageController(initialPage: selectedTab, keepPage: true);
     SizeXSizeY = SizeX * SizeY;
     print('SizeX ${SizeX}');
     initialTabs();
@@ -652,7 +656,7 @@ class NoteProvider extends ChangeNotifier {
       imageList = bnote.imageList;
       print('object');
     }
-    if (bnote.imageList?.isNotEmpty ?? false) {
+    if (bnote.voiceList?.isNotEmpty ?? false) {
       voiceList = bnote.voiceList;
     }
     if (bnote.taskList?.isNotEmpty ?? false) {
@@ -687,6 +691,8 @@ class NoteProvider extends ChangeNotifier {
     SizeXSizeY = SizeX * SizeY;
     initialTabs();
     notifyListeners();
+    pageController =
+        new PageController(initialPage: selectedTab, keepPage: true);
     takeSnapshot();
   }
 
@@ -710,11 +716,26 @@ class NoteProvider extends ChangeNotifier {
     //tabColors.
     print('tabColors ${tabColors}');
     items = [
-      NavigationItem(Icon(Icons.text_fields), Text(uiKit.AppLocalizations.of(noteContext).translate('text')), tabColors[0]),
-      NavigationItem(Icon(Icons.hourglass_empty), Text(uiKit.AppLocalizations.of(noteContext).translate('timer')), tabColors[1]),
-      NavigationItem(Icon(Icons.image_outlined), Text(uiKit.AppLocalizations.of(noteContext).translate('image')), tabColors[2]),
-      NavigationItem(Icon(Icons.voicemail), Text(uiKit.AppLocalizations.of(noteContext).translate('voice')), tabColors[3]),
-      NavigationItem(Icon(Icons.check), Text(uiKit.AppLocalizations.of(noteContext).translate('task')), tabColors[4]),
+      NavigationItem(
+          Icon(Icons.text_fields),
+          Text(uiKit.AppLocalizations.of(noteContext).translate('text')),
+          tabColors[0]),
+      NavigationItem(
+          Icon(Icons.hourglass_empty),
+          Text(uiKit.AppLocalizations.of(noteContext).translate('timer')),
+          tabColors[1]),
+      NavigationItem(
+          Icon(Icons.image_outlined),
+          Text(uiKit.AppLocalizations.of(noteContext).translate('image')),
+          tabColors[2]),
+      NavigationItem(
+          Icon(Icons.voicemail),
+          Text(uiKit.AppLocalizations.of(noteContext).translate('voice')),
+          tabColors[3]),
+      NavigationItem(
+          Icon(Icons.check),
+          Text(uiKit.AppLocalizations.of(noteContext).translate('task')),
+          tabColors[4]),
     ];
 
     tabs = [
@@ -940,6 +961,16 @@ class NoteProvider extends ChangeNotifier {
 
   void newTabSelected(int index) {
     selectedTab = index;
+    print('object ${index}');
+    pageController.jumpToPage(index);
+
+    notifyListeners();
+  }
+
+  void newTabSelectedAnimation(int index) {
+    selectedTab = index;
+    pageController.animateToPage(index,
+        duration: Duration(seconds: 1), curve: Curves.ease);
     notifyListeners();
   }
 
@@ -1100,11 +1131,12 @@ class NoteProvider extends ChangeNotifier {
   // This function  is used to handle the changes that has been
   // occured to the time picker !
   Duration saved_duration = Duration();
-  Duration saved_note_duration= Duration();
-  void saveDuration(){
+  Duration saved_note_duration = Duration();
+  void saveDuration() {
     saved_duration = time_duration;
     saved_note_duration = note_duration;
   }
+
   void timerDurationChange(duration) {
     // updating the state and notifiung the listeners
 
@@ -1113,6 +1145,7 @@ class NoteProvider extends ChangeNotifier {
 
     // notifyListeners();
   }
+
   void updateDuration(int leftTime) {
     time_duration = Duration(seconds: leftTime);
   }

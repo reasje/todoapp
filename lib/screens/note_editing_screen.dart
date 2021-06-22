@@ -19,10 +19,10 @@ class MyNotesEditing extends StatefulWidget {
 }
 
 class _MyNotesEditingState extends State<MyNotesEditing> {
-  PageController _pageController =
-      new PageController(initialPage: 0, keepPage: true);
+
   @override
   Widget build(BuildContext context) {
+
     final _myProvider = Provider.of<NoteProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
     double SizeX = MediaQuery.of(context).size.height;
@@ -52,9 +52,9 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
               //     bottom: MediaQuery.of(context).viewInsets.bottom),
               child: PageView(
                 onPageChanged: (value) {
-                  _myProvider.newTabSelected(value);
+                  _myProvider.newTabSelectedAnimation(value);
                 },
-                controller: _pageController,
+                controller: _myProvider.pageController,
                 children: [
                   Tab(
                     index: 0,
