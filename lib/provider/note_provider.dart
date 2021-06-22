@@ -689,7 +689,7 @@ class NoteProvider extends ChangeNotifier {
     SizeX = MediaQuery.of(context).size.height;
     SizeY = MediaQuery.of(context).size.width;
     SizeXSizeY = SizeX * SizeY;
-    initialTabs();
+    await initialTabs();
     notifyListeners();
     pageController =
         new PageController(initialPage: selectedTab, keepPage: true);
@@ -711,7 +711,7 @@ class NoteProvider extends ChangeNotifier {
   ];
   List<NavigationItem> items;
 
-  void initialTabs() {
+  Future<void> initialTabs() async{
     tabColors.shuffle();
     //tabColors.
     print('tabColors ${tabColors}');

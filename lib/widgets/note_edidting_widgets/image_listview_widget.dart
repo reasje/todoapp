@@ -24,6 +24,7 @@ class imageLisView extends StatelessWidget {
     double SizeXSizeY = SizeX * SizeY;
     return Container(
         height: isLandscape ? SizeY * 0.8 : SizeX * 0.8,
+        margin: EdgeInsets.only(top: SizeX * 0.02),
         child: ScrollConfiguration(
           behavior: uiKit.NoGlowBehaviour(),
           child: ListView.builder(
@@ -59,7 +60,8 @@ class imageLisView extends StatelessWidget {
                                 child: Icon(
                                   Icons.delete_sweep,
                                   size: SizeX * SizeY * 0.0003,
-                                  color: _themeProvider.textColor,
+                                  color: _myProvider
+                                  .tabs[_myProvider.selectedTab].color,
                                 ),
                               ),
                             ),
@@ -79,38 +81,49 @@ class imageLisView extends StatelessWidget {
                             child: Center(
                               child: Container(
                                   width: SizeY * 0.9,
-                                  height: SizeX * 0.25,
+                                  height: SizeX * 0.3,
                                   margin: EdgeInsets.symmetric(
                                       vertical: SizeY * 0.03),
                                   child: _myProvider.imageList != null
-                                      ? InkWell(
-                                        onTap: () => Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (BuildContext
-                                                        context) =>
-                                                    uiKit.PicDetail(
-                                                        index: index))),
-                                        child: Hero(
-                                            tag: 'pic${index}',
-                                            child: Image.memory(
-                                              snapShot.data[index],
-                                              fit: BoxFit.fill,
-                                            )),
+                                      ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(16.0),
+                                        child: InkWell(
+                                            onTap: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder:
+                                                        (BuildContext context) =>
+                                                            uiKit.PicDetail(
+                                                                index: index))),
+                                            child: Hero(
+                                              
+                                                tag: 'pic${index}',
+                                                child: Image.memory(
+                                                  snapShot.data[index],
+                                                  fit: BoxFit.fill,
+                                                )),
+                                          ),
                                       )
                                       : Container()),
                             ),
                           );
                         } else {
-                          return Shimmer.fromColors(
-                            baseColor: _themeProvider.mainColor,
-                            highlightColor: _themeProvider.shimmerColor,
-                            child: Container(
-                              width: SizeX * 0.16,
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: SizeY * 0.03),
-                              decoration: BoxDecoration(
-                                color: _themeProvider.mainColor,
+                          return Container(
+                            width: SizeY * 0.9,
+                            height: SizeX * 0.25,
+                            child: Shimmer.fromColors(
+                              period: Duration(seconds: 3),
+                              baseColor: _myProvider
+                                  .tabs[_myProvider.selectedTab].color
+                                  .withOpacity(0.3),
+                              highlightColor: _themeProvider.shimmerColor,
+                              child: Container(
+                                width: SizeX * 0.16,
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: SizeY * 0.03),
+                                decoration: BoxDecoration(
+                                  color: _themeProvider.mainColor,
+                                ),
                               ),
                             ),
                           );

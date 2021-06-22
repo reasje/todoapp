@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
@@ -44,7 +45,7 @@ class voiceListView extends StatelessWidget {
                       builder: (context, snapShot) {
                         if (snapShot.hasData) {
                           return Dismissible(
-                            //direction: DismissDirection.ri,
+                            direction: DismissDirection.horizontal,
                             key: UniqueKey(),
                             background: Center(
                               child: Container(
@@ -60,8 +61,9 @@ class voiceListView extends StatelessWidget {
                                 alignment: AlignmentDirectional.centerEnd,
                                 child: Icon(
                                   Icons.delete_sweep,
-                                  size: SizeX * SizeY * 0.00025,
-                                  color: _themeProvider.textColor,
+                                  size: SizeX * SizeY * 0.00022,
+                                  color: _myProvider
+                                  .tabs[_myProvider.selectedTab].color,
                                 ),
                               ),
                             ),
@@ -248,15 +250,24 @@ class voiceListView extends StatelessWidget {
                           );
                         } else {
                           return Container(
-                              width: SizeX * 0.16,
-                              margin:
-                                  EdgeInsets.symmetric(horizontal: SizeY * 0.03),
-                              decoration: BoxDecoration(
-                                color: backGroundColor,
-                                // borderRadius:
-                                //     BorderRadius.all(Radius.circular(SizeX * 0.3))
+                                width: SizeY * 0.8,
+                                height: SizeX * 0.12,
+                            child: Shimmer.fromColors(
+                              period: Duration(seconds: 3),
+                              baseColor: _myProvider
+                                  .tabs[_myProvider.selectedTab].color
+                                  .withOpacity(0.3),
+                              highlightColor: _themeProvider.shimmerColor,
+                              child: Container(
+                                width: SizeX * 0.16,
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: SizeY * 0.03),
+                                decoration: BoxDecoration(
+                                  color: _themeProvider.mainColor,
+                                ),
                               ),
-                              child: Center(child: CircularProgressIndicator()));
+                            ),
+                          );
                         }
                       });
                 }

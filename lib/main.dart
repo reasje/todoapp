@@ -1,5 +1,6 @@
 import 'package:circular_menu/circular_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:myket_iap/myket_iap.dart';
 import 'package:myket_iap/util/iab_result.dart';
@@ -75,12 +76,12 @@ void main() async {
   // });
   // android alarm manager services
   // final int helloAlarmID = 0;
-  // SystemChrome.setPreferredOrientations([
-  //   DeviceOrientation.portraitUp,
-  //   DeviceOrientation.portraitDown,
-  // ]).then((_) {
-  //   runApp(MyApp());
-  // });
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(MyApp());
+  });
   runApp(MyApp());
   configLoading();
   //await AndroidAlarmManager.periodic(const Duration(seconds: 1), 1, printHello, exact: true, wakeup: true);
