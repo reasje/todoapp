@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -293,30 +292,13 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                           ? InkWell(
                                                                               key: new PageStorageKey<String>('pageKey ${DateTime.now().microsecondsSinceEpoch}'),
                                                                               onTap: () {
-                                                                                if (!(_timerState.isRunning.any((element) => element == true))) {
-                                                                                  //_myProvider.changeTimerStack();
-                                                                                  _timerState.loadTimer(
-                                                                                    keys,
-                                                                                    index,
-                                                                                    context,
-                                                                                  );
-                                                                                  _myProvider.loadNote(context, keys, index);
-                                                                                  Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
-                                                                                } else {
-                                                                                  if (_timerState.index == index) {
-                                                                                    // TODO Delete _myProvider.changeTimerStack();
-                                                                                    _timerState.loadTimer(
-                                                                                      keys,
-                                                                                      index,
-                                                                                      context,
-                                                                                    );
-                                                                                    _myProvider.loadNote(context, keys, index);
-                                                                                    Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
-                                                                                  } else {
-                                                                                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                                                                    ScaffoldMessenger.of(context).showSnackBar(uiKit.MySnackBar(uiKit.AppLocalizations.of(context).translate('timerOn'), 'timerOn', false, context));
-                                                                                  }
-                                                                                }
+                                                                                _timerState.loadTimer(
+                                                                                  keys,
+                                                                                  index,
+                                                                                  context,
+                                                                                );
+                                                                                _myProvider.loadNote(context, keys, index);
+                                                                                Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
                                                                               },
                                                                               child: Container(
                                                                                 padding: EdgeInsets.all(4),
@@ -560,6 +542,7 @@ class _MyRorderableState extends State<MyRorderable> {
         onPressed: () {
           _myProvider.newNoteClicked(context);
           _timerState.clearControllers();
+          _timerState.newNoteIndex();
           Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
         },
       ),

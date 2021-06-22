@@ -95,7 +95,17 @@ class _MyButtonState extends State<MyButton> {
               // TODO Delete _myProvider.changeTimerStack();
               break;
             case 'start':
-              _timerState.startTimer(context);
+              if (!(_timerState.isRunning.any((element) => element == true))) {
+                _timerState.startTimer(context);
+              } else {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                ScaffoldMessenger.of(context).showSnackBar(uiKit.MySnackBar(
+                    uiKit.AppLocalizations.of(context).translate('timerOn'),
+                    'timerOn',
+                    false,
+                    context));
+              }
+
               //startTimer();
               break;
             case 'stop':
@@ -176,7 +186,7 @@ class _MyButtonState extends State<MyButton> {
                                     },
                                     child: Text(
                                       uiKit.AppLocalizations.of(context)
-                                    .translate('done'),
+                                          .translate('done'),
                                       style: TextStyle(
                                           color: _themeProvider.titleColor
                                               .withOpacity(0.6),
@@ -325,7 +335,8 @@ class _MyButtonState extends State<MyButton> {
                                     Navigator.pop(context);
                                   },
                                   child: Text(
-                                    uiKit.AppLocalizations.of(context).translate('camera'),
+                                    uiKit.AppLocalizations.of(context)
+                                        .translate('camera'),
                                     style: TextStyle(
                                         color: _themeProvider.titleColor
                                             .withOpacity(0.6),
@@ -345,7 +356,8 @@ class _MyButtonState extends State<MyButton> {
                                     Navigator.pop(context);
                                   },
                                   child: Text(
-                                    uiKit.AppLocalizations.of(context).translate('gallery'),
+                                    uiKit.AppLocalizations.of(context)
+                                        .translate('gallery'),
                                     style: TextStyle(
                                         color: _themeProvider.titleColor
                                             .withOpacity(0.6),
@@ -443,7 +455,7 @@ class _MyButtonState extends State<MyButton> {
                       fit: BoxFit.fill,
                     )
                   : Icon(widget.iconData,
-                  textDirection: TextDirection.ltr,
+                      textDirection: TextDirection.ltr,
                       size: widget.iconSize,
                       color: widget.id == 'google'
                           ? _signinState.isSignedin

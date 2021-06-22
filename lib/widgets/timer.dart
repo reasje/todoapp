@@ -23,12 +23,11 @@ class _TimerWidgetState extends State<TimerWidget> {
     double SizeXSizeY = SizeX * SizeY;
     final _timerState = Provider.of<TimerState>(context);
     final _myProvider = Provider.of<NoteProvider>(context);
-    final _themeProvider = Provider.of<ThemeProvider>(context);
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     return Container(
         height: isLandscape ? SizeY : SizeX * 0.9,
-        child: _myProvider.time_duration != Duration()
+        child: _myProvider.note_duration != Duration()
             ? FutureBuilder(
                 future: _myProvider.getNoteEditStack(
                     _timerState.keys, _timerState.index),
@@ -52,17 +51,21 @@ class _TimerWidgetState extends State<TimerWidget> {
                             .floor()
                             .toString()
                             .padLeft(2, '0');
+                    print(
+                        'object ${_timerState.newIndex}');
                     return Column(
                       children: [
                         Container(
                           height: SizeY * 0.85,
                           width: SizeY * 0.85,
-                                                      margin: EdgeInsets.only(top: SizeX*0.05),
+                          margin: EdgeInsets.only(top: SizeX * 0.05),
                           padding: EdgeInsets.all(SizeX * 0.03),
                           decoration: BoxDecoration(
-                              color: _timerState.isOver
+                              color: _timerState.isOver[
+                                      _timerState.index ?? _timerState.newIndex]
                                   ? _myProvider.items[3].color.withOpacity(0.1)
-                                  : _timerState.isPaused
+                                  : _timerState.isPaused[_timerState.index ??
+                                          _timerState.newIndex]
                                       ? _myProvider.items[1].color
                                           .withOpacity(0.1)
                                       : _timerState.isRunning
@@ -73,7 +76,6 @@ class _TimerWidgetState extends State<TimerWidget> {
                               borderRadius: BorderRadius.all(Radius.circular(
                                   isLandscape ? SizeY * 0.4 : SizeX * 0.3))),
                           child: Container(
-
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(
                                   isLandscape ? SizeY * 0.4 : SizeX * 0.3)),
@@ -89,9 +91,13 @@ class _TimerWidgetState extends State<TimerWidget> {
                                   Text(
                                     hour_section,
                                     style: TextStyle(
-                                        color: _timerState.isOver
+                                        color: _timerState.isOver[
+                                                _timerState.index ??
+                                                    _timerState.newIndex]
                                             ? _myProvider.items[3].color
-                                            : _timerState.isPaused
+                                            : _timerState.isPaused[
+                                                    _timerState.index ??
+                                                        _timerState.newIndex]
                                                 ? _myProvider.items[1].color
                                                 : _timerState.isRunning.any(
                                                         (element) =>
@@ -113,9 +119,13 @@ class _TimerWidgetState extends State<TimerWidget> {
                                   Text(
                                     minute_section,
                                     style: TextStyle(
-                                        color: _timerState.isOver
+                                        color: _timerState.isOver[
+                                                _timerState.index ??
+                                                    _timerState.newIndex]
                                             ? _myProvider.items[3].color
-                                            : _timerState.isPaused
+                                            : _timerState.isPaused[
+                                                    _timerState.index ??
+                                                        _timerState.newIndex]
                                                 ? _myProvider.items[1].color
                                                 : _timerState.isRunning.any(
                                                         (element) =>
@@ -137,9 +147,13 @@ class _TimerWidgetState extends State<TimerWidget> {
                                   Text(
                                     second_section,
                                     style: TextStyle(
-                                        color: _timerState.isOver
+                                        color: _timerState.isOver[
+                                                _timerState.index ??
+                                                    _timerState.newIndex]
                                             ? _myProvider.items[3].color
-                                            : _timerState.isPaused
+                                            : _timerState.isPaused[
+                                                    _timerState.index ??
+                                                        _timerState.newIndex]
                                                 ? _myProvider.items[1].color
                                                 : _timerState.isRunning.any(
                                                         (element) =>
@@ -164,9 +178,13 @@ class _TimerWidgetState extends State<TimerWidget> {
                                       MainAxisAlignment.spaceAround,
                                   children: [
                                     uiKit.MyButton(
-                                      backgroundColor: _timerState.isOver
+                                      backgroundColor: _timerState.isOver[
+                                              _timerState.index ??
+                                                  _timerState.newIndex]
                                           ? _myProvider.items[3].color
-                                          : _timerState.isPaused
+                                          : _timerState.isPaused[
+                                                  _timerState.index ??
+                                                      _timerState.newIndex]
                                               ? _myProvider.items[1].color
                                               : _timerState.isRunning.any(
                                                       (element) =>
@@ -180,9 +198,13 @@ class _TimerWidgetState extends State<TimerWidget> {
                                       id: 'reset',
                                     ),
                                     uiKit.MyButton(
-                                      backgroundColor: _timerState.isOver
+                                      backgroundColor: _timerState.isOver[
+                                              _timerState.index ??
+                                                  _timerState.newIndex]
                                           ? _myProvider.items[3].color
-                                          : _timerState.isPaused
+                                          : _timerState.isPaused[
+                                                  _timerState.index ??
+                                                      _timerState.newIndex]
                                               ? _myProvider.items[1].color
                                               : _timerState.isRunning.any(
                                                       (element) =>
@@ -199,9 +221,13 @@ class _TimerWidgetState extends State<TimerWidget> {
                                 )
                               : Center(
                                   child: uiKit.MyButton(
-                                    backgroundColor: _timerState.isOver
+                                    backgroundColor: _timerState.isOver[
+                                            _timerState.index ??
+                                                _timerState.newIndex]
                                         ? _myProvider.items[3].color
-                                        : _timerState.isPaused
+                                        : _timerState.isPaused[
+                                                _timerState.index ??
+                                                    _timerState.newIndex]
                                             ? _myProvider.items[1].color
                                             : _timerState.isRunning.any(
                                                     (element) =>

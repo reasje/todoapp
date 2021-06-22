@@ -1,364 +1,364 @@
-import 'dart:async';
+// import 'dart:async';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-import 'package:hive/hive.dart';
-import 'package:provider/provider.dart';
-import 'package:todoapp/model/note_model.dart';
-import 'package:todoapp/provider/note_provider.dart';
-import 'package:todoapp/provider/theme_provider.dart';
-import 'package:todoapp/provider/timer_provider.dart';
-import 'package:todoapp/uiKit.dart' as uiKit;
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:todoapp/screens/reorderable_screen_.dart';
+// import 'package:flutter/foundation.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:hive/hive.dart';
+// import 'package:provider/provider.dart';
+// import 'package:todoapp/model/note_model.dart';
+// import 'package:todoapp/provider/note_provider.dart';
+// import 'package:todoapp/provider/theme_provider.dart';
+// import 'package:todoapp/provider/timer_provider.dart';
+// import 'package:todoapp/uiKit.dart' as uiKit;
+// import 'package:hive_flutter/hive_flutter.dart';
+// import 'package:todoapp/screens/reorderable_screen_.dart';
 
-class MyTimer extends StatefulWidget {
-  double SizeX;
-  double SizeY;
-  final noteBox;
-  MyTimer({
-    Key key,
-    @required this.SizeX,
-    @required this.SizeY,
-    @required this.noteBox,
-  }) : super(key: key);
-  @override
-  _MyTimerState createState() => _MyTimerState();
-}
+// class MyTimer extends StatefulWidget {
+//   double SizeX;
+//   double SizeY;
+//   final noteBox;
+//   MyTimer({
+//     Key key,
+//     @required this.SizeX,
+//     @required this.SizeY,
+//     @required this.noteBox,
+//   }) : super(key: key);
+//   @override
+//   _MyTimerState createState() => _MyTimerState();
+// }
 
-class _MyTimerState extends State<MyTimer> {
-  @override
-  Widget build(BuildContext context) {
-    double SizeX = widget.SizeX;
-    double SizeY = widget.SizeY;
-    LazyBox<Note> noteBox = widget.noteBox;
-    final _myProvider = Provider.of<NoteProvider>(context);
-    final _timerState = Provider.of<TimerState>(context);
-    final _themeProvider = Provider.of<ThemeProvider>(context);
-    return Scaffold(
-          resizeToAvoidBottomInset: false,
-      backgroundColor: _themeProvider.mainColor,
-      body: ValueListenableBuilder(
-          valueListenable: noteBox.listenable(),
-          builder: (context, LazyBox<Note> notes, _) {
-            return FutureBuilder(
-              future: _myProvider.getNoteEditStack(
-                  _timerState.keys, _timerState.index),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  var hour_section = ((snapshot.data?.leftTime == null
-                              ? 0
-                              : snapshot.data.leftTime / 3600) %
-                          60)
-                      .floor()
-                      .toString()
-                      .padLeft(2, '0');
-                  //hour_section = null ? hour_section = '0' : hour_section;
-                  var second_section = (snapshot.data?.leftTime == null
-                          ? 0
-                          : snapshot.data.leftTime % 60)
-                      .floor()
-                      .toString()
-                      .padLeft(2, '0');
-                  //second_section = null ? second_section = '0' : second_section;
-                  var minute_section = ((snapshot.data?.leftTime == null
-                              ? 0
-                              : snapshot.data.leftTime / 60) %
-                          60)
-                      .floor()
-                      .toString()
-                      .padLeft(2, '0');
-                  //minute_section = null ? minute_section = '0' : minute_section;
-                  return Container(
-                    child: ScrollConfiguration(
-                      behavior: NoGlowBehaviour(),
-                      child: ListView(
-                        padding: EdgeInsets.only(bottom: SizeX * 0.05),
-                        children: [
-                          _timerState.isRunning
-                                      .any((element) => element == true) ==
-                                  false
-                              ? Container(
-                                  alignment: Alignment.centerRight,
-                                  margin: EdgeInsets.only(
-                                      top: SizeX * 0.04, right: 30),
-                                  child: uiKit.MyButton(
-                                    sizePU: SizeX * 0.07,
-                                    sizePD: SizeX * 0.08,
-                                    iconSize: SizeX * SizeY * 0.0001,
-                                    iconData: FontAwesome.check,
-                                    id: 'menu',
-                                  ),
-                                )
-                              : Container(
-                                  margin: EdgeInsets.all(SizeX * 0.03),
-                                  width: SizeX * 0.07,
-                                  height: SizeX * 0.07,
-                                ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Container(
-                                height: SizeY * 0.85,
-                                width: SizeY * 0.85,
-                                padding: EdgeInsets.all(SizeX * 0.03),
-                                decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: _themeProvider .lightShadowColor,
-                                        spreadRadius: 1.0,
-                                        blurRadius: 1.0,
-                                        offset: Offset(
-                                            -1, -1), // changes position of shadow
-                                      ),
-                                      BoxShadow(
-                                        color: _themeProvider .shadowColor
-                                            .withOpacity(0.17),
-                                        spreadRadius: 1.0,
-                                        blurRadius: 2.0,
-                                        offset: Offset(
-                                            3, 4), // changes position of shadow
-                                      ),
-                                    ],
-                                    color: _timerState.isOver
-                                        ? _themeProvider.overColor
-                                        : _timerState.isPaused
-                                            ? _themeProvider.pausedColor
-                                            : _timerState.isRunning.any(
-                                                    (element) => element == true)
-                                                ? _themeProvider .runningColor
-                                                : null,
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(SizeX * 0.3))),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(SizeX * 0.3)),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: _themeProvider.lightShadowColor,
-                                        offset: Offset(2, 2),
-                                        blurRadius: 0.0,
-                                        // changes position of shadow
-                                      ),
-                                      BoxShadow(
-                                        color: _themeProvider.shadowColor
-                                            .withOpacity(0.14),
-                                        offset: Offset(-1, -1),
-                                      ),
-                                      BoxShadow(
-                                        color: _themeProvider.mainColor,
-                                        offset: Offset(5, 8),
-                                        spreadRadius: -0.5,
-                                        blurRadius: 14.0,
-                                        // changes position of shadow
-                                      ),
-                                    ],
-                                  ),
-                                  child: Directionality(
-                                    textDirection: TextDirection.ltr,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Text(
-                                          hour_section,
-                                          style: TextStyle(
-                                              color: _timerState.isRunning.any(
-                                                      (element) =>
-                                                          element == true)
-                                                  ? _themeProvider.swachColor
-                                                  : _themeProvider.textColor,
-                                              fontSize: SizeX * SizeY * 0.00015,
-                                              fontFamily: "Ubuntu Condensed"),
-                                        ),
-                                        // Text(
-                                        //   ':',
-                                        //   style: TextStyle(
-                                        //       color: _timerState.isRunning
-                                        //               .any((element) => element == true)
-                                        //           ? _myProvider.swachColor
-                                        //           : _myProvider.textColor,
-                                        //       fontSize: SizeX * SizeY * 0.00015),
-                                        // ),
-                                        Text(
-                                          minute_section,
-                                          style: TextStyle(
-                                              color: _timerState.isRunning.any(
-                                                      (element) =>
-                                                          element == true)
-                                                  ? _themeProvider.swachColor
-                                                  : _themeProvider.textColor,
-                                              fontSize: SizeX * SizeY * 0.00015,
-                                              fontFamily: "Ubuntu Condensed"),
-                                        ),
-                                        // Text(
-                                        //   ':',
-                                        //   style: TextStyle(
-                                        //       color: _timerState.isRunning
-                                        //               .any((element) => element == true)
-                                        //           ? _myProvider.swachColor
-                                        //           : _myProvider.textColor,
-                                        //       fontSize: SizeX * SizeY * 0.00015),
-                                        // ),
-                                        Text(
-                                          second_section,
-                                          style: TextStyle(
-                                              color: _timerState.isRunning.any(
-                                                      (element) =>
-                                                          element == true)
-                                                  ? _themeProvider.swachColor
-                                                  : _themeProvider.textColor,
-                                              fontSize: SizeX * SizeY * 0.00015,
-                                              fontFamily: "Ubuntu Condensed"),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(30),
-                                child: _timerState.isRunning
-                                            .any((element) => element == true) ==
-                                        true
-                                    ? Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          uiKit.MyButton(
-                                            sizePU: SizeX * 0.1,
-                                            sizePD: SizeX * 0.1,
-                                            iconSize: SizeX * SizeY * 0.00014,
-                                            iconData: FontAwesome.refresh,
-                                            id: 'reset',
-                                          ),
-                                          uiKit.MyButton(
-                                            sizePU: SizeX * 0.1,
-                                            sizePD: SizeX * 0.1,
-                                            iconSize: SizeX * SizeY * 0.00014,
-                                            iconData: FontAwesome.stop,
-                                            id: 'stop',
-                                          ),
-                                        ],
-                                      )
-                                    : Center(
-                                        child: uiKit.MyButton(
-                                          sizePU: SizeX * 0.1,
-                                          sizePD: SizeX * 0.1,
-                                          iconSize: SizeX * SizeY * 0.00014,
-                                          iconData: FontAwesome.play,
-                                          id: 'start',
-                                          timerContext: context,
-                                        ),
-                                      ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.symmetric(
-                                    vertical: SizeX * 0.05,
-                                    horizontal: SizeY * 0.05),
-                                decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: _themeProvider.lightShadowColor,
-                                        spreadRadius: 1.0,
-                                        blurRadius: 1.0,
-                                        offset: Offset(
-                                            -1, -1), // changes position of shadow
-                                      ),
-                                      BoxShadow(
-                                        color: _themeProvider.shadowColor
-                                            .withOpacity(0.17),
-                                        spreadRadius: 1.0,
-                                        blurRadius: 2.0,
-                                        offset: Offset(
-                                            3, 4), // changes position of shadow
-                                      ),
-                                    ],
-                                    color: _themeProvider.mainColor,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10))),
-                                child: Center(
-                                  child: Container(
-                                    padding: EdgeInsets.all(SizeX * 0.02),
-                                    child: Text(
-                                      snapshot.data?.title == null
-                                          ? ""
-                                          : snapshot.data.title,
-                                      style: TextStyle(
-                                          color: _themeProvider.textColor,
-                                          fontSize: SizeX * SizeY * 0.0001,
-                                          fontWeight: _themeProvider.isEn
-                                              ? FontWeight.w100
-                                              : FontWeight.w600),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              snapshot.data?.text != null
-                                  ? Container(
-                                      margin: EdgeInsets.symmetric(
-                                          vertical: SizeX * 0.01,
-                                          horizontal: SizeY * 0.05),
-                                      decoration: BoxDecoration(
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: _themeProvider.lightShadowColor,
-                                              spreadRadius: 1.0,
-                                              blurRadius: 1.0,
-                                              offset: Offset(-1,
-                                                  -1), // changes position of shadow
-                                            ),
-                                            BoxShadow(
-                                              color: _themeProvider.shadowColor
-                                                  .withOpacity(0.17),
-                                              spreadRadius: 1.0,
-                                              blurRadius: 2.0,
-                                              offset: Offset(3,
-                                                  4), // changes position of shadow
-                                            ),
-                                          ],
-                                          color: _themeProvider.mainColor,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10))),
-                                      child: Center(
-                                        child: Container(
-                                          padding: EdgeInsets.all(SizeX * 0.02),
-                                          child: Text(
-                                            snapshot.data?.text == null
-                                                ? ""
-                                                : snapshot.data.text,
-                                            style: TextStyle(
-                                                color:_themeProvider.textColor,
-                                                fontSize: SizeX * SizeY * 0.0001,
-                                                fontWeight: _themeProvider.isEn
-                                                    ? FontWeight.w100
-                                                    : FontWeight.w600),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : Container()
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                } else {
-                  return Container(
-                      child: Center(child: CircularProgressIndicator()));
-                }
-              },
-            );
-          }),
-    );
-  }
-}
+// class _MyTimerState extends State<MyTimer> {
+//   @override
+//   Widget build(BuildContext context) {
+//     double SizeX = widget.SizeX;
+//     double SizeY = widget.SizeY;
+//     LazyBox<Note> noteBox = widget.noteBox;
+//     final _myProvider = Provider.of<NoteProvider>(context);
+//     final _timerState = Provider.of<TimerState>(context);
+//     final _themeProvider = Provider.of<ThemeProvider>(context);
+//     return Scaffold(
+//           resizeToAvoidBottomInset: false,
+//       backgroundColor: _themeProvider.mainColor,
+//       body: ValueListenableBuilder(
+//           valueListenable: noteBox.listenable(),
+//           builder: (context, LazyBox<Note> notes, _) {
+//             return FutureBuilder(
+//               future: _myProvider.getNoteEditStack(
+//                   _timerState.keys, _timerState.index),
+//               builder: (context, snapshot) {
+//                 if (snapshot.hasData) {
+//                   var hour_section = ((snapshot.data?.leftTime == null
+//                               ? 0
+//                               : snapshot.data.leftTime / 3600) %
+//                           60)
+//                       .floor()
+//                       .toString()
+//                       .padLeft(2, '0');
+//                   //hour_section = null ? hour_section = '0' : hour_section;
+//                   var second_section = (snapshot.data?.leftTime == null
+//                           ? 0
+//                           : snapshot.data.leftTime % 60)
+//                       .floor()
+//                       .toString()
+//                       .padLeft(2, '0');
+//                   //second_section = null ? second_section = '0' : second_section;
+//                   var minute_section = ((snapshot.data?.leftTime == null
+//                               ? 0
+//                               : snapshot.data.leftTime / 60) %
+//                           60)
+//                       .floor()
+//                       .toString()
+//                       .padLeft(2, '0');
+//                   //minute_section = null ? minute_section = '0' : minute_section;
+//                   return Container(
+//                     child: ScrollConfiguration(
+//                       behavior: NoGlowBehaviour(),
+//                       child: ListView(
+//                         padding: EdgeInsets.only(bottom: SizeX * 0.05),
+//                         children: [
+//                           _timerState.isRunning
+//                                       .any((element) => element == true) ==
+//                                   false
+//                               ? Container(
+//                                   alignment: Alignment.centerRight,
+//                                   margin: EdgeInsets.only(
+//                                       top: SizeX * 0.04, right: 30),
+//                                   child: uiKit.MyButton(
+//                                     sizePU: SizeX * 0.07,
+//                                     sizePD: SizeX * 0.08,
+//                                     iconSize: SizeX * SizeY * 0.0001,
+//                                     iconData: FontAwesome.check,
+//                                     id: 'menu',
+//                                   ),
+//                                 )
+//                               : Container(
+//                                   margin: EdgeInsets.all(SizeX * 0.03),
+//                                   width: SizeX * 0.07,
+//                                   height: SizeX * 0.07,
+//                                 ),
+//                           Column(
+//                             mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                             children: [
+//                               Container(
+//                                 height: SizeY * 0.85,
+//                                 width: SizeY * 0.85,
+//                                 padding: EdgeInsets.all(SizeX * 0.03),
+//                                 decoration: BoxDecoration(
+//                                     boxShadow: [
+//                                       BoxShadow(
+//                                         color: _themeProvider .lightShadowColor,
+//                                         spreadRadius: 1.0,
+//                                         blurRadius: 1.0,
+//                                         offset: Offset(
+//                                             -1, -1), // changes position of shadow
+//                                       ),
+//                                       BoxShadow(
+//                                         color: _themeProvider .shadowColor
+//                                             .withOpacity(0.17),
+//                                         spreadRadius: 1.0,
+//                                         blurRadius: 2.0,
+//                                         offset: Offset(
+//                                             3, 4), // changes position of shadow
+//                                       ),
+//                                     ],
+//                                     color: _timerState.isOver
+//                                         ? _themeProvider.overColor
+//                                         : _timerState.isPaused
+//                                             ? _themeProvider.pausedColor
+//                                             : _timerState.isRunning.any(
+//                                                     (element) => element == true)
+//                                                 ? _themeProvider .runningColor
+//                                                 : null,
+//                                     borderRadius: BorderRadius.all(
+//                                         Radius.circular(SizeX * 0.3))),
+//                                 child: Container(
+//                                   decoration: BoxDecoration(
+//                                     borderRadius: BorderRadius.all(
+//                                         Radius.circular(SizeX * 0.3)),
+//                                     boxShadow: [
+//                                       BoxShadow(
+//                                         color: _themeProvider.lightShadowColor,
+//                                         offset: Offset(2, 2),
+//                                         blurRadius: 0.0,
+//                                         // changes position of shadow
+//                                       ),
+//                                       BoxShadow(
+//                                         color: _themeProvider.shadowColor
+//                                             .withOpacity(0.14),
+//                                         offset: Offset(-1, -1),
+//                                       ),
+//                                       BoxShadow(
+//                                         color: _themeProvider.mainColor,
+//                                         offset: Offset(5, 8),
+//                                         spreadRadius: -0.5,
+//                                         blurRadius: 14.0,
+//                                         // changes position of shadow
+//                                       ),
+//                                     ],
+//                                   ),
+//                                   child: Directionality(
+//                                     textDirection: TextDirection.ltr,
+//                                     child: Column(
+//                                       crossAxisAlignment:
+//                                           CrossAxisAlignment.center,
+//                                       mainAxisAlignment:
+//                                           MainAxisAlignment.spaceEvenly,
+//                                       mainAxisSize: MainAxisSize.max,
+//                                       children: [
+//                                         Text(
+//                                           hour_section,
+//                                           style: TextStyle(
+//                                               color: _timerState.isRunning.any(
+//                                                       (element) =>
+//                                                           element == true)
+//                                                   ? _themeProvider.swachColor
+//                                                   : _themeProvider.textColor,
+//                                               fontSize: SizeX * SizeY * 0.00015,
+//                                               fontFamily: "Ubuntu Condensed"),
+//                                         ),
+//                                         // Text(
+//                                         //   ':',
+//                                         //   style: TextStyle(
+//                                         //       color: _timerState.isRunning
+//                                         //               .any((element) => element == true)
+//                                         //           ? _myProvider.swachColor
+//                                         //           : _myProvider.textColor,
+//                                         //       fontSize: SizeX * SizeY * 0.00015),
+//                                         // ),
+//                                         Text(
+//                                           minute_section,
+//                                           style: TextStyle(
+//                                               color: _timerState.isRunning.any(
+//                                                       (element) =>
+//                                                           element == true)
+//                                                   ? _themeProvider.swachColor
+//                                                   : _themeProvider.textColor,
+//                                               fontSize: SizeX * SizeY * 0.00015,
+//                                               fontFamily: "Ubuntu Condensed"),
+//                                         ),
+//                                         // Text(
+//                                         //   ':',
+//                                         //   style: TextStyle(
+//                                         //       color: _timerState.isRunning
+//                                         //               .any((element) => element == true)
+//                                         //           ? _myProvider.swachColor
+//                                         //           : _myProvider.textColor,
+//                                         //       fontSize: SizeX * SizeY * 0.00015),
+//                                         // ),
+//                                         Text(
+//                                           second_section,
+//                                           style: TextStyle(
+//                                               color: _timerState.isRunning.any(
+//                                                       (element) =>
+//                                                           element == true)
+//                                                   ? _themeProvider.swachColor
+//                                                   : _themeProvider.textColor,
+//                                               fontSize: SizeX * SizeY * 0.00015,
+//                                               fontFamily: "Ubuntu Condensed"),
+//                                         ),
+//                                       ],
+//                                     ),
+//                                   ),
+//                                 ),
+//                               ),
+//                               Container(
+//                                 padding: EdgeInsets.all(30),
+//                                 child: _timerState.isRunning
+//                                             .any((element) => element == true) ==
+//                                         true
+//                                     ? Row(
+//                                         mainAxisAlignment:
+//                                             MainAxisAlignment.spaceAround,
+//                                         children: [
+//                                           uiKit.MyButton(
+//                                             sizePU: SizeX * 0.1,
+//                                             sizePD: SizeX * 0.1,
+//                                             iconSize: SizeX * SizeY * 0.00014,
+//                                             iconData: FontAwesome.refresh,
+//                                             id: 'reset',
+//                                           ),
+//                                           uiKit.MyButton(
+//                                             sizePU: SizeX * 0.1,
+//                                             sizePD: SizeX * 0.1,
+//                                             iconSize: SizeX * SizeY * 0.00014,
+//                                             iconData: FontAwesome.stop,
+//                                             id: 'stop',
+//                                           ),
+//                                         ],
+//                                       )
+//                                     : Center(
+//                                         child: uiKit.MyButton(
+//                                           sizePU: SizeX * 0.1,
+//                                           sizePD: SizeX * 0.1,
+//                                           iconSize: SizeX * SizeY * 0.00014,
+//                                           iconData: FontAwesome.play,
+//                                           id: 'start',
+//                                           timerContext: context,
+//                                         ),
+//                                       ),
+//                               ),
+//                               Container(
+//                                 margin: EdgeInsets.symmetric(
+//                                     vertical: SizeX * 0.05,
+//                                     horizontal: SizeY * 0.05),
+//                                 decoration: BoxDecoration(
+//                                     boxShadow: [
+//                                       BoxShadow(
+//                                         color: _themeProvider.lightShadowColor,
+//                                         spreadRadius: 1.0,
+//                                         blurRadius: 1.0,
+//                                         offset: Offset(
+//                                             -1, -1), // changes position of shadow
+//                                       ),
+//                                       BoxShadow(
+//                                         color: _themeProvider.shadowColor
+//                                             .withOpacity(0.17),
+//                                         spreadRadius: 1.0,
+//                                         blurRadius: 2.0,
+//                                         offset: Offset(
+//                                             3, 4), // changes position of shadow
+//                                       ),
+//                                     ],
+//                                     color: _themeProvider.mainColor,
+//                                     borderRadius:
+//                                         BorderRadius.all(Radius.circular(10))),
+//                                 child: Center(
+//                                   child: Container(
+//                                     padding: EdgeInsets.all(SizeX * 0.02),
+//                                     child: Text(
+//                                       snapshot.data?.title == null
+//                                           ? ""
+//                                           : snapshot.data.title,
+//                                       style: TextStyle(
+//                                           color: _themeProvider.textColor,
+//                                           fontSize: SizeX * SizeY * 0.0001,
+//                                           fontWeight: _themeProvider.isEn
+//                                               ? FontWeight.w100
+//                                               : FontWeight.w600),
+//                                     ),
+//                                   ),
+//                                 ),
+//                               ),
+//                               snapshot.data?.text != null
+//                                   ? Container(
+//                                       margin: EdgeInsets.symmetric(
+//                                           vertical: SizeX * 0.01,
+//                                           horizontal: SizeY * 0.05),
+//                                       decoration: BoxDecoration(
+//                                           boxShadow: [
+//                                             BoxShadow(
+//                                               color: _themeProvider.lightShadowColor,
+//                                               spreadRadius: 1.0,
+//                                               blurRadius: 1.0,
+//                                               offset: Offset(-1,
+//                                                   -1), // changes position of shadow
+//                                             ),
+//                                             BoxShadow(
+//                                               color: _themeProvider.shadowColor
+//                                                   .withOpacity(0.17),
+//                                               spreadRadius: 1.0,
+//                                               blurRadius: 2.0,
+//                                               offset: Offset(3,
+//                                                   4), // changes position of shadow
+//                                             ),
+//                                           ],
+//                                           color: _themeProvider.mainColor,
+//                                           borderRadius: BorderRadius.all(
+//                                               Radius.circular(10))),
+//                                       child: Center(
+//                                         child: Container(
+//                                           padding: EdgeInsets.all(SizeX * 0.02),
+//                                           child: Text(
+//                                             snapshot.data?.text == null
+//                                                 ? ""
+//                                                 : snapshot.data.text,
+//                                             style: TextStyle(
+//                                                 color:_themeProvider.textColor,
+//                                                 fontSize: SizeX * SizeY * 0.0001,
+//                                                 fontWeight: _themeProvider.isEn
+//                                                     ? FontWeight.w100
+//                                                     : FontWeight.w600),
+//                                           ),
+//                                         ),
+//                                       ),
+//                                     )
+//                                   : Container()
+//                             ],
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                   );
+//                 } else {
+//                   return Container(
+//                       child: Center(child: CircularProgressIndicator()));
+//                 }
+//               },
+//             );
+//           }),
+//     );
+//   }
+// }
 // class NoGlowBehaviour extends ScrollBehavior {
 //   @override
 //   Widget buildViewportChrome(
