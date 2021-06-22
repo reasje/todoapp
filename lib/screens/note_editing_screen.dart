@@ -19,6 +19,8 @@ class MyNotesEditing extends StatefulWidget {
 }
 
 class _MyNotesEditingState extends State<MyNotesEditing> {
+  PageController _pageController =
+      new PageController(initialPage: 0, keepPage: true);
   @override
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<NoteProvider>(context);
@@ -48,21 +50,27 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
               width: isLandscape ? SizeY * 0.8 : SizeY,
               // padding: EdgeInsets.only(
               //     bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: ListView(
+              child: PageView(
+                onPageChanged: (value) {
+                  _myProvider.newTabSelected(value);
+                },
+                controller: _pageController,
                 children: [
-                  Container(
-                    height: SizeX * 0.05,
-                    width: double.maxFinite,
-                    margin: EdgeInsets.only(top: SizeX * 0.02),
-                    child: Row(
-                      textDirection: TextDirection.ltr,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        ..._myProvider.tabs[_myProvider.selectedTab].buttons,
-                      ],
-                    ),
+                  Tab(
+                    index: 0,
                   ),
-                  ..._myProvider.tabs[_myProvider.selectedTab].tabs
+                  Tab(
+                    index: 1,
+                  ),
+                  Tab(
+                    index: 2,
+                  ),
+                  Tab(
+                    index: 3,
+                  ),
+                  Tab(
+                    index: 4,
+                  ),
                 ],
               ),
             ),
@@ -258,6 +266,44 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
               : null,
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
+  }
+}
+
+class Tab extends StatefulWidget {
+  final index;
+  Tab({
+    Key key, this.index,
+  }) : super(key: key);
+
+  @override
+  _TabState createState() => _TabState();
+}
+
+class _TabState extends State<Tab> {
+
+  @override
+  Widget build(BuildContext context) {
+      int index = widget.index;
+    final _myProvider = Provider.of<NoteProvider>(context);
+    double SizeX = MediaQuery.of(context).size.height;
+    print(_myProvider.tabs[0]);
+    return ListView(
+      children: [
+        Container(
+          height: SizeX * 0.05,
+          width: double.maxFinite,
+          margin: EdgeInsets.only(top: SizeX * 0.02),
+          child: Row(
+            textDirection: TextDirection.ltr,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              ..._myProvider.tabs[index].buttons,
+            ],
+          ),
+        ),
+        ..._myProvider.tabs[index].tabs
+      ],
     );
   }
 }
