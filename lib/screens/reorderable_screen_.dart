@@ -292,11 +292,14 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                           ? InkWell(
                                                                               key: new PageStorageKey<String>('pageKey ${DateTime.now().microsecondsSinceEpoch}'),
                                                                               onTap: () {
+                                                                                if ( !(_timerState.isRunning.any((element) => element == true))) {
                                                                                 _timerState.loadTimer(
                                                                                   keys,
                                                                                   index,
                                                                                   context,
                                                                                 );
+                                                                                }
+
                                                                                 _myProvider.loadNote(context, keys, index);
                                                                                 Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
                                                                               },
@@ -419,11 +422,13 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                                 ],
                                                                               ),
                                                                               onTap: () {
+                                                                                if ( !(_timerState.isRunning.any((element) => element == true))) {
                                                                                 _timerState.loadTimer(
                                                                                   keys,
                                                                                   index,
                                                                                   context,
                                                                                 );
+                                                                                }
                                                                                 _myProvider.loadNote(context, keys, index);
                                                                                 Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
                                                                               },

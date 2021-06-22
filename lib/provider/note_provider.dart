@@ -436,7 +436,6 @@ class NoteProvider extends ChangeNotifier {
     });
     if (anyRunning) {
       var index = soundPlayerState.indexOf(runningElement);
-      print(' hh $index');
       pausePlayingRecorded(index);
     }
   }
@@ -483,7 +482,6 @@ class NoteProvider extends ChangeNotifier {
       await startPlayingRecorded(index);
     }
     var duration = Duration(seconds: value.toInt());
-    //print('object $');
     flutterSoundPlayer[index].seekToPlayer(duration);
     voiceProgress[index] = duration;
     notifyListeners();
@@ -565,6 +563,7 @@ class NoteProvider extends ChangeNotifier {
     voiceList.clear();
     taskControllerList.clear();
     taskList.clear();
+    providerIndex = null;
     time_duration = Duration();
     note_duration = Duration();
     notifyListeners();
@@ -588,8 +587,6 @@ class NoteProvider extends ChangeNotifier {
 
   // checks the snapsht that has been edited or not
   bool isEdited() {
-    // print('imageList : ${imageList}');
-    // print('imageListSnapshot : ${imageListSnapshot}');
     if (ttitle == title.text &&
         ttext == text.text &&
         time_duration == time_snapshot &&
@@ -632,12 +629,12 @@ class NoteProvider extends ChangeNotifier {
     taskControllerList.add(TaskController(TextEditingController(text: ""),
         false, FocusNode(), PageStorageKey<String>('pageKey 0')));
     newNote = true;
+    selectedTab == null ? selectedTab = 0 : null;
     SizeX = MediaQuery.of(context).size.height;
     SizeY = MediaQuery.of(context).size.width;
     pageController =
         new PageController(initialPage: selectedTab, keepPage: true);
     SizeXSizeY = SizeX * SizeY;
-    print('SizeX ${SizeX}');
     initialTabs();
     takeSnapshot();
     notifyListeners();
@@ -648,13 +645,12 @@ class NoteProvider extends ChangeNotifier {
     noteContext = context;
     providerKeys = keys;
     providerIndex = index;
-    clearControllers();
+    //selectedTab == null ? selectedTab = 0 : null;
     // getting the pics form the database.
     var bnote = await noteBox.get(providerKeys[providerIndex]);
     // if the note doesnot include any notes pass
     if (bnote.imageList?.isNotEmpty ?? false) {
       imageList = bnote.imageList;
-      print('object');
     }
     if (bnote.voiceList?.isNotEmpty ?? false) {
       voiceList = bnote.voiceList;
@@ -689,7 +685,7 @@ class NoteProvider extends ChangeNotifier {
     SizeX = MediaQuery.of(context).size.height;
     SizeY = MediaQuery.of(context).size.width;
     SizeXSizeY = SizeX * SizeY;
-    await initialTabs();
+    initialTabs();
     notifyListeners();
     pageController =
         new PageController(initialPage: selectedTab, keepPage: true);
@@ -711,10 +707,8 @@ class NoteProvider extends ChangeNotifier {
   ];
   List<NavigationItem> items;
 
-  Future<void> initialTabs() async{
+  void initialTabs() async {
     tabColors.shuffle();
-    //tabColors.
-    print('tabColors ${tabColors}');
     items = [
       NavigationItem(
           Icon(Icons.text_fields),
@@ -961,7 +955,6 @@ class NoteProvider extends ChangeNotifier {
 
   void newTabSelected(int index) {
     selectedTab = index;
-    print('object ${index}');
     pageController.jumpToPage(index);
 
     notifyListeners();

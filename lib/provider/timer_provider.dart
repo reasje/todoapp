@@ -11,10 +11,6 @@ import 'package:todoapp/provider/note_provider.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
-void printMe() {
-  print('Hell');
-}
-
 class TimerState extends ChangeNotifier {
   TimerState() {
     this.keys = [];
@@ -154,6 +150,7 @@ class TimerState extends ChangeNotifier {
   void clearControllers() {
     keys = null;
     index = null;
+    notifyListeners();
   }
 
   void newNoteIndex() {
@@ -283,6 +280,8 @@ class TimerState extends ChangeNotifier {
     title = uiKit.AppLocalizations.of(my_context).translate('notesapp');
     text = uiKit.AppLocalizations.of(my_context).translate('taskOver');
     leftTime = bnote.leftTime;
+    newIndex = null;
+    notifyListeners();
   }
 
   // Used when there was a timer screen
