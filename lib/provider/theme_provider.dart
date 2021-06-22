@@ -159,7 +159,7 @@ class ThemeProvider extends ChangeNotifier {
     }
     if (theme == 'white') {
       splashImage = 'assets/images/SplashScreenBlack.gif';
-      noTaskImage = "assets/images/blacknotask.png";
+      noTaskImage = "assets/images/notask.png";
       shimmerColor = blackShimmer;
       mainColor = blackMainColor;
       shadowColor = blackShadowColor;
