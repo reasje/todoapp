@@ -19,113 +19,122 @@ class _OnboardingState extends State<Onboarding> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration.zero, () => uiKit.showAlertDialog(context , "lan"));
+    Future.delayed(Duration.zero, () => uiKit.showAlertDialog(context, "lan"));
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     final _themeProvider = Provider.of<ThemeProvider>(context);
-    
+
     return Scaffold(
       backgroundColor: _themeProvider.mainColor,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            flex: 1,
-            child: Container(
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              height: SizeX * 0.05,
+              width: double.maxFinite,
+              margin: EdgeInsets.only(top: SizeX * 0.02),
               alignment: Alignment.centerRight,
-              margin: EdgeInsets.only(top: SizeX*0.082, right: 30),
-              child: uiKit.MyButton(
-                sizePU: SizeX * 0.07,
-                sizePD: SizeX * 0.08,
-                iconSize: SizeX * SizeY * 0.0001,
-                iconData: FontAwesome.check,
-                id: 'home',
+              child: Row(
+                                  textDirection: TextDirection.ltr,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  uiKit.MyButton(
+                    backgroundColor: _themeProvider.textColor,
+                    sizePU: SizeX * 0.07,
+                    sizePD: SizeX * 0.08,
+                    iconSize: SizeX * SizeY * 0.0001,
+                    iconData: Icons.arrow_forward_ios,
+                    id: 'home',
+                  ),
+                ],
               ),
             ),
-          ),
-          Expanded(
-            flex: 5,
-            child: Stack(
-              children: [
-                Column(
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.8,
-                      child: PageView(
-                        controller: _pageController,
-                        children: [
-                          onBoardPage(
-                              "paradise",
-                              uiKit.AppLocalizations.of(context)
-                                  .translate('paradiseTitle'),
-                              uiKit.AppLocalizations.of(context)
-                                  .translate('paradise'),
-                              SizeX,
-                              SizeY),
-                          onBoardPage(
-                              "plant",
-                              uiKit.AppLocalizations.of(context)
-                                  .translate('plantTitle'),
-                              uiKit.AppLocalizations.of(context)
-                                  .translate('plant'),
-                              SizeX,
-                              SizeY),
-                          onBoardPage(
-                              "deepwork",
-                              uiKit.AppLocalizations.of(context)
-                                  .translate('deepWorkTitle'),
-                              uiKit.AppLocalizations.of(context)
-                                  .translate('deepWork'),
-                              SizeX,
-                              SizeY),
-                          onBoardPage(
-                              "pioritize",
-                              uiKit.AppLocalizations.of(context)
-                                  .translate('pioritizeTitle'),
-                              uiKit.AppLocalizations.of(context)
-                                  .translate('pioritize'),
-                              SizeX,
-                              SizeY),
-                          onBoardPage(
-                              "family",
-                              uiKit.AppLocalizations.of(context)
-                                  .translate('familyTitle'),
-                              uiKit.AppLocalizations.of(context)
-                                  .translate('family'),
-                              SizeX,
-                              SizeY),
-                        ],
-                        onPageChanged: (value) => {setCurrentPage(value)},
+            Expanded(
+              flex: 5,
+              child: Stack(
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.8,
+                        child: PageView(
+                          controller: _pageController,
+                          children: [
+                            onBoardPage(
+                                "paradise",
+                                uiKit.AppLocalizations.of(context)
+                                    .translate('paradiseTitle'),
+                                uiKit.AppLocalizations.of(context)
+                                    .translate('paradise'),
+                                SizeX,
+                                SizeY),
+                            onBoardPage(
+                                "plant",
+                                uiKit.AppLocalizations.of(context)
+                                    .translate('plantTitle'),
+                                uiKit.AppLocalizations.of(context)
+                                    .translate('plant'),
+                                SizeX,
+                                SizeY),
+                            onBoardPage(
+                                "deepwork",
+                                uiKit.AppLocalizations.of(context)
+                                    .translate('deepWorkTitle'),
+                                uiKit.AppLocalizations.of(context)
+                                    .translate('deepWork'),
+                                SizeX,
+                                SizeY),
+                            onBoardPage(
+                                "pioritize",
+                                uiKit.AppLocalizations.of(context)
+                                    .translate('pioritizeTitle'),
+                                uiKit.AppLocalizations.of(context)
+                                    .translate('pioritize'),
+                                SizeX,
+                                SizeY),
+                            onBoardPage(
+                                "family",
+                                uiKit.AppLocalizations.of(context)
+                                    .translate('familyTitle'),
+                                uiKit.AppLocalizations.of(context)
+                                    .translate('family'),
+                                SizeX,
+                                SizeY),
+                          ],
+                          onPageChanged: (value) => {setCurrentPage(value)},
+                        ),
                       ),
-                    ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children:
-                            List.generate(5, (index) => getIndicator(index)),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children:
+                              List.generate(5, (index) => getIndicator(index)),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   AnimatedContainer getIndicator(int pageNo) {
     return AnimatedContainer(
-      
       duration: Duration(milliseconds: 200),
       height: 10,
       width: (currentPage == pageNo) ? 20 : 10,
@@ -151,7 +160,8 @@ class _OnboardingState extends State<Onboarding> {
           //padding: EdgeInsets.only(top: SizeX * 0.0005),
           child: Text(
             title,
-            style: TextStyle(fontSize: SizeX*SizeY*0.00008, fontWeight: FontWeight.w500),
+            style: TextStyle(
+                fontSize: SizeX * SizeY * 0.00008, fontWeight: FontWeight.w500),
           ),
         ),
         Container(
@@ -159,7 +169,8 @@ class _OnboardingState extends State<Onboarding> {
               top: SizeX * 0.02, right: SizeY * 0.03, left: SizeY * 0.03),
           child: Text(
             text,
-            style: TextStyle(fontSize: SizeX*SizeY*0.00005, color: Colors.grey),
+            style: TextStyle(
+                fontSize: SizeX * SizeY * 0.00005, color: Colors.grey),
             textAlign: TextAlign.center,
           ),
         )

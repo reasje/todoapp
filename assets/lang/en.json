@@ -55,10 +55,10 @@
   "googleBackup" : "Google Backup",
   "theme" : "Theme",
   "camera" : "Camera",
-  "galley" : "Gallery",
+  "gallery" : "Gallery",
   "text" : "Text",
   "timer" : "Timer",
   "image" : "Image",
   "voice" : "Voice",
-  "Task" : "Task"
+  "task" : "Task"
 }
