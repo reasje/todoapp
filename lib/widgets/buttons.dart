@@ -155,62 +155,53 @@ class _MyButtonState extends State<MyButton> {
                 //             ),
                 //           ),
                 //         ));
-                if (!(_timerState.isRunning
-                    .any((element) => element == true))) {
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return Container(
-                          color: Color(0xFF737373),
-                          height: SizeX * 0.3,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: _themeProvider.mainColor,
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(20),
-                                    topLeft: Radius.circular(20))),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  flex: 4,
-                                  child: Center(
-                                    child: uiKit.MyDatePicker(context),
-                                  ),
+
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Container(
+                        color: Color(0xFF737373),
+                        height: SizeX * 0.3,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: _themeProvider.mainColor,
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(20),
+                                  topLeft: Radius.circular(20))),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 4,
+                                child: Center(
+                                  child: uiKit.MyDatePicker(context),
                                 ),
-                                Divider(),
-                                Expanded(
-                                  child: Center(
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(
-                                        uiKit.AppLocalizations.of(context)
-                                            .translate('done'),
-                                        style: TextStyle(
-                                            color: _themeProvider.titleColor
-                                                .withOpacity(0.6),
-                                            fontSize: _themeProvider.isEn
-                                                ? SizeX * SizeY * 0.00007
-                                                : SizeX * SizeY * 0.00006),
-                                      ),
+                              ),
+                              Divider(),
+                              Expanded(
+                                child: Center(
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      uiKit.AppLocalizations.of(context)
+                                          .translate('done'),
+                                      style: TextStyle(
+                                          color: _themeProvider.titleColor
+                                              .withOpacity(0.6),
+                                          fontSize: _themeProvider.isEn
+                                              ? SizeX * SizeY * 0.00007
+                                              : SizeX * SizeY * 0.00006),
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
+                                ),
+                              )
+                            ],
                           ),
-                        );
-                      }).then((value) => _myProvider.timerDone());
-                } else {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  ScaffoldMessenger.of(context).showSnackBar(uiKit.MySnackBar(
-                      uiKit.AppLocalizations.of(context).translate('timerOn'),
-                      'timerOn',
-                      false,
-                      context));
-                }
+                        ),
+                      );
+                    }).then((value) => _myProvider.timerDone());
               }
               break;
 

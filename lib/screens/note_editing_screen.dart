@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
+import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
 import '../main.dart';
@@ -19,18 +20,23 @@ class MyNotesEditing extends StatefulWidget {
 }
 
 class _MyNotesEditingState extends State<MyNotesEditing> {
-
   @override
   Widget build(BuildContext context) {
-
     final _myProvider = Provider.of<NoteProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _timerState = Provider.of<TimerState>(context);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     double SizeXSizeY = SizeX * SizeY;
     LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
+    var timerIndex = _timerState.index ?? _timerState.newIndex;
+    var providerIndex = _myProvider.providerIndex ?? timerIndex+1;
+    bool areAlldown =
+        !(_timerState.isRunning.any((element) => element == true));
+    print('object : $timerIndex  $providerIndex');
+    bool condition = areAlldown || timerIndex == providerIndex;
     return Scaffold(
       //resizeToAvoidBottomInset: false,
       backgroundColor: _themeProvider.mainColor,
@@ -59,9 +65,23 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                   Tab(
                     index: 0,
                   ),
-                  Tab(
-                    index: 1,
-                  ),
+                  condition
+                      ? Tab(
+                          index: 1,
+                        )
+                      : Center(
+                          child: Text(
+                            uiKit.AppLocalizations.of(context)
+                                .translate('timerOn'),
+                            style: TextStyle(
+                                color: _myProvider
+                                    .tabColors[_myProvider.selectedTab],
+                                fontSize: _themeProvider.isEn
+                                    ? SizeX * SizeY * 0.00008
+                                    : SizeX * SizeY * 0.00006,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ),
                   Tab(
                     index: 2,
                   ),
@@ -273,7 +293,8 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
 class Tab extends StatefulWidget {
   final index;
   Tab({
-    Key key, this.index,
+    Key key,
+    this.index,
   }) : super(key: key);
 
   @override
@@ -281,10 +302,9 @@ class Tab extends StatefulWidget {
 }
 
 class _TabState extends State<Tab> {
-
   @override
   Widget build(BuildContext context) {
-      int index = widget.index;
+    int index = widget.index;
     final _myProvider = Provider.of<NoteProvider>(context);
     double SizeX = MediaQuery.of(context).size.height;
     print(_myProvider.tabs[0]);

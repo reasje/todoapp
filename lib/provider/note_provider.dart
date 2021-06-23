@@ -645,7 +645,7 @@ class NoteProvider extends ChangeNotifier {
     noteContext = context;
     providerKeys = keys;
     providerIndex = index;
-    //selectedTab == null ? selectedTab = 0 : null;
+    selectedTab == null ? selectedTab = 0 : null;
     // getting the pics form the database.
     var bnote = await noteBox.get(providerKeys[providerIndex]);
     // if the note doesnot include any notes pass
@@ -1027,7 +1027,9 @@ class NoteProvider extends ChangeNotifier {
             imageList, voiceList, taskList);
         await noteBox.add(note);
         changes.clearHistory();
+        notifyListeners();
         Navigator.pop(noteContext);
+        
       }
       // TODO find out why this is here
       //clearControllers();

@@ -29,20 +29,12 @@ class _TimerWidgetState extends State<TimerWidget> {
     final _myProvider = Provider.of<NoteProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
     LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
-    Widget _clock;
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
-    var timerIndex = _timerState.index ?? _timerState.newIndex;
-    var providerIndex = _myProvider.providerIndex ?? noteBox.length;
-    bool areAlldown =
-        !(_timerState.isRunning.any((element) => element == true));
-    bool condition = areAlldown || timerIndex == providerIndex;
-    print(condition);
     return Container(
         height: isLandscape ? SizeY : SizeX * 0.9,
         child: _myProvider.note_duration != Duration()
-            ? condition
-                ? _clock = FutureBuilder(
+                ? FutureBuilder(
                     future: _myProvider.getNoteEditStack(
                         _timerState.keys, _timerState.index),
                     builder: (context, snapshot) {
@@ -279,17 +271,6 @@ class _TimerWidgetState extends State<TimerWidget> {
                         return CircularProgressIndicator();
                       }
                     },
-                  )
-                : Center(
-                    child: Text(
-                      uiKit.AppLocalizations.of(context).translate('timerOn'),
-                      style: TextStyle(
-                          color: _myProvider.tabColors[_myProvider.selectedTab],
-                          fontSize: _themeProvider.isEn
-                              ? SizeX * SizeY * 0.00008
-                              : SizeX * SizeY * 0.00006,
-                          fontWeight: FontWeight.w400),
-                    ),
                   )
             : Container());
   }
