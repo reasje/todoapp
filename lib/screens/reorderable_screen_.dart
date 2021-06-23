@@ -543,10 +543,16 @@ class _MyRorderableState extends State<MyRorderable> {
           color: _themeProvider.textColor,
         ),
         onPressed: () {
+          if (!(_timerState.isRunning.any((element) => element == true))){
           _myProvider.newNoteClicked(context);
           _timerState.clearControllers();
           _timerState.newNoteIndex();
           Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
+          }else{
+          _myProvider.newNoteClicked(context);
+          Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
+          }
+
         },
       ),
     );

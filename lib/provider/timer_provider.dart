@@ -67,6 +67,7 @@ class TimerState extends ChangeNotifier {
 
         leftTime = leftTime - 1;
         _myProvider.updateDuration(leftTime);
+        print('object$leftTime');
         // If the timer finishes
         if (leftTime == 0) {
           stopTimer();
@@ -98,6 +99,9 @@ class TimerState extends ChangeNotifier {
           // We will be restarting the timer and starting the timer
         } else if (leftTime == -1) {
           if (!newNote) {
+            isPaused[index] = true;
+            isOver[index] = false;
+            isRunning[index] = true;
             var bnote = await noteBox.get(keys[index]);
             var ntitle = bnote.title;
             var nttext = bnote.text;

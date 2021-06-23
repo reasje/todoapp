@@ -35,7 +35,6 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
     var providerIndex = _myProvider.providerIndex ?? timerIndex+1;
     bool areAlldown =
         !(_timerState.isRunning.any((element) => element == true));
-    print('object : $timerIndex  $providerIndex');
     bool condition = areAlldown || timerIndex == providerIndex;
     return Scaffold(
       //resizeToAvoidBottomInset: false,
@@ -307,7 +306,6 @@ class _TabState extends State<Tab> {
     int index = widget.index;
     final _myProvider = Provider.of<NoteProvider>(context);
     double SizeX = MediaQuery.of(context).size.height;
-    print(_myProvider.tabs[0]);
     return ListView(
       children: [
         Container(

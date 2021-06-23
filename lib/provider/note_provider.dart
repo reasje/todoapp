@@ -1029,7 +1029,6 @@ class NoteProvider extends ChangeNotifier {
         changes.clearHistory();
         notifyListeners();
         Navigator.pop(noteContext);
-        
       }
       // TODO find out why this is here
       //clearControllers();
@@ -1150,7 +1149,6 @@ class NoteProvider extends ChangeNotifier {
       // timer has been updated so that
       // We must update the left time too
       if (!newNote) {
-        print('Provider Keys : ${providerKeys}');
         var bnote = await noteBox.get(providerKeys[providerIndex]);
         var ntitle = bnote.title;
         var nttext = bnote.text;
