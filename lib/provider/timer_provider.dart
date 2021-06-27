@@ -16,9 +16,7 @@ class TimerState extends ChangeNotifier {
     this.keys = [];
     this.keys.add(0);
     this.index = 0;
-    isRunning = List<bool>.filled(noteBox.length + 1, false);
-    isOver = List<bool>.filled(noteBox.length + 1, false);
-    isPaused = List<bool>.filled(noteBox.length + 1, true);
+    reNewList();
   }
 
   BuildContext my_context;
@@ -151,6 +149,12 @@ class TimerState extends ChangeNotifier {
     }
   }
 
+  void reNewList() {
+    isRunning = List<bool>.filled(noteBox.length + 1, false);
+    isOver = List<bool>.filled(noteBox.length + 1, false);
+    isPaused = List<bool>.filled(noteBox.length + 1, true);
+  }
+
   void clearControllers() {
     keys = null;
     index = null;
@@ -158,7 +162,9 @@ class TimerState extends ChangeNotifier {
   }
 
   void newNoteIndex() {
+    reNewList();
     newIndex = noteBox.length;
+
     notifyListeners();
   }
 

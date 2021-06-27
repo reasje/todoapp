@@ -32,7 +32,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
     double SizeXSizeY = SizeX * SizeY;
     LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
     var timerIndex = _timerState.index ?? _timerState.newIndex;
-    var providerIndex = _myProvider.providerIndex ?? timerIndex+1;
+    var providerIndex = _myProvider.providerIndex ?? timerIndex + 1;
     bool areAlldown =
         !(_timerState.isRunning.any((element) => element == true));
     bool condition = areAlldown || timerIndex == providerIndex;
@@ -68,19 +68,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
                       ? Tab(
                           index: 1,
                         )
-                      : Center(
-                          child: Text(
-                            uiKit.AppLocalizations.of(context)
-                                .translate('timerOn'),
-                            style: TextStyle(
-                                color: _myProvider
-                                    .tabColors[_myProvider.selectedTab],
-                                fontSize: _themeProvider.isEn
-                                    ? SizeX * SizeY * 0.00008
-                                    : SizeX * SizeY * 0.00006,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ),
+                      : Tab(index: 1, timerOn: true),
                   Tab(
                     index: 2,
                   ),
@@ -291,9 +279,11 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
 
 class Tab extends StatefulWidget {
   final index;
+  final timerOn;
   Tab({
     Key key,
     this.index,
+    this.timerOn,
   }) : super(key: key);
 
   @override
@@ -304,8 +294,11 @@ class _TabState extends State<Tab> {
   @override
   Widget build(BuildContext context) {
     int index = widget.index;
+    bool timerOn = widget.timerOn ?? false;
     final _myProvider = Provider.of<NoteProvider>(context);
     double SizeX = MediaQuery.of(context).size.height;
+    final _themeProvider = Provider.of<ThemeProvider>(context);
+    double SizeY = MediaQuery.of(context).size.width;
     return ListView(
       children: [
         Container(
@@ -316,11 +309,27 @@ class _TabState extends State<Tab> {
             textDirection: TextDirection.ltr,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              ..._myProvider.tabs[index].buttons,
+              if (!timerOn)
+                ..._myProvider.tabs[index].buttons
+              else
+                _myProvider.tabs[index].buttons[0]
             ],
           ),
         ),
-        ..._myProvider.tabs[index].tabs
+        if (!timerOn)
+          ..._myProvider.tabs[index].tabs
+        else
+          Center(
+            child: Text(
+              uiKit.AppLocalizations.of(context).translate('timerOn'),
+              style: TextStyle(
+                  color: _myProvider.tabColors[_myProvider.selectedTab],
+                  fontSize: _themeProvider.isEn
+                      ? SizeX * SizeY * 0.00008
+                      : SizeX * SizeY * 0.00006,
+                  fontWeight: FontWeight.w400),
+            ),
+          ),
       ],
     );
   }

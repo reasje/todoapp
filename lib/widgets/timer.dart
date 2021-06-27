@@ -59,7 +59,7 @@ class _TimerWidgetState extends State<TimerWidget> {
                                 .floor()
                                 .toString()
                                 .padLeft(2, '0');
-                        print('object ${_timerState.index}');
+                        print('object ${_timerState.newIndex}');
                         return Column(
                           children: [
                             Container(
