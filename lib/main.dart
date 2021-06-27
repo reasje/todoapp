@@ -8,6 +8,7 @@ import 'package:myket_iap/util/inventory.dart';
 import 'package:myket_iap/util/purchase.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapp/model/image_model.dart' as imageModel;
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/task_model.dart';
 import 'package:todoapp/model/voice_model.dart';
@@ -59,6 +60,8 @@ void main() async {
   print(document.uri);
   // Giving the path of the data base to the Hive
   Hive.init(document.path);
+    // registering the adapter
+  Hive.registerAdapter(imageModel.ImageAdapter());
   // registering the adapter
   Hive.registerAdapter(TaskAdapter());
   // registering the adapter

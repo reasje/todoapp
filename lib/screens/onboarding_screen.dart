@@ -19,7 +19,7 @@ class _OnboardingState extends State<Onboarding> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration.zero, () => uiKit.showAlertDialog(context, "lan"));
+    Future.delayed(Duration.zero, () => uiKit.showAlertDialog(context,id: "lan"));
   }
 
   @override

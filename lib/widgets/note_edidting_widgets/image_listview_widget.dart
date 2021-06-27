@@ -27,7 +27,11 @@ class imageLisView extends StatelessWidget {
         margin: EdgeInsets.only(top: SizeX * 0.02),
         child: ScrollConfiguration(
           behavior: uiKit.NoGlowBehaviour(),
-          child: ListView.builder(
+          child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 3 / 3,
+              ),
               scrollDirection: Axis.vertical,
               itemCount: _myProvider.imageList != null
                   ? _myProvider.imageList.length + 1
@@ -61,7 +65,7 @@ class imageLisView extends StatelessWidget {
                                   Icons.delete_sweep,
                                   size: SizeX * SizeY * 0.0003,
                                   color: _myProvider
-                                  .tabs[_myProvider.selectedTab].color,
+                                      .tabs[_myProvider.selectedTab].color,
                                 ),
                               ),
                             ),
@@ -78,33 +82,49 @@ class imageLisView extends StatelessWidget {
                                       index));
                               _myProvider.imageDissmissed(index);
                             },
-                            child: Center(
-                              child: Container(
-                                  width: SizeY * 0.9,
-                                  height: SizeX * 0.3,
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: SizeY * 0.03),
-                                  child: _myProvider.imageList != null
-                                      ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(16.0),
-                                        child: InkWell(
-                                            onTap: () => Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder:
-                                                        (BuildContext context) =>
-                                                            uiKit.PicDetail(
-                                                                index: index))),
-                                            child: Hero(
-                                              
-                                                tag: 'pic${index}',
-                                                child: Image.memory(
-                                                  snapShot.data[index],
-                                                  fit: BoxFit.fill,
-                                                )),
-                                          ),
-                                      )
-                                      : Container()),
+                            child: GridTile(
+                              footer: GridTileBar(
+                                  backgroundColor:
+                                      _themeProvider.mainColor.withOpacity(0.1),
+                                  title: Text(
+                                    snapShot.data[index].desc,
+                                    style: TextStyle(
+                                        fontFamily: _themeProvider.isEn ? "Ubuntu Condensed" : "Dubai",
+                                        color: _themeProvider.mainColor,
+                                        fontSize: _themeProvider.isEn
+                                            ? SizeX * SizeY * 0.00005
+                                            : SizeX * SizeY * 0.00003,
+                                        fontWeight: _themeProvider.isEn
+                                            ? FontWeight.w100
+                                            : FontWeight.w600),
+                                    textAlign: TextAlign.center,
+                                  )),
+                              child: Center(
+                                child: Container(
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: SizeY * 0.03),
+                                    child: _myProvider.imageList != null
+                                        ? ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(16.0),
+                                            child: InkWell(
+                                              onTap: () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          uiKit.PicDetail(
+                                                              index: index))),
+                                              child: Hero(
+                                                  tag: 'pic${index}',
+                                                  child: Image.memory(
+                                                    snapShot.data[index].image,
+                                                    fit: BoxFit.fill,
+                                                  )),
+                                            ),
+                                          )
+                                        : Container()),
+                              ),
                             ),
                           );
                         } else {

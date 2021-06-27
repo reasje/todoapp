@@ -3,12 +3,12 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_sound/public/tau.dart';
 import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:todoapp/model/image_model.dart' as imageModel;
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/taskController.dart';
 import 'package:todoapp/model/task_model.dart';
@@ -50,6 +50,8 @@ class NoteProvider extends ChangeNotifier {
   // This varrible is used to controll the listview size for the listview
   // to not to be short
   double listview_size;
+  // used to control resetCheckBoxs
+  bool resetCheckBoxs = false;
   // It is used to store
   // the theme status as string
   final prefsBox = Hive.box<String>(prefsBoxName);
@@ -73,14 +75,25 @@ class NoteProvider extends ChangeNotifier {
             var bnote = await noteBox.getAt(i);
             var ntitle = bnote.title;
             var nttext = bnote.text;
+            var ntIsChecked = bnote.isChecked;
             var nttime = bnote.time;
             var ntcolor = bnote.color;
             var ntlefttime = bnote.leftTime;
             var ntImageList = bnote.imageList;
             var ntVoiceList = bnote.voiceList;
             var ntTaskList = bnote.taskList;
-            Note note = Note(ntitle, nttext, false, nttime, ntcolor, ntlefttime,
-                ntImageList, ntVoiceList, ntTaskList);
+            Note note = Note(
+              ntitle,
+              nttext,
+              ntIsChecked,
+              nttime,
+              ntcolor,
+              ntlefttime,
+              ntImageList,
+              ntVoiceList,
+              ntTaskList,
+              false,
+            );
             noteBox.putAt(i, note);
           }
           prefsBox.put('date',
@@ -134,9 +147,9 @@ class NoteProvider extends ChangeNotifier {
   int indexOfSelectedColor;
   //////////////////////////////////// *** IMAGELIST PART *** /////////////////////////////////////
   // list of images that will be loaded on user tap
-  List<Uint8List> imageList = [];
-  List<Uint8List> imageListSnapshot = [];
-  Uint8List dismissedImage;
+  List<imageModel.Image> imageList = [];
+  List<imageModel.Image> imageListSnapshot = [];
+  imageModel.Image dismissedImage;
   // used for both loading images and taking images
   final picker = ImagePicker();
   PickedFile _image;
@@ -169,7 +182,7 @@ class NoteProvider extends ChangeNotifier {
           );
         }
       }
-      imageList.add(h);
+      imageList.add(imageModel.Image(h, ''));
     }
     notifyListeners();
   }
@@ -202,7 +215,7 @@ class NoteProvider extends ChangeNotifier {
           );
         }
       }
-      imageList.add(h);
+      imageList.add(imageModel.Image(h, ''));
     }
     notifyListeners();
   }
@@ -217,7 +230,7 @@ class NoteProvider extends ChangeNotifier {
   }
 
   void rotateImage(Uint8List image, int index) {
-    imageList[index] = image;
+    imageList[index].image = image;
     notifyListeners();
   }
 
@@ -225,12 +238,12 @@ class NoteProvider extends ChangeNotifier {
       List<int> keys, int index, double SizeX, double SizeY) async {
     var note = await noteBox.get(keys[index]);
     var bnote = Note(note.title, note.text, note.isChecked, note.time,
-        note.color, note.leftTime, null, null, null);
+        note.color, note.leftTime, null, null, null, note.resetCheckBoxs);
     updateListSize(keys, SizeX, SizeY);
     return bnote;
   }
 
-  Future<List<Uint8List>> getImageList() async {
+  Future<List<imageModel.Image>> getImageList() async {
     //myContext = context;
     if (newNote) {
       return imageList;
@@ -356,7 +369,7 @@ class NoteProvider extends ChangeNotifier {
     if (status == PermissionStatus.permanentlyDenied ||
         status == PermissionStatus.denied) {
       //throw RecordingPermissionException("Microphone permission not granted");
-      uiKit.showAlertDialog(context, 'microphoneRequired');
+      uiKit.showAlertDialog(context, id:'microphoneRequired');
       return;
     }
     // StreamSink<Food> _playerSubscription;
@@ -393,7 +406,7 @@ class NoteProvider extends ChangeNotifier {
     // finishing up the recorded voice
     String path = await flutterSoundRecorder.stopRecorder();
     if (context != null) {
-      await uiKit.showAlertDialog(context, 'voiceTitle');
+      await uiKit.showAlertDialog(context, id: 'voiceTitle');
     } else {
       voiceTitle = "Err:time";
     }
@@ -603,6 +616,7 @@ class NoteProvider extends ChangeNotifier {
   void updateIsChecked(bool newValue, List<int> keys, int index) async {
     providerKeys = keys;
     providerIndex = index;
+
     var bnote = await noteBox.get(providerKeys[providerIndex]);
     var ntitle = bnote.title;
     var nttext = bnote.text;
@@ -612,8 +626,9 @@ class NoteProvider extends ChangeNotifier {
     var ntImageList = bnote.imageList;
     var ntVoiceList = bnote.voiceList;
     var ntTaskList = bnote.taskList;
+    var ntResetCheckBoxs = bnote.resetCheckBoxs;
     Note note = Note(ntitle, nttext, newValue, nttime, ntcolor, ntlefttime,
-        ntImageList, ntVoiceList, ntTaskList);
+        ntImageList, ntVoiceList, ntTaskList, ntResetCheckBoxs);
     noteBox.put(providerKeys[providerIndex], note);
     //notifyListeners();
   }
@@ -1023,8 +1038,18 @@ class NoteProvider extends ChangeNotifier {
             }
           }
         }
-        Note note = Note(noteTitle, noteText, false, noteTime, color, leftTime,
-            imageList, voiceList, taskList);
+        Note note = Note(
+          noteTitle,
+          noteText,
+          false,
+          noteTime,
+          color,
+          leftTime,
+          imageList,
+          voiceList,
+          taskList,
+          resetCheckBoxs,
+        );
         await noteBox.add(note);
         changes.clearHistory();
         notifyListeners();
@@ -1057,7 +1082,8 @@ class NoteProvider extends ChangeNotifier {
             bnote.leftTime,
             imageList,
             voiceList,
-            taskList);
+            taskList,
+            resetCheckBoxs);
         await noteBox.put(providerKeys[providerIndex], note);
         changes.clearHistory();
         clearControllers();
@@ -1159,8 +1185,9 @@ class NoteProvider extends ChangeNotifier {
         var ntImageList = bnote.imageList;
         var ntVoiceList = bnote.voiceList;
         var ntTaskList = bnote.taskList;
+        var ntResetCheckBoxs = bnote.resetCheckBoxs;
         Note note = Note(ntitle, nttext, ntischecked, nttime, ntcolor,
-            ntlefttime, ntImageList, ntVoiceList, ntTaskList);
+            ntlefttime, ntImageList, ntVoiceList, ntTaskList, resetCheckBoxs);
         noteBox.put(providerKeys[providerIndex], note);
         notifyListeners();
       } else {
@@ -1195,6 +1222,11 @@ class NoteProvider extends ChangeNotifier {
     }
     listview_size = (without_timer * SizeX * 0.22) + (with_timer * SizeX * 0.5);
     return noteList;
+  }
+
+  Future<void> updateImageDesc(int index, String desc) async {
+    imageList[index].desc = desc;
+    notifyListeners();
   }
 }
 

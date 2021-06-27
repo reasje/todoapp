@@ -278,7 +278,7 @@ class _MyButtonState extends State<MyButton> {
               if (_connState.is_conn) {
                 _signinState.signinToAccount();
               } else {
-                uiKit.showAlertDialog(context, 'internet');
+                uiKit.showAlertDialog(context, id: 'internet');
               }
               break;
             case 'newpic':

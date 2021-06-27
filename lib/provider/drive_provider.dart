@@ -16,7 +16,9 @@ import 'package:todoapp/provider/signin_provider.dart';
 import 'dart:convert';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:connectivity/connectivity.dart' as conn;
-
+import 'package:todoapp/model/image_model.dart' as imageModel;
+// TODO image title and tasks are not uploaded to google drive 
+// consider adding them ,
 // This is the file id and the name
 // used to upload the file and check wether the file
 // exisstce or not and
@@ -59,7 +61,7 @@ Future<void> upload(
     var time = element.time;
     List<String> imageList = [];
     for (int i = 0; i < element.imageList.length; i++) {
-      imageList.add(base64Encode(element.imageList[i]));
+      imageList.add(base64Encode(element.imageList[i].image));
     }
     List<Voice> voiceList = List.from(element.voiceList);
     List<String> voiceTitleList = [];
@@ -118,9 +120,9 @@ Future<void> download(drive.DriveApi driveApi, drive.File driveFile,String downl
       int time = list[i]['time'];
       print(list[i]['imageList']);
       var imageListDownloaded = List.from(list[i]['imageList']);
-      List<Uint8List> imageList = [];
+      List<imageModel.Image> imageList = [];
       for (int i = 0; i < imageListDownloaded.length; i++) {
-        imageList.add(base64.decode(imageListDownloaded[i]));
+        imageList.add(imageModel.Image( base64.decode(imageListDownloaded[i]), '') );
       }
       List<Voice> voiceList = [];
       List<String> voiceTitleList = List.from(list[i]['voiceTitleList']);
@@ -133,7 +135,7 @@ Future<void> download(drive.DriveApi driveApi, drive.File driveFile,String downl
       }
       // TODO adding the task list uplaod and download
       await noteBox
-          .add(Note(title, text, false, time, 0, time, imageList, voiceList, null));
+          .add(Note(title, text, false, time, 0, time, imageList, voiceList, null , null));
     }
     await EasyLoading.dismiss();
     await EasyLoading.showSuccess(downloadDone);
@@ -151,11 +153,11 @@ Future<void> login(bool command, BuildContext context) async {
   final _connState = Provider.of<ConnState>(context, listen: false);
   final _signinState = Provider.of<SigninState>(context, listen: false);
   if (noteBox.isEmpty && command != false) {
-    uiKit.showAlertDialog(context, "noNotes");
+    uiKit.showAlertDialog(context, id:"noNotes");
   } else {
     if (!_connState.is_conn) {
       // I am connected to a mobile network or wifi.
-      uiKit.showAlertDialog(context, "internet");
+      uiKit.showAlertDialog(context, id:"internet");
     } else {
       _signinState.checkSignin();
       if (_signinState.isSignedin) {
@@ -165,7 +167,7 @@ Future<void> login(bool command, BuildContext context) async {
         final signIn.GoogleSignInAccount account = await googleSignIn.signIn();
         // getting the signinded account information
         if (account == null) {
-          uiKit.showAlertDialog(context, "internet");
+          uiKit.showAlertDialog(context,id: "internet");
         } else {
           try {
             final authHeaders = await account.authHeaders;
@@ -182,7 +184,7 @@ Future<void> login(bool command, BuildContext context) async {
               } else {
                 // show continue dialog
                 uiKit.showAlertDialog(
-                    context, "up", driveApi, driveFile, noteBox, file_id);
+                    context,id: "up",driveApi: driveApi,driveFile: driveFile,noteBox: noteBox,file_id: file_id);
               }
             } else {
               // The command is download
@@ -192,16 +194,16 @@ Future<void> login(bool command, BuildContext context) async {
               } else {
                 // show continue dialog
                 uiKit.showAlertDialog(
-                    context, "down", driveApi, driveFile, noteBox, file_id);
+                    context, id:"down",driveApi:  driveApi,driveFile: driveFile,noteBox: noteBox,file_id: file_id);
               }
             }
           } catch (err) {
             print("err : $err");
-            uiKit.showAlertDialog(context, "internet");
+            uiKit.showAlertDialog(context, id:"internet");
           }
         }
       } else {
-        uiKit.showAlertDialog(context, "signIn");
+        uiKit.showAlertDialog(context,id: "signIn");
       }
     }
   }

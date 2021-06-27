@@ -10,7 +10,7 @@ import 'package:todoapp/model/voice_model.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
-
+import 'package:todoapp/model/image_model.dart' as imageModel;
 class TimerState extends ChangeNotifier {
   TimerState() {
     this.keys = [];
@@ -32,7 +32,7 @@ class TimerState extends ChangeNotifier {
   int newIndex;
   var target;
   List<Voice> voiceList = [];
-  List<Uint8List> imageList = [];
+  List<imageModel.Image>imageList = [];
   bool newNote = false;
   final noteBox = Hive.lazyBox<Note>(noteBoxName);
   void startTimer(BuildContext context) async {
@@ -80,8 +80,19 @@ class TimerState extends ChangeNotifier {
             var ntImageList = bnote.imageList;
             var ntVoiceList = bnote.voiceList;
             var ntTaskList = bnote.taskList;
-            Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
-                ntlefttime, ntImageList, ntVoiceList, ntTaskList);
+            var ntResetCheckBoxs = bnote.resetCheckBoxs;
+            Note note = Note(
+              ntitle,
+              nttext,
+              ntisChecked,
+              nttime,
+              ntcolor,
+              ntlefttime,
+              ntImageList,
+              ntVoiceList,
+              ntTaskList,
+              ntResetCheckBoxs
+            );
             await noteBox.put(keys[index], note);
             isRunning[index] = true;
             isOver[index] = true;
@@ -110,8 +121,9 @@ class TimerState extends ChangeNotifier {
             var ntImageList = bnote.imageList;
             var ntVoiceList = bnote.voiceList;
             var ntTaskList = bnote.taskList;
+            var ntResetCheckBoxs = bnote.resetCheckBoxs;
             Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
-                ntlefttime, ntImageList, ntVoiceList, ntTaskList);
+                ntlefttime, ntImageList, ntVoiceList, ntTaskList, ntResetCheckBoxs);
             await noteBox.put(keys[index], note);
           } else {
             isPaused[newIndex] = true;
@@ -134,8 +146,9 @@ class TimerState extends ChangeNotifier {
             var ntImageList = bnote.imageList;
             var ntVoiceList = bnote.voiceList;
             var ntTaskList = bnote.taskList;
+            var ntResetCheckBoxs = bnote.resetCheckBoxs;
             Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
-                ntlefttime, ntImageList, ntVoiceList, ntTaskList);
+                ntlefttime, ntImageList, ntVoiceList, ntTaskList , ntResetCheckBoxs);
             await noteBox.put(keys[index], note);
             isRunning[index] = true;
           } else {
@@ -186,6 +199,7 @@ class TimerState extends ChangeNotifier {
       var ntimages = bnote.imageList;
       var ntvoices = bnote.voiceList;
       var nttasks = bnote.taskList;
+      var ntResetCheckBoxs = bnote.resetCheckBoxs;
       var ntlefttime;
       if (leftTime >= 0) {
         ntlefttime = 0;
@@ -210,7 +224,7 @@ class TimerState extends ChangeNotifier {
         ntlefttime = leftTime.abs();
       }
       Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime,
-          ntimages, ntvoices, nttasks);
+          ntimages, ntvoices, nttasks , ntResetCheckBoxs);
       await noteBox.put(keys[index], note);
       if (_turnOn) {
         startTimer(my_context);
@@ -265,8 +279,9 @@ class TimerState extends ChangeNotifier {
       var ntvoices = bnote.voiceList;
       var nttasks = bnote.taskList;
       var ntlefttime = nttime;
+      var ntResetCheckBoxs = bnote.resetCheckBoxs;
       Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime,
-          ntimages, ntvoices, nttasks);
+          ntimages, ntvoices, nttasks , ntResetCheckBoxs);
       await noteBox.put(keys[index], note);
       _myProvider.updateDuration(_myProvider.note_duration.inSeconds);
     } else {

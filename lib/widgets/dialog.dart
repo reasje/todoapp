@@ -196,21 +196,24 @@ import 'package:todoapp/provider/drive_provider.dart';
 // }
 
 Future showAlertDialog(BuildContext context,
-    [String id,
+    {String id,
     drive.DriveApi driveApi,
     drive.File driveFile,
     LazyBox<Note> noteBox,
-    String file_id]) async {
+    String file_id , int index , String desc} ) async {
+      
   final TextEditingController _titleFieldController = TextEditingController();
   final TextEditingController _textFieldController = TextEditingController();
   var _myProvider = Provider.of<NoteProvider>(context, listen: false);
   final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-  TextEditingController voiceTitleController = TextEditingController(text: '');
+  TextEditingController voiceTitleController = TextEditingController(text: desc ?? '');
   double SizeX = MediaQuery.of(context).size.height;
   double SizeY = MediaQuery.of(context).size.width;
   return showDialog(
+    
       context: context,
       builder: (context) {
+
         return StatefulBuilder(
           builder: (BuildContext context, setState) {
             return AlertDialog(
@@ -237,36 +240,39 @@ Future showAlertDialog(BuildContext context,
                                         : id == 'voiceTitle'
                                             ? uiKit.AppLocalizations.of(context)
                                                 .translate('voiceTitle')
-                                            : uiKit.AppLocalizations.of(context)
+                                            : id == 'imageDesc' ? uiKit.AppLocalizations.of(context)
+                                                .translate('imageDesc') : uiKit.AppLocalizations.of(context)
                                                 .translate('continue'),
                 style: TextStyle(
                   color: _themeProvider.textColor,
                 ),
               )),
               content: Container(
-                height: id != 'voiceTitle' ? SizeX * 0.12 : SizeX * 0.23,
+                height: id == 'voiceTitle' || id ==  'imageDesc' ? SizeX * 0.23 : SizeX * 0.12,
                 width: SizeY * 0.7,
                 child: Column(
                   children: [
-                    id == 'voiceTitle'
+                    id == 'voiceTitle'|| id ==  'imageDesc' 
                         ? TextField(
                           autofocus: true,
                             controller: voiceTitleController,
-                            maxLines: 1,
-                            maxLength: 10,
+                            maxLength: id !=  'imageDesc' ? 10 : 415,
                             cursorColor: _themeProvider.swachColor,
                             cursorHeight: SizeX * 0.052,
                             style: TextStyle(
                                 color: _themeProvider.textColor,
-                                fontSize: _themeProvider.isEn
+                                fontSize: id != 'imageDesc' ?  _themeProvider.isEn
                                     ? SizeX * SizeY * 0.0001
-                                    : SizeX * SizeY * 0.00008,
+                                    : SizeX * SizeY * 0.00008 : _themeProvider.isEn
+                                    ? SizeX * SizeY * 0.00006
+                                    : SizeX * SizeY * 0.00004,
                                 fontWeight: FontWeight.w400),
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.all(_themeProvider.isEn
                                     ? SizeX * SizeY * 0.00001
                                     : SizeX * SizeY * 0.00001),
-                                hintText: uiKit.AppLocalizations.of(context)
+                                hintText: id ==  'imageDesc' ?  uiKit.AppLocalizations.of(context)
+                                                .translate('imageDesc') : uiKit.AppLocalizations.of(context)
                                     .translate('titleHint'),
                                 border: InputBorder.none,
                                 focusedBorder: InputBorder.none,
@@ -276,9 +282,11 @@ Future showAlertDialog(BuildContext context,
                                 hintStyle: TextStyle(
                                     color:
                                         _themeProvider.hintColor.withOpacity(0.12),
-                                    fontSize: _themeProvider.isEn
-                                        ? SizeX * SizeY * 0.00012
-                                        : SizeX * SizeY * 0.0001,
+                                    fontSize: id != 'imageDesc' ?  _themeProvider.isEn
+                                        ? SizeX * SizeY * 0.00008
+                                        : SizeX * SizeY * 0.00006 : _themeProvider.isEn
+                                    ? SizeX * SizeY * 0.00007
+                                    : SizeX * SizeY * 0.00005,
                                     fontWeight: FontWeight.w400)),
                           )
                         : Container(),
@@ -349,7 +357,7 @@ Future showAlertDialog(BuildContext context,
                                             ? _themeProvider.changeLanToEnglish()
                                             : id == "up"
                                                 ? upload(driveApi, driveFile, noteBox,uiKit.AppLocalizations.of(context).translate('uploading'), uiKit.AppLocalizations.of(context).translate('uploadDone'), file_id )
-                                                : id == "voiceTitle" ?  _myProvider.setVoiceTitle(voiceTitleController.text): download(driveApi, driveFile ,uiKit.AppLocalizations.of(context).translate('downloading'),uiKit.AppLocalizations.of(context).translate('downloadDone'),
+                                                : id == "voiceTitle" ?  _myProvider.setVoiceTitle(voiceTitleController.text): id == 'imageDesc' ? _myProvider.updateImageDesc(index,voiceTitleController.text )   : download(driveApi, driveFile ,uiKit.AppLocalizations.of(context).translate('downloading'),uiKit.AppLocalizations.of(context).translate('downloadDone'),
                                                     noteBox, file_id);
                                         Navigator.pop(context);
                                       }))

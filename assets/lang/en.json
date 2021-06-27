@@ -60,5 +60,6 @@
   "timer" : "Timer",
   "image" : "Image",
   "voice" : "Voice",
-  "task" : "Task"
+  "task" : "Task",
+  "imageDesc" : "Description"
 }

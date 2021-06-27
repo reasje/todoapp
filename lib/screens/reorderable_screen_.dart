@@ -206,7 +206,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                         bnote.leftTime,
                                                         bnote.imageList,
                                                         bnote.voiceList,
-                                                        bnote.taskList);
+                                                        bnote.taskList , 
+                                                        bnote.resetCheckBoxs);
                                                     notes.delete(keys[index]);
                                                     ScaffoldMessenger.of(
                                                             context)
