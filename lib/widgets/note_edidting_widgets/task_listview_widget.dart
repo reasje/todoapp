@@ -27,22 +27,33 @@ class taskListView extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            height: SizeX* 0.1,
-            
-            child: Row( children: [
-              Switch(value: false, onChanged: (value) {
-                
-              },),
-              Text('Reset checkboxs on day change !' ,style: TextStyle(
-              color: _themeProvider.textColor,
-              fontSize: _themeProvider.isEn
-                  ? SizeX * SizeY * 0.00006
-                  : SizeX * SizeY * 0.00004,
-              fontWeight: FontWeight.w400),),
-            ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+            height: SizeX * 0.1,
+            child: Row(
+              children: [
+                Text(
+                  uiKit.AppLocalizations.of(context).translate('reset'),
+                  style: TextStyle(
+                      color: _themeProvider.textColor,
+                      fontSize: _themeProvider.isEn
+                          ? SizeX * SizeY * 0.00006
+                          : SizeX * SizeY * 0.00004,
+                      fontWeight: FontWeight.w400),
+                ),
+                Switch(
+                  activeColor: color,
+                  inactiveTrackColor: _themeProvider.textColor,
+                  inactiveThumbColor: _themeProvider.mainColor,
+                  value: _myProvider.resetCheckBoxs,
+                  onChanged: (value) {
+                    _myProvider.changeResetCheckBoxs(value);
+                  },
+                ),
+              ],
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ),
           ),
           Container(
-            height: SizeX*0.7,
+            height: SizeX * 0.7,
             child: FutureBuilder(
               future: _myProvider.getTaskList(),
               builder: (context, snapshot) {
@@ -89,7 +100,8 @@ class taskListView extends StatelessWidget {
                                   ),
                                 ),
                                 onDismissed: (direction) {
-                                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                  ScaffoldMessenger.of(context)
+                                      .hideCurrentSnackBar();
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       uiKit.MySnackBar(
                                           uiKit.AppLocalizations.of(context)
@@ -106,11 +118,13 @@ class taskListView extends StatelessWidget {
                                     top: SizeX * 0.02,
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          _myProvider.taskCheckBoxChanged(index);
+                                          _myProvider
+                                              .taskCheckBoxChanged(index);
                                         },
                                         child: Container(
                                             height: SizeX * 0.03,
@@ -119,12 +133,14 @@ class taskListView extends StatelessWidget {
                                                 shape: BoxShape.circle,
                                                 border: Border.all(
                                                     color: color, width: 1.5),
-                                                color: snapshot.data[index].isDone ??
+                                                color: snapshot.data[index]
+                                                            .isDone ??
                                                         false
                                                     ? color
                                                     : null),
                                             child:
-                                                snapshot.data[index].isDone ?? false
+                                                snapshot.data[index].isDone ??
+                                                        false
                                                     ? Icon(
                                                         Icons.check_rounded,
                                                         size: SizeX * 0.028,
@@ -137,13 +153,16 @@ class taskListView extends StatelessWidget {
                                         width: SizeY * 0.75,
                                         alignment: Alignment.center,
                                         child: TextField(
-                                          controller: snapshot
-                                              .data[index].textEditingController,
+                                          controller: snapshot.data[index]
+                                              .textEditingController,
                                           onSubmitted: (value) {
-                                            _myProvider.checkListOnSubmit(index);
+                                            _myProvider
+                                                .checkListOnSubmit(index);
                                           },
-                                          focusNode: snapshot.data[index].focusNode,
-                                          cursorColor: _themeProvider.swachColor,
+                                          focusNode:
+                                              snapshot.data[index].focusNode,
+                                          cursorColor:
+                                              _themeProvider.swachColor,
                                           cursorHeight: SizeX * 0.04,
                                           style: TextStyle(
                                               color: _themeProvider.textColor,
@@ -155,9 +174,12 @@ class taskListView extends StatelessWidget {
                                               contentPadding: EdgeInsets.all(
                                                   _themeProvider.isEn
                                                       ? SizeX * SizeY * 0.00001
-                                                      : SizeX * SizeY * 0.000008),
+                                                      : SizeX *
+                                                          SizeY *
+                                                          0.000008),
                                               hintText:
-                                                  uiKit.AppLocalizations.of(context)
+                                                  uiKit.AppLocalizations.of(
+                                                          context)
                                                       .translate('titleHint'),
                                               border: InputBorder.none,
                                               focusedBorder: InputBorder.none,
@@ -165,7 +187,8 @@ class taskListView extends StatelessWidget {
                                               errorBorder: InputBorder.none,
                                               disabledBorder: InputBorder.none,
                                               hintStyle: TextStyle(
-                                                  color: _themeProvider.hintColor
+                                                  color: _themeProvider
+                                                      .hintColor
                                                       .withOpacity(0.12),
                                                   fontSize: _themeProvider.isEn
                                                       ? SizeX * SizeY * 0.00008

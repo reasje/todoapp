@@ -61,5 +61,6 @@
   "image" : "Image",
   "voice" : "Voice",
   "task" : "Task",
-  "imageDesc" : "Description"
+  "imageDesc" : "Description",
+  "reset" : "Reset checkboxs on day change !"
 }

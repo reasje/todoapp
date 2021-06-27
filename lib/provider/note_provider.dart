@@ -52,6 +52,11 @@ class NoteProvider extends ChangeNotifier {
   double listview_size;
   // used to control resetCheckBoxs
   bool resetCheckBoxs = false;
+  void changeResetCheckBoxs(bool value) {
+    resetCheckBoxs = value;
+    notifyListeners();
+  }
+
   // It is used to store
   // the theme status as string
   final prefsBox = Hive.box<String>(prefsBoxName);
@@ -73,28 +78,35 @@ class NoteProvider extends ChangeNotifier {
         if (noteBox.length != 0) {
           for (int i = 0; i < noteBox.length; i++) {
             var bnote = await noteBox.getAt(i);
-            var ntitle = bnote.title;
-            var nttext = bnote.text;
-            var ntIsChecked = bnote.isChecked;
-            var nttime = bnote.time;
-            var ntcolor = bnote.color;
-            var ntlefttime = bnote.leftTime;
-            var ntImageList = bnote.imageList;
-            var ntVoiceList = bnote.voiceList;
-            var ntTaskList = bnote.taskList;
-            Note note = Note(
-              ntitle,
-              nttext,
-              ntIsChecked,
-              nttime,
-              ntcolor,
-              ntlefttime,
-              ntImageList,
-              ntVoiceList,
-              ntTaskList,
-              false,
-            );
-            noteBox.putAt(i, note);
+            if (bnote.resetCheckBoxs) {
+              var ntitle = bnote.title;
+              var nttext = bnote.text;
+              var ntIsChecked = bnote.isChecked;
+              var nttime = bnote.time;
+              var ntcolor = bnote.color;
+              var ntlefttime = bnote.leftTime;
+              var ntImageList = bnote.imageList;
+              var ntVoiceList = bnote.voiceList;
+              var ntTaskList = bnote.taskList;
+              // unchecking all the tasks
+              ntTaskList.forEach((element) {
+                element.isDone = false;
+              });
+              var ntResetCheckBoxs = bnote.resetCheckBoxs;
+              Note note = Note(
+                ntitle,
+                nttext,
+                ntIsChecked,
+                nttime,
+                ntcolor,
+                ntlefttime,
+                ntImageList,
+                ntVoiceList,
+                ntTaskList,
+                ntResetCheckBoxs,
+              );
+              noteBox.putAt(i, note);
+            }
           }
           prefsBox.put('date',
               "${DateTime.now().year},${DateTime.now().month},${DateTime.now().day}");
@@ -222,6 +234,7 @@ class NoteProvider extends ChangeNotifier {
 
   void imageDissmissed(index) {
     dismissedImage = imageList.removeAt(index);
+    notifyListeners();
   }
 
   void imageRecover(index) {
@@ -305,6 +318,7 @@ class NoteProvider extends ChangeNotifier {
 
   void taskDissmissed(int index) {
     dissmissedTask = taskControllerList.removeAt(index);
+    notifyListeners();
   }
 
   void taskRecover(int index) {
@@ -369,7 +383,7 @@ class NoteProvider extends ChangeNotifier {
     if (status == PermissionStatus.permanentlyDenied ||
         status == PermissionStatus.denied) {
       //throw RecordingPermissionException("Microphone permission not granted");
-      uiKit.showAlertDialog(context, id:'microphoneRequired');
+      uiKit.showAlertDialog(context, id: 'microphoneRequired');
       return;
     }
     // StreamSink<Food> _playerSubscription;
@@ -502,6 +516,7 @@ class NoteProvider extends ChangeNotifier {
 
   void voiceDissmissed(index) {
     dismissedVoice = voiceList.removeAt(index);
+    notifyListeners();
   }
 
   void voiceRecover(index) {
@@ -650,6 +665,7 @@ class NoteProvider extends ChangeNotifier {
     pageController =
         new PageController(initialPage: selectedTab, keepPage: true);
     SizeXSizeY = SizeX * SizeY;
+    resetCheckBoxs = false;
     initialTabs();
     takeSnapshot();
     notifyListeners();
@@ -661,6 +677,7 @@ class NoteProvider extends ChangeNotifier {
     providerKeys = keys;
     providerIndex = index;
     selectedTab == null ? selectedTab = 0 : null;
+
     // getting the pics form the database.
     var bnote = await noteBox.get(providerKeys[providerIndex]);
     // if the note doesnot include any notes pass
@@ -688,6 +705,7 @@ class NoteProvider extends ChangeNotifier {
       taskControllerList.add(TaskController(TextEditingController(text: ""),
           false, FocusNode(), PageStorageKey<String>('pageKey 0')));
     }
+    resetCheckBoxs = bnote.resetCheckBoxs;
     title.text = bnote.title;
     text.text = bnote.text;
     ftext.requestFocus();
@@ -1052,6 +1070,7 @@ class NoteProvider extends ChangeNotifier {
         );
         await noteBox.add(note);
         changes.clearHistory();
+        clearControllers();
         notifyListeners();
         Navigator.pop(noteContext);
       }
