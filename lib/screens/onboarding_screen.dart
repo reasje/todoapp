@@ -19,7 +19,8 @@ class _OnboardingState extends State<Onboarding> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration.zero, () => uiKit.showAlertDialog(context,id: "lan"));
+    Future.delayed(
+        Duration.zero, () => uiKit.showAlertDialog(context, id: "lan"));
   }
 
   @override
@@ -32,7 +33,7 @@ class _OnboardingState extends State<Onboarding> {
   Widget build(BuildContext context) {
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
-    final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Scaffold(
       backgroundColor: _themeProvider.mainColor,
@@ -46,8 +47,8 @@ class _OnboardingState extends State<Onboarding> {
               margin: EdgeInsets.only(top: SizeX * 0.02),
               alignment: Alignment.centerRight,
               child: Row(
-                                  textDirection: TextDirection.ltr,
-                    mainAxisAlignment: MainAxisAlignment.end,
+                textDirection: TextDirection.ltr,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   uiKit.MyButton(
                     backgroundColor: _themeProvider.textColor,
