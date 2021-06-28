@@ -7,6 +7,7 @@ import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/signin_provider.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:todoapp/provider/theme_provider.dart';
+import 'package:todoapp/provider/uncheck_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'onboarding_screen.dart';
 
@@ -27,13 +28,14 @@ class _MySplashScreenState extends State<MySplashScreen> {
   //   init = _connState.connSub();
   // }
   Future<Widget> loadHome() async {
-    final _noteProvider = Provider.of<NoteProvider>(context);
-    final _connState = Provider.of<ConnState>(context);
-    final _signinState = Provider.of<SigninState>(context);
-    final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _noteProvider = Provider.of<NoteProvider>(context , listen: false);
+    final _connState = Provider.of<ConnState>(context, listen: false);
+    final _signinState = Provider.of<SigninState>(context, listen: false);
+    final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final _unCheckProvider = Provider.of<UnCheckProvider>(context, listen: false);
     await _connState.connSub();
     await _connState.checkConn();
-    await _noteProvider.checkDayChange();
+    await _unCheckProvider.checkDayChange();
     await _themeProvider.initialColorsAndLan();
     await _signinState.checkSignin();
     await Future.delayed(Duration(seconds: 2));
