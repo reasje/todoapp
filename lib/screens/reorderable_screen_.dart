@@ -26,7 +26,6 @@ class _MyRorderableState extends State<MyRorderable> {
   ScrollController _scrollController;
   @override
   void initState() {
-    // TODO: implement initState
     _scrollController = ScrollController(keepScrollOffset: false);
     super.initState();
   }
@@ -35,7 +34,6 @@ class _MyRorderableState extends State<MyRorderable> {
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<NoteProvider>(context);
     final _timerState = Provider.of<TimerState>(context);
-    final _connState = Provider.of<ConnState>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
     LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
     double SizeX = MediaQuery.of(context).size.height;
@@ -70,77 +68,7 @@ class _MyRorderableState extends State<MyRorderable> {
                       controller: _scrollController,
                       child: Column(
                         children: [
-                          Column(
-                            children: [
-                              Directionality(
-                                textDirection: TextDirection.ltr,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                            padding: EdgeInsets.only(
-                                                top: SizeX * 0.03,
-                                                bottom: SizeX * 0.03,
-                                                left: SizeX * 0.03),
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              uiKit.AppLocalizations.of(context)
-                                                  .translate('notesApp'),
-                                              style: TextStyle(
-                                                  color: _themeProvider
-                                                      .titleColor
-                                                      .withOpacity(0.6),
-                                                  fontSize: _themeProvider.isEn
-                                                      ? SizeX * SizeY * 0.00012
-                                                      : SizeX * SizeY * 0.0001),
-                                            )),
-                                        Container(
-                                          child: Icon(
-                                            FontAwesome.dot_circle_o,
-                                            size: SizeX * SizeY * 0.00005,
-                                            color: _connState.is_conn
-                                                ? Colors.green.withOpacity(0.6)
-                                                : Colors.red.withOpacity(0.6),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        uiKit.MyButton(
-                                          backgroundColor:
-                                              _themeProvider.textColor,
-                                          iconData: Icons.settings,
-                                          iconSize: SizeX * SizeY * 0.00005,
-                                          sizePD: SizeX * SizeY * 0.00012,
-                                          sizePU: SizeX * SizeY * 0.00012,
-                                          id: 'setting',
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.all(
-                                              SizeXSizeY * 0.00004),
-                                          alignment: Alignment.centerLeft,
-                                          child: uiKit.MyButton(
-                                            backgroundColor:
-                                                _themeProvider.textColor,
-                                            sizePU: SizeXSizeY * 0.00012,
-                                            sizePD: SizeXSizeY * 0.00013,
-                                            iconSize: SizeX * SizeY * 0.00006,
-                                            iconData: FontAwesome.code,
-                                            id: 'coder',
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                          uiKit.ReorderableListButtonsWidget(),
                           if (noteBox.isEmpty)
                             uiKit.noNotes()
                           else
@@ -206,7 +134,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                         bnote.leftTime,
                                                         bnote.imageList,
                                                         bnote.voiceList,
-                                                        bnote.taskList , 
+                                                        bnote.taskList,
                                                         bnote.resetCheckBoxs);
                                                     notes.delete(keys[index]);
                                                     ScaffoldMessenger.of(
@@ -292,12 +220,12 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                           ? InkWell(
                                                                               key: UniqueKey(),
                                                                               onTap: () {
-                                                                                if ( !(_timerState.isRunning.any((element) => element == true))) {
-                                                                                _timerState.loadTimer(
-                                                                                  keys,
-                                                                                  index,
-                                                                                  context,
-                                                                                );
+                                                                                if (!(_timerState.isRunning.any((element) => element == true))) {
+                                                                                  _timerState.loadTimer(
+                                                                                    keys,
+                                                                                    index,
+                                                                                    context,
+                                                                                  );
                                                                                 }
 
                                                                                 _myProvider.loadNote(context, keys, index);
@@ -363,24 +291,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                           ),
                                                                           child:
                                                                               ExpansionTile(
-                                                                            // onExpansionChanged: (value) {
-                                                                            //   _myProvider.changeNoteTitleColor(value, index);
-                                                                            //   // used to animate
-                                                                            //   // if (value) {
-                                                                            //   //   _scrollController.animateTo(
-                                                                            //   //       _scrollController
-                                                                            //   //               .position
-                                                                            //   //               .pixels +
-                                                                            //   //           SizeX *
-                                                                            //   //               0.1,
-                                                                            //   //       duration:
-                                                                            //   //           Duration(
-                                                                            //   //               seconds:
-                                                                            //   //                   1),
-                                                                            //   //       curve: Curves
-                                                                            //   //           .easeIn);
-                                                                            //   // }
-                                                                            // },
+
                                                                             initiallyExpanded:
                                                                                 false,
                                                                             // tried too hard to make the expanion color and
@@ -389,7 +300,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                             // as I called one is ExpansionTile the Tile will be
                                                                             // recreated so We have to defin this spesific listTile
                                                                             // a key that the widget won't be changed !
-                                                                            key: UniqueKey(),
+                                                                            key:
+                                                                                UniqueKey(),
                                                                             title:
                                                                                 InkWell(
                                                                               child: Row(
@@ -421,12 +333,12 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                                 ],
                                                                               ),
                                                                               onTap: () {
-                                                                                if ( !(_timerState.isRunning.any((element) => element == true))) {
-                                                                                _timerState.loadTimer(
-                                                                                  keys,
-                                                                                  index,
-                                                                                  context,
-                                                                                );
+                                                                                if (!(_timerState.isRunning.any((element) => element == true))) {
+                                                                                  _timerState.loadTimer(
+                                                                                    keys,
+                                                                                    index,
+                                                                                    context,
+                                                                                  );
                                                                                 }
                                                                                 _myProvider.loadNote(context, keys, index);
                                                                                 Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
@@ -535,30 +447,13 @@ class _MyRorderableState extends State<MyRorderable> {
                   ),
                 );
               })),
-      floatingActionButton: FloatingActionButton(
-        elevation: 0,
-        highlightElevation: 0,
-        backgroundColor: _themeProvider.textColor.withOpacity(0.1),
-        child: Icon(
-          FontAwesome.plus,
-          color: _themeProvider.textColor,
-        ),
-        onPressed: () {
-          if (!(_timerState.isRunning.any((element) => element == true))){
-          _myProvider.newNoteClicked(context);
-          _timerState.clearControllers();
-          _timerState.newNoteIndex();
-          Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
-          }else{
-          _myProvider.newNoteClicked(context);
-          Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
-          }
-
-        },
-      ),
+      floatingActionButton: uiKit.FloatingActionButtonWidget(),
     );
   }
 }
+
+
+
 
 class NoGlowBehaviour extends ScrollBehavior {
   @override
@@ -568,12 +463,4 @@ class NoGlowBehaviour extends ScrollBehavior {
   }
 }
 
-// void _scrollToSelectedContent({GlobalKey expansionTileKey}) {
-//   final keyContext = expansionTileKey.currentContext;
-//   if (keyContext != null) {
-//     Future.delayed(Duration(milliseconds: 200)).then((value) {
-//       Scrollable.ensureVisible(keyContext,
-//           duration: Duration(milliseconds: 200));
-//     });
-//   }
-// }
+
