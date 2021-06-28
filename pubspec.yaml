@@ -25,7 +25,6 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  circular_menu: ^1.2.2
   collection: ^1.15.0
   connectivity: ^3.0.4
   flutter_easyloading: ^3.0.0
@@ -41,8 +40,6 @@ dependencies:
   hive_flutter: ^1.0.0
   image_picker: ^0.7.5+3
   just_audio: ^0.7.5
-  k_chart: ^0.3.1
-  myket_iap: ^1.0.1
   path_provider: ^2.0.1
   permission_handler: ^8.0.1
   provider: ^5.0.0
