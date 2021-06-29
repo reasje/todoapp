@@ -1172,10 +1172,35 @@ class NoteProvider extends ChangeNotifier {
         context: noteContext));
   }
 
+  Future<void> reorderList(int oldIndex, int newIndex) async {
+    List<int> keys = noteBox.keys.cast<int>().toList();
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+
+    var bnote = await noteBox.get(keys[oldIndex]);
+
+    Note note = bnote;
+    if (newIndex < oldIndex) {
+      for (int i = oldIndex; i > newIndex; i--) {
+        var bnote2 = await noteBox.get(keys[i - 1]);
+        noteBox.put(keys[i], bnote2);
+      }
+    } else {
+      for (int i = oldIndex; i < newIndex; i++) {
+        var bnote = await noteBox.get(keys[i + 1]);
+        noteBox.put(keys[i], bnote);
+      }
+    }
+    noteBox.put(keys[newIndex], note);
+  }
+
+  List<Note> noteList = [];
   Future<bool> updateListSize(List<int> keys, SizeX, SizeY) async {
+    print('2');
     int with_timer = 0;
     int without_timer = 0;
-    List<Note> noteList = [];
+
     for (int i = 0; i < keys.length; i++) {
       var bnote = await noteBox.get(keys[i]);
       noteList.add(bnote);

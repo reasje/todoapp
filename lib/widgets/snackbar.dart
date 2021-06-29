@@ -65,7 +65,7 @@ Widget MySnackBar(
               } else if (noteBox == null) {
                 _myProvider.imageRecover(index);
               } else {
-              
+                noteBox.put(keys[index], note);
               }
             },
           )
