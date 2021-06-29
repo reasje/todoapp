@@ -67,11 +67,6 @@ void main() async {
   await Hive.openLazyBox<Note>(noteBoxName);
   // the database of time for day change recognizing
   await Hive.openBox<String>(prefsBoxName);
-  // Hydrated bloc for keeping the instances of the
-  // blocs alive
-  // Future.microtask(() async {
-  //   await myProvider().initialColorsAndLan();
-  // });
   // android alarm manager services
   // final int helloAlarmID = 0;
   SystemChrome.setPreferredOrientations([

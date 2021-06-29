@@ -4,6 +4,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/conn_provider.dart';
 
@@ -48,11 +49,6 @@ class _MyRorderableState extends State<MyRorderable> {
       body: Container(
           padding: EdgeInsets.only(top: SizeXSizeY * 0.00008),
           width: SizeY,
-          margin: EdgeInsets.only(
-              //right: SizeY * 0.02,
-              //left: SizeY * 0.02,
-              ),
-          // padding: EdgeInsets.only(top: SizeX * 0.01),
           child: ValueListenableBuilder(
               valueListenable: noteBox.listenable(),
               builder: (context, LazyBox<Note> notes, _) {
@@ -122,9 +118,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                   .all(Radius
                                                                       .circular(
                                                                           35)),
-                                                              color:
-                                                                  _themeProvider
-                                                                      .mainColor,
+                                                              color: Colors
+                                                                  .transparent,
                                                             ),
                                                             alignment:
                                                                 AlignmentDirectional
@@ -362,27 +357,6 @@ class _MyRorderableState extends State<MyRorderable> {
                                                                               ),
                                                                             ],
                                                                           )
-
-                                                                          // return Container(
-                                                                          //     height: SizeX * 0.1,
-                                                                          //     child: Container(
-                                                                          //         padding: EdgeInsets.all(4),
-                                                                          //         child: Container(
-                                                                          //           decoration: BoxDecoration(
-                                                                          //             borderRadius: BorderRadius.all(Radius.circular(10)),
-                                                                          //           ),
-                                                                          //           child: Shimmer.fromColors(
-                                                                          //             baseColor: _themeProvider.shimmerColor,
-                                                                          //             highlightColor: Colors.white,
-                                                                          //             child: Container(
-                                                                          //                 margin: EdgeInsets.all(10),
-                                                                          //                 decoration: BoxDecoration(
-                                                                          //                   color: _themeProvider.shimmerColor,
-                                                                          //                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                                                                          //                 )),
-                                                                          //           ),
-                                                                          //         )));
-
                                                                           )),
                                                                 ),
                                                               ),
@@ -390,9 +364,53 @@ class _MyRorderableState extends State<MyRorderable> {
                                                           ),
                                                         );
                                                       } else {
-                                                        return CircularProgressIndicator();
+                                                        return Container(
+                                                          alignment: Alignment.center,
+                                                          child: Shimmer
+                                                              .fromColors(
+                                                                
+                                                            baseColor:
+                                                                _themeProvider
+                                                                    .textColor
+                                                                    ,
+                                                            highlightColor:
+                                                                _themeProvider
+                                                                    .mainColor,
+                                                            child: Container(
+                                                              height:
+                                                                  SizeX * 0.15,
+                                                              width: SizeY*0.8,
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          SizeY *
+                                                                              0.01,
+                                                                      vertical:
+                                                                          SizeY *
+                                                                              0.04),
+                                                              margin: EdgeInsets.only(
+                                                                  bottom: SizeX *
+                                                                      0.04,
+                                                                  top: isLandscape
+                                                                      ? SizeY *
+                                                                          0.1
+                                                                      : SizeX *
+                                                                          0.01),
+                                                              decoration: BoxDecoration(
+                                                                  color: _themeProvider
+                                                                      .textColor
+                                                                      .withOpacity(
+                                                                          0.1),
+                                                                  borderRadius: BorderRadius
+                                                                      .all(Radius
+                                                                          .circular(
+                                                                              20))),
+                                                            ),
+                                                          ),
+                                                        );
                                                       }
-                                                    }),
+                                                    }
+                                                    ),
                                             ],
                                             onReorder: (int oldIndex,
                                                 int newIndex) async {
@@ -412,10 +430,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                       ),
                                     );
                                   } else {
-                                    return Container(
-                                        child: Center(
-                                            child:
-                                                CircularProgressIndicator()));
+                                    return Container();
                                   }
                                 })
                         ],

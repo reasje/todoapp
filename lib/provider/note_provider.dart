@@ -1211,7 +1211,6 @@ class NoteProvider extends ChangeNotifier {
       }
     }
     listview_size = (without_timer * SizeX * 0.22) + (with_timer * SizeX * 0.5);
-    notifyListeners();
     return true;
   }
 
