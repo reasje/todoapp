@@ -125,7 +125,7 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (context) => ConnState()),
           ChangeNotifierProvider(create: (context) => SigninState()),
           ChangeNotifierProvider(create: (context) => ThemeProvider()),
-          ChangeNotifierProvider(create: (context) => UnCheckProvider())
+          ChangeNotifierProvider(create: (context) => UnCheckProvider()),
         ],
         child: Consumer<ThemeProvider>(
           builder: (context, _themeProvider, _) {

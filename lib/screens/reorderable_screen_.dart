@@ -150,11 +150,11 @@ class _MyRorderableState extends State<MyRorderable> {
                                                               'undoNote'),
                                                       'undoNote',
                                                       true,
-                                                      context,
-                                                      index,
-                                                      notes,
-                                                      note,
-                                                      keys,
+                                                      context: context,
+                                                      index: index,
+                                                      noteBox: notes,
+                                                      note: note,
+                                                      keys: keys,
                                                     ));
                                                   },
                                                   child: AnimationConfiguration

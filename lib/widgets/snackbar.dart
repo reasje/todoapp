@@ -29,14 +29,14 @@ import 'package:flutter/material.dart';
 Widget MySnackBar(
   String text,
   String id,
-  bool isAction, [
+  bool isAction, {
   BuildContext context,
   int index,
   LazyBox<Note> noteBox,
   Note note,
   List<int> keys,
   bool isWhite,
-]) {
+}) {
   final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
   final _myProvider = Provider.of<NoteProvider>(context, listen: false);
   isWhite = _themeProvider.checkIsWhite();
@@ -65,7 +65,7 @@ Widget MySnackBar(
               } else if (noteBox == null) {
                 _myProvider.imageRecover(index);
               } else {
-                noteBox.put(keys[index], note);
+              
               }
             },
           )

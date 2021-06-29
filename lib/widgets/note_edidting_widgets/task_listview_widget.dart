@@ -108,8 +108,8 @@ class taskListView extends StatelessWidget {
                                               .translate('undoTask'),
                                           'undoTask',
                                           true,
-                                          context,
-                                          index));
+                                          context: context,
+                                          index: index));
                                   _myProvider.taskDissmissed(index);
                                 },
                                 child: Container(

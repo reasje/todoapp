@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/provider/conn_provider.dart';
-import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/signin_provider.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:todoapp/provider/theme_provider.dart';
@@ -28,7 +27,6 @@ class _MySplashScreenState extends State<MySplashScreen> {
   //   init = _connState.connSub();
   // }
   Future<Widget> loadHome() async {
-    final _noteProvider = Provider.of<NoteProvider>(context , listen: false);
     final _connState = Provider.of<ConnState>(context, listen: false);
     final _signinState = Provider.of<SigninState>(context, listen: false);
     final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);

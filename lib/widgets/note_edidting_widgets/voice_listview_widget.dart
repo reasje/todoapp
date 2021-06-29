@@ -75,8 +75,8 @@ class voiceListView extends StatelessWidget {
                                           .translate('undoVoice'),
                                       'undoVoice',
                                       true,
-                                      context,
-                                      index));
+                                      context: context,
+                                      index: index));
                               _myProvider.voiceDissmissed(index);
                             },
                             child: Container(

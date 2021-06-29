@@ -8,6 +8,7 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_sound/public/tau.dart';
 import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:todoapp/model/image_model.dart' as imageModel;
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/taskController.dart';
@@ -206,7 +207,7 @@ class NoteProvider extends ChangeNotifier {
     if (newNote) {
       return imageList;
     } else {
-      var note = await noteBox.get(providerKeys[providerIndex]);
+      // var note = await noteBox.get(providerKeys[providerIndex]);
       return imageList;
     }
   }
@@ -973,7 +974,7 @@ class NoteProvider extends ChangeNotifier {
                 .translate('emptyFieldsAlert'),
             'emptyFieldsAlert',
             false,
-            noteContext,
+            context: noteContext,
           ));
           notSaving = notSaving + 1;
           Future.delayed(Duration(seconds: 10), () {
@@ -1078,7 +1079,7 @@ class NoteProvider extends ChangeNotifier {
             uiKit.AppLocalizations.of(noteContext).translate('willingToDelete'),
             'willingToDelete',
             false,
-            noteContext));
+            context: noteContext));
         Navigator.pop(noteContext);
         clearControllers();
       } else {
@@ -1089,7 +1090,7 @@ class NoteProvider extends ChangeNotifier {
                   .translate('notSavingAlert'),
               'notSavingAlert',
               false,
-              noteContext));
+              context: noteContext));
           notSaving = notSaving + 1;
           Future.delayed(Duration(seconds: 10), () {
             notSaving = 0;
@@ -1168,10 +1169,10 @@ class NoteProvider extends ChangeNotifier {
         uiKit.AppLocalizations.of(noteContext).translate('dogeAddressCopied'),
         'dogeAddressCopied',
         false,
-        noteContext));
+        context: noteContext));
   }
 
-  Future<List<Note>> updateListSize(List<int> keys, SizeX, SizeY) async {
+  Future<bool> updateListSize(List<int> keys, SizeX, SizeY) async {
     int with_timer = 0;
     int without_timer = 0;
     List<Note> noteList = [];
@@ -1185,7 +1186,8 @@ class NoteProvider extends ChangeNotifier {
       }
     }
     listview_size = (without_timer * SizeX * 0.22) + (with_timer * SizeX * 0.5);
-    return noteList;
+    notifyListeners();
+    return true;
   }
 
   Future<void> updateImageDesc(int index, String desc) async {

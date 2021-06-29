@@ -103,7 +103,7 @@ class _MyButtonState extends State<MyButton> {
                     uiKit.AppLocalizations.of(context).translate('timerOn'),
                     'timerOn',
                     false,
-                    context));
+                    context: context));
               }
 
               //startTimer();

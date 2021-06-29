@@ -25,7 +25,6 @@ class UnCheckProvider with ChangeNotifier {
   // Hive box for notes
   final noteBox = Hive.lazyBox<Note>(noteBoxName);
   Future<void> checkDayChange() async {
-    print('object');
     String date = prefsBox.get('date');
     var now = DateTime.now();
     if (date != null) {

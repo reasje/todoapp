@@ -78,8 +78,8 @@ class imageLisView extends StatelessWidget {
                                           .translate('undoImage'),
                                       'undoImage',
                                       true,
-                                      context,
-                                      index));
+                                      context: context,
+                                      index: index));
                               _myProvider.imageDissmissed(index);
                             },
                             child: GridTile(
