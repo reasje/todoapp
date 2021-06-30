@@ -15,7 +15,6 @@ import 'dart:convert';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:todoapp/model/image_model.dart' as imageModel;
 
-// TODO image title and tasks are not uploaded to google drive
 // consider adding them ,
 // This is the file id and the name
 // used to upload the file and check wether the file
@@ -58,6 +57,7 @@ Future<void> upload(drive.DriveApi driveApi, drive.File driveFile,
     var time = element.time;
     var resetCheckBoxs = element.resetCheckBoxs;
     var color = element.color;
+    var isChecked = element.isChecked;
     // resetCheckBoxs = utf8.fuse(base64).encode(resetCheckBoxs.toString());
     // List<String> imageList = [];
     // for (int i = 0; i < element.imageList.length; i++) {
@@ -91,6 +91,7 @@ Future<void> upload(drive.DriveApi driveApi, drive.File driveFile,
           "title": title,
           "text": text,
           "time": time,
+          "isChecked" : isChecked,
           "imageDescList": imageDescList,
           "imageImageList": imageImageList,
           "voiceTitleList": voiceTitleList,
@@ -145,6 +146,7 @@ Future<void> download(
       int time = list[i]['time'];
       bool resetCheckBoxs = list[i]['resetCheckBoxs'];
       int color = list[i]['color'];
+      bool isChecked = list[i]['isChecked'];
       // Downloading voices
       List<Voice> voiceList = [];
       List<String> voiceTitleList = List.from(list[i]['voiceTitleList']);
@@ -175,7 +177,7 @@ Future<void> download(
             utf8.fuse(base64).decode(taskTaskListDownloaded[i]) == 'true');
         taskList.add(task);
       }
-      await noteBox.add(Note(title, text, false, time, color, time, imageList,
+      await noteBox.add(Note(title, text, isChecked, time, color, time, imageList,
           voiceList, taskList, resetCheckBoxs));
     }
     await EasyLoading.dismiss();
