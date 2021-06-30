@@ -9,7 +9,6 @@ import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
-
 import '../main.dart';
 
 // TODO moving and reordering list view effect
@@ -26,7 +25,6 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
     final _myProvider = Provider.of<NoteProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
     final _timerState = Provider.of<TimerState>(context);
-    final _bottomNavProvider = Provider.of<BottomNavProvider>(context);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     bool isLandscape =
@@ -57,30 +55,34 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
               width: isLandscape ? SizeY * 0.8 : SizeY,
               // padding: EdgeInsets.only(
               //     bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: PageView(
-                onPageChanged: (value) {
-                  _bottomNavProvider.newTabSelectedAnimation(value);
+              child: Consumer<BottomNavProvider>(
+                builder: (ctx, _bottomNavProvider, _) {
+                  return PageView(
+                    onPageChanged: (value) {
+                      _bottomNavProvider.newTabSelectedAnimation(value);
+                    },
+                    controller: _bottomNavProvider.pageController,
+                    children: [
+                      uiKit.TabView(
+                        index: 0,
+                      ),
+                      condition
+                          ? uiKit.TabView(
+                              index: 1,
+                            )
+                          : uiKit.TabView(index: 1, timerOn: true),
+                      uiKit.TabView(
+                        index: 2,
+                      ),
+                      uiKit.TabView(
+                        index: 3,
+                      ),
+                      uiKit.TabView(
+                        index: 4,
+                      ),
+                    ],
+                  );
                 },
-                controller: _bottomNavProvider.pageController,
-                children: [
-                  uiKit.TabView(
-                    index: 0,
-                  ),
-                  condition
-                      ? uiKit.TabView(
-                          index: 1,
-                        )
-                      : uiKit.TabView(index: 1, timerOn: true),
-                  uiKit.TabView(
-                    index: 2,
-                  ),
-                  uiKit.TabView(
-                    index: 3,
-                  ),
-                  uiKit.TabView(
-                    index: 4,
-                  ),
-                ],
               ),
             ),
           ),
@@ -92,7 +94,3 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
     );
   }
 }
-
-
-
-

@@ -22,7 +22,7 @@ class _TabViewState extends State<TabView> {
     int index = widget.index;
     bool timerOn = widget.timerOn ?? false;
     final _bottomNavProvider =
-        Provider.of<BottomNavProvider>(context, listen: false);
+        Provider.of<BottomNavProvider>(context);
     double SizeX = MediaQuery.of(context).size.height;
     final _themeProvider = Provider.of<ThemeProvider>(context);
     double SizeY = MediaQuery.of(context).size.width;
