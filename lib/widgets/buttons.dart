@@ -9,6 +9,7 @@ import 'package:todoapp/provider/conn_provider.dart';
 import 'package:todoapp/provider/drive_provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/noteimage_provider.dart';
+import 'package:todoapp/provider/notevoice_recorder_provider.dart';
 import 'package:todoapp/provider/signin_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
@@ -73,6 +74,7 @@ class _MyButtonState extends State<MyButton> {
           final _signinState = Provider.of<SigninState>(context, listen: false);
           final _connState = Provider.of<ConnState>(context, listen: false);
           final _noteImageProvider = Provider.of<NoteImageProvider>(context, listen: false);
+          final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(context, listen: false);
           final _themeProvider =
               Provider.of<ThemeProvider>(context, listen: false);
           double SizeX = MediaQuery.of(context).size.height;
@@ -377,16 +379,16 @@ class _MyButtonState extends State<MyButton> {
                   });
               break;
             case 'newvoice':
-              await _myProvider.startRecorder(context);
+              await _noteVoiceRecorderProvider.startRecorder(context);
               break;
             case 'pausevoice':
-              await _myProvider.pauseRecorder();
+              await _noteVoiceRecorderProvider.pauseRecorder();
               break;
             case 'stopvoice':
-              await _myProvider.stopRecorder(context: context);
+              await _noteVoiceRecorderProvider.stopRecorder(context: context);
               break;
             case 'resumevoice':
-              await _myProvider.resumeRecorder();
+              await _noteVoiceRecorderProvider.resumeRecorder();
               break;
           }
         });

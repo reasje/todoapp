@@ -4,6 +4,7 @@ import 'package:todoapp/model/note_model.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/noteimage_provider.dart';
+import 'package:todoapp/provider/notevoice_recorder_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import '../applocalizations.dart';
@@ -209,6 +210,7 @@ Future showAlertDialog(BuildContext context,
       final _noteImageProvider =
         Provider.of<NoteImageProvider>(context, listen: false);
   final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+  final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(context, listen: false);
   TextEditingController voiceTitleController = TextEditingController(text: desc ?? '');
   double SizeX = MediaQuery.of(context).size.height;
   double SizeY = MediaQuery.of(context).size.width;
@@ -360,7 +362,7 @@ Future showAlertDialog(BuildContext context,
                                             ? _themeProvider.changeLanToEnglish()
                                             : id == "up"
                                                 ? upload(driveApi, driveFile, noteBox,uiKit.AppLocalizations.of(context).translate('uploading'), uiKit.AppLocalizations.of(context).translate('uploadDone'), file_id )
-                                                : id == "voiceTitle" ?  _myProvider.setVoiceTitle(voiceTitleController.text): id == 'imageDesc' ? _noteImageProvider.updateImageDesc(index,voiceTitleController.text )   : download(driveApi, driveFile ,uiKit.AppLocalizations.of(context).translate('downloading'),uiKit.AppLocalizations.of(context).translate('downloadDone'),
+                                                : id == "voiceTitle" ?  _noteVoiceRecorderProvider.setVoiceTitle(voiceTitleController.text): id == 'imageDesc' ? _noteImageProvider.updateImageDesc(index,voiceTitleController.text )   : download(driveApi, driveFile ,uiKit.AppLocalizations.of(context).translate('downloading'),uiKit.AppLocalizations.of(context).translate('downloadDone'),
                                                     noteBox, file_id);
                                         Navigator.pop(context);
                                       }))

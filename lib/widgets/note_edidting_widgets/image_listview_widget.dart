@@ -13,14 +13,11 @@ class ImageLisView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     double SizeXSizeY = SizeX * SizeY;
-
     return Container(
         height: isLandscape ? SizeY * 0.8 : SizeX * 0.8,
         margin: EdgeInsets.only(top: SizeX * 0.02),

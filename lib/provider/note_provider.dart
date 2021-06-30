@@ -14,6 +14,7 @@ import 'package:todoapp/model/taskController.dart';
 import 'package:todoapp/model/task_model.dart';
 import 'package:todoapp/model/voice_model.dart';
 import 'package:todoapp/provider/bottomnav_provider.dart';
+import 'package:todoapp/provider/notevoice_recorder_provider.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:undo/undo.dart';
@@ -117,10 +118,6 @@ class NoteProvider extends ChangeNotifier {
     return time_duration.inSeconds;
   }
 
-  Future<List<Voice>> getVoiceList() async {
-    return voiceList;
-  }
-
   //////////////////////////////////// *** TASK LIST  PART *** /////////////////////////////////////
   List<Task> taskList = [];
   // This is the controller assigned to the textfield inside
@@ -191,20 +188,7 @@ class NoteProvider extends ChangeNotifier {
   }
 
   //////////////////////////////////// *** VOICE LIST PART *** /////////////////////////////////////
-  // The voice note part
-  List<Voice> voiceList = [];
-  // Used to controll if the notes has been edited or not
-  List<Voice> voiceListSnapshot = [];
-  // This list is return to UI for details
-  // Below varriable is used to show the recorded time in the UI
-  Duration recorderDuration = Duration(seconds: 0);
-  // If any of the voices has been dismissed  It wil be saved in this varrable
-  Voice dismissedVoice;
-  // A name for any recordiing that will be used
-  String voiceName = 'tempraryFileName';
-  // A new Instance of FlutterSoundRecorder for recording
-  FlutterSoundRecorder flutterSoundRecorder = new FlutterSoundRecorder();
-  // A new Instance of FlutterSoundPlayer for playing USED AS LIST
+
   List<FlutterSoundPlayer> flutterSoundPlayer =
       List.filled(100, FlutterSoundPlayer());
   // this varriable shows the progress of the voice
@@ -217,76 +201,16 @@ class NoteProvider extends ChangeNotifier {
   List<SoundPlayerState> soundPlayerState =
       List.filled(100, SoundPlayerState.stopped);
   //                              *** RECORDER ***                              //
-  Future<void> startRecorder(BuildContext context) async {
-    PermissionStatus status = await Permission.microphone.request();
-    if (status == PermissionStatus.permanentlyDenied ||
-        status == PermissionStatus.denied) {
-      //throw RecordingPermissionException("Microphone permission not granted");
-      uiKit.showAlertDialog(context, id: 'microphoneRequired');
-      return;
-    }
-    // StreamSink<Food> _playerSubscription;
-    // opening the session before starting the recorder is required .
-    await flutterSoundRecorder.openAudioSession();
-    // starting the recording session by adding the file name to
-    await flutterSoundRecorder.startRecorder(
-        toFile: voiceName, codec: Codec.defaultCodec);
-    // This stream updates the recording duration
-    StreamSubscription<RecordingDisposition> sub;
-    sub = flutterSoundRecorder.onProgress.listen((event) async {
-      if (event.duration > Duration(minutes: 58)) {
-        sub.cancel();
-        await stopRecorder();
-      } else {
-        recorderDuration = event.duration;
-        notifyListeners();
-      }
-    });
-    notifyListeners();
-  }
-
-  Future<void> pauseRecorder() async {
-    await flutterSoundRecorder.pauseRecorder();
-    notifyListeners();
-  }
-
-  Future<void> resumeRecorder() async {
-    flutterSoundRecorder.resumeRecorder();
-    notifyListeners();
-  }
-
-  Future<void> stopRecorder({BuildContext context}) async {
-    // finishing up the recorded voice
-    String path = await flutterSoundRecorder.stopRecorder();
-    if (context != null) {
-      await uiKit.showAlertDialog(context, id: 'voiceTitle');
-    } else {
-      voiceTitle = "Err:time";
-    }
-    // time to save the file with path inside the
-    // datatbase as the Uint8List
-    File file = File(path);
-    var h = await file.readAsBytes();
-    var v = Voice(
-        (voiceTitle == null || voiceTitle == "") ? 'Unamed' : voiceTitle, h);
-    voiceList.add(v);
-    voiceTitle = null;
-    // Time to delete the file to avoid space overflow
-    flutterSoundRecorder.deleteRecord(fileName: voiceName);
-    notifyListeners();
-  }
-
-  String voiceTitle;
-  Future<void> setVoiceTitle(String title) {
-    voiceTitle = title;
-  }
 
   //                              *** PLAYER ***                              //
-  Future<void> startPlayingRecorded(int index) async {
+  Future<void> startPlayingRecorded(int index, BuildContext context) async {
+    noteContext = context;
+    final _noteVoiceRecorderProvider =
+        Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
     await checkForPlayingPlayers();
     flutterSoundPlayer[index].openAudioSession();
-    voiceDuration[index] = await flutterSoundPlayer[index]
-        .startPlayer(fromDataBuffer: voiceList[index].voice);
+    voiceDuration[index] = await flutterSoundPlayer[index].startPlayer(
+        fromDataBuffer: _noteVoiceRecorderProvider.voiceList[index].voice);
     timerOn(index);
   }
 
@@ -342,24 +266,16 @@ class NoteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void seekPlayingRecorder(double value, int index) async {
+  void seekPlayingRecorder(
+      double value, int index, BuildContext context) async {
+    noteContext = context;
     if (soundPlayerState[index] == SoundPlayerState.paused ||
         soundPlayerState[index] == SoundPlayerState.stopped) {
-      await startPlayingRecorded(index);
+      await startPlayingRecorded(index, context);
     }
     var duration = Duration(seconds: value.toInt());
     flutterSoundPlayer[index].seekToPlayer(duration);
     voiceProgress[index] = duration;
-    notifyListeners();
-  }
-
-  void voiceDissmissed(index) {
-    dismissedVoice = voiceList.removeAt(index);
-    notifyListeners();
-  }
-
-  void voiceRecover(index) {
-    voiceList.insert(index, dismissedVoice);
     notifyListeners();
   }
 
@@ -426,10 +342,12 @@ class NoteProvider extends ChangeNotifier {
   void clearControllers() {
     final _noteImageProvider =
         Provider.of<NoteImageProvider>(noteContext, listen: false);
+    final _noteVoiceRecorderProvider =
+        Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
     _noteImageProvider.clearImageList();
     title.clear();
     text.clear();
-    voiceList.clear();
+    _noteVoiceRecorderProvider.clearVoiceList();
     taskControllerList.clear();
     taskList.clear();
     providerIndex = null;
@@ -443,6 +361,8 @@ class NoteProvider extends ChangeNotifier {
   void takeSnapshot() async {
     final _noteImageProvider =
         Provider.of<NoteImageProvider>(noteContext, listen: false);
+    final _noteVoiceRecorderProvider =
+        Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
     ttitle = title.text;
     ttext = text.text;
     old_value = text.text;
@@ -451,7 +371,7 @@ class NoteProvider extends ChangeNotifier {
     begin_edit = false;
     if (!newNote) {
       _noteImageProvider.initialImageListSnapshot();
-      voiceListSnapshot = List.from(voiceList);
+      _noteVoiceRecorderProvider.initialVoiceListSnapshot();
       taskControllerList = List.from(taskControllerList);
     }
   }
@@ -460,12 +380,15 @@ class NoteProvider extends ChangeNotifier {
   bool isEdited() {
     final _noteImageProvider =
         Provider.of<NoteImageProvider>(noteContext, listen: false);
+    final _noteVoiceRecorderProvider =
+        Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
     if (ttitle == title.text &&
         ttext == text.text &&
         time_duration == time_snapshot &&
         ListEquality().equals(_noteImageProvider.imageList,
             _noteImageProvider.imageListSnapshot) &&
-        ListEquality().equals(voiceList, voiceListSnapshot) &&
+        ListEquality().equals(_noteVoiceRecorderProvider.voiceList,
+            _noteVoiceRecorderProvider.voiceListSnapshot) &&
         ListEquality().equals(taskControllerList, taskControllerListSnapShot)) {
       return false;
     } else {
@@ -523,6 +446,8 @@ class NoteProvider extends ChangeNotifier {
     noteContext = context;
     final _noteImageProvider =
         Provider.of<NoteImageProvider>(noteContext, listen: false);
+    final _noteVoiceRecorderProvider =
+        Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
     providerKeys = keys;
     providerIndex = index;
     _bottomNavProvider.initialSelectedTab();
@@ -534,7 +459,7 @@ class NoteProvider extends ChangeNotifier {
       _noteImageProvider.initialImageList(bnote.imageList);
     }
     if (bnote.voiceList?.isNotEmpty ?? false) {
-      voiceList = bnote.voiceList;
+      _noteVoiceRecorderProvider.initialVoiceList(bnote.voiceList);
     }
     if (bnote.taskList?.isNotEmpty ?? false) {
       taskList = bnote.taskList;
@@ -590,8 +515,10 @@ class NoteProvider extends ChangeNotifier {
     noteContext = context;
     final _bottomNavProvider =
         Provider.of<BottomNavProvider>(context, listen: false);
-          final _noteImageProvider =
+    final _noteImageProvider =
         Provider.of<NoteImageProvider>(noteContext, listen: false);
+    final _noteVoiceRecorderProvider =
+        Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
     // checking whether your going to update the note or add new one
     // that is done by chekcing the newNote true or false
     if (newNote) {
@@ -601,7 +528,7 @@ class NoteProvider extends ChangeNotifier {
           title.text.isEmpty &&
           taskControllerList[0].textEditingController.text == "" &&
           _noteImageProvider.imageList.isEmpty &&
-          voiceList.isEmpty &&
+          _noteVoiceRecorderProvider.voiceList.isEmpty &&
           note_duration == Duration()) {
         if (notSaving == 0) {
           ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
@@ -646,7 +573,7 @@ class NoteProvider extends ChangeNotifier {
           color,
           leftTime,
           _noteImageProvider.imageList,
-          voiceList,
+          _noteVoiceRecorderProvider.voiceList,
           taskList,
           resetCheckBoxs,
         );
@@ -680,7 +607,7 @@ class NoteProvider extends ChangeNotifier {
             color,
             bnote.leftTime,
             _noteImageProvider.imageList,
-            voiceList,
+            _noteVoiceRecorderProvider.voiceList,
             taskList,
             resetCheckBoxs);
         await noteBox.put(providerKeys[providerIndex], note);
@@ -700,16 +627,18 @@ class NoteProvider extends ChangeNotifier {
   // this fucntion will be executed checking for changes
   // if the changes has been made it is going to show an alert
   void cancelClicked(BuildContext context) {
-    
     noteContext = context;
-        final _noteImageProvider =
+    final _noteImageProvider =
         Provider.of<NoteImageProvider>(noteContext, listen: false);
+
+    final _noteVoiceRecorderProvider =
+        Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
     if (isEdited()) {
       if (text.text.isEmpty &&
           title.text.isEmpty &&
           taskControllerList[0].textEditingController.text == "" &&
           _noteImageProvider.imageList.isEmpty &&
-          voiceList.isEmpty &&
+          _noteVoiceRecorderProvider.voiceList.isEmpty &&
           note_duration == Duration()) {
         ScaffoldMessenger.of(noteContext).clearSnackBars();
         ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
@@ -832,14 +761,11 @@ class NoteProvider extends ChangeNotifier {
     noteBox.put(keys[newIndex], note);
   }
 
-  List<Note> noteList = [];
   Future<bool> updateListSize(List<int> keys, SizeX, SizeY) async {
     int with_timer = 0;
     int without_timer = 0;
-
     for (int i = 0; i < keys.length; i++) {
       var bnote = await noteBox.get(keys[i]);
-      noteList.add(bnote);
       if (bnote.time == 0) {
         without_timer = without_timer + 1;
       } else {
@@ -849,6 +775,4 @@ class NoteProvider extends ChangeNotifier {
     listview_size = (without_timer * SizeX * 0.22) + (with_timer * SizeX * 0.5);
     return true;
   }
-
-
 }
