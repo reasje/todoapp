@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
@@ -28,13 +27,15 @@ class FloatingActionButtonWidget extends StatelessWidget {
       ),
       onPressed: () {
         if (!(_timerState.isRunning.any((element) => element == true))) {
-          _myProvider.newNoteClicked(context);
-          _timerState.clearControllers();
-          _timerState.newNoteIndex();
-          Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
+          _myProvider.newNoteClicked(context).then((value) {
+            _timerState.clearControllers();
+            _timerState.newNoteIndex();
+            Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
+          });
         } else {
-          _myProvider.newNoteClicked(context);
-          Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
+          _myProvider.newNoteClicked(context).then((value) {
+            Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
+          });
         }
       },
     );

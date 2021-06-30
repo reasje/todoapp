@@ -111,11 +111,14 @@ class ReorderableCardWidget extends StatelessWidget {
                                       );
                                     }
 
-                                    _myProvider.loadNote(context, keys, index);
-                                    Navigator.push(
+                                    _myProvider.loadNote(context, keys, index).then((value) {
+                                                                          Navigator.push(
                                         context,
                                         SliderTransition(
                                             uiKit.MyNotesEditing()));
+                                    }
+                                    );
+
                                   },
                                   child: Container(
                                     padding: EdgeInsets.all(4),
@@ -318,11 +321,12 @@ class ReorderableCardWidget extends StatelessWidget {
                                         context,
                                       );
                                     }
-                                    _myProvider.loadNote(context, keys, index);
-                                    Navigator.push(
+                                    _myProvider.loadNote(context, keys, index).then((value) {
+                                                                          Navigator.push(
                                         context,
                                         SliderTransition(
                                             uiKit.MyNotesEditing()));
+                                    });
                                   },
                                 ),
                                 children: [
@@ -337,9 +341,6 @@ class ReorderableCardWidget extends StatelessWidget {
                                     ),
                                   ),
                                 ],
-                                // onTap: () {
-                                //   _myProvider.loadNote(keys, index, context);
-                                // },
                               ),
                             ),
                           ),
