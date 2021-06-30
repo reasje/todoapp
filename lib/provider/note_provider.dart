@@ -28,9 +28,7 @@ import 'noteimage_provider.dart';
 // and if more instances of that was made FlutterSoundPlayer's
 // state for example the isPlaying instance was true for all
 // even if Just one instance was playing
-const stopped = 0;
-const paused = 1;
-const resumed = 2;
+
 enum SoundPlayerState {
   stopped,
   paused,
@@ -186,99 +184,6 @@ class NoteProvider extends ChangeNotifier {
     //taskControllerList.insert(newIndex, taskController);
     notifyListeners();
   }
-
-  //////////////////////////////////// *** VOICE LIST PART *** /////////////////////////////////////
-
-  List<FlutterSoundPlayer> flutterSoundPlayer =
-      List.filled(100, FlutterSoundPlayer());
-  // this varriable shows the progress of the voice
-  List<Duration> voiceProgress = List.filled(100, Duration(seconds: 0));
-  // This shows the total duration of the voice
-  List<Duration> voiceDuration = List.filled(100, Duration(seconds: 0));
-  // This is the periodical timer for incrementing the voiceProgress duration
-  List<Timer> timer = List.filled(100, Timer(Duration(), () {}));
-  // Used to control the playing voices
-  List<SoundPlayerState> soundPlayerState =
-      List.filled(100, SoundPlayerState.stopped);
-  //                              *** RECORDER ***                              //
-
-  //                              *** PLAYER ***                              //
-  Future<void> startPlayingRecorded(int index, BuildContext context) async {
-    noteContext = context;
-    final _noteVoiceRecorderProvider =
-        Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
-    await checkForPlayingPlayers();
-    flutterSoundPlayer[index].openAudioSession();
-    voiceDuration[index] = await flutterSoundPlayer[index].startPlayer(
-        fromDataBuffer: _noteVoiceRecorderProvider.voiceList[index].voice);
-    timerOn(index);
-  }
-
-  Future<void> checkForPlayingPlayers() async {
-    var runningElement;
-    var anyRunning = soundPlayerState.any((element) {
-      if (element == SoundPlayerState.resumed) {
-        runningElement = element;
-        return true;
-      } else {
-        return false;
-      }
-    });
-    if (anyRunning) {
-      var index = soundPlayerState.indexOf(runningElement);
-      pausePlayingRecorded(index);
-    }
-  }
-
-  Future<void> timerOn(int index) async {
-    soundPlayerState[index] = SoundPlayerState.resumed;
-    timer[index] = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (voiceProgress[index] >= voiceDuration[index]) {
-        voiceProgress[index] = Duration(seconds: 0);
-        timerOff(index);
-        soundPlayerState[index] = SoundPlayerState.stopped;
-        notifyListeners();
-      } else {
-        voiceProgress[index] = voiceProgress[index] + Duration(seconds: 1);
-        notifyListeners();
-      }
-    });
-  }
-
-  void timerOff(int index) {
-    soundPlayerState[index] = SoundPlayerState.paused;
-    if (timer[index] != null) {
-      timer[index].cancel();
-    }
-    notifyListeners();
-  }
-
-  Future<void> resumePlayingRecorded(int index) async {
-    await checkForPlayingPlayers();
-    flutterSoundPlayer[index].resumePlayer();
-    timerOn(index);
-    notifyListeners();
-  }
-
-  Future<void> pausePlayingRecorded(int index) async {
-    flutterSoundPlayer[index].pausePlayer();
-    timerOff(index);
-    notifyListeners();
-  }
-
-  void seekPlayingRecorder(
-      double value, int index, BuildContext context) async {
-    noteContext = context;
-    if (soundPlayerState[index] == SoundPlayerState.paused ||
-        soundPlayerState[index] == SoundPlayerState.stopped) {
-      await startPlayingRecorded(index, context);
-    }
-    var duration = Duration(seconds: value.toInt());
-    flutterSoundPlayer[index].seekToPlayer(duration);
-    voiceProgress[index] = duration;
-    notifyListeners();
-  }
-
   // This is used inside of Note textfield to control and save the changes for undo property
   void listenerActivated(newValue) {
     // This Line is used for prevent unusual behavior of the textfield
@@ -420,7 +325,7 @@ class NoteProvider extends ChangeNotifier {
   }
 
   // new Note clieked
-  void newNoteClicked(BuildContext context) {
+  Future<void> newNoteClicked(BuildContext context) async{
     final _bottomNavProvider =
         Provider.of<BottomNavProvider>(context, listen: false);
     noteContext = context;
@@ -433,13 +338,13 @@ class NoteProvider extends ChangeNotifier {
     _bottomNavProvider.initialSelectedTab();
     _bottomNavProvider.initialPage();
     resetCheckBoxs = false;
-    _bottomNavProvider.initialTabs(context);
+    await _bottomNavProvider.initialTabs(context);
     takeSnapshot();
     notifyListeners();
   }
 
   // used indie list view after an elemt of listview is tapped
-  void loadNote(BuildContext context, [List<int> keys, int index]) async {
+  Future<void> loadNote(BuildContext context, [List<int> keys, int index]) async {
     final _bottomNavProvider =
         Provider.of<BottomNavProvider>(context, listen: false);
 
@@ -489,7 +394,7 @@ class NoteProvider extends ChangeNotifier {
     note_duration = Duration(seconds: bnote.time);
     noteColor = Color(bnote.color);
     newNote = false;
-    _bottomNavProvider.initialTabs(context);
+    await _bottomNavProvider.initialTabs(context);
     _bottomNavProvider.initialPage();
     notifyListeners();
 

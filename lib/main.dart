@@ -12,6 +12,7 @@ import 'package:todoapp/provider/conn_provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/provider/noteimage_provider.dart';
+import 'package:todoapp/provider/notevoice_player_provider.dart';
 import 'package:todoapp/provider/notevoice_recorder_provider.dart';
 import 'package:todoapp/provider/signin_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
@@ -127,6 +128,7 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (context) => BottomNavProvider()),
           ChangeNotifierProvider(create: (context) => NoteImageProvider()),
           ChangeNotifierProvider(create: (context) => NoteVoiceRecorderProvider()),
+          ChangeNotifierProvider(create: (context) => NoteVoicePlayerProvider()),
         ],
         child: Consumer<ThemeProvider>(
           builder: (context, _themeProvider, _) {

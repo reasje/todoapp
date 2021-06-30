@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapp/provider/bottomnav_provider.dart';
 import 'package:todoapp/provider/conn_provider.dart';
 import 'package:todoapp/provider/signin_provider.dart';
 import 'package:splashscreen/splashscreen.dart';
@@ -30,25 +31,30 @@ class _MySplashScreenState extends State<MySplashScreen> {
     final _connState = Provider.of<ConnState>(context, listen: false);
     final _signinState = Provider.of<SigninState>(context, listen: false);
     final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-    final _unCheckProvider = Provider.of<UnCheckProvider>(context, listen: false);
+    final _unCheckProvider =
+        Provider.of<UnCheckProvider>(context, listen: false);
+    // final _bottomNavProvider =
+    //     Provider.of<BottomNavProvider>(context, listen: false);
     await _connState.connSub();
     await _connState.checkConn();
     await _unCheckProvider.checkDayChange();
     await _themeProvider.initialColorsAndLan();
     await _signinState.checkSignin();
+    // await _bottomNavProvider.initialTabs(context);
     await Future.delayed(Duration(seconds: 2));
-    return Future.value(_themeProvider.isFirstTime ? Onboarding() : uiKit.MyRorderable());
+    return Future.value(
+        _themeProvider.isFirstTime ? Onboarding() : uiKit.MyRorderable());
   }
 
   @override
   Widget build(BuildContext context) {
-    final _themeProvider= Provider.of<ThemeProvider>(context);
+    final _themeProvider = Provider.of<ThemeProvider>(context);
     return Theme(
       data: Theme.of(context).copyWith(brightness: _themeProvider.brightness),
       child: new SplashScreen(
         navigateAfterFuture: loadHome(),
-        image: Image.asset(
-            _themeProvider.splashImage ?? 'assets/images/SplashScreenWhite.gif'),
+        image: Image.asset(_themeProvider.splashImage ??
+            'assets/images/SplashScreenWhite.gif'),
         loaderColor: _themeProvider.textColor,
         backgroundColor: _themeProvider.mainColor,
         photoSize: 100,

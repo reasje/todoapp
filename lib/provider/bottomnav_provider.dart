@@ -4,12 +4,10 @@ import 'package:todoapp/model/bottomnav_tab_model.dart';
 import 'package:todoapp/model/navigationitem_model.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
-class BottomNavProvider with ChangeNotifier{
+class BottomNavProvider with ChangeNotifier {
   int selectedTab = 0;
 
-
   List<BottomNavTab> tabs = [];
-
 
   List<Color> tabColors = [
     Color(0xffaa66cc),
@@ -19,23 +17,18 @@ class BottomNavProvider with ChangeNotifier{
     Color(0xFF00c851)
   ];
 
-
   PageController pageController;
-
 
   List<NavigationItem> items;
 
+  void initialSelectedTab() {
+    selectedTab == null ? selectedTab = 0 : null;
+  }
 
-    void initialSelectedTab(){
-      selectedTab == null ? selectedTab = 0 : null;
-    }
-
-
-    void initialPage(){
-          pageController =
+  void initialPage() {
+    pageController =
         new PageController(initialPage: selectedTab, keepPage: true);
-    }
-
+  }
 
   void newTabSelected(int index) {
     selectedTab = index;
@@ -50,9 +43,9 @@ class BottomNavProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  
-  void initialTabs(BuildContext context ,) async {
-
+  Future<void> initialTabs(
+    BuildContext context,
+  ) async {
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     double SizeXSizeY = SizeX * SizeY;

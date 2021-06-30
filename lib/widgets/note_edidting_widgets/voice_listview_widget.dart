@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:todoapp/provider/bottomnav_provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
+import 'package:todoapp/provider/notevoice_player_provider.dart';
 import 'package:todoapp/provider/notevoice_recorder_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
@@ -32,8 +33,8 @@ class voiceListView extends StatelessWidget {
         width: double.maxFinite,
         child: ScrollConfiguration(
           behavior: uiKit.NoGlowBehaviour(),
-          child: Consumer<NoteVoiceRecorderProvider>(
-            builder: (ctx, _noteVoiceRecorderProvider, _) {
+          child: Consumer2<NoteVoiceRecorderProvider , NoteVoicePlayerProvider>(
+            builder: (ctx, _noteVoiceRecorderProvider, _noteVoicePlayerProvider,_) {
               return ListView.builder(
                   itemCount: _noteVoiceRecorderProvider.voiceList != null
                       ? _noteVoiceRecorderProvider.voiceList.length + 1
@@ -124,17 +125,17 @@ class voiceListView extends StatelessWidget {
                                                           activeColor:
                                                               backGroundColor,
                                                           onChangeEnd: (value) {
-                                                            _myProvider
+                                                            _noteVoicePlayerProvider
                                                                 .seekPlayingRecorder(
                                                                     value,
                                                                     index, context);
                                                           },
-                                                          value: _myProvider
+                                                          value:_noteVoicePlayerProvider
                                                               .voiceProgress[
                                                                   index]
                                                               .inSeconds
                                                               .toDouble(),
-                                                          max: _myProvider
+                                                          max: _noteVoicePlayerProvider
                                                                   .voiceDuration[
                                                                       index]
                                                                   .inSeconds
@@ -168,10 +169,10 @@ class voiceListView extends StatelessWidget {
                                                                       .end,
                                                               children: [
                                                                 Text(
-                                                                    "${((_myProvider.voiceProgress[index].inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}"),
+                                                                    "${((_noteVoicePlayerProvider.voiceProgress[index].inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}"),
                                                                 Text(":"),
                                                                 Text(
-                                                                    "${(_myProvider.voiceProgress[index].inSeconds % 60).floor().toString().padLeft(2, '0')}"),
+                                                                    "${(_noteVoicePlayerProvider.voiceProgress[index].inSeconds % 60).floor().toString().padLeft(2, '0')}"),
                                                               ],
                                                             ),
                                                           ),
@@ -196,10 +197,10 @@ class voiceListView extends StatelessWidget {
                                                                       .ltr,
                                                               children: [
                                                                 Text(
-                                                                    "${((_myProvider.voiceDuration[index].inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}"),
+                                                                    "${((_noteVoicePlayerProvider.voiceDuration[index].inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}"),
                                                                 Text(":"),
                                                                 Text(
-                                                                    "${(_myProvider.voiceDuration[index].inSeconds % 60).floor().toString().padLeft(2, '0')}"),
+                                                                    "${(_noteVoicePlayerProvider.voiceDuration[index].inSeconds % 60).floor().toString().padLeft(2, '0')}"),
                                                               ],
                                                             ),
                                                           ),
@@ -214,7 +215,7 @@ class voiceListView extends StatelessWidget {
                                                     width: SizeY * 0.1,
                                                     padding: EdgeInsets.only(
                                                         right: SizeY * 0.02),
-                                                    child: _myProvider
+                                                    child: _noteVoicePlayerProvider
                                                                     .soundPlayerState[
                                                                 index] ==
                                                             SoundPlayerState
@@ -222,7 +223,7 @@ class voiceListView extends StatelessWidget {
                                                         ? InkWell(
                                                             key: UniqueKey(),
                                                             onTap: () {
-                                                              _myProvider
+                                                              _noteVoicePlayerProvider
                                                                   .pausePlayingRecorded(
                                                                       index);
                                                             },
@@ -235,13 +236,13 @@ class voiceListView extends StatelessWidget {
                                                                     SizeY *
                                                                     0.00012),
                                                           )
-                                                        : _myProvider.soundPlayerState[
+                                                        : _noteVoicePlayerProvider.soundPlayerState[
                                                                     index] ==
                                                                 SoundPlayerState
                                                                     .paused
                                                             ? InkWell(
                                                                 onTap: () {
-                                                                  _myProvider
+                                                                  _noteVoicePlayerProvider
                                                                       .resumePlayingRecorded(
                                                                           index);
                                                                 },
@@ -254,13 +255,13 @@ class voiceListView extends StatelessWidget {
                                                                         SizeY *
                                                                         0.00012),
                                                               )
-                                                            : _myProvider.soundPlayerState[
+                                                            : _noteVoicePlayerProvider.soundPlayerState[
                                                                         index] ==
                                                                     SoundPlayerState
                                                                         .stopped
                                                                 ? InkWell(
                                                                     onTap: () {
-                                                                      _myProvider
+                                                                      _noteVoicePlayerProvider
                                                                           .startPlayingRecorded(
                                                                               index , context);
                                                                     },

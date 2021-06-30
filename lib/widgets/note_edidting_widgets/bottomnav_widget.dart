@@ -66,6 +66,7 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final _bottomNavProvider = Provider.of<BottomNavProvider>(context);
     return Container(
       width: MediaQuery.of(context).size.width,
       height: SizeX * 0.08,
@@ -74,8 +75,8 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
       decoration: BoxDecoration(
         color: _themeProvider.mainColor,
       ),
-      child: Consumer<BottomNavProvider>(builder: (ctx, _bottomNavProvider, _) {
-        return Row(
+
+        child: Row(
           textDirection: TextDirection.ltr,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: _bottomNavProvider.items.map((item) {
@@ -88,8 +89,8 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
               },
             );
           }).toList(),
-        );
-      }),
+        )
+      
     );
   }
 }

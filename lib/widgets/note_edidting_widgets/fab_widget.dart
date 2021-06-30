@@ -14,6 +14,7 @@ class NoteEditingFloatingActionButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
+    
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     double SizeXSizeY = SizeX * SizeY;
