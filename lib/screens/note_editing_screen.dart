@@ -10,7 +10,7 @@ import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
 import '../main.dart';
-
+final GlobalKey<ScaffoldState> noteEditingScaffoldKey = new GlobalKey<ScaffoldState>();
 // TODO moving and reordering list view effect
 class MyNotesEditing extends StatefulWidget {
   MyNotesEditing({Key key}) : super(key: key);
@@ -22,21 +22,21 @@ class MyNotesEditing extends StatefulWidget {
 class _MyNotesEditingState extends State<MyNotesEditing> {
   @override
   Widget build(BuildContext context) {
-    final _myProvider = Provider.of<NoteProvider>(context);
-    final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _myProvider = Provider.of<NoteProvider>(context , listen: false);
+    final _themeProvider = Provider.of<ThemeProvider>(context , listen: false);
     final _timerState = Provider.of<TimerState>(context);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     double SizeXSizeY = SizeX * SizeY;
-    LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
     var timerIndex = _timerState.index ?? _timerState.newIndex;
     var providerIndex = _myProvider.providerIndex ?? timerIndex + 1;
     bool areAlldown =
         !(_timerState.isRunning.any((element) => element == true));
     bool condition = areAlldown || timerIndex == providerIndex;
     return Scaffold(
+      key: noteEditingScaffoldKey,
       //resizeToAvoidBottomInset: false,
       backgroundColor: _themeProvider.mainColor,
       bottomNavigationBar: uiKit.BottomNavWidget(),

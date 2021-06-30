@@ -5,6 +5,7 @@ import 'package:todoapp/provider/bottomnav_provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
+
 class NoteEditingFloatingActionButtonWidget extends StatelessWidget {
   const NoteEditingFloatingActionButtonWidget({Key key}) : super(key: key);
 
@@ -206,6 +207,11 @@ class NoteEditingFloatingActionButtonWidget extends StatelessWidget {
                           ],
                         ),
                       )
-            : Container();
+            : Visibility(
+              visible: false,
+              child: FloatingActionButton(
+                  onPressed: () {},
+                ),
+            );
   }
 }
