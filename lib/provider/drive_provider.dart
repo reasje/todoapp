@@ -1,8 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:googleapis/mybusinesslodging/v1.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/main.dart';
@@ -15,7 +12,6 @@ import 'package:todoapp/provider/conn_provider.dart';
 import 'package:todoapp/provider/signin_provider.dart';
 import 'dart:convert';
 import 'package:todoapp/uiKit.dart' as uiKit;
-import 'package:connectivity/connectivity.dart' as conn;
 import 'package:todoapp/model/image_model.dart' as imageModel;
 // TODO image title and tasks are not uploaded to google drive 
 // consider adding them ,

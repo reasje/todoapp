@@ -107,10 +107,8 @@ class _MyRorderableState extends State<MyRorderable> {
                                                 int newIndex) async {
                                               // TODO try corecting the when there 3 element and
                                               // you change the bottom and the top elements
-
                                               _myProvider.reorderList(
                                                   oldIndex, newIndex);
-
                                               // if oldIndex < newIndex the flutter asumes the
                                               // newIndex is newIndex+1 for example new index yopu think is
                                               // 1 and old index is 0 but the realaity is  that new index is

@@ -24,15 +24,19 @@ class imageLisView extends StatelessWidget {
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     double SizeXSizeY = SizeX * SizeY;
+
     return Container(
         height: isLandscape ? SizeY * 0.8 : SizeX * 0.8,
         margin: EdgeInsets.only(top: SizeX * 0.02),
+        padding: EdgeInsets.symmetric(horizontal: SizeY*0.05),
         child: ScrollConfiguration(
           behavior: uiKit.NoGlowBehaviour(),
           child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 3 / 3,
+                childAspectRatio: 0.8,
+                // mainAxisSpacing: SizeX*0.05,
+                // crossAxisSpacing: SizeY*0.05
               ),
               scrollDirection: Axis.vertical,
               itemCount: _myProvider.imageList != null
@@ -53,19 +57,10 @@ class imageLisView extends StatelessWidget {
                             key: UniqueKey(),
                             background: Center(
                               child: Container(
-                                padding: EdgeInsets.only(
-                                    left: SizeY * 0.1,
-                                    bottom: SizeX * 0.01,
-                                    right: SizeY * 0.1),
-                                // decoration: BoxDecoration(
-                                //   borderRadius:
-                                //       BorderRadius.all(Radius.circular(35)),
-                                //   color: _themeProvider.mainColor,
-                                // ),
-                                alignment: AlignmentDirectional.centerEnd,
+                                alignment: AlignmentDirectional.center,
                                 child: Icon(
                                   Icons.delete_sweep,
-                                  size: SizeX * SizeY * 0.0003,
+                                  size: SizeX * SizeY * 0.0002,
                                   color: _bottomNavProvider
                                       .tabs[_bottomNavProvider.selectedTab].color,
                                 ),
@@ -103,8 +98,6 @@ class imageLisView extends StatelessWidget {
                                   )),
                               child: Center(
                                 child: Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: SizeY * 0.03),
                                     child: _myProvider.imageList != null
                                         ? ClipRRect(
                                             borderRadius:
@@ -131,8 +124,6 @@ class imageLisView extends StatelessWidget {
                           );
                         } else {
                           return Container(
-                            width: SizeY * 0.9,
-                            height: SizeX * 0.25,
                             child: Shimmer.fromColors(
                               period: Duration(seconds: 3),
                               baseColor: _bottomNavProvider

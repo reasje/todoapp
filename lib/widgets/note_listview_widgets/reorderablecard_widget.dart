@@ -58,7 +58,6 @@ class ReorderableCardWidget extends StatelessWidget {
             bnote.resetCheckBoxs);
         notes.delete(keys[index]);
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        var uiKit;
         ScaffoldMessenger.of(context).showSnackBar(uiKit.MySnackBar(
           uiKit.AppLocalizations.of(context).translate('undoNote'),
           'undoNote',
