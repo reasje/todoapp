@@ -258,7 +258,7 @@ Future showAlertDialog(BuildContext context,
                             controller: voiceTitleController,
                             maxLength: id !=  'imageDesc' ? 10 : 415,
                             cursorColor: _themeProvider.swachColor,
-                            cursorHeight: SizeX * 0.052,
+                            cursorHeight: id != 'imageDesc' ? SizeX * 0.052 : SizeX * 0.03,
                             style: TextStyle(
                                 color: _themeProvider.textColor,
                                 fontSize: id != 'imageDesc' ?  _themeProvider.isEn
