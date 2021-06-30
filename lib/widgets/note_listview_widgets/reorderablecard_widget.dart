@@ -6,9 +6,7 @@ import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/widgets/buttons.dart';
-import 'package:todoapp/uiKit.dart'as uiKit;
-
-
+import 'package:todoapp/uiKit.dart' as uiKit;
 
 class ReorderableCardWidget extends StatelessWidget {
   const ReorderableCardWidget({Key key, this.snapShot, this.notes, this.index})
@@ -250,18 +248,34 @@ class ReorderableCardWidget extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: Checkbox(
-                                            checkColor:
-                                                _themeProvider.textColor,
-                                            value: snapShot.data.isChecked,
-                                            activeColor:
-                                                _themeProvider.textColor,
-                                            onChanged: (bool newValue) {
-                                              _myProvider.updateIsChecked(
-                                                  newValue, keys, index);
-                                            }),
+                                      InkWell(
+                                        onTap: () {
+                                          _myProvider
+                                              .updateIsChecked(keys, index);
+                                        },
+                                        child: Container(
+                                            height: SizeX * 0.04,
+                                            width: SizeX * 0.04,
+                                            decoration: BoxDecoration(
+                                                
+                                                border: Border.all(
+                                                    color: _themeProvider.textColor,
+                                                    width: 1.5),
+                                                borderRadius: BorderRadius.circular(10),
+                                                color: snapShot.data.isChecked
+                                                             ??
+                                                        false
+                                                    ? Color(snapShot.data.color).withOpacity(0.2)
+                                                    : null),
+                                            child: snapShot.data.isChecked
+                                                        ??
+                                                    false
+                                                ? Icon(
+                                                    Icons.check_rounded,
+                                                    size: SizeX * 0.03,
+                                                    color: Colors.white,
+                                                  )
+                                                : Container()),
                                       ),
                                       Expanded(
                                         flex: 8,

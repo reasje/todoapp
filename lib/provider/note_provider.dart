@@ -574,11 +574,13 @@ class NoteProvider extends ChangeNotifier {
   }
 
   // upodating the database when the check box is checked or unchecked
-  void updateIsChecked(bool newValue, List<int> keys, int index) async {
+  void updateIsChecked(List<int> keys, int index) async {
     providerKeys = keys;
     providerIndex = index;
 
     var bnote = await noteBox.get(providerKeys[providerIndex]);
+    var isChecked = bnote.isChecked;
+    isChecked = !isChecked;
     var ntitle = bnote.title;
     var nttext = bnote.text;
     var nttime = bnote.time;
@@ -588,7 +590,7 @@ class NoteProvider extends ChangeNotifier {
     var ntVoiceList = bnote.voiceList;
     var ntTaskList = bnote.taskList;
     var ntResetCheckBoxs = bnote.resetCheckBoxs;
-    Note note = Note(ntitle, nttext, newValue, nttime, ntcolor, ntlefttime,
+    Note note = Note(ntitle, nttext, isChecked, nttime, ntcolor, ntlefttime,
         ntImageList, ntVoiceList, ntTaskList, ntResetCheckBoxs);
     noteBox.put(providerKeys[providerIndex], note);
     //notifyListeners();
@@ -683,7 +685,7 @@ class NoteProvider extends ChangeNotifier {
   // executed when the user tapped on the check floating button (done icon FAB)
   void doneClicked(BuildContext context) async {
     noteContext = context;
-        final _bottomNavProvider =
+    final _bottomNavProvider =
         Provider.of<BottomNavProvider>(context, listen: false);
     // checking whether your going to update the note or add new one
     // that is done by chekcing the newNote true or false

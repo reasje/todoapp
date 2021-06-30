@@ -31,7 +31,6 @@ class _MyRorderableState extends State<MyRorderable> {
   @override
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<NoteProvider>(context, listen: false);
-    final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
