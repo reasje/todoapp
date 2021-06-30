@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:todoapp/model/note_model.dart';
-import 'package:todoapp/provider/conn_provider.dart';
-
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
@@ -39,7 +36,6 @@ class _MyRorderableState extends State<MyRorderable> {
     LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
-    print('object');
     double SizeXSizeY = SizeX * SizeY;
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;

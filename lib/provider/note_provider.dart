@@ -14,7 +14,7 @@ import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/taskController.dart';
 import 'package:todoapp/model/task_model.dart';
 import 'package:todoapp/model/voice_model.dart';
-import 'package:todoapp/widgets/note_edidting_widgets/bottomnav_widget.dart';
+import 'package:todoapp/provider/bottomnav_provider.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:undo/undo.dart';
@@ -594,10 +594,10 @@ class NoteProvider extends ChangeNotifier {
     //notifyListeners();
   }
 
-  PageController pageController;
-
   // new Note clieked
   void newNoteClicked(BuildContext context) {
+    final _bottomNavProvider =
+        Provider.of<BottomNavProvider>(context, listen: false);
     noteContext = context;
     // When the add icon is tapped this function will be executed and
     // prepare the provider for the new Note
@@ -605,24 +605,22 @@ class NoteProvider extends ChangeNotifier {
     taskControllerList.add(TaskController(TextEditingController(text: ""),
         false, FocusNode(), PageStorageKey<String>('pageKey 0')));
     newNote = true;
-    selectedTab == null ? selectedTab = 0 : null;
-    SizeX = MediaQuery.of(context).size.height;
-    SizeY = MediaQuery.of(context).size.width;
-    pageController =
-        new PageController(initialPage: selectedTab, keepPage: true);
-    SizeXSizeY = SizeX * SizeY;
+    _bottomNavProvider.initialSelectedTab();
+    _bottomNavProvider.initialPage();
     resetCheckBoxs = false;
-    initialTabs();
+    _bottomNavProvider.initialTabs(context);
     takeSnapshot();
     notifyListeners();
   }
 
   // used indie list view after an elemt of listview is tapped
   void loadNote(BuildContext context, [List<int> keys, int index]) async {
+    final _bottomNavProvider =
+        Provider.of<BottomNavProvider>(context, listen: false);
     noteContext = context;
     providerKeys = keys;
     providerIndex = index;
-    selectedTab == null ? selectedTab = 0 : null;
+    _bottomNavProvider.initialSelectedTab();
 
     // getting the pics form the database.
     var bnote = await noteBox.get(providerKeys[providerIndex]);
@@ -661,288 +659,17 @@ class NoteProvider extends ChangeNotifier {
     note_duration = Duration(seconds: bnote.time);
     noteColor = Color(bnote.color);
     newNote = false;
-    SizeX = MediaQuery.of(context).size.height;
-    SizeY = MediaQuery.of(context).size.width;
-    SizeXSizeY = SizeX * SizeY;
-    initialTabs();
+    _bottomNavProvider.initialTabs(context);
+    _bottomNavProvider.initialPage();
     notifyListeners();
-    pageController =
-        new PageController(initialPage: selectedTab, keepPage: true);
+
     takeSnapshot();
   }
 
   //  Note editing tabs and colors managment
-  double SizeX;
-  double SizeY;
-  double SizeXSizeY;
-  int selectedTab = 0;
-  List<Tab> tabs = [];
-  List<Color> tabColors = [
-    Color(0xffaa66cc),
-    Color(0xFFff4444),
-    Color(0xFFffbb33),
-    Color(0xFF33b5e5),
-    Color(0xFF00c851)
-  ];
-  List<NavigationItem> items;
-
-  void initialTabs() async {
-    tabColors.shuffle();
-    items = [
-      NavigationItem(
-          Icon(Icons.text_fields),
-          Text(uiKit.AppLocalizations.of(noteContext).translate('text')),
-          tabColors[0]),
-      NavigationItem(
-          Icon(Icons.hourglass_empty),
-          Text(uiKit.AppLocalizations.of(noteContext).translate('timer')),
-          tabColors[1]),
-      NavigationItem(
-          Icon(Icons.image_outlined),
-          Text(uiKit.AppLocalizations.of(noteContext).translate('image')),
-          tabColors[2]),
-      NavigationItem(
-          Icon(Icons.voicemail),
-          Text(uiKit.AppLocalizations.of(noteContext).translate('voice')),
-          tabColors[3]),
-      NavigationItem(
-          Icon(Icons.check),
-          Text(uiKit.AppLocalizations.of(noteContext).translate('task')),
-          tabColors[4]),
-    ];
-
-    tabs = [
-      Tab(
-          'Text',
-          [
-            uiKit.titleTextField(),
-            uiKit.textTextField(),
-          ],
-          items[0].color,
-          [
-            Expanded(
-              flex: 1,
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: uiKit.MyButton(
-                  backgroundColor: items[0].color,
-                  sizePU: SizeXSizeY * 0.00017,
-                  sizePD: SizeXSizeY * 0.00018,
-                  iconSize: SizeX * SizeY * 0.00008,
-                  iconData: Icons.arrow_back_ios_new_rounded,
-                  id: 'save',
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Row(
-                children: [
-                  uiKit.MyButton(
-                    backgroundColor: items[0].color,
-                    sizePU: SizeXSizeY * 0.00017,
-                    sizePD: SizeXSizeY * 0.00018,
-                    iconSize: SizeX * SizeY * 0.00008,
-                    iconData: Icons.undo_rounded,
-                    id: 'undo',
-                  ),
-                  uiKit.MyButton(
-                    backgroundColor: items[0].color,
-                    sizePU: SizeXSizeY * 0.00017,
-                    sizePD: SizeXSizeY * 0.00018,
-                    iconSize: SizeX * SizeY * 0.00008,
-                    iconData: Icons.redo_rounded,
-                    id: 'redo',
-                  ),
-                  uiKit.MyButton(
-                    backgroundColor: items[0].color,
-                    sizePU: SizeXSizeY * 0.00017,
-                    sizePD: SizeXSizeY * 0.00018,
-                    iconSize: SizeX * SizeY * 0.00008,
-                    iconData: Icons.color_lens_outlined,
-                    id: 'color',
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Container(
-                alignment: Alignment.centerRight,
-                child: uiKit.MyButton(
-                  backgroundColor: items[0].color,
-                  sizePU: SizeXSizeY * 0.00017,
-                  sizePD: SizeXSizeY * 0.00018,
-                  iconSize: SizeX * SizeY * 0.00008,
-                  iconData: Icons.close_rounded,
-                  id: 'cancel',
-                ),
-              ),
-            ),
-          ]),
-      Tab(
-          "Timer",
-          [uiKit.TimerWidget()],
-          items[1].color,
-          [
-            Expanded(
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: uiKit.MyButton(
-                  backgroundColor: items[1].color,
-                  sizePU: SizeXSizeY * 0.00017,
-                  sizePD: SizeXSizeY * 0.00018,
-                  iconSize: SizeX * SizeY * 0.00008,
-                  iconData: Icons.arrow_back_ios_new_rounded,
-                  id: 'save',
-                ),
-              ),
-            ),
-            Expanded(
-              child: uiKit.MyButton(
-                backgroundColor: items[1].color,
-                sizePU: SizeXSizeY * 0.00017,
-                sizePD: SizeXSizeY * 0.00018,
-                iconSize: SizeX * SizeY * 0.00008,
-                iconData: Icons.hourglass_empty,
-                id: 'timer',
-              ),
-            ),
-            Expanded(
-              child: Container(
-                alignment: Alignment.centerRight,
-                child: uiKit.MyButton(
-                  backgroundColor: items[1].color,
-                  sizePU: SizeXSizeY * 0.00017,
-                  sizePD: SizeXSizeY * 0.00018,
-                  iconSize: SizeX * SizeY * 0.00008,
-                  iconData: Icons.close_rounded,
-                  id: 'cancel',
-                ),
-              ),
-            ),
-          ]),
-      Tab(
-          "Image",
-          [uiKit.imageLisView()],
-          items[2].color,
-          [
-            Expanded(
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: uiKit.MyButton(
-                  backgroundColor: items[2].color,
-                  sizePU: SizeXSizeY * 0.00017,
-                  sizePD: SizeXSizeY * 0.00018,
-                  iconSize: SizeX * SizeY * 0.00008,
-                  iconData: Icons.arrow_back_ios_new_rounded,
-                  id: 'save',
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                alignment: Alignment.centerRight,
-                child: uiKit.MyButton(
-                  backgroundColor: items[2].color,
-                  sizePU: SizeXSizeY * 0.00017,
-                  sizePD: SizeXSizeY * 0.00018,
-                  iconSize: SizeX * SizeY * 0.00008,
-                  iconData: Icons.close_rounded,
-                  id: 'cancel',
-                ),
-              ),
-            ),
-          ]),
-      Tab(
-          'Voice',
-          [uiKit.voiceListView(backGroundColor: items[3].color)],
-          items[3].color,
-          [
-            Expanded(
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: uiKit.MyButton(
-                  backgroundColor: items[3].color,
-                  sizePU: SizeXSizeY * 0.00017,
-                  sizePD: SizeXSizeY * 0.00018,
-                  iconSize: SizeX * SizeY * 0.00008,
-                  iconData: Icons.arrow_back_ios_new_rounded,
-                  id: 'save',
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                alignment: Alignment.centerRight,
-                child: uiKit.MyButton(
-                  backgroundColor: items[3].color,
-                  sizePU: SizeXSizeY * 0.00017,
-                  sizePD: SizeXSizeY * 0.00018,
-                  iconSize: SizeX * SizeY * 0.00008,
-                  iconData: Icons.close_rounded,
-                  id: 'cancel',
-                ),
-              ),
-            ),
-          ]),
-      Tab(
-          'Task',
-          [
-            uiKit.taskListView(
-              color: items[4].color,
-            )
-          ],
-          items[4].color,
-          [
-            Expanded(
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: uiKit.MyButton(
-                  backgroundColor: items[4].color,
-                  sizePU: SizeXSizeY * 0.00017,
-                  sizePD: SizeXSizeY * 0.00018,
-                  iconSize: SizeX * SizeY * 0.00008,
-                  iconData: Icons.arrow_back_ios_new_rounded,
-                  id: 'save',
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                alignment: Alignment.centerRight,
-                child: uiKit.MyButton(
-                  backgroundColor: items[4].color,
-                  sizePU: SizeXSizeY * 0.00017,
-                  sizePD: SizeXSizeY * 0.00018,
-                  iconSize: SizeX * SizeY * 0.00008,
-                  iconData: Icons.close_rounded,
-                  id: 'cancel',
-                ),
-              ),
-            ),
-          ])
-    ];
-
-    notifyListeners();
-  }
 
   void noteColorSelected(Color color) {
     noteColor = color;
-    notifyListeners();
-  }
-
-  void newTabSelected(int index) {
-    selectedTab = index;
-    pageController.jumpToPage(index);
-
-    notifyListeners();
-  }
-
-  void newTabSelectedAnimation(int index) {
-    selectedTab = index;
-    pageController.animateToPage(index,
-        duration: Duration(seconds: 1), curve: Curves.ease);
     notifyListeners();
   }
 
@@ -956,6 +683,8 @@ class NoteProvider extends ChangeNotifier {
   // executed when the user tapped on the check floating button (done icon FAB)
   void doneClicked(BuildContext context) async {
     noteContext = context;
+        final _bottomNavProvider =
+        Provider.of<BottomNavProvider>(context, listen: false);
     // checking whether your going to update the note or add new one
     // that is done by chekcing the newNote true or false
     if (newNote) {
@@ -992,7 +721,7 @@ class NoteProvider extends ChangeNotifier {
         final String noteText = text.text;
         final int noteTime = note_duration.inSeconds;
         int leftTime = noteTime;
-        var color = noteColor?.value ?? tabColors[0].value;
+        var color = noteColor?.value ?? _bottomNavProvider.tabColors[0].value;
         if (taskControllerList.isNotEmpty) {
           for (int i = 0; i < taskControllerList.length; i++) {
             if (taskControllerList[i].textEditingController.text != '') {
@@ -1020,15 +749,13 @@ class NoteProvider extends ChangeNotifier {
         notifyListeners();
         Navigator.pop(noteContext);
       }
-      // TODO find out why this is here
-      //clearControllers();
     } else {
       // One of the title or text fields must be filled
       if (text.text.isNotEmpty || title.text.isNotEmpty) {
         var bnote = await noteBox.get(providerKeys[providerIndex]);
         String noteTitle;
         title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
-        var color = noteColor?.value ?? tabColors[0].value;
+        var color = noteColor?.value ?? _bottomNavProvider.tabColors[0].value;
         if (taskControllerList.isNotEmpty) {
           for (int i = 0; i < taskControllerList.length; i++) {
             if (taskControllerList[i].textEditingController.text != '') {
@@ -1197,7 +924,6 @@ class NoteProvider extends ChangeNotifier {
 
   List<Note> noteList = [];
   Future<bool> updateListSize(List<int> keys, SizeX, SizeY) async {
-    print('2');
     int with_timer = 0;
     int without_timer = 0;
 
@@ -1218,13 +944,4 @@ class NoteProvider extends ChangeNotifier {
     imageList[index].desc = desc;
     notifyListeners();
   }
-}
-
-class Tab {
-  String title;
-  List<Widget> tabs;
-  Color color;
-  List<Widget> buttons;
-
-  Tab(this.title, this.tabs, this.color, this.buttons);
 }

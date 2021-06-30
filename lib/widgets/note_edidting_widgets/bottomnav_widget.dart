@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapp/provider/note_provider.dart';
+import 'package:todoapp/model/navigationitem_model.dart';
+import 'package:todoapp/provider/bottomnav_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
-import 'package:todoapp/provider/timer_provider.dart';
 
 class BottomNavWidget extends StatefulWidget {
   BottomNavWidget({Key key}) : super(key: key);
@@ -19,7 +18,7 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
       NavigationItem item, bool isSelected, BuildContext context) {
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
-    final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _themeProvider = Provider.of<ThemeProvider>(context , listen: false);
     return AnimatedContainer(
       duration: Duration(milliseconds: 450),
       height: double.maxFinite,
@@ -66,8 +65,7 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
   Widget build(BuildContext context) {
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
-    final _myProvider = Provider.of<NoteProvider>(context);
-    final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     return Container(
       width: MediaQuery.of(context).size.width,
       height: SizeX * 0.08,
@@ -76,27 +74,24 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
       decoration: BoxDecoration(
         color: _themeProvider.mainColor,
       ),
-      child: Row(
-        textDirection: TextDirection.ltr,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: _myProvider.items.map((item) {
-          var itemIndex = _myProvider.items.indexOf(item);
-          return GestureDetector(
-            child:
-                _buildItem(item, _myProvider.selectedTab == itemIndex, context),
-            onTap: () {
-                _myProvider.newTabSelected(itemIndex);
-            },
-          );
-        }).toList(),
-      ),
+      child: Consumer<BottomNavProvider>(builder: (ctx, _bottomNavProvider, _) {
+        return Row(
+          textDirection: TextDirection.ltr,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: _bottomNavProvider.items.map((item) {
+            var itemIndex = _bottomNavProvider.items.indexOf(item);
+            return GestureDetector(
+              child: _buildItem(
+                  item, _bottomNavProvider.selectedTab == itemIndex, context),
+              onTap: () {
+                _bottomNavProvider.newTabSelected(itemIndex);
+              },
+            );
+          }).toList(),
+        );
+      }),
     );
   }
 }
 
-class NavigationItem {
-  final Icon icon;
-  final Text title;
-  final Color color;
-  NavigationItem(this.icon, this.title, this.color);
-}
+

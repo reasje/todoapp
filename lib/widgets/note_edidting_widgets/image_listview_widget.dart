@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:todoapp/provider/bottomnav_provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
@@ -17,6 +18,7 @@ class imageLisView extends StatelessWidget {
     final _timerState = Provider.of<TimerState>(context);
     final _myProvider = Provider.of<NoteProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _bottomNavProvider = Provider.of<BottomNavProvider>(context, listen: false);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     bool isLandscape =
@@ -64,8 +66,8 @@ class imageLisView extends StatelessWidget {
                                 child: Icon(
                                   Icons.delete_sweep,
                                   size: SizeX * SizeY * 0.0003,
-                                  color: _myProvider
-                                      .tabs[_myProvider.selectedTab].color,
+                                  color: _bottomNavProvider
+                                      .tabs[_bottomNavProvider.selectedTab].color,
                                 ),
                               ),
                             ),
@@ -133,8 +135,8 @@ class imageLisView extends StatelessWidget {
                             height: SizeX * 0.25,
                             child: Shimmer.fromColors(
                               period: Duration(seconds: 3),
-                              baseColor: _myProvider
-                                  .tabs[_myProvider.selectedTab].color
+                              baseColor: _bottomNavProvider
+                                  .tabs[_bottomNavProvider.selectedTab].color
                                   .withOpacity(0.3),
                               highlightColor: _themeProvider.shimmerColor,
                               child: Container(

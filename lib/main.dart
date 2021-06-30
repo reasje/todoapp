@@ -7,6 +7,7 @@ import 'package:todoapp/model/image_model.dart' as imageModel;
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/task_model.dart';
 import 'package:todoapp/model/voice_model.dart';
+import 'package:todoapp/provider/bottomnav_provider.dart';
 import 'package:todoapp/provider/conn_provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:hive/hive.dart';
@@ -121,6 +122,7 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (context) => SigninState()),
           ChangeNotifierProvider(create: (context) => ThemeProvider()),
           ChangeNotifierProvider(create: (context) => UnCheckProvider()),
+          ChangeNotifierProvider(create: (context) => BottomNavProvider()),
         ],
         child: Consumer<ThemeProvider>(
           builder: (context, _themeProvider, _) {

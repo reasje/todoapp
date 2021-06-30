@@ -3,6 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
+import 'package:todoapp/provider/bottomnav_provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
@@ -28,6 +29,7 @@ class _TimerWidgetState extends State<TimerWidget> {
     final _timerState = Provider.of<TimerState>(context);
     final _myProvider = Provider.of<NoteProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _bottomNavProvider = Provider.of<BottomNavProvider>(context, listen: false);
     LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
@@ -70,16 +72,16 @@ class _TimerWidgetState extends State<TimerWidget> {
                               decoration: BoxDecoration(
                                   color: _timerState.isOver[_timerState.index ??
                                           _timerState.newIndex]
-                                      ? _myProvider.items[3].color
+                                      ? _bottomNavProvider.items[3].color
                                           .withOpacity(0.1)
                                       : _timerState.isPaused[
                                               _timerState.index ??
                                                   _timerState.newIndex]
-                                          ? _myProvider.items[1].color
+                                          ? _bottomNavProvider.items[1].color
                                               .withOpacity(0.1)
                                           : _timerState.isRunning.any(
                                                   (element) => element == true)
-                                              ? _myProvider.items[4].color
+                                              ? _bottomNavProvider.items[4].color
                                                   .withOpacity(0.1)
                                               : null,
                                   borderRadius: BorderRadius.all(
@@ -108,16 +110,16 @@ class _TimerWidgetState extends State<TimerWidget> {
                                             color: _timerState.isOver[
                                                     _timerState.index ??
                                                         _timerState.newIndex]
-                                                ? _myProvider.items[3].color
+                                                ? _bottomNavProvider.items[3].color
                                                 : _timerState.isPaused[
                                                         _timerState.index ??
                                                             _timerState
                                                                 .newIndex]
-                                                    ? _myProvider.items[1].color
+                                                    ? _bottomNavProvider.items[1].color
                                                     : _timerState.isRunning.any(
                                                             (element) =>
                                                                 element == true)
-                                                        ? _myProvider
+                                                        ? _bottomNavProvider
                                                             .items[4].color
                                                         : null,
                                             fontSize: SizeX * SizeY * 0.00015,
@@ -138,16 +140,16 @@ class _TimerWidgetState extends State<TimerWidget> {
                                             color: _timerState.isOver[
                                                     _timerState.index ??
                                                         _timerState.newIndex]
-                                                ? _myProvider.items[3].color
+                                                ? _bottomNavProvider.items[3].color
                                                 : _timerState.isPaused[
                                                         _timerState.index ??
                                                             _timerState
                                                                 .newIndex]
-                                                    ? _myProvider.items[1].color
+                                                    ? _bottomNavProvider.items[1].color
                                                     : _timerState.isRunning.any(
                                                             (element) =>
                                                                 element == true)
-                                                        ? _myProvider
+                                                        ? _bottomNavProvider
                                                             .items[4].color
                                                         : null,
                                             fontSize: SizeX * SizeY * 0.00015,
@@ -168,16 +170,16 @@ class _TimerWidgetState extends State<TimerWidget> {
                                             color: _timerState.isOver[
                                                     _timerState.index ??
                                                         _timerState.newIndex]
-                                                ? _myProvider.items[3].color
+                                                ? _bottomNavProvider.items[3].color
                                                 : _timerState.isPaused[
                                                         _timerState.index ??
                                                             _timerState
                                                                 .newIndex]
-                                                    ? _myProvider.items[1].color
+                                                    ? _bottomNavProvider.items[1].color
                                                     : _timerState.isRunning.any(
                                                             (element) =>
                                                                 element == true)
-                                                        ? _myProvider
+                                                        ? _bottomNavProvider
                                                             .items[4].color
                                                         : null,
                                             fontSize: SizeX * SizeY * 0.00015,
@@ -201,15 +203,15 @@ class _TimerWidgetState extends State<TimerWidget> {
                                           backgroundColor: _timerState.isOver[
                                                   _timerState.index ??
                                                       _timerState.newIndex]
-                                              ? _myProvider.items[3].color
+                                              ? _bottomNavProvider.items[3].color
                                               : _timerState.isPaused[
                                                       _timerState.index ??
                                                           _timerState.newIndex]
-                                                  ? _myProvider.items[1].color
+                                                  ? _bottomNavProvider.items[1].color
                                                   : _timerState.isRunning.any(
                                                           (element) =>
                                                               element == true)
-                                                      ? _myProvider
+                                                      ? _bottomNavProvider
                                                           .items[4].color
                                                       : null,
                                           sizePU: SizeXSizeY * 0.00024,
@@ -222,15 +224,15 @@ class _TimerWidgetState extends State<TimerWidget> {
                                           backgroundColor: _timerState.isOver[
                                                   _timerState.index ??
                                                       _timerState.newIndex]
-                                              ? _myProvider.items[3].color
+                                              ? _bottomNavProvider.items[3].color
                                               : _timerState.isPaused[
                                                       _timerState.index ??
                                                           _timerState.newIndex]
-                                                  ? _myProvider.items[1].color
+                                                  ? _bottomNavProvider.items[1].color
                                                   : _timerState.isRunning.any(
                                                           (element) =>
                                                               element == true)
-                                                      ? _myProvider
+                                                      ? _bottomNavProvider
                                                           .items[4].color
                                                       : null,
                                           sizePU: SizeXSizeY * 0.00024,
@@ -246,15 +248,15 @@ class _TimerWidgetState extends State<TimerWidget> {
                                         backgroundColor: _timerState.isOver[
                                                 _timerState.index ??
                                                     _timerState.newIndex]
-                                            ? _myProvider.items[3].color
+                                            ? _bottomNavProvider.items[3].color
                                             : _timerState.isPaused[
                                                     _timerState.index ??
                                                         _timerState.newIndex]
-                                                ? _myProvider.items[1].color
+                                                ? _bottomNavProvider.items[1].color
                                                 : _timerState.isRunning.any(
                                                         (element) =>
                                                             element == true)
-                                                    ? _myProvider.items[4].color
+                                                    ? _bottomNavProvider.items[4].color
                                                     : null,
                                         sizePU: SizeXSizeY * 0.00024,
                                         sizePD: SizeXSizeY * 0.00025,

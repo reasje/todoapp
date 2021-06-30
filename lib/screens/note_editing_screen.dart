@@ -4,6 +4,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
+import 'package:todoapp/provider/bottomnav_provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
@@ -25,6 +26,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
     final _myProvider = Provider.of<NoteProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
     final _timerState = Provider.of<TimerState>(context);
+    final _bottomNavProvider = Provider.of<BottomNavProvider>(context);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     bool isLandscape =
@@ -57,25 +59,25 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
               //     bottom: MediaQuery.of(context).viewInsets.bottom),
               child: PageView(
                 onPageChanged: (value) {
-                  _myProvider.newTabSelectedAnimation(value);
+                  _bottomNavProvider.newTabSelectedAnimation(value);
                 },
-                controller: _myProvider.pageController,
+                controller: _bottomNavProvider.pageController,
                 children: [
-                  Tab(
+                  TabView(
                     index: 0,
                   ),
                   condition
-                      ? Tab(
+                      ? TabView(
                           index: 1,
                         )
-                      : Tab(index: 1, timerOn: true),
-                  Tab(
+                      : TabView(index: 1, timerOn: true),
+                  TabView(
                     index: 2,
                   ),
-                  Tab(
+                  TabView(
                     index: 3,
                   ),
-                  Tab(
+                  TabView(
                     index: 4,
                   ),
                 ],
@@ -84,218 +86,35 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
           ),
         ),
       ),
-      floatingActionButton: _myProvider.tabs[_myProvider.selectedTab].title ==
-              "Image"
-          ? FloatingActionButton(
-              focusColor: Colors.transparent,
-              highlightElevation: 0,
-              elevation: 0,
-              onPressed: () {},
-              backgroundColor: _myProvider.tabs[_myProvider.selectedTab].color
-                  .withOpacity(0.3),
-              child: uiKit.MyButton(
-                backgroundColor:
-                    _myProvider.tabs[_myProvider.selectedTab].color,
-                sizePU: SizeXSizeY * 0.00017,
-                sizePD: SizeXSizeY * 0.00018,
-                iconSize: SizeX * SizeY * 0.00006,
-                iconData: FontAwesome.plus,
-                id: 'newpic',
-              ),
-            )
-          : _myProvider.tabs[_myProvider.selectedTab].title == "Voice"
-              ? _myProvider.flutterSoundRecorder.isStopped
-                  ? FloatingActionButton(
-                      highlightElevation: 0,
-                      elevation: 0,
-                      onPressed: () {},
-                      backgroundColor: _myProvider
-                          .tabs[_myProvider.selectedTab].color
-                          .withOpacity(0.3),
-                      child: uiKit.MyButton(
-                        backgroundColor:
-                            _myProvider.tabs[_myProvider.selectedTab].color,
-                        sizePU: SizeXSizeY * 0.00017,
-                        sizePD: SizeXSizeY * 0.00018,
-                        iconSize: SizeX * SizeY * 0.00006,
-                        iconData: FontAwesome.microphone,
-                        id: 'newvoice',
-                      ))
-                  : _myProvider.flutterSoundRecorder.isRecording
-                      ? Container(
-                          width: SizeY * 0.8,
-                          child: Row(
-                            textDirection: TextDirection.ltr,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              FloatingActionButton(
-                                highlightElevation: 0,
-                                elevation: 0,
-                                onPressed: () {},
-                                backgroundColor: _myProvider
-                                    .tabs[_myProvider.selectedTab].color
-                                    .withOpacity(0.3),
-                                child: uiKit.MyButton(
-                                  backgroundColor: _myProvider
-                                      .tabs[_myProvider.selectedTab].color,
-                                  sizePU: SizeXSizeY * 0.00012,
-                                  sizePD: SizeXSizeY * 0.00013,
-                                  iconSize: SizeX * SizeY * 0.00006,
-                                  iconData: FontAwesome.pause,
-                                  id: 'pausevoice',
-                                ),
-                              ),
-                              Container(
-                                width: SizeY * 0.4,
-                                padding: EdgeInsets.symmetric(
-                                    vertical: SizeY * 0.04,
-                                    horizontal: SizeY * 0.04),
-                                child: Row(
-                                  textDirection: TextDirection.ltr,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      '${((_myProvider.recorderDuration.inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}',
-                                      style: TextStyle(
-                                          color: _themeProvider.blueMaterial,
-                                          fontSize: SizeX * SizeY * 0.0001),
-                                    ),
-                                    Text(
-                                      ':',
-                                      style: TextStyle(
-                                          color: _themeProvider.blueMaterial,
-                                          fontSize: SizeX * SizeY * 0.0001),
-                                    ),
-                                    Text(
-                                      '${((_myProvider.recorderDuration.inSeconds) % 60).floor().toString().padLeft(2, '0')}',
-                                      style: TextStyle(
-                                          color: _themeProvider.blueMaterial,
-                                          fontSize: SizeX * SizeY * 0.0001),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              FloatingActionButton(
-                                highlightElevation: 0,
-                                elevation: 0,
-                                onPressed: () {},
-                                backgroundColor: _myProvider
-                                    .tabs[_myProvider.selectedTab].color
-                                    .withOpacity(0.3),
-                                child: uiKit.MyButton(
-                                  backgroundColor: _myProvider
-                                      .tabs[_myProvider.selectedTab].color,
-                                  sizePU: SizeXSizeY * 0.00012,
-                                  sizePD: SizeXSizeY * 0.00013,
-                                  iconSize: SizeX * SizeY * 0.00006,
-                                  iconData: FontAwesome.stop,
-                                  id: 'stopvoice',
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : Container(
-                          width: SizeY * 0.8,
-                          child: Row(
-                            textDirection: TextDirection.ltr,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              FloatingActionButton(
-                                highlightElevation: 0,
-                                elevation: 0,
-                                onPressed: () {},
-                                backgroundColor: _myProvider
-                                    .tabs[_myProvider.selectedTab].color
-                                    .withOpacity(0.3),
-                                child: uiKit.MyButton(
-                                  backgroundColor: _myProvider
-                                      .tabs[_myProvider.selectedTab].color,
-                                  sizePU: SizeX * 0.05,
-                                  sizePD: SizeX * 0.06,
-                                  iconSize: SizeX * SizeY * 0.00006,
-                                  iconData: FontAwesome.play,
-                                  id: 'resumevoice',
-                                ),
-                              ),
-                              Container(
-                                width: SizeY * 0.4,
-                                padding: EdgeInsets.symmetric(
-                                    vertical: SizeY * 0.02,
-                                    horizontal: SizeY * 0.02),
-                                child: Row(
-                                  textDirection: TextDirection.ltr,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      '${((_myProvider.recorderDuration.inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}',
-                                      style: TextStyle(
-                                          color: _themeProvider.blueMaterial,
-                                          fontSize: SizeX * SizeY * 0.0001),
-                                    ),
-                                    Text(
-                                      ':',
-                                      style: TextStyle(
-                                          color: _themeProvider.blueMaterial,
-                                          fontSize: SizeX * SizeY * 0.0001),
-                                    ),
-                                    Text(
-                                      '${((_myProvider.recorderDuration.inSeconds) % 60).floor().toString().padLeft(2, '0')}',
-                                      style: TextStyle(
-                                          color: _themeProvider.blueMaterial,
-                                          fontSize: SizeX * SizeY * 0.0001),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              FloatingActionButton(
-                                highlightElevation: 0,
-                                elevation: 0,
-                                onPressed: () {},
-                                backgroundColor: _myProvider
-                                    .tabs[_myProvider.selectedTab].color
-                                    .withOpacity(0.3),
-                                child: uiKit.MyButton(
-                                  backgroundColor: _myProvider
-                                      .tabs[_myProvider.selectedTab].color,
-                                  sizePU: SizeX * 0.05,
-                                  sizePD: SizeX * 0.06,
-                                  iconSize: SizeX * SizeY * 0.00006,
-                                  iconData: FontAwesome.stop,
-                                  id: 'stopvoice',
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-              : null,
+      floatingActionButton: NoteEditingFloatingActionButtonWidget(),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
 
-class Tab extends StatefulWidget {
+
+
+class TabView extends StatefulWidget {
   final index;
   final timerOn;
-  Tab({
+  TabView({
     Key key,
     this.index,
     this.timerOn,
   }) : super(key: key);
 
   @override
-  _TabState createState() => _TabState();
+  _TabViewState createState() => _TabViewState();
 }
 
-class _TabState extends State<Tab> {
+class _TabViewState extends State<TabView> {
   @override
   Widget build(BuildContext context) {
     int index = widget.index;
     bool timerOn = widget.timerOn ?? false;
-    final _myProvider = Provider.of<NoteProvider>(context);
+    final _bottomNavProvider =
+        Provider.of<BottomNavProvider>(context, listen: false);
     double SizeX = MediaQuery.of(context).size.height;
     final _themeProvider = Provider.of<ThemeProvider>(context);
     double SizeY = MediaQuery.of(context).size.width;
@@ -310,20 +129,21 @@ class _TabState extends State<Tab> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               if (!timerOn)
-                ..._myProvider.tabs[index].buttons
+                ..._bottomNavProvider.tabs[index].buttons
               else
-                _myProvider.tabs[index].buttons[0]
+                _bottomNavProvider.tabs[index].buttons[0]
             ],
           ),
         ),
         if (!timerOn)
-          ..._myProvider.tabs[index].tabs
+          ..._bottomNavProvider.tabs[index].tabs
         else
           Center(
             child: Text(
               uiKit.AppLocalizations.of(context).translate('timerOn'),
               style: TextStyle(
-                  color: _myProvider.tabColors[_myProvider.selectedTab],
+                  color: _bottomNavProvider
+                      .tabColors[_bottomNavProvider.selectedTab],
                   fontSize: _themeProvider.isEn
                       ? SizeX * SizeY * 0.00008
                       : SizeX * SizeY * 0.00006,

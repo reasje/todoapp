@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:todoapp/provider/bottomnav_provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
-import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
 class voiceListView extends StatelessWidget {
@@ -18,6 +18,7 @@ class voiceListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<NoteProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _bottomNavProvider = Provider.of<BottomNavProvider>(context, listen: false);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     bool isLandscape =
@@ -62,8 +63,8 @@ class voiceListView extends StatelessWidget {
                                 child: Icon(
                                   Icons.delete_sweep,
                                   size: SizeX * SizeY * 0.00022,
-                                  color: _myProvider
-                                  .tabs[_myProvider.selectedTab].color,
+                                  color: _bottomNavProvider
+                                  .tabs[_bottomNavProvider.selectedTab].color,
                                 ),
                               ),
                             ),
@@ -254,8 +255,8 @@ class voiceListView extends StatelessWidget {
                                 height: SizeX * 0.12,
                             child: Shimmer.fromColors(
                               period: Duration(seconds: 3),
-                              baseColor: _myProvider
-                                  .tabs[_myProvider.selectedTab].color
+                              baseColor: _bottomNavProvider
+                                  .tabs[_bottomNavProvider.selectedTab].color
                                   .withOpacity(0.3),
                               highlightColor: _themeProvider.shimmerColor,
                               child: Container(
