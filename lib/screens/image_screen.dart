@@ -6,6 +6,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:googleapis/cloudbuild/v1.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
+import 'package:todoapp/provider/noteimage_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
@@ -41,11 +42,12 @@ class _PicDetailState extends State<PicDetail> {
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<NoteProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _noteImageProvider = Provider.of<NoteImageProvider>(context, listen: false);
     var isWhite = _themeProvider.checkIsWhite();
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     double SizeXSizeY = SizeX * SizeY;
-    int textLength = _myProvider.imageList[widget.index].desc.length;
+    int textLength = _noteImageProvider.imageList[widget.index].desc.length;
     TextSize textSize;
     if (textLength >= 415) {
       textSize = TextSize.large;
@@ -84,11 +86,11 @@ class _PicDetailState extends State<PicDetail> {
                       tag: 'imageHero',
                       transitionOnUserGestures: true,
                       child: Image.memory(
-                        _myProvider.imageList[widget.index].image,
+                        _noteImageProvider.imageList[widget.index].image,
                       )),
                 ),
               ),
-              _myProvider.imageList[widget.index].desc != null
+              _noteImageProvider.imageList[widget.index].desc != ''
                   ? Positioned(
                       bottom: SizeX * 0,
                       child: Container(
@@ -99,10 +101,10 @@ class _PicDetailState extends State<PicDetail> {
                             color: _themeProvider.textColor.withOpacity(0.1)),
                         child: Text(
                           textSize == TextSize.large
-                              ? _myProvider.imageList[widget.index].desc
+                              ? _noteImageProvider.imageList[widget.index].desc
                                       .substring(0, 410) +
                                   '...'
-                              : _myProvider.imageList[widget.index].desc,
+                              : _noteImageProvider.imageList[widget.index].desc,
                           softWrap: true,
                           style: TextStyle(
                               color: _themeProvider.textColor,
@@ -133,9 +135,9 @@ class _PicDetailState extends State<PicDetail> {
                   child: Icon(FontAwesome.rotate_right),
                   onPressed: () async {
                     var result = await FlutterImageCompress.compressWithList(
-                        _myProvider.imageList[widget.index].image,
+                        _noteImageProvider.imageList[widget.index].image,
                         rotate: 90);
-                    _myProvider.rotateImage(result, widget.index);
+                    _noteImageProvider.rotateImage(result, widget.index);
                   },
                 ),
                 FloatingActionButton(
@@ -149,7 +151,7 @@ class _PicDetailState extends State<PicDetail> {
                     uiKit.showAlertDialog(context,
                         id: 'imageDesc',
                         index: widget.index,
-                        desc: _myProvider.imageList[widget.index].desc ?? null);
+                        desc: _noteImageProvider.imageList[widget.index].desc ?? null);
                   },
                 ),
               ],

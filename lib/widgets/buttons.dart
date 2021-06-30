@@ -8,6 +8,7 @@ import 'package:todoapp/provider/conn_provider.dart';
 
 import 'package:todoapp/provider/drive_provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
+import 'package:todoapp/provider/noteimage_provider.dart';
 import 'package:todoapp/provider/signin_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
@@ -71,6 +72,7 @@ class _MyButtonState extends State<MyButton> {
           final _timerState = Provider.of<TimerState>(context, listen: false);
           final _signinState = Provider.of<SigninState>(context, listen: false);
           final _connState = Provider.of<ConnState>(context, listen: false);
+          final _noteImageProvider = Provider.of<NoteImageProvider>(context, listen: false);
           final _themeProvider =
               Provider.of<ThemeProvider>(context, listen: false);
           double SizeX = MediaQuery.of(context).size.height;
@@ -331,7 +333,7 @@ class _MyButtonState extends State<MyButton> {
                               child: Center(
                                 child: InkWell(
                                   onTap: () {
-                                    _myProvider.imagePickerCamera();
+                                    _noteImageProvider.imagePickerCamera();
                                     Navigator.pop(context);
                                   },
                                   child: Text(
@@ -352,7 +354,7 @@ class _MyButtonState extends State<MyButton> {
                               child: Center(
                                 child: InkWell(
                                   onTap: () {
-                                    _myProvider.imagePickerGalley();
+                                    _noteImageProvider.imagePickerGalley();
                                     Navigator.pop(context);
                                   },
                                   child: Text(

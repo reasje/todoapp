@@ -194,7 +194,7 @@ class BottomNavProvider with ChangeNotifier{
           ]),
       BottomNavTab(
           "Image",
-          [uiKit.imageLisView()],
+          [uiKit.ImageLisView()],
           items[2].color,
           [
             Expanded(

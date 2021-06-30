@@ -3,13 +3,12 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_sound/public/tau.dart';
 import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapp/model/image_model.dart' as imageModel;
+
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/taskController.dart';
 import 'package:todoapp/model/task_model.dart';
@@ -18,8 +17,9 @@ import 'package:todoapp/provider/bottomnav_provider.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:undo/undo.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:collection/collection.dart';
+
+import 'noteimage_provider.dart';
 
 // TODO orginaing the providers and having multi providres having a separate
 // provider for check me .
@@ -104,113 +104,6 @@ class NoteProvider extends ChangeNotifier {
   Color colorSnapShot;
   int indexOfSelectedColor;
   //////////////////////////////////// *** IMAGELIST PART *** /////////////////////////////////////
-  // list of images that will be loaded on user tap
-  List<imageModel.Image> imageList = [];
-  List<imageModel.Image> imageListSnapshot = [];
-  imageModel.Image dismissedImage;
-  // used for both loading images and taking images
-  final picker = ImagePicker();
-  PickedFile _image;
-  // Show the image picker dilog
-  Future<void> imagePickerGalley() async {
-    _image = await picker.getImage(source: ImageSource.gallery);
-    if (_image != null) {
-      var h = await _image.readAsBytes();
-      var fileSize = h.lengthInBytes;
-      if (fileSize > 300000) {
-        if (fileSize < 5000000) {
-          h = await FlutterImageCompress.compressWithList(
-            h,
-            quality: 60,
-          );
-        } else if (fileSize < 10000000) {
-          h = await FlutterImageCompress.compressWithList(
-            h,
-            quality: 50,
-          );
-        } else if (fileSize < 15000000) {
-          h = await FlutterImageCompress.compressWithList(
-            h,
-            quality: 40,
-          );
-        } else {
-          h = await FlutterImageCompress.compressWithList(
-            h,
-            quality: 30,
-          );
-        }
-      }
-      imageList.add(imageModel.Image(h, ''));
-    }
-    notifyListeners();
-  }
-
-  Future<void> imagePickerCamera() async {
-    _image = await picker.getImage(source: ImageSource.camera);
-    if (_image != null) {
-      var h = await _image.readAsBytes();
-      var fileSize = h.lengthInBytes;
-      if (fileSize > 300000) {
-        if (fileSize < 5000000) {
-          h = await FlutterImageCompress.compressWithList(
-            h,
-            quality: 60,
-          );
-        } else if (fileSize < 10000000) {
-          h = await FlutterImageCompress.compressWithList(
-            h,
-            quality: 50,
-          );
-        } else if (fileSize < 15000000) {
-          h = await FlutterImageCompress.compressWithList(
-            h,
-            quality: 40,
-          );
-        } else {
-          h = await FlutterImageCompress.compressWithList(
-            h,
-            quality: 30,
-          );
-        }
-      }
-      imageList.add(imageModel.Image(h, ''));
-    }
-    notifyListeners();
-  }
-
-  void imageDissmissed(index) {
-    dismissedImage = imageList.removeAt(index);
-    notifyListeners();
-  }
-
-  void imageRecover(index) {
-    imageList.insert(index, dismissedImage);
-    notifyListeners();
-  }
-
-  void rotateImage(Uint8List image, int index) {
-    imageList[index].image = image;
-    notifyListeners();
-  }
-
-  Future<Note> getNoteListView(
-      List<int> keys, int index, double SizeX, double SizeY) async {
-    var note = await noteBox.get(keys[index]);
-    var bnote = Note(note.title, note.text, note.isChecked, note.time,
-        note.color, note.leftTime, null, null, null, note.resetCheckBoxs);
-    updateListSize(keys, SizeX, SizeY);
-    return bnote;
-  }
-
-  Future<List<imageModel.Image>> getImageList() async {
-    //myContext = context;
-    if (newNote) {
-      return imageList;
-    } else {
-      // var note = await noteBox.get(providerKeys[providerIndex]);
-      return imageList;
-    }
-  }
 
   // This function is used inside the notes_editing_screen as
   // a future function to load the pictures
@@ -531,7 +424,9 @@ class NoteProvider extends ChangeNotifier {
 
   // for the clear the form
   void clearControllers() {
-    imageList.clear();
+    final _noteImageProvider =
+        Provider.of<NoteImageProvider>(noteContext, listen: false);
+    _noteImageProvider.clearImageList();
     title.clear();
     text.clear();
     voiceList.clear();
@@ -546,6 +441,8 @@ class NoteProvider extends ChangeNotifier {
   // getting the controller before the user enters the editing area
   // to detect the if any changes has been occured !
   void takeSnapshot() async {
+    final _noteImageProvider =
+        Provider.of<NoteImageProvider>(noteContext, listen: false);
     ttitle = title.text;
     ttext = text.text;
     old_value = text.text;
@@ -553,7 +450,7 @@ class NoteProvider extends ChangeNotifier {
     colorSnapShot = noteColor;
     begin_edit = false;
     if (!newNote) {
-      imageListSnapshot = List.from(imageList);
+      _noteImageProvider.initialImageListSnapshot();
       voiceListSnapshot = List.from(voiceList);
       taskControllerList = List.from(taskControllerList);
     }
@@ -561,10 +458,13 @@ class NoteProvider extends ChangeNotifier {
 
   // checks the snapsht that has been edited or not
   bool isEdited() {
+    final _noteImageProvider =
+        Provider.of<NoteImageProvider>(noteContext, listen: false);
     if (ttitle == title.text &&
         ttext == text.text &&
         time_duration == time_snapshot &&
-        ListEquality().equals(imageList, imageListSnapshot) &&
+        ListEquality().equals(_noteImageProvider.imageList,
+            _noteImageProvider.imageListSnapshot) &&
         ListEquality().equals(voiceList, voiceListSnapshot) &&
         ListEquality().equals(taskControllerList, taskControllerListSnapShot)) {
       return false;
@@ -619,7 +519,10 @@ class NoteProvider extends ChangeNotifier {
   void loadNote(BuildContext context, [List<int> keys, int index]) async {
     final _bottomNavProvider =
         Provider.of<BottomNavProvider>(context, listen: false);
+
     noteContext = context;
+    final _noteImageProvider =
+        Provider.of<NoteImageProvider>(noteContext, listen: false);
     providerKeys = keys;
     providerIndex = index;
     _bottomNavProvider.initialSelectedTab();
@@ -628,7 +531,7 @@ class NoteProvider extends ChangeNotifier {
     var bnote = await noteBox.get(providerKeys[providerIndex]);
     // if the note doesnot include any notes pass
     if (bnote.imageList?.isNotEmpty ?? false) {
-      imageList = bnote.imageList;
+      _noteImageProvider.initialImageList(bnote.imageList);
     }
     if (bnote.voiceList?.isNotEmpty ?? false) {
       voiceList = bnote.voiceList;
@@ -687,6 +590,8 @@ class NoteProvider extends ChangeNotifier {
     noteContext = context;
     final _bottomNavProvider =
         Provider.of<BottomNavProvider>(context, listen: false);
+          final _noteImageProvider =
+        Provider.of<NoteImageProvider>(noteContext, listen: false);
     // checking whether your going to update the note or add new one
     // that is done by chekcing the newNote true or false
     if (newNote) {
@@ -695,7 +600,7 @@ class NoteProvider extends ChangeNotifier {
       if (text.text.isEmpty &&
           title.text.isEmpty &&
           taskControllerList[0].textEditingController.text == "" &&
-          imageList.isEmpty &&
+          _noteImageProvider.imageList.isEmpty &&
           voiceList.isEmpty &&
           note_duration == Duration()) {
         if (notSaving == 0) {
@@ -740,7 +645,7 @@ class NoteProvider extends ChangeNotifier {
           noteTime,
           color,
           leftTime,
-          imageList,
+          _noteImageProvider.imageList,
           voiceList,
           taskList,
           resetCheckBoxs,
@@ -774,7 +679,7 @@ class NoteProvider extends ChangeNotifier {
             note_duration.inSeconds,
             color,
             bnote.leftTime,
-            imageList,
+            _noteImageProvider.imageList,
             voiceList,
             taskList,
             resetCheckBoxs);
@@ -795,12 +700,15 @@ class NoteProvider extends ChangeNotifier {
   // this fucntion will be executed checking for changes
   // if the changes has been made it is going to show an alert
   void cancelClicked(BuildContext context) {
+    
     noteContext = context;
+        final _noteImageProvider =
+        Provider.of<NoteImageProvider>(noteContext, listen: false);
     if (isEdited()) {
       if (text.text.isEmpty &&
           title.text.isEmpty &&
           taskControllerList[0].textEditingController.text == "" &&
-          imageList.isEmpty &&
+          _noteImageProvider.imageList.isEmpty &&
           voiceList.isEmpty &&
           note_duration == Duration()) {
         ScaffoldMessenger.of(noteContext).clearSnackBars();
@@ -942,8 +850,5 @@ class NoteProvider extends ChangeNotifier {
     return true;
   }
 
-  Future<void> updateImageDesc(int index, String desc) async {
-    imageList[index].desc = desc;
-    notifyListeners();
-  }
+
 }
