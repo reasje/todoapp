@@ -36,7 +36,7 @@ class imageLisView extends StatelessWidget {
                 crossAxisCount: 2,
                 childAspectRatio: 0.8,
                 // mainAxisSpacing: SizeX*0.05,
-                // crossAxisSpacing: SizeY*0.05
+                crossAxisSpacing: SizeY*0.03
               ),
               scrollDirection: Axis.vertical,
               itemCount: _myProvider.imageList != null
