@@ -13,6 +13,8 @@ export 'screens/donate_screen.dart';
 export 'widgets/dialog.dart';
 export 'widgets/timer_widget.dart';
 export 'widgets/note_edidting_widgets/bottomnav_widget.dart';
+export 'widgets/note_edidting_widgets/fab_widget.dart';
+export 'widgets/note_edidting_widgets/tabview_widget.dart';
 export 'screens/home_screen.dart';
 export 'screens/image_screen.dart';
 export 'widgets/note_listview_widgets/no_note_widget.dart';
