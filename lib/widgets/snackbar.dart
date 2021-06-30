@@ -43,7 +43,7 @@ Widget MySnackBar(
   return SnackBar(
     elevation: 0,
     backgroundColor:
-        isWhite ? _themeProvider.blackMainColor : _themeProvider.whiteMainColor,
+        isWhite ? _themeProvider.blackMainColor.withOpacity(0.3) : _themeProvider.whiteMainColor.withOpacity(0.3),
     behavior: SnackBarBehavior.floating,
     content: Text(
       text,
