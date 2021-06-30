@@ -20,6 +20,8 @@ export 'screens/image_screen.dart';
 export 'widgets/note_listview_widgets/no_note_widget.dart';
 export 'widgets/note_listview_widgets/fab_widget.dart';
 export 'widgets/note_listview_widgets/reorderable_buttons_widget.dart';
+export 'widgets/note_listview_widgets/reorderablecard_widget.dart';
+export 'widgets/note_listview_widgets/loadingcard_widget.dart';
 export 'widgets/note_edidting_widgets/title_textfield_widget.dart';
 export 'widgets/note_edidting_widgets/text_textfield_widget.dart';
 export 'widgets/note_edidting_widgets/voice_listview_widget.dart';
