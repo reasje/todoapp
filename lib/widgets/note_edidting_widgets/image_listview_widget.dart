@@ -125,16 +125,16 @@ class ImageLisView extends StatelessWidget {
                           } else {
                             return Container(
                               child: Shimmer.fromColors(
-                                period: Duration(seconds: 3),
+                                period: Duration(seconds: 1),
                                 baseColor: _bottomNavProvider
                                     .tabs[_bottomNavProvider.selectedTab].color
                                     .withOpacity(0.3),
                                 highlightColor: _themeProvider.shimmerColor,
                                 child: Container(
-                                  width: SizeX * 0.16,
                                   margin: EdgeInsets.symmetric(
                                       horizontal: SizeY * 0.03),
                                   decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
                                     color: _themeProvider.mainColor,
                                   ),
                                 ),
