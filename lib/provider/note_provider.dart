@@ -7,10 +7,10 @@ import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/taskController.dart';
 import 'package:todoapp/model/task_model.dart';
 import 'package:todoapp/provider/bottomnav_provider.dart';
+import 'package:todoapp/provider/notetitletext_provider.dart';
 import 'package:todoapp/provider/notevoice_recorder_provider.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
-import 'package:undo/undo.dart';
 import 'package:collection/collection.dart';
 
 import 'noteimage_provider.dart';
@@ -34,7 +34,6 @@ class NoteProvider extends ChangeNotifier {
   // to not to be short
   double listview_size;
 
-
   // It is used to store
   // the theme status as string
   final prefsBox = Hive.box<String>(prefsBoxName);
@@ -43,37 +42,23 @@ class NoteProvider extends ChangeNotifier {
   final noteBox = Hive.lazyBox<Note>(noteBoxName);
 
   //////////////////////////////////// *** CHECKBOX CHECK PART *** /////////////////////////////////////
-  final TextEditingController title = TextEditingController(text: '');
-  final TextEditingController text = TextEditingController(text: '');
-  // handeling changes to text textfield
-  var changes = new ChangeStack();
+
   // The Time picker dialog controller
   Duration time_duration = Duration();
   Duration note_duration = Duration();
   // this varriable is used in snapshot to chacke
   // that no changes has been made
   Duration time_snapshot;
-  // these two varrables are used to check if anything has been changed or not .
-  String ttitle;
-  String ttext;
-  // focus nodes for each text field
-  final FocusNode fTitle = FocusNode();
-  final FocusNode ftext = FocusNode();
+
   // this is used for showing the SnackBar
   BuildContext noteContext;
   // the index of the main stack and the floating stack
   // to press the back button twice for getting back to the notes list ! without saving
   int notSaving = 0;
-  // the chnage and edit controller
-  String old_value;
-  String new_value_helper;
-  String redo_value;
-  bool begin_edit;
 
   List<int> providerKeys;
   int providerIndex;
-  TextEditingController get myTitle => title;
-  TextEditingController get myText => text;
+
   bool newNote;
   Note bnote;
   // note color is used for reloading the color selection selected
@@ -124,65 +109,6 @@ class NoteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // This is used inside of Note textfield to control and save the changes for undo property
-  void listenerActivated(newValue) {
-    // This Line is used for prevent unusual behavior of the textfield
-    // It executes the on change function twice after entering only one word
-    if (new_value_helper != newValue) {
-      // Staging the changes !
-      changes.add(new Change(old_value, () {
-        redo_value = newValue;
-      }, (oldValue) {
-        // When the chnage is being apllies or in other words
-        // The undo button is selected I want to make the text controller
-        // text equal to the oldValue that the change got before .
-        text.text = oldValue;
-        // Updating the old_value and making it ready for the next change
-        old_value = oldValue;
-        // Making the cursor stay at the right position
-        text.selection =
-            TextSelection.fromPosition(TextPosition(offset: text.text.length));
-      }));
-      // After giving the value of the old_value as Oldvalue to the change
-      // It's Time to update old_value for the next change
-      old_value = text.text;
-      // updating the new_value_helper to prevent extra execution of onChange function
-      new_value_helper = newValue;
-      notifyListeners();
-    }
-  }
-
-  // Redo and Undo button activation change and used
-  // to avoid direct access to provider
-  bool get canRedo => changes.canRedo;
-  bool get canUndo => changes.canUndo;
-  // Handeling the Undo function
-  void changesUndo() {
-    changes.undo();
-    notifyListeners();
-  }
-
-  // handeling the Redo function
-  void changesRedo() {
-    changes.redo();
-    text.text = redo_value;
-    text.selection =
-        TextSelection.fromPosition(TextPosition(offset: text.text.length));
-    notifyListeners();
-  }
-
-  // fo the clear button in the form
-  void clearTitle() {
-    title.clear();
-    notifyListeners();
-  }
-
-  // Clearing only the text
-  void clearText() {
-    text.clear();
-    notifyListeners();
-  }
-
   // for the clear the form
   void clearControllers() {
     final _noteImageProvider =
@@ -191,9 +117,11 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
     final _noteTaskProvider =
         Provider.of<NoteTaskProvider>(noteContext, listen: false);
+    final _noteTitleTextProvider =
+        Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
     _noteImageProvider.clearImageList();
-    title.clear();
-    text.clear();
+    _noteTitleTextProvider.clearTitle();
+    _noteTitleTextProvider.clearText();
     _noteVoiceRecorderProvider.clearVoiceList();
     _noteTaskProvider.clearTaskList();
     _noteTaskProvider.clearTaskControllerList();
@@ -212,12 +140,13 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
     final _noteTaskProvider =
         Provider.of<NoteTaskProvider>(noteContext, listen: false);
-    ttitle = title.text;
-    ttext = text.text;
-    old_value = text.text;
+        final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+    _noteTitleTextProvider.ttitle = _noteTitleTextProvider.title.text;
+    _noteTitleTextProvider.ttext = _noteTitleTextProvider.text.text;
+    _noteTitleTextProvider.old_value = _noteTitleTextProvider.text.text;
     time_snapshot = note_duration;
     colorSnapShot = noteColor;
-    begin_edit = false;
+    _noteTitleTextProvider.begin_edit = false;
     if (!newNote) {
       _noteImageProvider.initialImageListSnapshot();
       _noteVoiceRecorderProvider.initialVoiceListSnapshot();
@@ -233,8 +162,9 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
     final _noteTaskProvider =
         Provider.of<NoteTaskProvider>(noteContext, listen: false);
-    if (ttitle == title.text &&
-        ttext == text.text &&
+    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+    if (_noteTitleTextProvider.ttitle == _noteTitleTextProvider.title.text &&
+        _noteTitleTextProvider.ttext == _noteTitleTextProvider.text.text &&
         time_duration == time_snapshot &&
         ListEquality().equals(_noteImageProvider.imageList,
             _noteImageProvider.imageListSnapshot) &&
@@ -308,6 +238,7 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
     final _noteTaskProvider =
         Provider.of<NoteTaskProvider>(noteContext, listen: false);
+    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
     providerKeys = keys;
     providerIndex = index;
     _bottomNavProvider.initialSelectedTab();
@@ -336,15 +267,18 @@ class NoteProvider extends ChangeNotifier {
       // obtained
       _noteTaskProvider.clearTaskList();
     } else {
-      _noteTaskProvider.taskControllerList.add(TaskController(TextEditingController(text: ""),
-          false, FocusNode(), PageStorageKey<String>('pageKey 0')));
+      _noteTaskProvider.taskControllerList.add(TaskController(
+          TextEditingController(text: ""),
+          false,
+          FocusNode(),
+          PageStorageKey<String>('pageKey 0')));
     }
     _noteTaskProvider.resetCheckBoxs = bnote.resetCheckBoxs;
-    title.text = bnote.title;
-    text.text = bnote.text;
-    ftext.requestFocus();
-    text.selection =
-        TextSelection.fromPosition(TextPosition(offset: text.text.length));
+    _noteTitleTextProvider.title.text = bnote.title;
+    _noteTitleTextProvider.text.text = bnote.text;
+    _noteTitleTextProvider.ftext.requestFocus();
+    _noteTitleTextProvider.text.selection =
+        TextSelection.fromPosition(TextPosition(offset: _noteTitleTextProvider.text.text.length));
     time_duration = Duration(seconds: bnote.leftTime);
     note_duration = Duration(seconds: bnote.time);
     noteColor = Color(bnote.color);
@@ -379,16 +313,18 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteImageProvider>(noteContext, listen: false);
     final _noteVoiceRecorderProvider =
         Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
-          final _noteTaskProvider =
+    final _noteTaskProvider =
         Provider.of<NoteTaskProvider>(noteContext, listen: false);
+    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
     // checking whether your going to update the note or add new one
     // that is done by chekcing the newNote true or false
     if (newNote) {
       // One of the title or text fields must be filled for the new Note
 
-      if (text.text.isEmpty &&
-          title.text.isEmpty &&
-          _noteTaskProvider.taskControllerList[0].textEditingController.text == "" &&
+      if (_noteTitleTextProvider.text.text.isEmpty &&
+          _noteTitleTextProvider.title.text.isEmpty &&
+          _noteTaskProvider.taskControllerList[0].textEditingController.text ==
+              "" &&
           _noteImageProvider.imageList.isEmpty &&
           _noteVoiceRecorderProvider.voiceList.isEmpty &&
           note_duration == Duration()) {
@@ -408,21 +344,26 @@ class NoteProvider extends ChangeNotifier {
         } else {
           notSaving = 0;
           Navigator.pop(noteContext);
-          changes.clearHistory();
+          _noteTitleTextProvider.changes.clearHistory();
           clearControllers();
         }
       } else {
         String noteTitle;
-        title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
-        final String noteText = text.text;
+        _noteTitleTextProvider.title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = _noteTitleTextProvider.title.text;
+        final String noteText = _noteTitleTextProvider.text.text;
         final int noteTime = note_duration.inSeconds;
         int leftTime = noteTime;
         var color = noteColor?.value ?? _bottomNavProvider.tabColors[0].value;
         if (_noteTaskProvider.taskControllerList.isNotEmpty) {
-          for (int i = 0; i < _noteTaskProvider.taskControllerList.length; i++) {
-            if (_noteTaskProvider.taskControllerList[i].textEditingController.text != '') {
+          for (int i = 0;
+              i < _noteTaskProvider.taskControllerList.length;
+              i++) {
+            if (_noteTaskProvider
+                    .taskControllerList[i].textEditingController.text !=
+                '') {
               _noteTaskProvider.taskList.add(Task(
-                  _noteTaskProvider.taskControllerList[i].textEditingController.text,
+                  _noteTaskProvider
+                      .taskControllerList[i].textEditingController.text,
                   _noteTaskProvider.taskControllerList[i].isDone));
             }
           }
@@ -440,30 +381,35 @@ class NoteProvider extends ChangeNotifier {
           _noteTaskProvider.resetCheckBoxs,
         );
         await noteBox.add(note);
-        changes.clearHistory();
+       _noteTitleTextProvider.changes.clearHistory();
         clearControllers();
         notifyListeners();
         Navigator.pop(noteContext);
       }
     } else {
       // One of the title or text fields must be filled
-      if (text.text.isNotEmpty || title.text.isNotEmpty) {
+      if (_noteTitleTextProvider.text.text.isNotEmpty || _noteTitleTextProvider.title.text.isNotEmpty) {
         var bnote = await noteBox.get(providerKeys[providerIndex]);
         String noteTitle;
-        title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
+        _noteTitleTextProvider.title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = _noteTitleTextProvider.title.text;
         var color = noteColor?.value ?? _bottomNavProvider.tabColors[0].value;
         if (_noteTaskProvider.taskControllerList.isNotEmpty) {
-          for (int i = 0; i < _noteTaskProvider.taskControllerList.length; i++) {
-            if (_noteTaskProvider.taskControllerList[i].textEditingController.text != '') {
+          for (int i = 0;
+              i < _noteTaskProvider.taskControllerList.length;
+              i++) {
+            if (_noteTaskProvider
+                    .taskControllerList[i].textEditingController.text !=
+                '') {
               _noteTaskProvider.taskList.add(Task(
-                  _noteTaskProvider.taskControllerList[i].textEditingController.text,
+                  _noteTaskProvider
+                      .taskControllerList[i].textEditingController.text,
                   _noteTaskProvider.taskControllerList[i].isDone));
             }
           }
         }
         Note note = new Note(
             noteTitle,
-            text.text,
+            _noteTitleTextProvider.text.text,
             bnote.isChecked,
             note_duration.inSeconds,
             color,
@@ -473,12 +419,12 @@ class NoteProvider extends ChangeNotifier {
             _noteTaskProvider.taskList,
             _noteTaskProvider.resetCheckBoxs);
         await noteBox.put(providerKeys[providerIndex], note);
-        changes.clearHistory();
+        _noteTitleTextProvider.changes.clearHistory();
         clearControllers();
         Navigator.pop(noteContext);
       } else {
         await noteBox.delete(providerKeys[providerIndex]);
-        changes.clearHistory();
+        _noteTitleTextProvider.changes.clearHistory();
         clearControllers();
         Navigator.pop(noteContext);
       }
@@ -495,12 +441,14 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteVoiceRecorderProvider =
         Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
-          final _noteTaskProvider =
+    final _noteTaskProvider =
         Provider.of<NoteTaskProvider>(noteContext, listen: false);
+    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
     if (isEdited()) {
-      if (text.text.isEmpty &&
-          title.text.isEmpty &&
-          _noteTaskProvider.taskControllerList[0].textEditingController.text == "" &&
+      if (_noteTitleTextProvider.text.text.isEmpty &&
+          _noteTitleTextProvider.title.text.isEmpty &&
+          _noteTaskProvider.taskControllerList[0].textEditingController.text ==
+              "" &&
           _noteImageProvider.imageList.isEmpty &&
           _noteVoiceRecorderProvider.voiceList.isEmpty &&
           note_duration == Duration()) {
@@ -528,7 +476,7 @@ class NoteProvider extends ChangeNotifier {
         } else {
           notSaving = 0;
           Navigator.pop(noteContext);
-          changes.clearHistory();
+          _noteTitleTextProvider.changes.clearHistory();
           clearControllers();
         }
       }
@@ -536,7 +484,7 @@ class NoteProvider extends ChangeNotifier {
       // making all the changes that has been save for the
       // future undo will be deleted to prevent the future problem
       // causes !
-      changes.clearHistory();
+      _noteTitleTextProvider.changes.clearHistory();
       // changing the stacks and getting back to listview Screen !
       clearControllers();
       Navigator.pop(noteContext);

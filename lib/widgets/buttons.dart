@@ -9,6 +9,7 @@ import 'package:todoapp/provider/conn_provider.dart';
 import 'package:todoapp/provider/drive_provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/noteimage_provider.dart';
+import 'package:todoapp/provider/notetitletext_provider.dart';
 import 'package:todoapp/provider/notevoice_recorder_provider.dart';
 import 'package:todoapp/provider/signin_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
@@ -75,6 +76,7 @@ class _MyButtonState extends State<MyButton> {
           final _connState = Provider.of<ConnState>(context, listen: false);
           final _noteImageProvider = Provider.of<NoteImageProvider>(context, listen: false);
           final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(context, listen: false);
+          final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(context, listen: false);
           final _themeProvider =
               Provider.of<ThemeProvider>(context, listen: false);
           double SizeX = MediaQuery.of(context).size.height;
@@ -119,7 +121,7 @@ class _MyButtonState extends State<MyButton> {
               _timerState.resetTimer(context);
               break;
             case 'redo':
-              _myProvider.canRedo ? _myProvider.changesRedo() : null;
+              _noteTitleTextProvider.canRedo ? _noteTitleTextProvider.changesRedo() : null;
               break;
             case 'lan':
               _themeProvider.changeLan();
@@ -133,7 +135,7 @@ class _MyButtonState extends State<MyButton> {
               break;
             case 'undo':
               {
-                _myProvider.canUndo ? _myProvider.changesUndo() : null;
+                _noteTitleTextProvider.canUndo ? _noteTitleTextProvider.changesUndo() : null;
               }
               break;
             case 'timer':

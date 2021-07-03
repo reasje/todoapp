@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
+import 'package:todoapp/provider/notetitletext_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 class titleTextField extends StatelessWidget {
@@ -15,6 +16,7 @@ class titleTextField extends StatelessWidget {
   Widget build(BuildContext context) {
             final _myProvider = Provider.of<NoteProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(context, listen: false);
         double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     bool isLandscape =
@@ -28,8 +30,8 @@ class titleTextField extends StatelessWidget {
             BorderRadius.all(Radius.circular(SizeX * 0.016)),
       ),
       child: TextField(
-        controller: _myProvider.title,
-        focusNode: _myProvider.fTitle,
+        controller: _noteTitleTextProvider.title,
+        focusNode: _noteTitleTextProvider.fTitle,
         keyboardType: TextInputType.multiline,
         maxLines: null,
         cursorColor: _themeProvider.swachColor,
@@ -48,7 +50,7 @@ class titleTextField extends StatelessWidget {
             suffixIcon: IconButton(
               icon: Icon(Icons.clear_sharp),
               onPressed: () {
-                _myProvider.clearTitle();
+                _noteTitleTextProvider.clearTitle();
               },
             ),
             hintText: uiKit.AppLocalizations.of(context)

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
+import 'package:todoapp/provider/notetitletext_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
@@ -12,6 +13,7 @@ class textTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<NoteProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(context, listen: false);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     bool isLandscape =
@@ -23,10 +25,10 @@ class textTextField extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(SizeX * 0.016)),
       ),
       child: TextField(
-        controller: _myProvider.text,
-        focusNode: _myProvider.ftext,
+        controller: _noteTitleTextProvider.text,
+        focusNode: _noteTitleTextProvider.ftext,
         onChanged: (newVal) {
-          _myProvider.listenerActivated(newVal);
+          _noteTitleTextProvider.listenerActivated(newVal);
         },
         keyboardType: TextInputType.multiline,
         maxLines: null,
@@ -42,7 +44,7 @@ class textTextField extends StatelessWidget {
             suffixIcon: IconButton(
               icon: Icon(Icons.clear_sharp),
               onPressed: () {
-                _myProvider.clearText();
+                _noteTitleTextProvider.clearText();
               },
             ),
             contentPadding: EdgeInsets.symmetric(
