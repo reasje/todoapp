@@ -4,6 +4,11 @@ import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/provider/notevoice_recorder_provider.dart';
 
+
+// flutter_sound had a serious problem with the states
+// and if more instances of that was made FlutterSoundPlayer's
+// state for example the isPlaying instance was true for all
+// even if Just one instance was playing
 enum SoundPlayerState {
   stopped,
   paused,

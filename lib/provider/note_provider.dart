@@ -12,31 +12,19 @@ import 'package:todoapp/provider/notevoice_recorder_provider.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:collection/collection.dart';
-
 import 'noteimage_provider.dart';
 import 'notetask_provider.dart';
-
-// TODO orginaing the providers and having multi providres having a separate
-// provider for check me .
-// flutter_sound had a serious problem with the states
-// and if more instances of that was made FlutterSoundPlayer's
-// state for example the isPlaying instance was true for all
-// even if Just one instance was playing
-
 
 class NoteProvider extends ChangeNotifier {
   // This varrible is used to controll the listview size for the listview
   // to not to be short
-  double listview_size;
-
+  double listViewSize;
   // It is used to store
   // the theme status as string
   final prefsBox = Hive.box<String>(prefsBoxName);
   //BuildContext donateContext;
   // Hive box for notes
   final noteBox = Hive.lazyBox<Note>(noteBoxName);
-
-  //////////////////////////////////// *** CHECKBOX CHECK PART *** /////////////////////////////////////
 
   // The Time picker dialog controller
   Duration time_duration = Duration();
@@ -579,7 +567,7 @@ class NoteProvider extends ChangeNotifier {
         without_timer = without_timer + 1;
       }
     }
-    listview_size = (without_timer * SizeX * 0.22) + (with_timer * SizeX * 0.5);
+    listViewSize = (without_timer * SizeX * 0.22) + (with_timer * SizeX * 0.5);
     return true;
   }
 }

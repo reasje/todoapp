@@ -72,7 +72,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                       if (snapShot.hasData) {
                                         return Container(
                                           height:
-                                              _myProvider.listview_size + 400.0,
+                                              _myProvider.listViewSize + 400.0,
                                           width: SizeY,
                                           child: ScrollConfiguration(
                                             behavior: NoGlowBehaviour(),
