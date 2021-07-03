@@ -10,7 +10,7 @@ class ReorderableProvider with ChangeNotifier {
   double listViewSize;
     // Hive box for notes
   final noteBox = Hive.lazyBox<Note>(noteBoxName);
-    Future<void> reorderList(int oldIndex, int newIndex) async {
+    Future<void> reorderNoteList(int oldIndex, int newIndex) async {
     List<int> keys = noteBox.keys.cast<int>().toList();
     if (oldIndex < newIndex) {
       newIndex -= 1;
@@ -47,4 +47,5 @@ class ReorderableProvider with ChangeNotifier {
     listViewSize = (without_timer * SizeX * 0.22) + (with_timer * SizeX * 0.5);
     return true;
   }
+  
 }

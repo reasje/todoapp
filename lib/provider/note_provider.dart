@@ -55,35 +55,8 @@ class NoteProvider extends ChangeNotifier {
     return time_duration.inSeconds;
   }
 
-  //////////////////////////////////// *** TASK LIST  PART *** /////////////////////////////////////
 
-  void reorder(int oldIndex, int newIndex) {
-    final _noteTaskProvider =
-        Provider.of<NoteTaskProvider>(noteContext, listen: false);
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
-    var taskController =
-        _noteTaskProvider.taskControllerList.elementAt(oldIndex);
-    if (newIndex < oldIndex) {
-      for (int i = oldIndex; i > newIndex; i--) {
-        var taskController2 =
-            _noteTaskProvider.taskControllerList.elementAt(i - 1);
-        _noteTaskProvider.taskControllerList[i] = taskController2;
-        //taskControllerList.insert(i, );
-      }
-    } else {
-      for (int i = oldIndex; i < newIndex; i++) {
-        var taskController =
-            _noteTaskProvider.taskControllerList.elementAt(i + 1);
-        _noteTaskProvider.taskControllerList[i] = taskController;
-        //taskControllerList.insert(i, taskController);
-      }
-    }
-    _noteTaskProvider.taskControllerList[newIndex] = taskController;
-    //taskControllerList.insert(newIndex, taskController);
-    notifyListeners();
-  }
+
 
   // for the clear the form
   void clearControllers() {

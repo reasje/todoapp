@@ -68,7 +68,7 @@ class TaskListView extends StatelessWidget {
                     ),
                     child: ReorderableListView(
                         onReorder: (oldIndex, newIndex) {
-                          _myProvider.reorder(oldIndex, newIndex);
+                          _noteTaskProvider.reorderTaskList(oldIndex, newIndex);
                         },
                         children: List.generate(snapshot.data.length, (index) {
                           return AnimatedContainer(
@@ -198,7 +198,13 @@ class TaskListView extends StatelessWidget {
                                                       : SizeX * SizeY * 0.00006,
                                                   fontWeight: FontWeight.w200)),
                                         ),
-                                      )
+                                      ),
+                                      // Column(
+                                      //   children: [
+                                      //     Icon(Icons.arrow_circle_down_rounded),
+                                      //     Icon(Icons.arrow_circle_up_rounded),
+                                      //   ],
+                                      // )
                                     ],
                                   ),
                                 )),

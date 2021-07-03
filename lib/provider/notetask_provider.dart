@@ -23,7 +23,32 @@ class NoteTaskProvider with ChangeNotifier {
   Future<List<TaskController>> getTaskList() async {
     return taskControllerList;
   }
-
+  
+  void reorderTaskList(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    var taskController =
+        taskControllerList.elementAt(oldIndex);
+    if (newIndex < oldIndex) {
+      for (int i = oldIndex; i > newIndex; i--) {
+        var taskController2 =
+            taskControllerList.elementAt(i - 1);
+        taskControllerList[i] = taskController2;
+        //taskControllerList.insert(i, );
+      }
+    } else {
+      for (int i = oldIndex; i < newIndex; i++) {
+        var taskController =
+            taskControllerList.elementAt(i + 1);
+        taskControllerList[i] = taskController;
+        //taskControllerList.insert(i, taskController);
+      }
+    }
+    taskControllerList[newIndex] = taskController;
+    //taskControllerList.insert(newIndex, taskController);
+    notifyListeners();
+  }
   void taskCheckBoxChanged(int index) {
     print('object');
     if (taskControllerList[index].isDone) {
