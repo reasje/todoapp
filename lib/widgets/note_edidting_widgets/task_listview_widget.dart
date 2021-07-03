@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
+import 'package:todoapp/provider/notetask_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
-class taskListView extends StatelessWidget {
+class TaskListView extends StatelessWidget {
   final Color color;
-  const taskListView({
+  const TaskListView({
     Key key,
     this.color,
   }) : super(key: key);
@@ -16,6 +17,8 @@ class taskListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<NoteProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
+          final _noteTaskProvider =
+        Provider.of<NoteTaskProvider>(context);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     bool isLandscape =
@@ -43,9 +46,9 @@ class taskListView extends StatelessWidget {
                   activeColor: color,
                   inactiveTrackColor: _themeProvider.textColor,
                   inactiveThumbColor: _themeProvider.mainColor,
-                  value: _myProvider.resetCheckBoxs,
+                  value: _noteTaskProvider.resetCheckBoxs,
                   onChanged: (value) {
-                    _myProvider.changeResetCheckBoxs(value);
+                    _noteTaskProvider.changeResetCheckBoxs(value);
                   },
                 ),
               ],
@@ -55,7 +58,7 @@ class taskListView extends StatelessWidget {
           Container(
             height: SizeX * 0.7,
             child: FutureBuilder(
-              future: _myProvider.getTaskList(),
+              future: _noteTaskProvider.getTaskList(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Theme(
@@ -110,7 +113,7 @@ class taskListView extends StatelessWidget {
                                           true,
                                           context: context,
                                           index: index));
-                                  _myProvider.taskDissmissed(index);
+                                  _noteTaskProvider.taskDissmissed(index);
                                 },
                                 child: Container(
                                   height: SizeXSizeY * 0.00022,
@@ -123,7 +126,7 @@ class taskListView extends StatelessWidget {
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          _myProvider
+                                          _noteTaskProvider
                                               .taskCheckBoxChanged(index);
                                         },
                                         child: Container(
@@ -156,7 +159,7 @@ class taskListView extends StatelessWidget {
                                           controller: snapshot.data[index]
                                               .textEditingController,
                                           onSubmitted: (value) {
-                                            _myProvider
+                                            _noteTaskProvider
                                                 .checkListOnSubmit(index);
                                           },
                                           focusNode:

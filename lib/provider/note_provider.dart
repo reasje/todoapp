@@ -1,18 +1,11 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sound/flutter_sound.dart';
-import 'package:flutter_sound/public/tau.dart';
 import 'package:hive/hive.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/taskController.dart';
 import 'package:todoapp/model/task_model.dart';
-import 'package:todoapp/model/voice_model.dart';
 import 'package:todoapp/provider/bottomnav_provider.dart';
 import 'package:todoapp/provider/notevoice_recorder_provider.dart';
 import '../main.dart';
@@ -21,6 +14,7 @@ import 'package:undo/undo.dart';
 import 'package:collection/collection.dart';
 
 import 'noteimage_provider.dart';
+import 'notetask_provider.dart';
 
 // TODO orginaing the providers and having multi providres having a separate
 // provider for check me .
@@ -36,26 +30,10 @@ enum SoundPlayerState {
 }
 
 class NoteProvider extends ChangeNotifier {
-  // NoteProvider() {
-  //   //checkDayChange();
-  //   // setting the timer for only once
-  //   Timer.periodic(Duration(seconds: 60), (timer) {
-  //     // check for if the day is changed
-  //     // if changed will handle the
-  //     // check box uncheck duty for
-  //     // new day .
-  //     checkDayChange();
-  //   });
-  // }
   // This varrible is used to controll the listview size for the listview
   // to not to be short
   double listview_size;
-  // used to control resetCheckBoxs
-  bool resetCheckBoxs = false;
-  void changeResetCheckBoxs(bool value) {
-    resetCheckBoxs = value;
-    notifyListeners();
-  }
+
 
   // It is used to store
   // the theme status as string
@@ -117,73 +95,35 @@ class NoteProvider extends ChangeNotifier {
   }
 
   //////////////////////////////////// *** TASK LIST  PART *** /////////////////////////////////////
-  List<Task> taskList = [];
-  // This is the controller assigned to the textfield inside
-  // so the
-  // List<TextEditingController> taskTextList = [];
-  TaskController dissmissedTask;
-  List<TaskController> taskControllerList = [];
-  List<TaskController> taskControllerListSnapShot = [];
-  Future<List<TaskController>> getTaskList() async {
-    return taskControllerList;
-  }
-
-  void taskCheckBoxChanged(int index) {
-    if (taskControllerList[index].isDone) {
-      taskControllerList[index].isDone = false;
-    } else {
-      taskControllerList[index].isDone = true;
-    }
-    notifyListeners();
-  }
-
-  void checkListOnSubmit(index) {
-    taskControllerList.insert(
-        index + 1,
-        TaskController(
-            TextEditingController(text: ""),
-            false,
-            FocusNode(),
-            PageStorageKey<String>(
-                'pageKey ${DateTime.now().microsecondsSinceEpoch}')));
-    taskControllerList[index + 1].focusNode.requestFocus();
-    notifyListeners();
-  }
-
-  void taskDissmissed(int index) {
-    dissmissedTask = taskControllerList.removeAt(index);
-    notifyListeners();
-  }
-
-  void taskRecover(int index) {
-    dissmissedTask.key = PageStorageKey<String>(
-        'pageKey ${DateTime.now().microsecondsSinceEpoch}');
-    taskControllerList.insert(index, dissmissedTask);
-    notifyListeners();
-  }
 
   void reorder(int oldIndex, int newIndex) {
+    final _noteTaskProvider =
+        Provider.of<NoteTaskProvider>(noteContext, listen: false);
     if (oldIndex < newIndex) {
       newIndex -= 1;
     }
-    var taskController = taskControllerList.elementAt(oldIndex);
+    var taskController =
+        _noteTaskProvider.taskControllerList.elementAt(oldIndex);
     if (newIndex < oldIndex) {
       for (int i = oldIndex; i > newIndex; i--) {
-        var taskController2 = taskControllerList.elementAt(i - 1);
-        taskControllerList[i] = taskController2;
+        var taskController2 =
+            _noteTaskProvider.taskControllerList.elementAt(i - 1);
+        _noteTaskProvider.taskControllerList[i] = taskController2;
         //taskControllerList.insert(i, );
       }
     } else {
       for (int i = oldIndex; i < newIndex; i++) {
-        var taskController = taskControllerList.elementAt(i + 1);
-        taskControllerList[i] = taskController;
+        var taskController =
+            _noteTaskProvider.taskControllerList.elementAt(i + 1);
+        _noteTaskProvider.taskControllerList[i] = taskController;
         //taskControllerList.insert(i, taskController);
       }
     }
-    taskControllerList[newIndex] = taskController;
+    _noteTaskProvider.taskControllerList[newIndex] = taskController;
     //taskControllerList.insert(newIndex, taskController);
     notifyListeners();
   }
+
   // This is used inside of Note textfield to control and save the changes for undo property
   void listenerActivated(newValue) {
     // This Line is used for prevent unusual behavior of the textfield
@@ -249,12 +189,14 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteImageProvider>(noteContext, listen: false);
     final _noteVoiceRecorderProvider =
         Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
+    final _noteTaskProvider =
+        Provider.of<NoteTaskProvider>(noteContext, listen: false);
     _noteImageProvider.clearImageList();
     title.clear();
     text.clear();
     _noteVoiceRecorderProvider.clearVoiceList();
-    taskControllerList.clear();
-    taskList.clear();
+    _noteTaskProvider.clearTaskList();
+    _noteTaskProvider.clearTaskControllerList();
     providerIndex = null;
     time_duration = Duration();
     note_duration = Duration();
@@ -268,6 +210,8 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteImageProvider>(noteContext, listen: false);
     final _noteVoiceRecorderProvider =
         Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
+    final _noteTaskProvider =
+        Provider.of<NoteTaskProvider>(noteContext, listen: false);
     ttitle = title.text;
     ttext = text.text;
     old_value = text.text;
@@ -277,7 +221,7 @@ class NoteProvider extends ChangeNotifier {
     if (!newNote) {
       _noteImageProvider.initialImageListSnapshot();
       _noteVoiceRecorderProvider.initialVoiceListSnapshot();
-      taskControllerList = List.from(taskControllerList);
+      _noteTaskProvider.initialTaskControllerList();
     }
   }
 
@@ -287,6 +231,8 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteImageProvider>(noteContext, listen: false);
     final _noteVoiceRecorderProvider =
         Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
+    final _noteTaskProvider =
+        Provider.of<NoteTaskProvider>(noteContext, listen: false);
     if (ttitle == title.text &&
         ttext == text.text &&
         time_duration == time_snapshot &&
@@ -294,7 +240,8 @@ class NoteProvider extends ChangeNotifier {
             _noteImageProvider.imageListSnapshot) &&
         ListEquality().equals(_noteVoiceRecorderProvider.voiceList,
             _noteVoiceRecorderProvider.voiceListSnapshot) &&
-        ListEquality().equals(taskControllerList, taskControllerListSnapShot)) {
+        ListEquality().equals(_noteTaskProvider.taskControllerList,
+            _noteTaskProvider.taskControllerListSnapShot)) {
       return false;
     } else {
       return true;
@@ -325,26 +272,32 @@ class NoteProvider extends ChangeNotifier {
   }
 
   // new Note clieked
-  Future<void> newNoteClicked(BuildContext context) async{
+  Future<void> newNoteClicked(BuildContext context) async {
     final _bottomNavProvider =
         Provider.of<BottomNavProvider>(context, listen: false);
+    final _noteTaskProvider =
+        Provider.of<NoteTaskProvider>(noteContext, listen: false);
     noteContext = context;
     // When the add icon is tapped this function will be executed and
     // prepare the provider for the new Note
     clearControllers();
-    taskControllerList.add(TaskController(TextEditingController(text: ""),
-        false, FocusNode(), PageStorageKey<String>('pageKey 0')));
+    _noteTaskProvider.taskControllerList.add(TaskController(
+        TextEditingController(text: ""),
+        false,
+        FocusNode(),
+        PageStorageKey<String>('pageKey 0')));
     newNote = true;
     _bottomNavProvider.initialSelectedTab();
     _bottomNavProvider.initialPage();
-    resetCheckBoxs = false;
+    _noteTaskProvider.resetCheckBoxs = false;
     await _bottomNavProvider.initialTabs(context);
     takeSnapshot();
     notifyListeners();
   }
 
   // used indie list view after an elemt of listview is tapped
-  Future<void> loadNote(BuildContext context, [List<int> keys, int index]) async {
+  Future<void> loadNote(BuildContext context,
+      [List<int> keys, int index]) async {
     final _bottomNavProvider =
         Provider.of<BottomNavProvider>(context, listen: false);
 
@@ -353,6 +306,8 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteImageProvider>(noteContext, listen: false);
     final _noteVoiceRecorderProvider =
         Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
+    final _noteTaskProvider =
+        Provider.of<NoteTaskProvider>(noteContext, listen: false);
     providerKeys = keys;
     providerIndex = index;
     _bottomNavProvider.initialSelectedTab();
@@ -367,11 +322,11 @@ class NoteProvider extends ChangeNotifier {
       _noteVoiceRecorderProvider.initialVoiceList(bnote.voiceList);
     }
     if (bnote.taskList?.isNotEmpty ?? false) {
-      taskList = bnote.taskList;
-      for (int i = 0; i < taskList.length; i++) {
-        taskControllerList.add(TaskController(
-            TextEditingController(text: taskList[i].title),
-            taskList[i].isDone,
+      _noteTaskProvider.initialTaskList(bnote.taskList);
+      for (int i = 0; i < _noteTaskProvider.taskList.length; i++) {
+        _noteTaskProvider.taskControllerList.add(TaskController(
+            TextEditingController(text: _noteTaskProvider.taskList[i].title),
+            _noteTaskProvider.taskList[i].isDone,
             FocusNode(),
             PageStorageKey<String>(
                 'pageKey ${DateTime.now().microsecondsSinceEpoch}')));
@@ -379,12 +334,12 @@ class NoteProvider extends ChangeNotifier {
       // clearing the taskList because
       // the needed information has been
       // obtained
-      taskList.clear();
+      _noteTaskProvider.clearTaskList();
     } else {
-      taskControllerList.add(TaskController(TextEditingController(text: ""),
+      _noteTaskProvider.taskControllerList.add(TaskController(TextEditingController(text: ""),
           false, FocusNode(), PageStorageKey<String>('pageKey 0')));
     }
-    resetCheckBoxs = bnote.resetCheckBoxs;
+    _noteTaskProvider.resetCheckBoxs = bnote.resetCheckBoxs;
     title.text = bnote.title;
     text.text = bnote.text;
     ftext.requestFocus();
@@ -424,6 +379,8 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteImageProvider>(noteContext, listen: false);
     final _noteVoiceRecorderProvider =
         Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
+          final _noteTaskProvider =
+        Provider.of<NoteTaskProvider>(noteContext, listen: false);
     // checking whether your going to update the note or add new one
     // that is done by chekcing the newNote true or false
     if (newNote) {
@@ -431,7 +388,7 @@ class NoteProvider extends ChangeNotifier {
 
       if (text.text.isEmpty &&
           title.text.isEmpty &&
-          taskControllerList[0].textEditingController.text == "" &&
+          _noteTaskProvider.taskControllerList[0].textEditingController.text == "" &&
           _noteImageProvider.imageList.isEmpty &&
           _noteVoiceRecorderProvider.voiceList.isEmpty &&
           note_duration == Duration()) {
@@ -461,12 +418,12 @@ class NoteProvider extends ChangeNotifier {
         final int noteTime = note_duration.inSeconds;
         int leftTime = noteTime;
         var color = noteColor?.value ?? _bottomNavProvider.tabColors[0].value;
-        if (taskControllerList.isNotEmpty) {
-          for (int i = 0; i < taskControllerList.length; i++) {
-            if (taskControllerList[i].textEditingController.text != '') {
-              taskList.add(Task(
-                  taskControllerList[i].textEditingController.text,
-                  taskControllerList[i].isDone));
+        if (_noteTaskProvider.taskControllerList.isNotEmpty) {
+          for (int i = 0; i < _noteTaskProvider.taskControllerList.length; i++) {
+            if (_noteTaskProvider.taskControllerList[i].textEditingController.text != '') {
+              _noteTaskProvider.taskList.add(Task(
+                  _noteTaskProvider.taskControllerList[i].textEditingController.text,
+                  _noteTaskProvider.taskControllerList[i].isDone));
             }
           }
         }
@@ -479,8 +436,8 @@ class NoteProvider extends ChangeNotifier {
           leftTime,
           _noteImageProvider.imageList,
           _noteVoiceRecorderProvider.voiceList,
-          taskList,
-          resetCheckBoxs,
+          _noteTaskProvider.taskList,
+          _noteTaskProvider.resetCheckBoxs,
         );
         await noteBox.add(note);
         changes.clearHistory();
@@ -495,12 +452,12 @@ class NoteProvider extends ChangeNotifier {
         String noteTitle;
         title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = title.text;
         var color = noteColor?.value ?? _bottomNavProvider.tabColors[0].value;
-        if (taskControllerList.isNotEmpty) {
-          for (int i = 0; i < taskControllerList.length; i++) {
-            if (taskControllerList[i].textEditingController.text != '') {
-              taskList.add(Task(
-                  taskControllerList[i].textEditingController.text,
-                  taskControllerList[i].isDone));
+        if (_noteTaskProvider.taskControllerList.isNotEmpty) {
+          for (int i = 0; i < _noteTaskProvider.taskControllerList.length; i++) {
+            if (_noteTaskProvider.taskControllerList[i].textEditingController.text != '') {
+              _noteTaskProvider.taskList.add(Task(
+                  _noteTaskProvider.taskControllerList[i].textEditingController.text,
+                  _noteTaskProvider.taskControllerList[i].isDone));
             }
           }
         }
@@ -513,8 +470,8 @@ class NoteProvider extends ChangeNotifier {
             bnote.leftTime,
             _noteImageProvider.imageList,
             _noteVoiceRecorderProvider.voiceList,
-            taskList,
-            resetCheckBoxs);
+            _noteTaskProvider.taskList,
+            _noteTaskProvider.resetCheckBoxs);
         await noteBox.put(providerKeys[providerIndex], note);
         changes.clearHistory();
         clearControllers();
@@ -538,10 +495,12 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteVoiceRecorderProvider =
         Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
+          final _noteTaskProvider =
+        Provider.of<NoteTaskProvider>(noteContext, listen: false);
     if (isEdited()) {
       if (text.text.isEmpty &&
           title.text.isEmpty &&
-          taskControllerList[0].textEditingController.text == "" &&
+          _noteTaskProvider.taskControllerList[0].textEditingController.text == "" &&
           _noteImageProvider.imageList.isEmpty &&
           _noteVoiceRecorderProvider.voiceList.isEmpty &&
           note_duration == Duration()) {
@@ -623,7 +582,7 @@ class NoteProvider extends ChangeNotifier {
         var ntTaskList = bnote.taskList;
         var ntResetCheckBoxs = bnote.resetCheckBoxs;
         Note note = Note(ntitle, nttext, ntischecked, nttime, ntcolor,
-            ntlefttime, ntImageList, ntVoiceList, ntTaskList, resetCheckBoxs);
+            ntlefttime, ntImageList, ntVoiceList, ntTaskList, ntResetCheckBoxs);
         noteBox.put(providerKeys[providerIndex], note);
         notifyListeners();
       } else {

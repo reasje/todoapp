@@ -252,7 +252,7 @@ class BottomNavProvider with ChangeNotifier {
       BottomNavTab(
           'Task',
           [
-            uiKit.taskListView(
+            uiKit.TaskListView(
               color: items[4].color,
             )
           ],

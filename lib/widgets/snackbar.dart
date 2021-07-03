@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/noteimage_provider.dart';
+import 'package:todoapp/provider/notetask_provider.dart';
 import 'package:todoapp/provider/notevoice_recorder_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uikit.dart' as uiKit;
@@ -44,6 +45,8 @@ Widget MySnackBar(
   final _noteImageProvider = Provider.of<NoteImageProvider>(context, listen: false);
       final _noteVoiceRecorderProvider =
         Provider.of<NoteVoiceRecorderProvider>(context, listen: false);
+      final _noteTaskProvider =
+        Provider.of<NoteTaskProvider>(context, listen: false);
   isWhite = _themeProvider.checkIsWhite();
   return SnackBar(
     elevation: 0,
@@ -66,7 +69,7 @@ Widget MySnackBar(
               if (id == 'undoVoice') {
                 _noteVoiceRecorderProvider.voiceRecover(index);
               } else if (id == 'undoTask') {
-                _myProvider.taskRecover(index);
+                _noteTaskProvider.taskRecover(index);
               } else if (noteBox == null) {
                 _noteImageProvider.imageRecover(index);
               } else {
