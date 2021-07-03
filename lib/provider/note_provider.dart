@@ -23,11 +23,6 @@ import 'notetask_provider.dart';
 // state for example the isPlaying instance was true for all
 // even if Just one instance was playing
 
-enum SoundPlayerState {
-  stopped,
-  paused,
-  resumed,
-}
 
 class NoteProvider extends ChangeNotifier {
   // This varrible is used to controll the listview size for the listview

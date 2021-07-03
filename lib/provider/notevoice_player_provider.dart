@@ -2,9 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/notevoice_recorder_provider.dart';
 
+enum SoundPlayerState {
+  stopped,
+  paused,
+  resumed,
+}
 class NoteVoicePlayerProvider with ChangeNotifier {
 
 
