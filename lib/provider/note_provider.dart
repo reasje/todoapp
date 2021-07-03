@@ -435,14 +435,5 @@ class NoteProvider extends ChangeNotifier {
     }
   }
 
-  showDogeCopied(BuildContext context) {
-    noteContext = context;
-    ScaffoldMessenger.of(noteContext).clearSnackBars();
-    ScaffoldMessenger.of(noteContext).removeCurrentSnackBar();
-    ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
-        uiKit.AppLocalizations.of(noteContext).translate('dogeAddressCopied'),
-        'dogeAddressCopied',
-        false,
-        context: noteContext));
-  }
+
 }

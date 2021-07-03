@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/conn_provider.dart';
+import 'package:todoapp/provider/donate_provider.dart';
 
 import 'package:todoapp/provider/drive_provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
@@ -20,18 +21,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../main.dart';
 
-//typedef function = void Function();
-const _url = 'https://idpay.ir/todoapp';
-const _dogeAdress = 'bnb1g3thz6z0t2gz2fffthdvv6mxpjvgfacp7hfjml';
-Future<void> copyDogeAdress() async {
-  ClipboardData data = ClipboardData(text: _dogeAdress);
-  print(data.text);
-  await Clipboard.setData(data);
-}
-
-void printMe() {
-  print('Hell');
-}
 
 class MyButton extends StatefulWidget {
   final IconData iconData;
@@ -78,6 +67,7 @@ class _MyButtonState extends State<MyButton> {
           final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(context, listen: false);
           final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(context, listen: false);
           final _noteColorProvider = Provider.of<NoteColorProvider>(context, listen: false);
+          final _donateProvider = Provider.of<DonateProvider>(context, listen: false);
           final _themeProvider =
               Provider.of<ThemeProvider>(context, listen: false);
           double SizeX = MediaQuery.of(context).size.height;
@@ -85,8 +75,8 @@ class _MyButtonState extends State<MyButton> {
           LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
           switch (widget.id) {
             case 'dogedonate':
-              copyDogeAdress();
-              _myProvider.showDogeCopied(context);
+              _donateProvider.copyDogeAdress();
+              _donateProvider.showDogeCopied(context);
               break;
             case 'home':
               Navigator.pushReplacement(
@@ -270,7 +260,7 @@ class _MyButtonState extends State<MyButton> {
               // TODO Delete _myProvider.gotoDonate(context);
               break;
             case 'donate':
-              _launchURL();
+              _donateProvider.launchURL();
               break;
             case 'upload':
               login(true, context);
@@ -496,5 +486,4 @@ class SliderTransition extends PageRouteBuilder {
             });
 }
 
-void _launchURL() async =>
-    await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+
