@@ -10,6 +10,7 @@ import 'package:todoapp/provider/bottomnav_provider.dart';
 import 'package:todoapp/provider/notecolor_provider.dart';
 import 'package:todoapp/provider/notetitletext_provider.dart';
 import 'package:todoapp/provider/notevoice_recorder_provider.dart';
+import 'package:todoapp/provider/timer_provider.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:collection/collection.dart';
@@ -17,7 +18,6 @@ import 'noteimage_provider.dart';
 import 'notetask_provider.dart';
 
 class NoteProvider extends ChangeNotifier {
-
   // It is used to store
   // the theme status as string
   final prefsBox = Hive.box<String>(prefsBoxName);
@@ -25,12 +25,6 @@ class NoteProvider extends ChangeNotifier {
   // Hive box for notes
   final noteBox = Hive.lazyBox<Note>(noteBoxName);
 
-  // The Time picker dialog controller
-  Duration time_duration = Duration();
-  Duration note_duration = Duration();
-  // this varriable is used in snapshot to chacke
-  // that no changes has been made
-  Duration time_snapshot;
   // this is used for showing the SnackBar
   BuildContext noteContext;
   // the index of the main stack and the floating stack
@@ -43,21 +37,6 @@ class NoteProvider extends ChangeNotifier {
   bool newNote;
   Note bnote;
 
-  // This function is used inside the notes_editing_screen as
-  // a future function to load the pictures
-  Future<int> getNoteEditStack([List<int> keys, int index]) async {
-    // if (keys?.isEmpty) {
-    //   bnote = await noteBox.get(providerKeys[providerIndex]);
-    // } else {
-    //   bnote = await noteBox.get(keys[index]);
-    // }
-    // return bnote.leftTime;
-    return time_duration.inSeconds;
-  }
-
-
-
-
   // for the clear the form
   void clearControllers() {
     final _noteImageProvider =
@@ -68,6 +47,8 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteTaskProvider>(noteContext, listen: false);
     final _noteTitleTextProvider =
         Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+    final _timerProvider =
+        Provider.of<TimerProvider>(noteContext, listen: false);
     _noteImageProvider.clearImageList();
     _noteTitleTextProvider.clearTitle();
     _noteTitleTextProvider.clearText();
@@ -75,8 +56,8 @@ class NoteProvider extends ChangeNotifier {
     _noteTaskProvider.clearTaskList();
     _noteTaskProvider.clearTaskControllerList();
     providerIndex = null;
-    time_duration = Duration();
-    note_duration = Duration();
+    _timerProvider.time_duration = Duration();
+    _timerProvider.note_duration = Duration();
     notifyListeners();
   }
 
@@ -93,10 +74,12 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
     final _noteColorProvider =
         Provider.of<NoteColorProvider>(noteContext, listen: false);
+            final _timerProvider =
+        Provider.of<TimerProvider>(noteContext, listen: false);
     _noteTitleTextProvider.ttitle = _noteTitleTextProvider.title.text;
     _noteTitleTextProvider.ttext = _noteTitleTextProvider.text.text;
     _noteTitleTextProvider.old_value = _noteTitleTextProvider.text.text;
-    time_snapshot = note_duration;
+    _timerProvider.time_snapshot = _timerProvider.note_duration;
     _noteColorProvider.colorSnapShot = _noteColorProvider.noteColor;
     _noteTitleTextProvider.begin_edit = false;
     if (!newNote) {
@@ -116,9 +99,11 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteTaskProvider>(noteContext, listen: false);
     final _noteTitleTextProvider =
         Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+            final _timerProvider =
+        Provider.of<TimerProvider>(noteContext, listen: false);
     if (_noteTitleTextProvider.ttitle == _noteTitleTextProvider.title.text &&
         _noteTitleTextProvider.ttext == _noteTitleTextProvider.text.text &&
-        time_duration == time_snapshot &&
+        _timerProvider.time_duration == _timerProvider.time_snapshot &&
         ListEquality().equals(_noteImageProvider.imageList,
             _noteImageProvider.imageListSnapshot) &&
         ListEquality().equals(_noteVoiceRecorderProvider.voiceList,
@@ -195,6 +180,8 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
     final _noteColorProvider =
         Provider.of<NoteColorProvider>(noteContext, listen: false);
+            final _timerProvider =
+        Provider.of<TimerProvider>(noteContext, listen: false);
     providerKeys = keys;
     providerIndex = index;
     _bottomNavProvider.initialSelectedTab();
@@ -235,8 +222,8 @@ class NoteProvider extends ChangeNotifier {
     _noteTitleTextProvider.ftext.requestFocus();
     _noteTitleTextProvider.text.selection = TextSelection.fromPosition(
         TextPosition(offset: _noteTitleTextProvider.text.text.length));
-    time_duration = Duration(seconds: bnote.leftTime);
-    note_duration = Duration(seconds: bnote.time);
+    _timerProvider.time_duration = Duration(seconds: bnote.leftTime);
+    _timerProvider.note_duration = Duration(seconds: bnote.time);
     _noteColorProvider.initialNoteColor(Color(bnote.color));
     newNote = false;
     await _bottomNavProvider.initialTabs(context);
@@ -259,7 +246,10 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteTaskProvider>(noteContext, listen: false);
     final _noteTitleTextProvider =
         Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
-    final _noteColorProvider = Provider.of<NoteColorProvider>(noteContext, listen: false);
+    final _noteColorProvider =
+        Provider.of<NoteColorProvider>(noteContext, listen: false);
+            final _timerProvider =
+        Provider.of<TimerProvider>(noteContext, listen: false);
     // checking whether your going to update the note or add new one
     // that is done by chekcing the newNote true or false
     if (newNote) {
@@ -271,7 +261,7 @@ class NoteProvider extends ChangeNotifier {
               "" &&
           _noteImageProvider.imageList.isEmpty &&
           _noteVoiceRecorderProvider.voiceList.isEmpty &&
-          note_duration == Duration()) {
+          _timerProvider.note_duration == Duration()) {
         if (notSaving == 0) {
           ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
             // TODO making better the emptyFieldAlert to title and text must not be null
@@ -297,9 +287,10 @@ class NoteProvider extends ChangeNotifier {
             ? noteTitle = "Unamed"
             : noteTitle = _noteTitleTextProvider.title.text;
         final String noteText = _noteTitleTextProvider.text.text;
-        final int noteTime = note_duration.inSeconds;
+        final int noteTime = _timerProvider.note_duration.inSeconds;
         int leftTime = noteTime;
-        var color = _noteColorProvider.noteColor?.value ?? _bottomNavProvider.tabColors[0].value;
+        var color = _noteColorProvider.noteColor?.value ??
+            _bottomNavProvider.tabColors[0].value;
         if (_noteTaskProvider.taskControllerList.isNotEmpty) {
           for (int i = 0;
               i < _noteTaskProvider.taskControllerList.length;
@@ -341,7 +332,8 @@ class NoteProvider extends ChangeNotifier {
         _noteTitleTextProvider.title.text.isEmpty
             ? noteTitle = "Unamed"
             : noteTitle = _noteTitleTextProvider.title.text;
-        var color = _noteColorProvider.noteColor?.value ?? _bottomNavProvider.tabColors[0].value;
+        var color = _noteColorProvider.noteColor?.value ??
+            _bottomNavProvider.tabColors[0].value;
         if (_noteTaskProvider.taskControllerList.isNotEmpty) {
           for (int i = 0;
               i < _noteTaskProvider.taskControllerList.length;
@@ -360,7 +352,7 @@ class NoteProvider extends ChangeNotifier {
             noteTitle,
             _noteTitleTextProvider.text.text,
             bnote.isChecked,
-            note_duration.inSeconds,
+            _timerProvider.note_duration.inSeconds,
             color,
             bnote.leftTime,
             _noteImageProvider.imageList,
@@ -394,6 +386,8 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteTaskProvider>(noteContext, listen: false);
     final _noteTitleTextProvider =
         Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+          final _timerProvider =
+        Provider.of<TimerProvider>(noteContext, listen: false);
     if (isEdited()) {
       if (_noteTitleTextProvider.text.text.isEmpty &&
           _noteTitleTextProvider.title.text.isEmpty &&
@@ -401,7 +395,7 @@ class NoteProvider extends ChangeNotifier {
               "" &&
           _noteImageProvider.imageList.isEmpty &&
           _noteVoiceRecorderProvider.voiceList.isEmpty &&
-          note_duration == Duration()) {
+          _timerProvider.note_duration == Duration()) {
         ScaffoldMessenger.of(noteContext).clearSnackBars();
         ScaffoldMessenger.of(noteContext).showSnackBar(uiKit.MySnackBar(
             uiKit.AppLocalizations.of(noteContext).translate('willingToDelete'),
@@ -441,54 +435,6 @@ class NoteProvider extends ChangeNotifier {
     }
   }
 
-  // This function  is used to handle the changes that has been
-  // occured to the time picker !
-  Duration saved_duration = Duration();
-  Duration saved_note_duration = Duration();
-  void saveDuration() {
-    saved_duration = time_duration;
-    saved_note_duration = note_duration;
-  }
-
-  void timerDurationChange(duration) {
-    // updating the state and notifiung the listeners
-
-    time_duration = duration;
-    note_duration = duration;
-
-    // notifyListeners();
-  }
-
-  void updateDuration(int leftTime) {
-    time_duration = Duration(seconds: leftTime);
-  }
-
-  void timerDone() async {
-    if (note_duration != time_snapshot) {
-      // timer has been updated so that
-      // We must update the left time too
-      if (!newNote) {
-        var bnote = await noteBox.get(providerKeys[providerIndex]);
-        var ntitle = bnote.title;
-        var nttext = bnote.text;
-        var ntischecked = bnote.isChecked;
-        var nttime = note_duration.inSeconds;
-        var ntcolor = bnote.color;
-        var ntlefttime = note_duration.inSeconds;
-        var ntImageList = bnote.imageList;
-        var ntVoiceList = bnote.voiceList;
-        var ntTaskList = bnote.taskList;
-        var ntResetCheckBoxs = bnote.resetCheckBoxs;
-        Note note = Note(ntitle, nttext, ntischecked, nttime, ntcolor,
-            ntlefttime, ntImageList, ntVoiceList, ntTaskList, ntResetCheckBoxs);
-        noteBox.put(providerKeys[providerIndex], note);
-        notifyListeners();
-      } else {
-        notifyListeners();
-      }
-    }
-  }
-
   showDogeCopied(BuildContext context) {
     noteContext = context;
     ScaffoldMessenger.of(noteContext).clearSnackBars();
@@ -499,6 +445,4 @@ class NoteProvider extends ChangeNotifier {
         false,
         context: noteContext));
   }
-
-
 }

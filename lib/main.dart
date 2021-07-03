@@ -110,13 +110,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   myProvider().checkDayChange();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -124,7 +117,7 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(
             create: (context) => NoteProvider(),
           ),
-          ChangeNotifierProvider(create: (context) => TimerState()),
+          ChangeNotifierProvider(create: (context) => TimerProvider()),
           ChangeNotifierProvider(create: (context) => ConnState()),
           ChangeNotifierProvider(create: (context) => SigninState()),
           ChangeNotifierProvider(create: (context) => ThemeProvider()),

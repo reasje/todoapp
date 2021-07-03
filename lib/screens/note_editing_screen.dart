@@ -24,7 +24,7 @@ class _MyNotesEditingState extends State<MyNotesEditing> {
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<NoteProvider>(context , listen: false);
     final _themeProvider = Provider.of<ThemeProvider>(context , listen: false);
-    final _timerState = Provider.of<TimerState>(context);
+    final _timerState = Provider.of<TimerProvider>(context);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     bool isLandscape =

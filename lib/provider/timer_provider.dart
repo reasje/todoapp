@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -11,15 +10,15 @@ import 'package:todoapp/provider/note_provider.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:todoapp/model/image_model.dart' as imageModel;
-class TimerState extends ChangeNotifier {
-  TimerState() {
+class TimerProvider extends ChangeNotifier {
+  TimerProvider() {
     this.keys = [];
     this.keys.add(0);
     this.index = 0;
     reNewList();
   }
 
-  BuildContext my_context;
+  BuildContext timerContext;
   List<bool> isRunning = [];
   List<bool> isOver = [];
   List<bool> isPaused = [];
@@ -33,16 +32,20 @@ class TimerState extends ChangeNotifier {
   var target;
   List<Voice> voiceList = [];
   List<imageModel.Image>imageList = [];
+  List<int> providerKeys;
+  int providerIndex;
   bool newNote = false;
   final noteBox = Hive.lazyBox<Note>(noteBoxName);
+
+  // When the timer gets started 
   void startTimer(BuildContext context) async {
     final _myProvider = Provider.of<NoteProvider>(context, listen: false);
     if (timer == null || !timer?.isActive) {
       var bnote = keys == null ? null : await noteBox.get(keys[index]);
       bnote?.leftTime == null ? newNote = true : newNote = false;
-      int leftTime = bnote?.leftTime ?? _myProvider.time_duration.inSeconds;
+      int leftTime = bnote?.leftTime ?? time_duration.inSeconds;
       // This
-      leftTime == 0 ? leftTime = _myProvider.note_duration.inSeconds : null;
+      leftTime == 0 ? leftTime = note_duration.inSeconds : null;
       var now = DateTime.now();
       if (leftTime > 900) {
         leftTime = leftTime - 180;
@@ -56,15 +59,15 @@ class TimerState extends ChangeNotifier {
       Duration duration =
           Duration(hours: hour, minutes: minute, seconds: second);
       target = now.add(duration);
-      _myProvider.updateDuration(leftTime);
+      updateDuration(leftTime);
       leftTime = leftTime - 1;
       timer = Timer.periodic(Duration(seconds: 1), (timer) async {
         var bnote = keys == null ? null : await noteBox.get(keys[index]);
         bnote?.leftTime == null ? newNote = true : newNote = false;
-        int leftTime = bnote?.leftTime ?? _myProvider.time_duration.inSeconds;
+        int leftTime = bnote?.leftTime ?? time_duration.inSeconds;
 
         leftTime = leftTime - 1;
-        _myProvider.updateDuration(leftTime);
+        updateDuration(leftTime);
         print('object$leftTime');
         // If the timer finishes
         if (leftTime == 0) {
@@ -227,7 +230,7 @@ class TimerState extends ChangeNotifier {
           ntimages, ntvoices, nttasks , ntResetCheckBoxs);
       await noteBox.put(keys[index], note);
       if (_turnOn) {
-        startTimer(my_context);
+        startTimer(timerContext);
       }
     } else {
       // if (leftTime >= 0) {
@@ -283,9 +286,9 @@ class TimerState extends ChangeNotifier {
       Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime,
           ntimages, ntvoices, nttasks , ntResetCheckBoxs);
       await noteBox.put(keys[index], note);
-      _myProvider.updateDuration(_myProvider.note_duration.inSeconds);
+      updateDuration(note_duration.inSeconds);
     } else {
-      _myProvider.updateDuration(_myProvider.note_duration.inSeconds);
+      updateDuration(note_duration.inSeconds);
     }
     //notifyListeners();
     stopTimer();
@@ -295,15 +298,15 @@ class TimerState extends ChangeNotifier {
     var bnote = await noteBox.get(keys[index]);
     this.keys = keys;
     this.index = index;
-    this.my_context = context;
+    this.timerContext = context;
     if (bnote.imageList?.isNotEmpty ?? false) {
       imageList = bnote.imageList;
     }
     if (bnote.imageList?.isNotEmpty ?? false) {
       voiceList = bnote.voiceList;
     }
-    title = uiKit.AppLocalizations.of(my_context).translate('notesapp');
-    text = uiKit.AppLocalizations.of(my_context).translate('taskOver');
+    title = uiKit.AppLocalizations.of(timerContext).translate('notesapp');
+    text = uiKit.AppLocalizations.of(timerContext).translate('taskOver');
     leftTime = bnote.leftTime;
     newIndex = null;
     notifyListeners();
@@ -353,17 +356,74 @@ class TimerState extends ChangeNotifier {
     // await flutterLocalNotificationsPlugin.schedule(0, 'Office', 'alarmInfo.title',
     //     scheduledNotificationDateTime, platformChannelSpecifics);
   }
+    // The Time picker dialog controller
+  Duration time_duration = Duration();
+  Duration note_duration = Duration();
+  // this varriable is used in snapshot to chacke
+  // that no changes has been made
+  Duration time_snapshot;
+    // This function  is used to handle the changes that has been
+  // occured to the time picker !
+  Duration saved_duration = Duration();
+  Duration saved_note_duration = Duration();
+  void saveDuration() {
+    saved_duration = time_duration;
+    saved_note_duration = note_duration;
+  }
 
+  void timerDurationChange(duration) {
+    // updating the state and notifiung the listeners
+
+    time_duration = duration;
+    note_duration = duration;
+
+    // notifyListeners();
+  }
+
+  void updateDuration(int leftTime) {
+    time_duration = Duration(seconds: leftTime);
+  }
+
+  void timerDone() async {
+    if (note_duration != time_snapshot) {
+      // timer has been updated so that
+      // We must update the left time too
+      if (!newNote) {
+        var bnote = await noteBox.get(providerKeys[providerIndex]);
+        var ntitle = bnote.title;
+        var nttext = bnote.text;
+        var ntischecked = bnote.isChecked;
+        var nttime = note_duration.inSeconds;
+        var ntcolor = bnote.color;
+        var ntlefttime = note_duration.inSeconds;
+        var ntImageList = bnote.imageList;
+        var ntVoiceList = bnote.voiceList;
+        var ntTaskList = bnote.taskList;
+        var ntResetCheckBoxs = bnote.resetCheckBoxs;
+        Note note = Note(ntitle, nttext, ntischecked, nttime, ntcolor,
+            ntlefttime, ntImageList, ntVoiceList, ntTaskList, ntResetCheckBoxs);
+        noteBox.put(providerKeys[providerIndex], note);
+        notifyListeners();
+      } else {
+        notifyListeners();
+      }
+    }
+  }
+  // This function is used inside the notes_editing_screen as
+  // a future function to load the pictures
+  Future<int> getTimeDuration([List<int> keys, int index]) async {
+    return time_duration.inSeconds;
+  }
   // trying to avoid the user from getting back while the timer is on
   // void backPressed() {
   //   if (isRunning[index]) {
   //     print('object');
-  //     ScaffoldMessenger.of(my_context).showSnackBar(uiKit.MySnackBar(
-  //         uiKit.AppLocalizations.of(my_context).translate('cannotGoBack'),
+  //     ScaffoldMessenger.of(timerContext).showSnackBar(uiKit.MySnackBar(
+  //         uiKit.AppLocalizations.of(timerContext).translate('cannotGoBack'),
   //         false,
-  //         my_context));
+  //         timerContext));
   //   } else {
-  //     var _myProvider = Provider.of<myProvider>(my_context);
+  //     var _myProvider = Provider.of<myProvider>(timerContext);
   //     _myProvider.changeTimerStack();
   //   }
   // }

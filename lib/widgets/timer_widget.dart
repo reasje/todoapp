@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/bottomnav_provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
-import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
-import '../main.dart';
 
 class TimerWidget extends StatefulWidget {
   const TimerWidget({
@@ -26,18 +22,15 @@ class _TimerWidgetState extends State<TimerWidget> {
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     double SizeXSizeY = SizeX * SizeY;
-    final _timerState = Provider.of<TimerState>(context);
-    final _myProvider = Provider.of<NoteProvider>(context);
-    final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _timerState = Provider.of<TimerProvider>(context);
     final _bottomNavProvider = Provider.of<BottomNavProvider>(context, listen: false);
-    LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     return Container(
         height: isLandscape ? SizeY : SizeX * 0.9,
-        child: _myProvider.note_duration != Duration()
+        child: _timerState.note_duration != Duration()
                 ? FutureBuilder(
-                    future: _myProvider.getNoteEditStack(
+                    future: _timerState.getTimeDuration(
                         _timerState.keys, _timerState.index),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
@@ -125,15 +118,6 @@ class _TimerWidgetState extends State<TimerWidget> {
                                             fontSize: SizeX * SizeY * 0.00015,
                                             fontFamily: "Ubuntu Condensed"),
                                       ),
-                                      // Text(
-                                      //   ':',
-                                      //   style: TextStyle(
-                                      //       color: _timerState.isRunning
-                                      //               .any((element) => element == true)
-                                      //           ? _myProvider.swachColor
-                                      //           : _myProvider.textColor,
-                                      //       fontSize: SizeX * SizeY * 0.00015),
-                                      // ),
                                       Text(
                                         minute_section,
                                         style: TextStyle(
@@ -155,15 +139,6 @@ class _TimerWidgetState extends State<TimerWidget> {
                                             fontSize: SizeX * SizeY * 0.00015,
                                             fontFamily: "Ubuntu Condensed"),
                                       ),
-                                      // Text(
-                                      //   ':',
-                                      //   style: TextStyle(
-                                      //       color: _timerState.isRunning
-                                      //               .any((element) => element == true)
-                                      //           ? _myProvider.swachColor
-                                      //           : _myProvider.textColor,
-                                      //       fontSize: SizeX * SizeY * 0.00015),
-                                      // ),
                                       Text(
                                         second_section,
                                         style: TextStyle(

@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
+import 'package:todoapp/provider/timer_provider.dart';
 
-Widget MyDatePicker(@required BuildContext context) {
-  final _myprovider = Provider.of<NoteProvider>(context);
+Widget MyDatePicker( BuildContext context) {
+  final _timerProvider = Provider.of<TimerProvider>(context);
   final _themeProvider = Provider.of<ThemeProvider>(context);
   return Container(
     color: _themeProvider.mainColor,
@@ -24,9 +24,9 @@ Widget MyDatePicker(@required BuildContext context) {
           backgroundColor: _themeProvider.mainColor,
           
           onTimerDurationChanged: (value) {
-            _myprovider.timerDurationChange(value);
+            _timerProvider.timerDurationChange(value);
           },
-          initialTimerDuration: _myprovider.note_duration ?? Duration(seconds: 0),
+          initialTimerDuration: _timerProvider.note_duration ?? Duration(seconds: 0),
           mode: CupertinoTimerPickerMode.hms,
           minuteInterval: 1,
           secondInterval: 1,

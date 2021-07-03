@@ -71,7 +71,7 @@ class _MyButtonState extends State<MyButton> {
         isPressed = true;
         Future.delayed(Duration(milliseconds: 100), () async {
           final _myProvider = Provider.of<NoteProvider>(context, listen: false);
-          final _timerState = Provider.of<TimerState>(context, listen: false);
+          final _timerState = Provider.of<TimerProvider>(context, listen: false);
           final _signinState = Provider.of<SigninState>(context, listen: false);
           final _connState = Provider.of<ConnState>(context, listen: false);
           final _noteImageProvider = Provider.of<NoteImageProvider>(context, listen: false);
@@ -208,7 +208,7 @@ class _MyButtonState extends State<MyButton> {
                           ),
                         ),
                       );
-                    }).then((value) => _myProvider.timerDone());
+                    }).then((value) => _timerState.timerDone());
               }
               break;
 
@@ -402,7 +402,7 @@ class _MyButtonState extends State<MyButton> {
   @override
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<NoteProvider>(context);
-    final _timerState = Provider.of<TimerState>(context);
+    final _timerState = Provider.of<TimerProvider>(context);
     final _signinState = Provider.of<SigninState>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
     Color backgroundColor = widget.backgroundColor;

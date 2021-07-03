@@ -15,7 +15,7 @@ class FloatingActionButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<NoteProvider>(context, listen: false);
-    final _timerState = Provider.of<TimerState>(context, listen: false);
+    final _timerState = Provider.of<TimerProvider>(context, listen: false);
     final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     return FloatingActionButton(
       elevation: 0,
