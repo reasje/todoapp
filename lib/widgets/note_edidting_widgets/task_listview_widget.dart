@@ -199,12 +199,7 @@ class TaskListView extends StatelessWidget {
                                                   fontWeight: FontWeight.w200)),
                                         ),
                                       ),
-                                      // Column(
-                                      //   children: [
-                                      //     Icon(Icons.arrow_circle_down_rounded),
-                                      //     Icon(Icons.arrow_circle_up_rounded),
-                                      //   ],
-                                      // )
+                                      Icon(Icons.swap_vertical_circle_rounded , color: color,),
                                     ],
                                   ),
                                 )),
