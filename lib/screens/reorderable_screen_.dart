@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/note_provider.dart';
+import 'package:todoapp/provider/reorderable_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
@@ -31,6 +32,7 @@ class _MyRorderableState extends State<MyRorderable> {
   @override
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<NoteProvider>(context, listen: false);
+    final _reorderableProvider = Provider.of<ReorderableProvider>(context, listen: false);
     LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
@@ -66,13 +68,13 @@ class _MyRorderableState extends State<MyRorderable> {
                                 uiKit.noNotes()
                               else
                                 FutureBuilder(
-                                    future: _myProvider.updateListSize(
+                                    future: _reorderableProvider.updateListSize(
                                         keys, SizeX, SizeY),
                                     builder: (context, snapShot) {
                                       if (snapShot.hasData) {
                                         return Container(
                                           height:
-                                              _myProvider.listViewSize + 400.0,
+                                              _reorderableProvider.listViewSize + 400.0,
                                           width: SizeY,
                                           child: ScrollConfiguration(
                                             behavior: NoGlowBehaviour(),
@@ -114,7 +116,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                     int newIndex) async {
                                                   // TODO try corecting the when there 3 element and
                                                   // you change the bottom and the top elements
-                                                  _myProvider.reorderList(
+                                                  _reorderableProvider.reorderList(
                                                       oldIndex, newIndex);
                                                   // if oldIndex < newIndex the flutter asumes the
                                                   // newIndex is newIndex+1 for example new index yopu think is

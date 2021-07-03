@@ -17,6 +17,7 @@ import 'package:todoapp/provider/notetask_provider.dart';
 import 'package:todoapp/provider/notetitletext_provider.dart';
 import 'package:todoapp/provider/notevoice_player_provider.dart';
 import 'package:todoapp/provider/notevoice_recorder_provider.dart';
+import 'package:todoapp/provider/reorderable_provider.dart';
 import 'package:todoapp/provider/signin_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
@@ -135,6 +136,7 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (context) => NoteTaskProvider()),
           ChangeNotifierProvider(create: (context) => NoteTitleTextProvider()),
           ChangeNotifierProvider(create: (context) => NoteColorProvider()),
+          ChangeNotifierProvider(create: (context) => ReorderableProvider()),
         ],
         child: Consumer<ThemeProvider>(
           builder: (context, _themeProvider, _) {
