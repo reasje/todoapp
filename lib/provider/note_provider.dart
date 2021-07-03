@@ -7,6 +7,7 @@ import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/taskController.dart';
 import 'package:todoapp/model/task_model.dart';
 import 'package:todoapp/provider/bottomnav_provider.dart';
+import 'package:todoapp/provider/notecolor_provider.dart';
 import 'package:todoapp/provider/notetitletext_provider.dart';
 import 'package:todoapp/provider/notevoice_recorder_provider.dart';
 import '../main.dart';
@@ -32,7 +33,6 @@ class NoteProvider extends ChangeNotifier {
   // this varriable is used in snapshot to chacke
   // that no changes has been made
   Duration time_snapshot;
-
   // this is used for showing the SnackBar
   BuildContext noteContext;
   // the index of the main stack and the floating stack
@@ -44,11 +44,6 @@ class NoteProvider extends ChangeNotifier {
 
   bool newNote;
   Note bnote;
-  // note color is used for reloading the color selection selected
-  Color noteColor;
-  Color colorSnapShot;
-  int indexOfSelectedColor;
-  //////////////////////////////////// *** IMAGELIST PART *** /////////////////////////////////////
 
   // This function is used inside the notes_editing_screen as
   // a future function to load the pictures
@@ -123,12 +118,15 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
     final _noteTaskProvider =
         Provider.of<NoteTaskProvider>(noteContext, listen: false);
-        final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+    final _noteTitleTextProvider =
+        Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+    final _noteColorProvider =
+        Provider.of<NoteColorProvider>(noteContext, listen: false);
     _noteTitleTextProvider.ttitle = _noteTitleTextProvider.title.text;
     _noteTitleTextProvider.ttext = _noteTitleTextProvider.text.text;
     _noteTitleTextProvider.old_value = _noteTitleTextProvider.text.text;
     time_snapshot = note_duration;
-    colorSnapShot = noteColor;
+    _noteColorProvider.colorSnapShot = _noteColorProvider.noteColor;
     _noteTitleTextProvider.begin_edit = false;
     if (!newNote) {
       _noteImageProvider.initialImageListSnapshot();
@@ -145,7 +143,8 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
     final _noteTaskProvider =
         Provider.of<NoteTaskProvider>(noteContext, listen: false);
-    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+    final _noteTitleTextProvider =
+        Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
     if (_noteTitleTextProvider.ttitle == _noteTitleTextProvider.title.text &&
         _noteTitleTextProvider.ttext == _noteTitleTextProvider.text.text &&
         time_duration == time_snapshot &&
@@ -221,7 +220,10 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
     final _noteTaskProvider =
         Provider.of<NoteTaskProvider>(noteContext, listen: false);
-    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+    final _noteTitleTextProvider =
+        Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+    final _noteColorProvider =
+        Provider.of<NoteColorProvider>(noteContext, listen: false);
     providerKeys = keys;
     providerIndex = index;
     _bottomNavProvider.initialSelectedTab();
@@ -260,31 +262,17 @@ class NoteProvider extends ChangeNotifier {
     _noteTitleTextProvider.title.text = bnote.title;
     _noteTitleTextProvider.text.text = bnote.text;
     _noteTitleTextProvider.ftext.requestFocus();
-    _noteTitleTextProvider.text.selection =
-        TextSelection.fromPosition(TextPosition(offset: _noteTitleTextProvider.text.text.length));
+    _noteTitleTextProvider.text.selection = TextSelection.fromPosition(
+        TextPosition(offset: _noteTitleTextProvider.text.text.length));
     time_duration = Duration(seconds: bnote.leftTime);
     note_duration = Duration(seconds: bnote.time);
-    noteColor = Color(bnote.color);
+    _noteColorProvider.initialNoteColor(Color(bnote.color));
     newNote = false;
     await _bottomNavProvider.initialTabs(context);
     _bottomNavProvider.initialPage();
     notifyListeners();
 
     takeSnapshot();
-  }
-
-  //  Note editing tabs and colors managment
-
-  void noteColorSelected(Color color) {
-    noteColor = color;
-    notifyListeners();
-  }
-
-  // getting the color that was choosen by the user
-  void changeNoteColor(Color selectedColor, int index) {
-    noteColor = selectedColor;
-    indexOfSelectedColor = index;
-    notifyListeners();
   }
 
   // executed when the user tapped on the check floating button (done icon FAB)
@@ -298,7 +286,9 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
     final _noteTaskProvider =
         Provider.of<NoteTaskProvider>(noteContext, listen: false);
-    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+    final _noteTitleTextProvider =
+        Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+    final _noteColorProvider = Provider.of<NoteColorProvider>(noteContext, listen: false);
     // checking whether your going to update the note or add new one
     // that is done by chekcing the newNote true or false
     if (newNote) {
@@ -332,11 +322,13 @@ class NoteProvider extends ChangeNotifier {
         }
       } else {
         String noteTitle;
-        _noteTitleTextProvider.title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = _noteTitleTextProvider.title.text;
+        _noteTitleTextProvider.title.text.isEmpty
+            ? noteTitle = "Unamed"
+            : noteTitle = _noteTitleTextProvider.title.text;
         final String noteText = _noteTitleTextProvider.text.text;
         final int noteTime = note_duration.inSeconds;
         int leftTime = noteTime;
-        var color = noteColor?.value ?? _bottomNavProvider.tabColors[0].value;
+        var color = _noteColorProvider.noteColor?.value ?? _bottomNavProvider.tabColors[0].value;
         if (_noteTaskProvider.taskControllerList.isNotEmpty) {
           for (int i = 0;
               i < _noteTaskProvider.taskControllerList.length;
@@ -364,18 +356,21 @@ class NoteProvider extends ChangeNotifier {
           _noteTaskProvider.resetCheckBoxs,
         );
         await noteBox.add(note);
-       _noteTitleTextProvider.changes.clearHistory();
+        _noteTitleTextProvider.changes.clearHistory();
         clearControllers();
         notifyListeners();
         Navigator.pop(noteContext);
       }
     } else {
       // One of the title or text fields must be filled
-      if (_noteTitleTextProvider.text.text.isNotEmpty || _noteTitleTextProvider.title.text.isNotEmpty) {
+      if (_noteTitleTextProvider.text.text.isNotEmpty ||
+          _noteTitleTextProvider.title.text.isNotEmpty) {
         var bnote = await noteBox.get(providerKeys[providerIndex]);
         String noteTitle;
-        _noteTitleTextProvider.title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = _noteTitleTextProvider.title.text;
-        var color = noteColor?.value ?? _bottomNavProvider.tabColors[0].value;
+        _noteTitleTextProvider.title.text.isEmpty
+            ? noteTitle = "Unamed"
+            : noteTitle = _noteTitleTextProvider.title.text;
+        var color = _noteColorProvider.noteColor?.value ?? _bottomNavProvider.tabColors[0].value;
         if (_noteTaskProvider.taskControllerList.isNotEmpty) {
           for (int i = 0;
               i < _noteTaskProvider.taskControllerList.length;
@@ -426,7 +421,8 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
     final _noteTaskProvider =
         Provider.of<NoteTaskProvider>(noteContext, listen: false);
-    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+    final _noteTitleTextProvider =
+        Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
     if (isEdited()) {
       if (_noteTitleTextProvider.text.text.isEmpty &&
           _noteTitleTextProvider.title.text.isEmpty &&

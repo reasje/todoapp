@@ -8,13 +8,13 @@ import 'package:todoapp/provider/conn_provider.dart';
 
 import 'package:todoapp/provider/drive_provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
+import 'package:todoapp/provider/notecolor_provider.dart';
 import 'package:todoapp/provider/noteimage_provider.dart';
 import 'package:todoapp/provider/notetitletext_provider.dart';
 import 'package:todoapp/provider/notevoice_recorder_provider.dart';
 import 'package:todoapp/provider/signin_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
-import 'package:todoapp/screens/home_screen.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -77,6 +77,7 @@ class _MyButtonState extends State<MyButton> {
           final _noteImageProvider = Provider.of<NoteImageProvider>(context, listen: false);
           final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(context, listen: false);
           final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(context, listen: false);
+          final _noteColorProvider = Provider.of<NoteColorProvider>(context, listen: false);
           final _themeProvider =
               Provider.of<ThemeProvider>(context, listen: false);
           double SizeX = MediaQuery.of(context).size.height;
@@ -235,7 +236,7 @@ class _MyButtonState extends State<MyButton> {
                           children: colors
                               .map((color) => InkWell(
                                     onTap: () {
-                                      _myProvider.noteColorSelected(color);
+                                      _noteColorProvider.noteColorSelected(color);
                                       Navigator.pop(context);
                                     },
                                     child: Container(
