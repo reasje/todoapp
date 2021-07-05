@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:screen_loader/screen_loader.dart';
 import 'package:todoapp/model/image_model.dart' as imageModel;
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/task_model.dart';
@@ -25,7 +24,6 @@ import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/provider/uncheck_provider.dart';
 import 'package:todoapp/screens/splash_screen.dart';
-import 'package:todoapp/widgets/loading_widget.dart';
 import 'applocalizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -66,7 +64,7 @@ void main() async {
   final document = await getApplicationDocumentsDirectory();
   // Giving the path of the data base to the Hive
   Hive.init(document.path);
-    // registering the adapter
+  // registering the adapter
   Hive.registerAdapter(imageModel.ImageAdapter());
   // registering the adapter
   Hive.registerAdapter(TaskAdapter());
@@ -127,8 +125,10 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (context) => UnCheckProvider()),
           ChangeNotifierProvider(create: (context) => BottomNavProvider()),
           ChangeNotifierProvider(create: (context) => NoteImageProvider()),
-          ChangeNotifierProvider(create: (context) => NoteVoiceRecorderProvider()),
-          ChangeNotifierProvider(create: (context) => NoteVoicePlayerProvider()),
+          ChangeNotifierProvider(
+              create: (context) => NoteVoiceRecorderProvider()),
+          ChangeNotifierProvider(
+              create: (context) => NoteVoicePlayerProvider()),
           ChangeNotifierProvider(create: (context) => NoteTaskProvider()),
           ChangeNotifierProvider(create: (context) => NoteTitleTextProvider()),
           ChangeNotifierProvider(create: (context) => NoteColorProvider()),
@@ -137,50 +137,41 @@ class _MyAppState extends State<MyApp> {
         ],
         child: Consumer<ThemeProvider>(
           builder: (context, _themeProvider, _) {
-            return ScreenLoaderApp(
-              app: new MaterialApp(
-                locale: _themeProvider.locale,
-                localizationsDelegates: [
-                  AppLocalizations.delegate,
-                  // A class which loads the strings form JSON files
-                  //GlobalCupertinoLocalizations.delegate,
-                  // Built-in localization for simple text for Material widgets
-                  GlobalMaterialLocalizations.delegate,
-                  // Built-in localization for text direction LTR/RTL
-                  GlobalWidgetsLocalizations.delegate,
-                ],
-                supportedLocales: [
-                  Locale("en", "US"),
-                  Locale("fa", "IR"),
-                ],
-                // Return a locale which will be used by the app
-                // localeResolutionCallback: (locale, supportedLocales) {
-                //   // Check if the current device locale is supported
-                //   for (var supportedLocale in supportedLocales) {
-                //     if (supportedLocale.languageCode == locale.languageCode &&
-                //         supportedLocale.countryCode == locale.countryCode) {
-                //       return supportedLocale;
-                //     }
-                //   }
-                //   return supportedLocales.first;
-                // },
-                debugShowCheckedModeBanner: false,
-                theme: ThemeData(
-                    visualDensity: VisualDensity.adaptivePlatformDensity,
-                    fontFamily:
-                        _themeProvider.isEn ? "Ubuntu Condensed" : "Dubai"),
-                home: MySplashScreen(),
-                builder: EasyLoading.init(),
-              ),
-              globalLoader: MyCustomWidget(),
-              globalLoadingBgBlur: 20.0,
+            return new MaterialApp(
+              locale: _themeProvider.locale,
+              localizationsDelegates: [
+                AppLocalizations.delegate,
+                // A class which loads the strings form JSON files
+                //GlobalCupertinoLocalizations.delegate,
+                // Built-in localization for simple text for Material widgets
+                GlobalMaterialLocalizations.delegate,
+                // Built-in localization for text direction LTR/RTL
+                GlobalWidgetsLocalizations.delegate,
+              ],
+              supportedLocales: [
+                Locale("en", "US"),
+                Locale("fa", "IR"),
+              ],
+              // Return a locale which will be used by the app
+              // localeResolutionCallback: (locale, supportedLocales) {
+              //   // Check if the current device locale is supported
+              //   for (var supportedLocale in supportedLocales) {
+              //     if (supportedLocale.languageCode == locale.languageCode &&
+              //         supportedLocale.countryCode == locale.countryCode) {
+              //       return supportedLocale;
+              //     }
+              //   }
+              //   return supportedLocales.first;
+              // },
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(
+                  visualDensity: VisualDensity.adaptivePlatformDensity,
+                  fontFamily:
+                      _themeProvider.isEn ? "Ubuntu Condensed" : "Dubai"),
+              home: MySplashScreen(),
+              builder: EasyLoading.init(),
             );
           },
         ));
   }
 }
-
-
-
-
-

@@ -14,6 +14,7 @@ export 'widgets/note_edidting_widgets/bottomnav_widget.dart';
 export 'widgets/note_edidting_widgets/fab_widget.dart';
 export 'widgets/note_edidting_widgets/tabview_widget.dart';
 export 'screens/image_screen.dart';
+export 'widgets/loading_widget.dart';
 export 'widgets/note_listview_widgets/no_note_widget.dart';
 export 'widgets/note_listview_widgets/fab_widget.dart';
 export 'widgets/note_listview_widgets/reorderable_buttons_widget.dart';

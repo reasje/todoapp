@@ -7,7 +7,6 @@ import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/provider/reorderable_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
-import 'package:todoapp/widgets/loading_widget.dart';
 import '../main.dart';
 
 class MyRorderable extends StatefulWidget {
@@ -18,12 +17,7 @@ class MyRorderable extends StatefulWidget {
 }
 
 class _MyRorderableState extends State<MyRorderable> {
-  ScrollController _scrollController;
-  @override
-  void initState() {
-    _scrollController = ScrollController(keepScrollOffset: false);
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +50,6 @@ class _MyRorderableState extends State<MyRorderable> {
                       child: ScrollConfiguration(
                         behavior: NoGlowBehaviour(),
                         child: SingleChildScrollView(
-                          controller: _scrollController,
                           child: Column(
                             children: [
                               uiKit.ReorderableListButtonsWidget(),
@@ -82,8 +75,6 @@ class _MyRorderableState extends State<MyRorderable> {
                                                   child: ReorderableListView(
                                                     physics:
                                                         NeverScrollableScrollPhysics(),
-                                                    scrollController:
-                                                        _scrollController,
                                                     padding: EdgeInsets.only(
                                                         bottom: SizeX * 0.1,
                                                         top: SizeX * 0.01),
@@ -114,8 +105,6 @@ class _MyRorderableState extends State<MyRorderable> {
                                                     ],
                                                     onReorder: (int oldIndex,
                                                         int newIndex) async {
-                                                      // TODO try corecting the when there 3 element and
-                                                      // you change the bottom and the top elements
                                                       _reorderableProvider
                                                           .reorderNoteList(
                                                               oldIndex,
@@ -138,7 +127,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                       return Visibility(
                                           visible:
                                               _reorderableProvider.isLoading,
-                                          child: MyCustomWidget());
+                                          child: uiKit.LoadingWidget());
                                     },
                                   )
                                 ],

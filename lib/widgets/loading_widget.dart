@@ -1,12 +1,12 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 
-class MyCustomWidget extends StatefulWidget {
+class LoadingWidget extends StatefulWidget {
   @override
   _MyCustomWidgetState createState() => _MyCustomWidgetState();
 }
 
-class _MyCustomWidgetState extends State<MyCustomWidget>
+class _MyCustomWidgetState extends State<LoadingWidget>
     with TickerProviderStateMixin {
   AnimationController controller1;
   Animation<double> animation1;
