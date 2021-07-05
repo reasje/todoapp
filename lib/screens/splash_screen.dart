@@ -33,14 +33,11 @@ class _MySplashScreenState extends State<MySplashScreen> {
     final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     final _unCheckProvider =
         Provider.of<UnCheckProvider>(context, listen: false);
-    // final _bottomNavProvider =
-    //     Provider.of<BottomNavProvider>(context, listen: false);
     await _connState.connSub();
     await _connState.checkConn();
     await _unCheckProvider.checkDayChange();
     await _themeProvider.initialColorsAndLan();
     await _signinState.checkSignin();
-    // await _bottomNavProvider.initialTabs(context);
     await Future.delayed(Duration(seconds: 2));
     return Future.value(
         _themeProvider.isFirstTime ? Onboarding() : uiKit.MyRorderable());

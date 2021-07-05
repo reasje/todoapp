@@ -32,7 +32,4 @@ class Note {
   Note(this.title, this.text, this.isChecked, this.time, this.color,
       this.leftTime, this.imageList, this.voiceList, this.taskList , this.resetCheckBoxs);
 
-  // factory Note.fromJson(Map<String, dynamic> json) {
-  //   return Note(json['title'], json['text'], false, json['time'], null, null);
-  // }
 }
