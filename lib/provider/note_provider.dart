@@ -74,7 +74,7 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
     final _noteColorProvider =
         Provider.of<NoteColorProvider>(noteContext, listen: false);
-            final _timerProvider =
+    final _timerProvider =
         Provider.of<TimerProvider>(noteContext, listen: false);
     _noteTitleTextProvider.ttitle = _noteTitleTextProvider.title.text;
     _noteTitleTextProvider.ttext = _noteTitleTextProvider.text.text;
@@ -99,7 +99,7 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteTaskProvider>(noteContext, listen: false);
     final _noteTitleTextProvider =
         Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
-            final _timerProvider =
+    final _timerProvider =
         Provider.of<TimerProvider>(noteContext, listen: false);
     if (_noteTitleTextProvider.ttitle == _noteTitleTextProvider.title.text &&
         _noteTitleTextProvider.ttext == _noteTitleTextProvider.text.text &&
@@ -139,11 +139,11 @@ class NoteProvider extends ChangeNotifier {
   }
 
   // new Note clieked
-  Future<void> newNoteClicked(BuildContext context) async {
+  Future newNoteClicked(BuildContext context) async {
     final _bottomNavProvider =
         Provider.of<BottomNavProvider>(context, listen: false);
     final _noteTaskProvider =
-        Provider.of<NoteTaskProvider>(noteContext, listen: false);
+        Provider.of<NoteTaskProvider>(context, listen: false);
     noteContext = context;
     // When the add icon is tapped this function will be executed and
     // prepare the provider for the new Note
@@ -160,6 +160,7 @@ class NoteProvider extends ChangeNotifier {
     await _bottomNavProvider.initialTabs(context);
     takeSnapshot();
     notifyListeners();
+    return true;
   }
 
   // used indie list view after an elemt of listview is tapped
@@ -179,7 +180,7 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
     final _noteColorProvider =
         Provider.of<NoteColorProvider>(noteContext, listen: false);
-            final _timerProvider =
+    final _timerProvider =
         Provider.of<TimerProvider>(noteContext, listen: false);
     providerKeys = keys;
     providerIndex = index;
@@ -247,7 +248,7 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
     final _noteColorProvider =
         Provider.of<NoteColorProvider>(noteContext, listen: false);
-            final _timerProvider =
+    final _timerProvider =
         Provider.of<TimerProvider>(noteContext, listen: false);
     // checking whether your going to update the note or add new one
     // that is done by chekcing the newNote true or false
@@ -385,7 +386,7 @@ class NoteProvider extends ChangeNotifier {
         Provider.of<NoteTaskProvider>(noteContext, listen: false);
     final _noteTitleTextProvider =
         Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
-          final _timerProvider =
+    final _timerProvider =
         Provider.of<TimerProvider>(noteContext, listen: false);
     if (isEdited()) {
       if (_noteTitleTextProvider.text.text.isEmpty &&
@@ -433,6 +434,4 @@ class NoteProvider extends ChangeNotifier {
       Navigator.pop(noteContext);
     }
   }
-
-
 }
