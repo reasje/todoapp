@@ -31,7 +31,7 @@ class _MyRorderableState extends State<MyRorderable> {
 
   @override
   Widget build(BuildContext context) {
-    final _myProvider = Provider.of<NoteProvider>(context, listen: false);
+
     final _reorderableProvider = Provider.of<ReorderableProvider>(context, listen: false);
     LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
     double SizeX = MediaQuery.of(context).size.height;

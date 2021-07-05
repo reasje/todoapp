@@ -22,6 +22,7 @@ class TimerProvider extends ChangeNotifier {
   List<bool> isRunning = [];
   List<bool> isOver = [];
   List<bool> isPaused = [];
+  
   var timer;
   int leftTime = 0;
   List<int> keys;
@@ -32,14 +33,11 @@ class TimerProvider extends ChangeNotifier {
   var target;
   List<Voice> voiceList = [];
   List<imageModel.Image>imageList = [];
-  List<int> providerKeys;
-  int providerIndex;
   bool newNote = false;
   final noteBox = Hive.lazyBox<Note>(noteBoxName);
 
   // When the timer gets started 
   void startTimer(BuildContext context) async {
-    final _myProvider = Provider.of<NoteProvider>(context, listen: false);
     if (timer == null || !timer?.isActive) {
       var bnote = keys == null ? null : await noteBox.get(keys[index]);
       bnote?.leftTime == null ? newNote = true : newNote = false;
@@ -65,10 +63,8 @@ class TimerProvider extends ChangeNotifier {
         var bnote = keys == null ? null : await noteBox.get(keys[index]);
         bnote?.leftTime == null ? newNote = true : newNote = false;
         int leftTime = bnote?.leftTime ?? time_duration.inSeconds;
-
         leftTime = leftTime - 1;
         updateDuration(leftTime);
-        print('object$leftTime');
         // If the timer finishes
         if (leftTime == 0) {
           stopTimer();
@@ -103,9 +99,6 @@ class TimerProvider extends ChangeNotifier {
             isOver[newIndex] = true;
             isRunning[newIndex] = false;
           }
-          // Future.microtask(() {
-          //   startAlarm();
-          // });
           notifyListeners();
           // If the timer is over and the user clicks on start
           // We will be restarting the timer and starting the timer
@@ -294,7 +287,7 @@ class TimerProvider extends ChangeNotifier {
     stopTimer();
   }
 
-  void loadTimer(List<int> keys, int index, BuildContext context) async {
+  void loadTimer(List<int> keys, int index, BuildContext context ) async {
     var bnote = await noteBox.get(keys[index]);
     this.keys = keys;
     this.index = index;
@@ -312,15 +305,6 @@ class TimerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Used when there was a timer screen
-  // Future<List<Uint8List>> getImageList() async {
-  //   //myContext = context;
-  //   return imageList;
-  // }
-  //   Future<List<Voice>> getVoiceList() async {
-  //   //myContext = context;
-  //   return voiceList;
-  // }
   Future<void> startAlarm() async {
     Future.delayed(Duration(seconds: 0), () async {
       // var scheduledNotificationDateTime =
@@ -383,13 +367,15 @@ class TimerProvider extends ChangeNotifier {
   void updateDuration(int leftTime) {
     time_duration = Duration(seconds: leftTime);
   }
-
+  Future<int> getTimeDuration([List<int> keys, int index]) async {
+    return time_duration.inSeconds;
+  }
   void timerDone() async {
     if (note_duration != time_snapshot) {
       // timer has been updated so that
       // We must update the left time too
       if (!newNote) {
-        var bnote = await noteBox.get(providerKeys[providerIndex]);
+        var bnote = await noteBox.get(keys[index]);
         var ntitle = bnote.title;
         var nttext = bnote.text;
         var ntischecked = bnote.isChecked;
@@ -402,7 +388,7 @@ class TimerProvider extends ChangeNotifier {
         var ntResetCheckBoxs = bnote.resetCheckBoxs;
         Note note = Note(ntitle, nttext, ntischecked, nttime, ntcolor,
             ntlefttime, ntImageList, ntVoiceList, ntTaskList, ntResetCheckBoxs);
-        noteBox.put(providerKeys[providerIndex], note);
+        noteBox.put(keys[index], note);
         notifyListeners();
       } else {
         notifyListeners();
@@ -411,9 +397,7 @@ class TimerProvider extends ChangeNotifier {
   }
   // This function is used inside the notes_editing_screen as
   // a future function to load the pictures
-  Future<int> getTimeDuration([List<int> keys, int index]) async {
-    return time_duration.inSeconds;
-  }
+
   // trying to avoid the user from getting back while the timer is on
   // void backPressed() {
   //   if (isRunning[index]) {

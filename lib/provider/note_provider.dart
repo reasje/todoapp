@@ -120,7 +120,6 @@ class NoteProvider extends ChangeNotifier {
   void updateIsChecked(List<int> keys, int index) async {
     providerKeys = keys;
     providerIndex = index;
-
     var bnote = await noteBox.get(providerKeys[providerIndex]);
     var isChecked = bnote.isChecked;
     isChecked = !isChecked;

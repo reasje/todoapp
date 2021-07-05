@@ -129,7 +129,7 @@ class ReorderableCardWidget extends StatelessWidget {
                                       ),
                                       child: Directionality(
                                         textDirection: TextDirection.ltr,
-                                        child: Row(
+                                        child:  Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           mainAxisAlignment:

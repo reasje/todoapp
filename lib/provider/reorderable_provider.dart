@@ -5,13 +5,18 @@ import 'package:todoapp/model/note_model.dart';
 import '../main.dart';
 
 class ReorderableProvider with ChangeNotifier {
-    // This varrible is used to controll the listview size for the listview
+
+  // This varrible is used to controll the listview size for the listview
   // to not to be short
   double listViewSize;
-    // Hive box for notes
+
+  // Hive box for notes
   final noteBox = Hive.lazyBox<Note>(noteBoxName);
+
     Future<void> reorderNoteList(int oldIndex, int newIndex) async {
+
     List<int> keys = noteBox.keys.cast<int>().toList();
+
     if (oldIndex < newIndex) {
       newIndex -= 1;
     }
@@ -47,5 +52,8 @@ class ReorderableProvider with ChangeNotifier {
     listViewSize = (without_timer * SizeX * 0.22) + (with_timer * SizeX * 0.5);
     return true;
   }
-  
+
+  // Future<List<Note>> getNoteList(){
+
+  // }
 }
