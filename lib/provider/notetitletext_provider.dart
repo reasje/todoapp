@@ -11,7 +11,7 @@ class NoteTitleTextProvider with ChangeNotifier {
   String ttext;
   // focus nodes for each text field
   final FocusNode fTitle = FocusNode();
-    // Redo and Undo button activation change and used
+  // Redo and Undo button activation change and used
   // to avoid direct access to provider
   bool get canRedo => changes.canRedo;
   bool get canUndo => changes.canUndo;
@@ -20,7 +20,7 @@ class NoteTitleTextProvider with ChangeNotifier {
     changes.undo();
     notifyListeners();
   }
-  
+
   // handeling the Redo function
   void changesRedo() {
     changes.redo();
@@ -41,6 +41,7 @@ class NoteTitleTextProvider with ChangeNotifier {
     text.clear();
     notifyListeners();
   }
+
   final FocusNode ftext = FocusNode();
   TextEditingController get myTitle => title;
   TextEditingController get myText => text;
@@ -76,5 +77,12 @@ class NoteTitleTextProvider with ChangeNotifier {
       new_value_helper = newValue;
       notifyListeners();
     }
+  }
+
+  @override
+  void dispose() {
+    text.dispose();
+    title.dispose();
+    super.dispose();
   }
 }
