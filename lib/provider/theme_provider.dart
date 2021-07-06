@@ -12,70 +12,66 @@ class ThemeProvider extends ChangeNotifier {
   List<Color> noteTitleColor;
   Color shimmerColor;
   Color mainColor;
-  Color shadowColor;
-  Color lightShadowColor;
   Color textColor;
   Color titleColor;
   Color hintColor;
   Brightness brightness;
-  Color swachColor;
+  Color swachColor= Color(0xFF001b48);
   bool isEn;
   // this varrable is used to control the showcase
   bool isFirstTime;
   Locale locale;
   String noTaskImage;
   // This the color to be used for the buttons and so on
-  MaterialColor blueMaterial =
-      const MaterialColor(0xFF3694fc, const <int, Color>{
-    50: const Color(0x1A001b48),
-    100: const Color(0x33001b48),
-    200: const Color(0x4D001b48),
-    300: const Color(0x66001b48),
-    400: const Color(0x80001b48),
-    500: const Color(0x99001b48),
-    600: const Color(0xB3001b48),
-    700: const Color(0xCC001b48),
-    800: const Color(0xE6001b48),
-    900: const Color(0xFF001b48),
-  });
+  // MaterialColor blueMaterial =
+  //     const MaterialColor(0xFF3694fc, const <int, Color>{
+  //   50: const Color(0x1A001b48),
+  //   100: const Color(0x33001b48),
+  //   200: const Color(0x4D001b48),
+  //   300: const Color(0x66001b48),
+  //   400: const Color(0x80001b48),
+  //   500: const Color(0x99001b48),
+  //   600: const Color(0xB3001b48),
+  //   700: const Color(0xCC001b48),
+  //   800: const Color(0xE6001b48),
+  //   900: const Color(0xFF001b48),
+  // });
   Color red = Color(0xFFff4444);
   Color green = Color(0xFF00c851);
   Color yellow = Color(0xFFffbb33);
   Color blue = Color(0xFF33b5e5);
   Color purple = Color(0xffaa66cc);
 
-  Color redShade = Color(0xFFff4444);
-  Color greenShade = Color(0xFF00c851);
-  Color yellowShade = Color(0xFFffbb33);
-  Color blueShade = Color(0xFF33b5e5);
-  Color purpleShade = Color(0xffaa66cc);
+  // Color redShade = Color(0xFFff4444);
+  // Color greenShade = Color(0xFF00c851);
+  // Color yellowShade = Color(0xFFffbb33);
+  // Color blueShade = Color(0xFF33b5e5);
+  // Color purpleShade = Color(0xffaa66cc);
   List<Color> shadedColors = [];
   List<Color> getNoteColors() {
     shadedColors.clear();
-    shadedColors.add(redShade);
-    shadedColors.add(greenShade);
-    shadedColors.add(yellowShade);
-    shadedColors.add(blueShade);
-    shadedColors.add(purpleShade);
+    shadedColors.add(red);
+    shadedColors.add(green);
+    shadedColors.add(yellow);
+    shadedColors.add(blue);
+    shadedColors.add(purple);
     return shadedColors;
   }
 
   String splashImage;
   Color whiteMainColor = Color(0xffe6ebf2);
   Color blackMainColor = Color(0xff303234);
-  Color whiteShadowColor = Colors.black;
-  Color whiteShimmer = Colors.grey.withOpacity(0.6);
-  Color blackShimmer = Colors.grey.withOpacity(0.5);
-  Color blackShadowColor = Color(0xff000000).withOpacity(0.4);
-  Color whiteLightShadowColor = Colors.white;
-  Color blackLightShadowColor = Color(0xff494949).withOpacity(0.4);
+  // Color whiteShadowColor = Colors.black;
+  // Color whiteShimmer = Colors.grey.withOpacity(0.6);
+  // Color blackShimmer = Colors.grey.withOpacity(0.5);
+  // Color blackShadowColor = Color(0xff000000).withOpacity(0.4);
+  // Color whiteLightShadowColor = Colors.white;
+  // Color blackLightShadowColor = Color(0xff494949).withOpacity(0.4);
   Color whiteTextColor = Colors.black.withOpacity(.5);
   Color blackTextColor = Colors.white.withOpacity(.5);
   Color whiteTitleColor = Colors.black;
   Color blackTitleColor = Colors.white;
-  Color runningColor;
-  Color pausedColor;
-  Color overColor;
+
   Color whiteNoteTitleColor = Colors.black.withOpacity(.5);
   Color blackNoteTitleColor = Colors.white.withOpacity(.5);
 
@@ -130,9 +126,6 @@ class ThemeProvider extends ChangeNotifier {
     // better animation pusrpose
     noteTitleColor = List<Color>.filled(100, Colors.white);
     // The colors for the timer border
-    runningColor = Colors.greenAccent[400];
-    pausedColor = blueMaterial.withOpacity(0.7);
-    overColor = Colors.redAccent[400];
     // will initial the color
     changeBrigness(toWhat: theme);
     notifyListeners();
@@ -160,29 +153,25 @@ class ThemeProvider extends ChangeNotifier {
     if (theme == 'white') {
       splashImage = 'assets/images/SplashScreenBlack.gif';
       noTaskImage = "assets/images/notask.png";
-      shimmerColor = blackShimmer;
+      // shimmerColor = blackShimmer;
       mainColor = blackMainColor;
-      shadowColor = blackShadowColor;
-      lightShadowColor = blackLightShadowColor;
       textColor = blackTextColor;
       brightness = Brightness.dark;
       noteTitleColor.fillRange(0, 100, blackNoteTitleColor);
       hintColor = textColor.withOpacity(0.5);
-      swachColor = blueMaterial.withOpacity(0.7);
+      swachColor = swachColor.withOpacity(0.7);
       titleColor = blackTitleColor;
       prefsBox.put('theme', 'black');
     } else {
       splashImage = 'assets/images/SplashScreenWhite.gif';
       noTaskImage = "assets/images/notask.png";
-      shimmerColor = whiteShimmer;
+      // shimmerColor = whiteShimmer;
       mainColor = whiteMainColor;
-      shadowColor = whiteShadowColor;
-      lightShadowColor = whiteLightShadowColor;
       textColor = whiteTextColor;
       brightness = Brightness.light;
       titleColor = whiteTitleColor;
       noteTitleColor.fillRange(0, 100, whiteNoteTitleColor);
-      swachColor = blueMaterial.withOpacity(0.7);
+      swachColor = swachColor.withOpacity(0.7);
       hintColor = whiteTextColor.withOpacity(0.5);
       prefsBox.put('theme', 'white');
     }

@@ -1,4 +1,4 @@
-library TodoApp;
+library todoapp;
 
 export 'screens/reorderable_screen_.dart';
 export 'screens/note_editing_screen.dart';

@@ -97,19 +97,25 @@ class NoteEditingFloatingActionButtonWidget extends StatelessWidget {
                                     Text(
                                       '${((_noteVoiceRecorderProvider.recorderDuration.inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}',
                                       style: TextStyle(
-                                          color: _themeProvider.blueMaterial,
+                                          color: _bottomNavProvider
+                                      .tabs[_bottomNavProvider.selectedTab]
+                                      .color,
                                           fontSize: SizeX * SizeY * 0.0001),
                                     ),
                                     Text(
                                       ':',
                                       style: TextStyle(
-                                          color: _themeProvider.blueMaterial,
+                                          color: _bottomNavProvider
+                                      .tabs[_bottomNavProvider.selectedTab]
+                                      .color,
                                           fontSize: SizeX * SizeY * 0.0001),
                                     ),
                                     Text(
                                       '${((_noteVoiceRecorderProvider.recorderDuration.inSeconds) % 60).floor().toString().padLeft(2, '0')}',
                                       style: TextStyle(
-                                          color: _themeProvider.blueMaterial,
+                                          color: _bottomNavProvider
+                                      .tabs[_bottomNavProvider.selectedTab]
+                                      .color,
                                           fontSize: SizeX * SizeY * 0.0001),
                                     ),
                                   ],
@@ -173,19 +179,25 @@ class NoteEditingFloatingActionButtonWidget extends StatelessWidget {
                                     Text(
                                       '${((_noteVoiceRecorderProvider.recorderDuration.inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}',
                                       style: TextStyle(
-                                          color: _themeProvider.blueMaterial,
+                                          color: _bottomNavProvider
+                                      .tabs[_bottomNavProvider.selectedTab]
+                                      .color,
                                           fontSize: SizeX * SizeY * 0.0001),
                                     ),
                                     Text(
                                       ':',
                                       style: TextStyle(
-                                          color: _themeProvider.blueMaterial,
+                                          color: _bottomNavProvider
+                                      .tabs[_bottomNavProvider.selectedTab]
+                                      .color,
                                           fontSize: SizeX * SizeY * 0.0001),
                                     ),
                                     Text(
                                       '${((_noteVoiceRecorderProvider.recorderDuration.inSeconds) % 60).floor().toString().padLeft(2, '0')}',
                                       style: TextStyle(
-                                          color: _themeProvider.blueMaterial,
+                                          color: _bottomNavProvider
+                                      .tabs[_bottomNavProvider.selectedTab]
+                                      .color,
                                           fontSize: SizeX * SizeY * 0.0001),
                                     ),
                                   ],
