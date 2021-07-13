@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/notetask_provider.dart';
@@ -156,6 +155,7 @@ class TaskListView extends StatelessWidget {
                                         width: SizeY * 0.75,
                                         alignment: Alignment.center,
                                         child: TextField(
+                                          
                                           controller: snapshot.data[index]
                                               .textEditingController,
                                           onSubmitted: (value) {
