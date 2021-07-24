@@ -6,6 +6,7 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:todoapp/model/voice_model.dart';
+import 'package:todoapp/screens/note_editing_screen.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
 class NoteVoiceRecorderProvider with ChangeNotifier {
@@ -75,16 +76,13 @@ class NoteVoiceRecorderProvider with ChangeNotifier {
     voiceListSnapshot = List.from(voiceList);
   }
 
-  void stopRecorder({BuildContext context}) async {
+  void stopRecorder() async {
     
     // finishing up the recorded voice
     String path = await flutterSoundRecorder.stopRecorder();
-    if (voiceContext != null) {
-      voiceContext = context;
-      await uiKit.showAlertDialog(voiceContext, id: 'voiceTitle');
-    } else {
-      voiceTitle = "Err:time";
-    }
+
+    await uiKit.showAlertDialog(noteEditingScaffoldKey.currentContext, id: 'voiceTitle');
+
     // time to save the file with path inside the
     // datatbase as the Uint8List
     File file = File(path);

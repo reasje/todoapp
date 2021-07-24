@@ -385,9 +385,9 @@ class _MyButtonState extends State<MyButton> {
               await _noteVoiceRecorderProvider.pauseRecorder();
               break;
             case 'stopvoice':
-              Future.delayed(Duration(seconds: 1), () async{
-              await _noteVoiceRecorderProvider.stopRecorder(context: context);
-              });
+
+              _noteVoiceRecorderProvider.stopRecorder();
+
               
               break;
             case 'resumevoice':
