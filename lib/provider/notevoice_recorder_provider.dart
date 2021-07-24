@@ -23,12 +23,14 @@ class NoteVoiceRecorderProvider with ChangeNotifier {
   // A new Instance of FlutterSoundRecorder for recording
   FlutterSoundRecorder flutterSoundRecorder = new FlutterSoundRecorder();
   // A new Instance of FlutterSoundPlayer for playing USED AS LIST
+  BuildContext voiceContext;
   Future<void> startRecorder(BuildContext context) async {
+    voiceContext = context;
     PermissionStatus status = await Permission.microphone.request();
     if (status == PermissionStatus.permanentlyDenied ||
         status == PermissionStatus.denied) {
       //throw RecordingPermissionException("Microphone permission not granted");
-      uiKit.showAlertDialog(context, id: 'microphoneRequired');
+      uiKit.showAlertDialog(voiceContext, id: 'microphoneRequired');
       return;
     }
     // StreamSink<Food> _playerSubscription;
@@ -73,11 +75,13 @@ class NoteVoiceRecorderProvider with ChangeNotifier {
     voiceListSnapshot = List.from(voiceList);
   }
 
-  Future<void> stopRecorder({BuildContext context}) async {
+  void stopRecorder({BuildContext context}) async {
+    
     // finishing up the recorded voice
     String path = await flutterSoundRecorder.stopRecorder();
-    if (context != null) {
-      await uiKit.showAlertDialog(context, id: 'voiceTitle');
+    if (voiceContext != null) {
+      voiceContext = context;
+      await uiKit.showAlertDialog(voiceContext, id: 'voiceTitle');
     } else {
       voiceTitle = "Err:time";
     }
@@ -95,7 +99,7 @@ class NoteVoiceRecorderProvider with ChangeNotifier {
   }
 
   String voiceTitle;
-  Future<void> setVoiceTitle(String title) {
+  void setVoiceTitle(String title) {
     voiceTitle = title;
   }
 
@@ -108,7 +112,8 @@ class NoteVoiceRecorderProvider with ChangeNotifier {
     voiceList.insert(index, dismissedVoice);
     notifyListeners();
   }
-    Future<List<Voice>> getVoiceList() async {
+
+  Future<List<Voice>> getVoiceList() async {
     return voiceList;
   }
 }

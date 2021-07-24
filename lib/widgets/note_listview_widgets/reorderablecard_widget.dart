@@ -240,6 +240,7 @@ class ReorderableCardWidget extends StatelessWidget {
                               ),
                               child: ExpansionTile(
                                 initiallyExpanded: false,
+                                
                                 // tried too hard to make the expanion color and
                                 // collapsed color personalized but threre was  a problem
                                 // Every widget when We call the notifier in the provider

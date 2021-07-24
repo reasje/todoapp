@@ -35,7 +35,7 @@ dependencies:
   google_sign_in: ^5.0.3
   googleapis: ^3.0.0
   hive: ^2.0.0
-  hive_flutter: ^1.0.0
+  hive_flutter: ^1.1.0
   image_picker: ^0.7.5+3
   path_provider: ^2.0.1
   permission_handler: ^8.0.1

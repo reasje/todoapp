@@ -22,8 +22,8 @@ class MyNotesEditing extends StatefulWidget {
 class _MyNotesEditingState extends State<MyNotesEditing> {
   @override
   Widget build(BuildContext context) {
-    final _myProvider = Provider.of<NoteProvider>(context , listen: false);
-    final _themeProvider = Provider.of<ThemeProvider>(context , listen: false);
+    final _myProvider = Provider.of<NoteProvider>(context );
+    final _themeProvider = Provider.of<ThemeProvider>(context );
     final _timerState = Provider.of<TimerProvider>(context);
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;

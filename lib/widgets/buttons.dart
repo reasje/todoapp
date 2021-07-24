@@ -16,9 +16,7 @@ import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/provider/timer_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
-
 import '../main.dart';
-
 
 class MyButton extends StatefulWidget {
   final IconData iconData;
@@ -58,14 +56,20 @@ class _MyButtonState extends State<MyButton> {
         isPressed = true;
         Future.delayed(Duration(milliseconds: 100), () async {
           final _myProvider = Provider.of<NoteProvider>(context, listen: false);
-          final _timerState = Provider.of<TimerProvider>(context, listen: false);
+          final _timerState =
+              Provider.of<TimerProvider>(context, listen: false);
           final _signinState = Provider.of<SigninState>(context, listen: false);
           final _connState = Provider.of<ConnState>(context, listen: false);
-          final _noteImageProvider = Provider.of<NoteImageProvider>(context, listen: false);
-          final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(context, listen: false);
-          final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(context, listen: false);
-          final _noteColorProvider = Provider.of<NoteColorProvider>(context, listen: false);
-          final _donateProvider = Provider.of<DonateProvider>(context, listen: false);
+          final _noteImageProvider =
+              Provider.of<NoteImageProvider>(context, listen: false);
+          final _noteVoiceRecorderProvider =
+              Provider.of<NoteVoiceRecorderProvider>(context, listen: false);
+          final _noteTitleTextProvider =
+              Provider.of<NoteTitleTextProvider>(context, listen: false);
+          final _noteColorProvider =
+              Provider.of<NoteColorProvider>(context, listen: false);
+          final _donateProvider =
+              Provider.of<DonateProvider>(context, listen: false);
           final _themeProvider =
               Provider.of<ThemeProvider>(context, listen: false);
           double SizeX = MediaQuery.of(context).size.height;
@@ -110,7 +114,9 @@ class _MyButtonState extends State<MyButton> {
               _timerState.resetTimer(context);
               break;
             case 'redo':
-              _noteTitleTextProvider.canRedo ? _noteTitleTextProvider.changesRedo() : null;
+              _noteTitleTextProvider.canRedo
+                  ? _noteTitleTextProvider.changesRedo()
+                  : null;
               break;
             case 'lan':
               _themeProvider.changeLan();
@@ -124,7 +130,9 @@ class _MyButtonState extends State<MyButton> {
               break;
             case 'undo':
               {
-                _noteTitleTextProvider.canUndo ? _noteTitleTextProvider.changesUndo() : null;
+                _noteTitleTextProvider.canUndo
+                    ? _noteTitleTextProvider.changesUndo()
+                    : null;
               }
               break;
             case 'timer':
@@ -224,7 +232,8 @@ class _MyButtonState extends State<MyButton> {
                           children: colors
                               .map((color) => InkWell(
                                     onTap: () {
-                                      _noteColorProvider.noteColorSelected(color);
+                                      _noteColorProvider
+                                          .noteColorSelected(color);
                                       Navigator.pop(context);
                                     },
                                     child: Container(
@@ -376,7 +385,10 @@ class _MyButtonState extends State<MyButton> {
               await _noteVoiceRecorderProvider.pauseRecorder();
               break;
             case 'stopvoice':
+              Future.delayed(Duration(seconds: 1), () async{
               await _noteVoiceRecorderProvider.stopRecorder(context: context);
+              });
+              
               break;
             case 'resumevoice':
               await _noteVoiceRecorderProvider.resumeRecorder();
@@ -483,5 +495,3 @@ class SliderTransition extends PageRouteBuilder {
               );
             });
 }
-
-

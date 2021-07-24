@@ -7,19 +7,35 @@ import 'package:todoapp/provider/notevoice_recorder_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 
-class NoteEditingFloatingActionButtonWidget extends StatelessWidget {
+class NoteEditingFloatingActionButtonWidget extends StatefulWidget {
   const NoteEditingFloatingActionButtonWidget({Key key}) : super(key: key);
+
+  @override
+  _NoteEditingFloatingActionButtonWidgetState createState() =>
+      _NoteEditingFloatingActionButtonWidgetState();
+}
+
+class _NoteEditingFloatingActionButtonWidgetState
+    extends State<NoteEditingFloatingActionButtonWidget> {
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print('Disposed');
+  }
 
   @override
   Widget build(BuildContext context) {
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
-    
+
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     double SizeXSizeY = SizeX * SizeY;
-    return Consumer3<NoteVoiceRecorderProvider, BottomNavProvider , ThemeProvider>(
-        builder: (ctx, _noteVoiceRecorderProvider, _bottomNavProvider,_themeProvider , _) {
+    return Consumer3<NoteVoiceRecorderProvider, BottomNavProvider,
+            ThemeProvider>(
+        builder: (ctx, _noteVoiceRecorderProvider, _bottomNavProvider,
+            _themeProvider, _) {
       return _bottomNavProvider.tabs[_bottomNavProvider.selectedTab].title ==
               "Image"
           ? FloatingActionButton(
@@ -98,24 +114,27 @@ class NoteEditingFloatingActionButtonWidget extends StatelessWidget {
                                       '${((_noteVoiceRecorderProvider.recorderDuration.inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}',
                                       style: TextStyle(
                                           color: _bottomNavProvider
-                                      .tabs[_bottomNavProvider.selectedTab]
-                                      .color,
+                                              .tabs[_bottomNavProvider
+                                                  .selectedTab]
+                                              .color,
                                           fontSize: SizeX * SizeY * 0.0001),
                                     ),
                                     Text(
                                       ':',
                                       style: TextStyle(
                                           color: _bottomNavProvider
-                                      .tabs[_bottomNavProvider.selectedTab]
-                                      .color,
+                                              .tabs[_bottomNavProvider
+                                                  .selectedTab]
+                                              .color,
                                           fontSize: SizeX * SizeY * 0.0001),
                                     ),
                                     Text(
                                       '${((_noteVoiceRecorderProvider.recorderDuration.inSeconds) % 60).floor().toString().padLeft(2, '0')}',
                                       style: TextStyle(
                                           color: _bottomNavProvider
-                                      .tabs[_bottomNavProvider.selectedTab]
-                                      .color,
+                                              .tabs[_bottomNavProvider
+                                                  .selectedTab]
+                                              .color,
                                           fontSize: SizeX * SizeY * 0.0001),
                                     ),
                                   ],
@@ -180,24 +199,27 @@ class NoteEditingFloatingActionButtonWidget extends StatelessWidget {
                                       '${((_noteVoiceRecorderProvider.recorderDuration.inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}',
                                       style: TextStyle(
                                           color: _bottomNavProvider
-                                      .tabs[_bottomNavProvider.selectedTab]
-                                      .color,
+                                              .tabs[_bottomNavProvider
+                                                  .selectedTab]
+                                              .color,
                                           fontSize: SizeX * SizeY * 0.0001),
                                     ),
                                     Text(
                                       ':',
                                       style: TextStyle(
                                           color: _bottomNavProvider
-                                      .tabs[_bottomNavProvider.selectedTab]
-                                      .color,
+                                              .tabs[_bottomNavProvider
+                                                  .selectedTab]
+                                              .color,
                                           fontSize: SizeX * SizeY * 0.0001),
                                     ),
                                     Text(
                                       '${((_noteVoiceRecorderProvider.recorderDuration.inSeconds) % 60).floor().toString().padLeft(2, '0')}',
                                       style: TextStyle(
                                           color: _bottomNavProvider
-                                      .tabs[_bottomNavProvider.selectedTab]
-                                      .color,
+                                              .tabs[_bottomNavProvider
+                                                  .selectedTab]
+                                              .color,
                                           fontSize: SizeX * SizeY * 0.0001),
                                     ),
                                   ],

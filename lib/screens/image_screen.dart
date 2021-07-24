@@ -40,7 +40,6 @@ class _PicDetailState extends State<PicDetail> {
 
   @override
   Widget build(BuildContext context) {
-    final _myProvider = Provider.of<NoteProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
     final _noteImageProvider = Provider.of<NoteImageProvider>(context, listen: false);
     var isWhite = _themeProvider.checkIsWhite();
@@ -87,7 +86,8 @@ class _PicDetailState extends State<PicDetail> {
                       transitionOnUserGestures: true,
                       child: Image.memory(
                         _noteImageProvider.imageList[widget.index].image,
-                      )),
+                      )
+                      ),
                 ),
               ),
               _noteImageProvider.imageList[widget.index].desc != ''

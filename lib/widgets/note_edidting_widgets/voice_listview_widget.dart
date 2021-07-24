@@ -18,11 +18,6 @@ class voiceListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _myProvider = Provider.of<NoteProvider>(context);
-    final _themeProvider = Provider.of<ThemeProvider>(context);
-    final _bottomNavProvider =
-        Provider.of<BottomNavProvider>(context, listen: false);
-
     double SizeX = MediaQuery.of(context).size.height;
     double SizeY = MediaQuery.of(context).size.width;
     bool isLandscape =
@@ -33,8 +28,8 @@ class voiceListView extends StatelessWidget {
         width: double.maxFinite,
         child: ScrollConfiguration(
           behavior: uiKit.NoGlowBehaviour(),
-          child: Consumer2<NoteVoiceRecorderProvider , NoteVoicePlayerProvider>(
-            builder: (ctx, _noteVoiceRecorderProvider, _noteVoicePlayerProvider,_) {
+          child: Consumer4<NoteVoiceRecorderProvider , NoteVoicePlayerProvider , BottomNavProvider , ThemeProvider>(
+            builder: (ctx, _noteVoiceRecorderProvider, _noteVoicePlayerProvider,_bottomNavProvider , _themeProvider , _) {
               return ListView.builder(
                   itemCount: _noteVoiceRecorderProvider.voiceList != null
                       ? _noteVoiceRecorderProvider.voiceList.length + 1
@@ -283,14 +278,7 @@ class voiceListView extends StatelessWidget {
                             } else {
                               return Align(
                                 alignment: Alignment.center,
-                                child: Shimmer.fromColors(
-                                  period: Duration(seconds: 1),
-                                  baseColor: _bottomNavProvider
-                                      .tabs[_bottomNavProvider.selectedTab]
-                                      .color
-                                      .withOpacity(0.3),
-                                  highlightColor: _themeProvider.shimmerColor,
-                                  child: Container(
+                                                                  child: Container(
                                     
                                     width: SizeY * 0.82,
                                     height: SizeX*0.13,
@@ -302,7 +290,27 @@ class voiceListView extends StatelessWidget {
                                       color: _themeProvider.mainColor,
                                     ),
                                   ),
-                                ),
+                                // child: Shimmer.fromColors(
+                                //   period: Duration(seconds: 1),
+                                //   baseColor: 
+                                //   _bottomNavProvider
+                                //       .tabs[_bottomNavProvider.selectedTab]
+                                //       .color
+                                //       .withOpacity(0.3),
+                                //   highlightColor: _themeProvider.shimmerColor,
+                                //   child: Container(
+                                    
+                                //     width: SizeY * 0.82,
+                                //     height: SizeX*0.13,
+                                //     margin: EdgeInsets.symmetric(
+                                //         vertical: SizeX*0.03,
+                                //         horizontal: SizeY * 0.03),
+                                //     decoration: BoxDecoration(
+                                //       borderRadius: BorderRadius.circular(10),
+                                //       color: _themeProvider.mainColor,
+                                //     ),
+                                //   ),
+                                // ),
                               );
                             }
                           });

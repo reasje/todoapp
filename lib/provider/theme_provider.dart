@@ -16,7 +16,7 @@ class ThemeProvider extends ChangeNotifier {
   Color titleColor;
   Color hintColor;
   Brightness brightness;
-  Color swachColor= Color(0xFF001b48);
+  Color swachColor = Color(0xFF001b48);
   bool isEn;
   // this varrable is used to control the showcase
   bool isFirstTime;
@@ -93,6 +93,7 @@ class ThemeProvider extends ChangeNotifier {
     } else {
       prefsBox.put('firstTime', "Yes");
       first_time = "Yes";
+      noteBox.clear();
     }
     if (first_time == "Yes") {
       isFirstTime = true;
