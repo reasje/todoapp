@@ -57,7 +57,7 @@ class ReorderableProvider with ChangeNotifier {
         without_timer = without_timer + 1;
       }
     }
-    listViewSize = (without_timer * SizeX * 0.22) + (with_timer * SizeX * 0.5);
+    listViewSize = (without_timer * SizeX * 0.22) + (with_timer * SizeX * 0.5) + 500 ;
     return true;
   }
 

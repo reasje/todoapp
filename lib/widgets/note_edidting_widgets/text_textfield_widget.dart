@@ -19,8 +19,8 @@ class textTextField extends StatelessWidget {
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     return Container(
-      height: SizeX*0.5,
-      //margin: EdgeInsets.only(top: SizeX * 0.04),
+      height: double.maxFinite,
+      margin: EdgeInsets.symmetric(horizontal: SizeY*0.025),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(SizeX * 0.016)),
       ),

@@ -102,7 +102,7 @@ class NoteTaskProvider with ChangeNotifier {
 notifyListeners();
     
   }
-
+  
   void taskDissmissed(int index) {
     dissmissedTask = taskControllerList.removeAt(index);
     notifyListeners();

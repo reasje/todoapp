@@ -334,7 +334,7 @@ class ReorderableCardWidget extends StatelessWidget {
                                   Container(
                                     padding: EdgeInsets.all(SizeY * 0.05),
                                     child: Text(
-                                      snapShot.data.text,
+                                      snapShot.data.text.length > 1500 ? snapShot.data.text.toString().substring(0 , 1500) + "..." :snapShot.data.text ,
                                       style: TextStyle(
                                         color: _themeProvider.textColor,
                                         fontSize: SizeX * SizeY * 0.00008,
