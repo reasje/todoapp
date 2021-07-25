@@ -12,35 +12,33 @@ class NoteTaskProvider with ChangeNotifier {
   List<TaskController> taskControllerList = [];
 
   List<TaskController> taskControllerListSnapShot = [];
+  ScrollController scrollController = new ScrollController();
 
-    // used to control resetCheckBoxs
+  // used to control resetCheckBoxs
   bool resetCheckBoxs = false;
   void changeResetCheckBoxs(bool value) {
     resetCheckBoxs = value;
     notifyListeners();
   }
-  
+
   Future<List<TaskController>> getTaskList() async {
     return taskControllerList;
   }
-  
+
   void reorderTaskList(int oldIndex, int newIndex) {
     if (oldIndex < newIndex) {
       newIndex -= 1;
     }
-    var taskController =
-        taskControllerList.elementAt(oldIndex);
+    var taskController = taskControllerList.elementAt(oldIndex);
     if (newIndex < oldIndex) {
       for (int i = oldIndex; i > newIndex; i--) {
-        var taskController2 =
-            taskControllerList.elementAt(i - 1);
+        var taskController2 = taskControllerList.elementAt(i - 1);
         taskControllerList[i] = taskController2;
         //taskControllerList.insert(i, );
       }
     } else {
       for (int i = oldIndex; i < newIndex; i++) {
-        var taskController =
-            taskControllerList.elementAt(i + 1);
+        var taskController = taskControllerList.elementAt(i + 1);
         taskControllerList[i] = taskController;
         //taskControllerList.insert(i, taskController);
       }
@@ -49,6 +47,7 @@ class NoteTaskProvider with ChangeNotifier {
     //taskControllerList.insert(newIndex, taskController);
     notifyListeners();
   }
+
   void taskCheckBoxChanged(int index) {
     print('object');
     if (taskControllerList[index].isDone) {
@@ -69,6 +68,15 @@ class NoteTaskProvider with ChangeNotifier {
 
   void initialTaskControllerList() {
     taskControllerList = List.from(taskControllerList);
+    // taskControllerList.forEach((element) {
+    //   element.focusNode.addListener(() {
+    //     element.focusNode.hasFocus ?    scrollController.animateTo(
+    //   scrollController.position.maxScrollExtent,
+    //   curve: Curves.easeOut,
+    //   duration: const Duration(milliseconds: 300),
+    // ) : null;
+    //   });
+    // });
   }
 
   void initialTaskList(List<Task> givenTaskList) {
@@ -84,8 +92,15 @@ class NoteTaskProvider with ChangeNotifier {
             FocusNode(),
             PageStorageKey<String>(
                 'pageKey ${DateTime.now().microsecondsSinceEpoch}')));
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      curve: Curves.easeOut,
+      duration: const Duration(milliseconds: 300),
+    );
+    
     taskControllerList[index + 1].focusNode.requestFocus();
-    notifyListeners();
+notifyListeners();
+    
   }
 
   void taskDissmissed(int index) {

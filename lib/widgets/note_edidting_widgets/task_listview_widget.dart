@@ -11,11 +11,11 @@ class TaskListView extends StatelessWidget {
     Key key,
     this.color,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final _myProvider = Provider.of<NoteProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
+    
           final _noteTaskProvider =
         Provider.of<NoteTaskProvider>(context);
     double SizeX = MediaQuery.of(context).size.height;
@@ -29,7 +29,8 @@ class TaskListView extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            height: SizeX * 0.1,
+            height: SizeX * 0.06,
+            
             child: Row(
               children: [
                 Text(
@@ -37,8 +38,8 @@ class TaskListView extends StatelessWidget {
                   style: TextStyle(
                       color: _themeProvider.textColor,
                       fontSize: _themeProvider.isEn
-                          ? SizeX * SizeY * 0.00006
-                          : SizeX * SizeY * 0.00004,
+                          ? SizeX * SizeY * 0.00007
+                          : SizeX * SizeY * 0.00005,
                       fontWeight: FontWeight.w400),
                 ),
                 Switch(
@@ -66,6 +67,10 @@ class TaskListView extends StatelessWidget {
                       shadowColor: Colors.transparent,
                     ),
                     child: ReorderableListView(
+                      scrollController: _noteTaskProvider.scrollController,
+                      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                      physics: ClampingScrollPhysics(), 
+                        shrinkWrap: true,
                         onReorder: (oldIndex, newIndex) {
                           _noteTaskProvider.reorderTaskList(oldIndex, newIndex);
                         },

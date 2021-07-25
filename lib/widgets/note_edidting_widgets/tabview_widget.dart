@@ -26,39 +26,44 @@ class _TabViewState extends State<TabView> {
     double SizeX = MediaQuery.of(context).size.height;
     final _themeProvider = Provider.of<ThemeProvider>(context);
     double SizeY = MediaQuery.of(context).size.width;
-    return ListView(
-      children: [
-        Container(
-          height: SizeX * 0.05,
-          width: double.maxFinite,
-          margin: EdgeInsets.only(top: SizeX * 0.02),
-          child: Row(
-            textDirection: TextDirection.ltr,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              if (!timerOn)
-                ..._bottomNavProvider.tabs[index].buttons
-              else
-                _bottomNavProvider.tabs[index].buttons[0]
-            ],
-          ),
-        ),
-        if (!timerOn)
-          ..._bottomNavProvider.tabs[index].tabs
-        else
-          Center(
-            child: Text(
-              uiKit.AppLocalizations.of(context).translate('timerOn'),
-              style: TextStyle(
-                  color: _bottomNavProvider
-                      .tabColors[_bottomNavProvider.selectedTab],
-                  fontSize: _themeProvider.isEn
-                      ? SizeX * SizeY * 0.00008
-                      : SizeX * SizeY * 0.00006,
-                  fontWeight: FontWeight.w400),
+    return ScrollConfiguration(
+      behavior: uiKit.NoGlowBehaviour(),
+      child: ListView(
+        // shrinkWrap: true,
+        // physics: ClampingScrollPhysics(), 
+        children: [
+          Container(
+            height: SizeX * 0.05,
+            width: double.maxFinite,
+            margin: EdgeInsets.only(top: SizeX * 0.02),
+            child: Row(
+              textDirection: TextDirection.ltr,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                if (!timerOn)
+                  ..._bottomNavProvider.tabs[index].buttons
+                else
+                  _bottomNavProvider.tabs[index].buttons[0]
+              ],
             ),
           ),
-      ],
+          if (!timerOn)
+            ..._bottomNavProvider.tabs[index].tabs
+          else
+            Center(
+              child: Text(
+                uiKit.AppLocalizations.of(context).translate('timerOn'),
+                style: TextStyle(
+                    color: _bottomNavProvider
+                        .tabColors[_bottomNavProvider.selectedTab],
+                    fontSize: _themeProvider.isEn
+                        ? SizeX * SizeY * 0.00008
+                        : SizeX * SizeY * 0.00006,
+                    fontWeight: FontWeight.w400),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

@@ -32,13 +32,14 @@ class UnCheckProvider with ChangeNotifier {
       int day = now.day;
       int month = now.month;
       int year = now.year;
+      print('object ${noteBox.getAt(0).then((value) => print(value.title))}');
       if (int.parse(dateList[0]) < year ||
           int.parse(dateList[1]) < month ||
           int.parse(dateList[2]) < day) {
         if (noteBox.length != 0) {
           for (int i = 0; i < noteBox.length; i++) {
             var bnote = await noteBox.getAt(i);
-            if (bnote.resetCheckBoxs) {
+            if (bnote.resetCheckBoxs == true) {
               var ntitle = bnote.title;
               var nttext = bnote.text;
               var ntIsChecked = bnote.isChecked;
