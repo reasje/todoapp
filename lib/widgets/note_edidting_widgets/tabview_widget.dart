@@ -29,8 +29,6 @@ class _TabViewState extends State<TabView> {
     return ScrollConfiguration(
       behavior: uiKit.NoGlowBehaviour(),
       child: ListView(
-        // shrinkWrap: true,
-        // physics: ClampingScrollPhysics(), 
         children: [
           Container(
             height: SizeX * 0.05,

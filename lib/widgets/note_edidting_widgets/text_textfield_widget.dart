@@ -11,7 +11,6 @@ class textTextField extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final _myProvider = Provider.of<NoteProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
     final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(context, listen: false);
     double SizeX = MediaQuery.of(context).size.height;

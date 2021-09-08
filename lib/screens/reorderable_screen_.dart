@@ -17,8 +17,6 @@ class MyRorderable extends StatefulWidget {
 }
 
 class _MyRorderableState extends State<MyRorderable> {
-
-
   @override
   Widget build(BuildContext context) {
     final _reorderableProvider =
@@ -41,100 +39,78 @@ class _MyRorderableState extends State<MyRorderable> {
                   valueListenable: noteBox.listenable(),
                   builder: (context, LazyBox<Note> notes, _) {
                     List<int> keys = notes.keys.cast<int>().toList();
-
                     return Theme(
                       data: Theme.of(context).copyWith(
                         canvasColor: Colors.transparent,
                         shadowColor: Colors.transparent,
                       ),
-                      child: ScrollConfiguration(
-                        behavior: NoGlowBehaviour(),
-                        child: SingleChildScrollView(
-                          
-                          child: Column(
-                            children: [
-                              uiKit.ReorderableListButtonsWidget(),
-                              Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  if (noteBox.isEmpty)
-                                    uiKit.noNotes()
-                                  else
-                                    FutureBuilder(
-                                        future: _reorderableProvider
-                                            .updateListSize(keys, SizeX, SizeY),
-                                        builder: (context, snapShot) {
-                                          if (snapShot.hasData) {
-                                            return Container(
-                                              height: _reorderableProvider
-                                                      .listViewSize +
-                                                  400.0,
-                                              width: SizeY,
-                                              child: ScrollConfiguration(
-                                                behavior: NoGlowBehaviour(),
-                                                child: AnimationLimiter(
-                                                  child: ReorderableListView(
-                                                    physics:
-                                                        NeverScrollableScrollPhysics(),
-                                                    padding: EdgeInsets.only(
-                                                        bottom: SizeX * 0.1,
-                                                        top: SizeX * 0.01),
-                                                    children: [
-                                                      for (int index = 0;
-                                                          index < snapShot.data.length;
-                                                          index++)
-                                                        FutureBuilder(
-                                                            key: UniqueKey(),
-                                                            future: notes.get(
-                                                                keys[index]),
-                                                            builder: (context,
-                                                                snapShot) {
-                                                              if (snapShot
-                                                                  .hasData) {
-                                                                return uiKit
-                                                                    .ReorderableCardWidget(
-                                                                  index: index,
-                                                                  notes: notes,
-                                                                  snapShot:
-                                                                      snapShot,
-                                                                );
-                                                              } else {
-                                                                return uiKit
-                                                                    .LoadingCardWidget();
-                                                              }
-                                                            }),
-                                                    ],
-                                                    onReorder: (int oldIndex,
-                                                        int newIndex) async {
-                                                      _reorderableProvider
-                                                          .reorderNoteList(
-                                                              oldIndex,
-                                                              newIndex);
-                                                      // if oldIndex < newIndex the flutter asumes the
-                                                      // newIndex is newIndex+1 for example new index yopu think is
-                                                      // 1 and old index is 0 but the realaity is  that new index is
-                                                      // 2 !
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          } else {
-                                            return Container();
-                                          }
-                                        }),
-                                  Consumer<ReorderableProvider>(
-                                    builder: (ctx, _reorderableProvider, _) {
-                                      return Visibility(
-                                          visible:
-                                              _reorderableProvider.isLoading,
-                                          child: uiKit.LoadingWidget());
-                                    },
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
+                      child: Container(
+                        height: SizeX,
+                        width: SizeY,
+                        child: Column(
+                          children: [
+                            uiKit.ReorderableListButtonsWidget(),
+                            if (noteBox.isEmpty)
+                              uiKit.noNotes()
+                            else
+                              Align(
+
+                                child: Container(
+                                    height: SizeX*0.83,
+                                    child: ScrollConfiguration(
+                                      behavior: NoGlowBehaviour(),
+                                      child: AnimationLimiter(
+                                        child: ReorderableListView(
+                                          // physics:
+                                          //     NeverScrollableScrollPhysics(),
+                                          padding: EdgeInsets.only(
+                                              bottom: SizeX * 0.1,
+                                              top: SizeX * 0.01),
+                                          children: [
+                                            for (int index = 0;
+                                                index < notes.length;
+                                                index++)
+                                              FutureBuilder(
+                                                  key: UniqueKey(),
+                                                  future:
+                                                      notes.get(keys[index]),
+                                                  builder:
+                                                      (context, snapShot) {
+                                                    if (snapShot.hasData) {
+                                                      return uiKit
+                                                          .ReorderableCardWidget(
+                                                        index: index,
+                                                        notes: notes,
+                                                        snapShot: snapShot,
+                                                      );
+                                                    } else {
+                                                      return uiKit
+                                                          .LoadingCardWidget();
+                                                    }
+                                                  }),
+                                          ],
+                                          onReorder: (int oldIndex,
+                                              int newIndex) async {
+                                            _reorderableProvider
+                                                .reorderNoteList(
+                                                    oldIndex, newIndex);
+                                            // if oldIndex < newIndex the flutter asumes the
+                                            // newIndex is newIndex+1 for example new index yopu think is
+                                            // 1 and old index is 0 but the realaity is  that new index is
+                                            // 2 !
+                                          },
+                                        ),
+                                      ),
+                                    )),
+                              ),
+                            Consumer<ReorderableProvider>(
+                              builder: (ctx, _reorderableProvider, _) {
+                                return Visibility(
+                                    visible: _reorderableProvider.isLoading,
+                                    child: uiKit.LoadingWidget());
+                              },
+                            )
+                          ],
                         ),
                       ),
                     );

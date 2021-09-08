@@ -85,8 +85,8 @@ class ReorderableCardWidget extends StatelessWidget {
                   padding: EdgeInsets.symmetric(
                       horizontal: SizeY * 0.009, vertical: SizeY * 0.04),
                   margin: EdgeInsets.only(
-                      bottom: SizeX * 0.04,
-                      top: isLandscape ? SizeY * 0.1 : SizeX * 0.01),
+                      bottom: SizeX * 0.01,
+                      top: isLandscape ? SizeY * 0.1 : SizeX * 0.002),
                   decoration: BoxDecoration(
                       color: Color(snapShot.data.color).withOpacity(0.5) ??
                           Colors.white,
