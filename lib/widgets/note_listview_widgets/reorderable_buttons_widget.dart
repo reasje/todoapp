@@ -45,8 +45,8 @@ class ReorderableListButtonsWidget extends StatelessWidget {
                                 .titleColor
                                 .withOpacity(0.6),
                             fontSize: _themeProvider.isEn
-                                ? SizeX * SizeY * 0.00012
-                                : SizeX * SizeY * 0.0001),
+                                ? SizeY * 0.09
+                                : SizeY * 0.07),
                       )),
                   Container(
                     child: Icon(
@@ -67,8 +67,8 @@ class ReorderableListButtonsWidget extends StatelessWidget {
                         _themeProvider.textColor,
                     iconData: Icons.settings,
                     iconSize: SizeX * SizeY * 0.00005,
-                    sizePD: SizeX * SizeY * 0.00012,
-                    sizePU: SizeX * SizeY * 0.00012,
+                    sizePD: SizeY * 0.1,
+                    sizePU: SizeY * 0.1,
                     id: 'setting',
                   ),
                   Container(
@@ -78,8 +78,8 @@ class ReorderableListButtonsWidget extends StatelessWidget {
                     child: uiKit.MyButton(
                       backgroundColor:
                           _themeProvider.textColor,
-                      sizePU: SizeXSizeY * 0.00012,
-                      sizePD: SizeXSizeY * 0.00013,
+                    sizePD: SizeY * 0.1,
+                    sizePU: SizeY * 0.1,
                       iconSize: SizeX * SizeY * 0.00006,
                       iconData: FontAwesome.code,
                       id: 'coder',

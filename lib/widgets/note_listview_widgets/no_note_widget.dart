@@ -53,7 +53,7 @@ class noNotes extends StatelessWidget {
                         style: TextStyle(
                             color: _themeProvider.textColor,
                             fontWeight: FontWeight.w400,
-                            fontSize: SizeX * SizeY * 0.00008),
+                            fontSize: SizeY * 0.06),
                       ),
                     ),
                   ),
@@ -72,8 +72,8 @@ class noNotes extends StatelessWidget {
                             color: _themeProvider.textColor,
                             fontWeight: FontWeight.w500,
                             fontSize: _themeProvider.isEn
-                                ? SizeX * SizeY * 0.00008
-                                : SizeX * SizeY * 0.00006),
+                                ? SizeY * 0.06
+                                : SizeY * 0.04),
                       ),
                     ),
                   ),
