@@ -32,7 +32,6 @@ class UnCheckProvider with ChangeNotifier {
       int day = now.day;
       int month = now.month;
       int year = now.year;
-      print('object ${noteBox.getAt(0).then((value) => print(value.title))}');
       if (int.parse(dateList[0]) < year ||
           int.parse(dateList[1]) < month ||
           int.parse(dateList[2]) < day) {

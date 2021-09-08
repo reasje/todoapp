@@ -84,7 +84,7 @@ void main() async {
   ]).then((_) {
     runApp(MyApp());
   });
-  runApp(MyApp());
+  // runApp(MyApp());
   configLoading();
   //await AndroidAlarmManager.periodic(const Duration(seconds: 1), 1, printHello, exact: true, wakeup: true);
 }

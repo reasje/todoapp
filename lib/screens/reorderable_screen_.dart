@@ -81,7 +81,7 @@ class _MyRorderableState extends State<MyRorderable> {
                                                         top: SizeX * 0.01),
                                                     children: [
                                                       for (int index = 0;
-                                                          index < keys.length;
+                                                          index < snapShot.data.length;
                                                           index++)
                                                         FutureBuilder(
                                                             key: UniqueKey(),
