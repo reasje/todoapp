@@ -16,6 +16,10 @@ class NoteColorProvider with ChangeNotifier {
     noteColor = givenColor;
   }
 
+  void clearNoteColor() {
+    noteColor = null;
+  }
+
   // getting the color that was choosen by the user
   void changeNoteColor(Color selectedColor, int index) {
     noteColor = selectedColor;

@@ -63,6 +63,9 @@ class NoteProvider extends ChangeNotifier {
     final _timerProvider =
         Provider.of<TimerProvider>(noteContext, listen: false);
 
+    final _noteColorProvider =
+        Provider.of<NoteColorProvider>(noteContext, listen: false);
+
     _noteImageProvider.clearImageList();
 
     _notePasswordProvider.clearPassword();
@@ -82,6 +85,8 @@ class NoteProvider extends ChangeNotifier {
     _timerProvider.time_duration = Duration();
 
     _timerProvider.note_duration = Duration();
+
+    _noteColorProvider.clearNoteColor();
 
     notifyListeners();
   }
@@ -421,7 +426,7 @@ class NoteProvider extends ChangeNotifier {
         var noteTime = _timerProvider.note_duration.inSeconds;
 
         var leftTime = noteTime;
-
+        print("_noteColorProvider.noteColor? ${_noteColorProvider.noteColor}");
         var color = _noteColorProvider.noteColor?.value ??
             _bottomNavProvider.tabColors[0].value;
 
