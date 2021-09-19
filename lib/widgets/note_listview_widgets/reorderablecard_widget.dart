@@ -103,8 +103,8 @@ class ReorderableCardWidget extends StatelessWidget {
                         children: [
                           snapShot.data.time != 0
                               ? InkWell(
-                                  // This is fun is probable to be executed if the 
-                                  // note include time 
+                                  // This is fun is probable to be executed if the
+                                  // note include time
                                   onTap: () async {
                                     if (snapShot.data.password == '' ||
                                         snapShot.data.password == null) {
@@ -369,6 +369,7 @@ class ReorderableCardWidget extends StatelessWidget {
                                                 uiKit.MyNotesEditing()));
                                       });
                                     } else {
+                                      print(snapShot.data.password);
                                       // have the password and it must be checked
                                       await screenLock<void>(
                                         context: context,

@@ -38,7 +38,9 @@ Future showAlertDialog(BuildContext context,
 
   TextEditingController dialogController =
       TextEditingController(text: desc ?? '');
-
+  id == 'password'
+      ? dialogController.text = _notePasswordProvider.password
+      : null;
   double SizeX = MediaQuery.of(mCtx).size.height;
 
   double SizeY = MediaQuery.of(mCtx).size.width;
@@ -100,7 +102,8 @@ Future showAlertDialog(BuildContext context,
                             obscureText: _passwordInVisible,
                             autofocus: true,
                             controller: dialogController,
-                            keyboardType: id == 'password' ? TextInputType.number : null,
+                            keyboardType:
+                                id == 'password' ? TextInputType.number : null,
                             maxLength: id == 'password'
                                 ? 10
                                 : id != 'imageDesc'
