@@ -14,6 +14,7 @@ import 'package:todoapp/provider/note_provider.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/provider/notecolor_provider.dart';
 import 'package:todoapp/provider/noteimage_provider.dart';
+import 'package:todoapp/provider/notepassword_provider.dart';
 import 'package:todoapp/provider/notetask_provider.dart';
 import 'package:todoapp/provider/notetitletext_provider.dart';
 import 'package:todoapp/provider/notevoice_player_provider.dart';
@@ -135,6 +136,7 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (context) => NoteColorProvider()),
           ChangeNotifierProvider(create: (context) => ReorderableProvider()),
           ChangeNotifierProvider(create: (context) => DonateProvider()),
+          ChangeNotifierProvider(create: (context) => NotePasswordProvider()),
         ],
         child: Consumer<ThemeProvider>(
           builder: (context, _themeProvider, _) {

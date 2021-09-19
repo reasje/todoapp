@@ -27,13 +27,14 @@ class NoteAdapter extends TypeAdapter<Note> {
       (fields[7] as List)?.cast<Voice>(),
       (fields[8] as List)?.cast<Task>(),
       fields[9] as bool,
+      fields[10] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Note obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
@@ -53,7 +54,9 @@ class NoteAdapter extends TypeAdapter<Note> {
       ..writeByte(8)
       ..write(obj.taskList)
       ..writeByte(9)
-      ..write(obj.resetCheckBoxs);
+      ..write(obj.resetCheckBoxs)
+      ..writeByte(10)
+      ..write(obj.password);
   }
 
   @override

@@ -48,6 +48,7 @@ class UnCheckProvider with ChangeNotifier {
               var ntImageList = bnote.imageList;
               var ntVoiceList = bnote.voiceList;
               var ntTaskList = bnote.taskList;
+                          var ntPassword = bnote.password;
               // unchecking all the tasks
               ntTaskList.forEach((element) {
                 element.isDone = false;
@@ -64,6 +65,7 @@ class UnCheckProvider with ChangeNotifier {
                 ntVoiceList,
                 ntTaskList,
                 ntResetCheckBoxs,
+                ntPassword
               );
               noteBox.putAt(i, note);
             }

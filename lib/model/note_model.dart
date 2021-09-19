@@ -29,7 +29,19 @@ class Note {
   List<Task> taskList;
   @HiveField(9)
   bool resetCheckBoxs;
-  Note(this.title, this.text, this.isChecked, this.time, this.color,
-      this.leftTime, this.imageList, this.voiceList, this.taskList , this.resetCheckBoxs);
-
+  @HiveField(10)
+  String password;
+  Note(
+      this.title,
+      this.text,
+      this.isChecked,
+      this.time,
+      this.color,
+      this.leftTime,
+      this.imageList,
+      this.voiceList,
+      this.taskList,
+      this.resetCheckBoxs,
+      this.password,
+      );
 }

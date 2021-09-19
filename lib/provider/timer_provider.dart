@@ -10,6 +10,7 @@ import 'package:todoapp/provider/note_provider.dart';
 import '../main.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
 import 'package:todoapp/model/image_model.dart' as imageModel;
+
 class TimerProvider extends ChangeNotifier {
   TimerProvider() {
     this.keys = [];
@@ -22,7 +23,7 @@ class TimerProvider extends ChangeNotifier {
   List<bool> isRunning = [];
   List<bool> isOver = [];
   List<bool> isPaused = [];
-  
+
   var timer;
   int leftTime = 0;
   List<int> keys;
@@ -32,11 +33,11 @@ class TimerProvider extends ChangeNotifier {
   int newIndex;
   var target;
   List<Voice> voiceList = [];
-  List<imageModel.Image>imageList = [];
+  List<imageModel.Image> imageList = [];
   bool newNote = false;
   final noteBox = Hive.lazyBox<Note>(noteBoxName);
 
-  // When the timer gets started 
+  // When the timer gets started
   void startTimer(BuildContext context) async {
     if (timer == null || !timer?.isActive) {
       var bnote = keys == null ? null : await noteBox.get(keys[index]);
@@ -80,18 +81,19 @@ class TimerProvider extends ChangeNotifier {
             var ntVoiceList = bnote.voiceList;
             var ntTaskList = bnote.taskList;
             var ntResetCheckBoxs = bnote.resetCheckBoxs;
+            var ntPassword = bnote.password;
             Note note = Note(
-              ntitle,
-              nttext,
-              ntisChecked,
-              nttime,
-              ntcolor,
-              ntlefttime,
-              ntImageList,
-              ntVoiceList,
-              ntTaskList,
-              ntResetCheckBoxs
-            );
+                ntitle,
+                nttext,
+                ntisChecked,
+                nttime,
+                ntcolor,
+                ntlefttime,
+                ntImageList,
+                ntVoiceList,
+                ntTaskList,
+                ntResetCheckBoxs,
+                ntPassword);
             await noteBox.put(keys[index], note);
             isRunning[index] = true;
             isOver[index] = true;
@@ -118,8 +120,19 @@ class TimerProvider extends ChangeNotifier {
             var ntVoiceList = bnote.voiceList;
             var ntTaskList = bnote.taskList;
             var ntResetCheckBoxs = bnote.resetCheckBoxs;
-            Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
-                ntlefttime, ntImageList, ntVoiceList, ntTaskList, ntResetCheckBoxs);
+            var ntPassword = bnote.password;
+            Note note = Note(
+                ntitle,
+                nttext,
+                ntisChecked,
+                nttime,
+                ntcolor,
+                ntlefttime,
+                ntImageList,
+                ntVoiceList,
+                ntTaskList,
+                ntResetCheckBoxs,
+                ntPassword);
             await noteBox.put(keys[index], note);
           } else {
             isPaused[newIndex] = true;
@@ -143,8 +156,19 @@ class TimerProvider extends ChangeNotifier {
             var ntVoiceList = bnote.voiceList;
             var ntTaskList = bnote.taskList;
             var ntResetCheckBoxs = bnote.resetCheckBoxs;
-            Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor,
-                ntlefttime, ntImageList, ntVoiceList, ntTaskList , ntResetCheckBoxs);
+            var ntPassword = bnote.password;
+            Note note = Note(
+                ntitle,
+                nttext,
+                ntisChecked,
+                nttime,
+                ntcolor,
+                ntlefttime,
+                ntImageList,
+                ntVoiceList,
+                ntTaskList,
+                ntResetCheckBoxs,
+                ntPassword);
             await noteBox.put(keys[index], note);
             isRunning[index] = true;
           } else {
@@ -197,6 +221,7 @@ class TimerProvider extends ChangeNotifier {
       var nttasks = bnote.taskList;
       var ntResetCheckBoxs = bnote.resetCheckBoxs;
       var ntlefttime;
+      var ntPassword = bnote.password;
       if (leftTime >= 0) {
         ntlefttime = 0;
         isPaused[index] = true;
@@ -220,7 +245,7 @@ class TimerProvider extends ChangeNotifier {
         ntlefttime = leftTime.abs();
       }
       Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime,
-          ntimages, ntvoices, nttasks , ntResetCheckBoxs);
+          ntimages, ntvoices, nttasks, ntResetCheckBoxs, ntPassword);
       await noteBox.put(keys[index], note);
       if (_turnOn) {
         startTimer(timerContext);
@@ -276,8 +301,9 @@ class TimerProvider extends ChangeNotifier {
       var nttasks = bnote.taskList;
       var ntlefttime = nttime;
       var ntResetCheckBoxs = bnote.resetCheckBoxs;
+      var ntPassword = bnote.password;
       Note note = Note(ntitle, nttext, ntisChecked, nttime, ntcolor, ntlefttime,
-          ntimages, ntvoices, nttasks , ntResetCheckBoxs);
+          ntimages, ntvoices, nttasks, ntResetCheckBoxs , ntPassword );
       await noteBox.put(keys[index], note);
       updateDuration(note_duration.inSeconds);
     } else {
@@ -287,7 +313,7 @@ class TimerProvider extends ChangeNotifier {
     stopTimer();
   }
 
-  void loadTimer(List<int> keys, int index, BuildContext context ) async {
+  void loadTimer(List<int> keys, int index, BuildContext context) async {
     var bnote = await noteBox.get(keys[index]);
     this.keys = keys;
     this.index = index;
@@ -340,13 +366,14 @@ class TimerProvider extends ChangeNotifier {
     // await flutterLocalNotificationsPlugin.schedule(0, 'Office', 'alarmInfo.title',
     //     scheduledNotificationDateTime, platformChannelSpecifics);
   }
-    // The Time picker dialog controller
+
+  // The Time picker dialog controller
   Duration time_duration = Duration();
   Duration note_duration = Duration();
   // this varriable is used in snapshot to chacke
   // that no changes has been made
   Duration time_snapshot;
-    // This function  is used to handle the changes that has been
+  // This function  is used to handle the changes that has been
   // occured to the time picker !
   Duration saved_duration = Duration();
   Duration saved_note_duration = Duration();
@@ -367,9 +394,11 @@ class TimerProvider extends ChangeNotifier {
   void updateDuration(int leftTime) {
     time_duration = Duration(seconds: leftTime);
   }
+
   Future<int> getTimeDuration([List<int> keys, int index]) async {
     return time_duration.inSeconds;
   }
+
   void timerDone() async {
     if (note_duration != time_snapshot) {
       // timer has been updated so that
@@ -386,8 +415,9 @@ class TimerProvider extends ChangeNotifier {
         var ntVoiceList = bnote.voiceList;
         var ntTaskList = bnote.taskList;
         var ntResetCheckBoxs = bnote.resetCheckBoxs;
+                    var ntPassword = bnote.password;
         Note note = Note(ntitle, nttext, ntischecked, nttime, ntcolor,
-            ntlefttime, ntImageList, ntVoiceList, ntTaskList, ntResetCheckBoxs);
+            ntlefttime, ntImageList, ntVoiceList, ntTaskList, ntResetCheckBoxs,ntPassword);
         noteBox.put(keys[index], note);
         notifyListeners();
       } else {

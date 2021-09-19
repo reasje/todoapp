@@ -4,6 +4,7 @@ import 'package:todoapp/model/note_model.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/provider/note_provider.dart';
 import 'package:todoapp/provider/noteimage_provider.dart';
+import 'package:todoapp/provider/notepassword_provider.dart';
 import 'package:todoapp/provider/notevoice_recorder_provider.dart';
 import 'package:todoapp/provider/theme_provider.dart';
 import 'package:todoapp/uiKit.dart' as uiKit;
@@ -20,18 +21,28 @@ Future showAlertDialog(BuildContext context,
     String file_id,
     int index,
     String desc}) async {
+  bool _passwordInVisible = true;
+
   var mCtx = context;
-  final TextEditingController _titleFieldController = TextEditingController();
-  final TextEditingController _textFieldController = TextEditingController();
+
+  final _notePasswordProvider =
+      Provider.of<NotePasswordProvider>(mCtx, listen: false);
+
   final _noteImageProvider =
       Provider.of<NoteImageProvider>(mCtx, listen: false);
+
   final _themeProvider = Provider.of<ThemeProvider>(mCtx, listen: false);
+
   final _noteVoiceRecorderProvider =
       Provider.of<NoteVoiceRecorderProvider>(mCtx, listen: false);
-  TextEditingController voiceTitleController =
+
+  TextEditingController dialogController =
       TextEditingController(text: desc ?? '');
+
   double SizeX = MediaQuery.of(mCtx).size.height;
+
   double SizeY = MediaQuery.of(mCtx).size.width;
+
   return showDialog(
       context: mCtx,
       builder: (ctxt) {
@@ -63,38 +74,52 @@ Future showAlertDialog(BuildContext context,
                                             : id == 'imageDesc'
                                                 ? uiKit.AppLocalizations.of(ctx)
                                                     .translate('imageDesc')
-                                                : uiKit.AppLocalizations.of(ctx)
-                                                    .translate('continue'),
+                                                : id == 'password'
+                                                    ? uiKit.AppLocalizations.of(
+                                                            ctx)
+                                                        .translate(
+                                                            'setPassword')
+                                                    : uiKit.AppLocalizations.of(
+                                                            ctx)
+                                                        .translate('continue'),
                 style: TextStyle(
                   color: _themeProvider.textColor,
                 ),
               )),
               content: Container(
-                height: id == 'voiceTitle' || id == 'imageDesc'
-                    ? SizeX * 0.23
-                    : SizeX * 0.12,
+                height:
+                    id == 'voiceTitle' || id == 'imageDesc' || id == 'password'
+                        ? SizeX * 0.18
+                        : SizeX * 0.1,
                 width: SizeY * 0.7,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    id == 'voiceTitle' || id == 'imageDesc'
+                    id == 'voiceTitle' || id == 'imageDesc' || id == 'password'
                         ? TextField(
+                            obscureText: _passwordInVisible,
                             autofocus: true,
-                            controller: voiceTitleController,
-                            maxLength: id != 'imageDesc' ? 10 : 415,
+                            controller: dialogController,
+                            keyboardType: id == 'password' ? TextInputType.number : null,
+                            maxLength: id == 'password'
+                                ? 10
+                                : id != 'imageDesc'
+                                    ? 10
+                                    : 415,
                             cursorColor: _themeProvider.swachColor,
                             cursorHeight: id != 'imageDesc'
-                                ? SizeX * 0.052
+                                ? SizeX * 0.048
                                 : SizeX * 0.03,
                             style: TextStyle(
                                 color: _themeProvider.textColor,
                                 fontSize: id != 'imageDesc'
                                     ? _themeProvider.isEn
-                                        ? SizeX * SizeY * 0.0001
-                                        : SizeX * SizeY * 0.00008
+                                        ? SizeY * 0.07
+                                        : SizeY * 0.05
                                     : _themeProvider.isEn
-                                        ? SizeX * SizeY * 0.00006
-                                        : SizeX * SizeY * 0.00004,
-                                fontWeight: FontWeight.w400),
+                                        ? SizeY * 0.04
+                                        : SizeY * 0.03,
+                                fontWeight: FontWeight.w200),
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.all(
                                     _themeProvider.isEn
@@ -103,9 +128,23 @@ Future showAlertDialog(BuildContext context,
                                 hintText: id == 'imageDesc'
                                     ? uiKit.AppLocalizations.of(ctx)
                                         .translate('imageDesc')
-                                    : uiKit.AppLocalizations.of(ctx)
-                                        .translate('titleHint'),
+                                    : id == 'password'
+                                        ? uiKit.AppLocalizations.of(ctx)
+                                            .translate('passwordHint')
+                                        : uiKit.AppLocalizations.of(ctx)
+                                            .translate('titleHint'),
                                 border: InputBorder.none,
+                                suffixIcon: IconButton(
+                                  autofocus: false,
+                                  color: _themeProvider.textColor,
+                                  icon: Icon(_passwordInVisible
+                                      ? Icons.visibility_off
+                                      : Icons.visibility),
+                                  onPressed: () {
+                                    _passwordInVisible = !_passwordInVisible;
+                                    setState(() {});
+                                  },
+                                ),
                                 focusedBorder: InputBorder.none,
                                 enabledBorder: InputBorder.none,
                                 errorBorder: InputBorder.none,
@@ -115,11 +154,11 @@ Future showAlertDialog(BuildContext context,
                                         .withOpacity(0.12),
                                     fontSize: id != 'imageDesc'
                                         ? _themeProvider.isEn
-                                            ? SizeX * SizeY * 0.00008
-                                            : SizeX * SizeY * 0.00006
+                                            ? SizeY * 0.07
+                                            : SizeY * 0.05
                                         : _themeProvider.isEn
-                                            ? SizeX * SizeY * 0.00007
-                                            : SizeX * SizeY * 0.00005,
+                                            ? SizeY * 0.05
+                                            : SizeY * 0.04,
                                     fontWeight: FontWeight.w400)),
                           )
                         : Container(),
@@ -185,44 +224,45 @@ Future showAlertDialog(BuildContext context,
                                             fontWeight: FontWeight.bold),
                                       )),
                                       onTap: () {
-                                        //_myProvider.changeLanToEnglish();
-                                        id == "lan"
-                                            ? _themeProvider
-                                                .changeLanToEnglish()
-                                            : id == "up"
-                                                ? upload(
-                                                    driveApi,
-                                                    driveFile,
-                                                    noteBox,
-                                                    uiKit.AppLocalizations.of(ctx)
-                                                        .translate('uploading'),
-                                                    uiKit.AppLocalizations.of(ctx)
-                                                        .translate(
-                                                            'uploadDone'),
-                                                    file_id)
-                                                : id == "voiceTitle"
-                                                    ? _noteVoiceRecorderProvider
-                                                        .setVoiceTitle(
-                                                            voiceTitleController
-                                                                .text)
-                                                    : id == 'imageDesc'
-                                                        ? _noteImageProvider
-                                                            .updateImageDesc(
-                                                                index,
-                                                                voiceTitleController
+                                        id == 'password'
+                                            ? _notePasswordProvider.setPassword(
+                                                dialogController.text)
+                                            : id == "lan"
+                                                ? _themeProvider
+                                                    .changeLanToEnglish()
+                                                : id == "up"
+                                                    ? upload(
+                                                        driveApi,
+                                                        driveFile,
+                                                        noteBox,
+                                                        uiKit.AppLocalizations.of(ctx)
+                                                            .translate(
+                                                                'uploading'),
+                                                        uiKit.AppLocalizations.of(ctx)
+                                                            .translate(
+                                                                'uploadDone'),
+                                                        file_id)
+                                                    : id == "voiceTitle"
+                                                        ? _noteVoiceRecorderProvider
+                                                            .setVoiceTitle(
+                                                                dialogController
                                                                     .text)
-                                                        : download(
-                                                            driveApi,
-                                                            driveFile,
-                                                            uiKit.AppLocalizations.of(ctx)
-                                                                .translate(
-                                                                    'downloading'),
-                                                            uiKit.AppLocalizations
-                                                                    .of(ctx)
-                                                                .translate(
-                                                                    'downloadDone'),
-                                                            noteBox,
-                                                            file_id);
+                                                        : id == 'imageDesc'
+                                                            ? _noteImageProvider
+                                                                .updateImageDesc(
+                                                                    index,
+                                                                    dialogController
+                                                                        .text)
+                                                            : download(
+                                                                driveApi,
+                                                                driveFile,
+                                                                uiKit.AppLocalizations.of(ctx)
+                                                                    .translate(
+                                                                        'downloading'),
+                                                                uiKit.AppLocalizations.of(ctx)
+                                                                    .translate('downloadDone'),
+                                                                noteBox,
+                                                                file_id);
                                         Navigator.pop(ctx);
                                       }))
                               : Container()

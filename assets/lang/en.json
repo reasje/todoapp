@@ -62,5 +62,7 @@
   "voice" : "Voice",
   "task" : "Task",
   "imageDesc" : "Description",
-  "reset" : "Reset checkboxs on day change !"
+  "reset" : "Reset checkboxs on day change !",
+  "setPassword" : "set a password",
+  "passwordHint" : "password"
 }

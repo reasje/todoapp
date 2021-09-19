@@ -57,7 +57,7 @@ class _MyButtonState extends State<MyButton> {
         widget.id == 'stopvoice' ||
         widget.id == 'resumevoice';
     var shaded =
-        floating ? Colors.transparent : backgroundColor.withOpacity(0.1);    
+        floating ? Colors.transparent : backgroundColor.withOpacity(0.1);
     IconData iconData = widget.iconData;
     String id = widget.id;
     double iconSize = widget.iconSize;
@@ -423,6 +423,12 @@ class _MyButtonState extends State<MyButton> {
                   case 'resumevoice':
                     await _noteVoiceRecorderProvider.resumeRecorder();
                     break;
+                  case 'password':
+                    uiKit.showAlertDialog(
+                      context,
+                      id: 'password',
+                    );
+                    break;
                 }
               });
             });
@@ -433,13 +439,13 @@ class _MyButtonState extends State<MyButton> {
           child: AnimatedContainer(
             duration: Duration(milliseconds: 50),
             curve: Curves.fastLinearToSlowEaseIn,
-            height: isTapped ? widget.sizePD*0.4 : widget.sizePU,
-            width: isTapped ? widget.sizePD*0.4: widget.sizePU,
-                          decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: shaded,
-                //borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
+            height: isTapped ? widget.sizePD * 0.4 : widget.sizePU,
+            width: isTapped ? widget.sizePD * 0.4 : widget.sizePU,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: shaded,
+              //borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
             // padding: EdgeInsets?.all(4),
             child: widget.id == 'dogedonate'
                 ? Image.asset(
@@ -917,22 +923,22 @@ class _MyButtonState extends State<MyButton> {
 //   }
 // }
 
-// class SliderTransition extends PageRouteBuilder {
-//   final Widget page;
-//   SliderTransition(this.page)
-//       : super(
-//             pageBuilder: (context, animation, anotherAnimation) => page,
-//             transitionDuration: Duration(milliseconds: 1500),
-//             reverseTransitionDuration: Duration(milliseconds: 400),
-//             transitionsBuilder: (context, animation, anotherAnimation, child) {
-//               animation = CurvedAnimation(
-//                   curve: Curves.fastLinearToSlowEaseIn,
-//                   parent: animation,
-//                   reverseCurve: Curves.fastOutSlowIn);
-//               return SlideTransition(
-//                 position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-//                     .animate(animation),
-//                 child: page,
-//               );
-//             });
-// }
+class SliderTransition extends PageRouteBuilder {
+  final Widget page;
+  SliderTransition(this.page)
+      : super(
+            pageBuilder: (context, animation, anotherAnimation) => page,
+            transitionDuration: Duration(milliseconds: 1500),
+            reverseTransitionDuration: Duration(milliseconds: 400),
+            transitionsBuilder: (context, animation, anotherAnimation, child) {
+              animation = CurvedAnimation(
+                  curve: Curves.fastLinearToSlowEaseIn,
+                  parent: animation,
+                  reverseCurve: Curves.fastOutSlowIn);
+              return SlideTransition(
+                position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                    .animate(animation),
+                child: page,
+              );
+            });
+}

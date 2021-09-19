@@ -24,6 +24,7 @@ class _TimerWidgetState extends State<TimerWidget> {
     double SizeXSizeY = SizeX * SizeY;
     final _timerState = Provider.of<TimerProvider>(context);
     final _bottomNavProvider = Provider.of<BottomNavProvider>(context, listen: false);
+    
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     return Container(

@@ -53,6 +53,8 @@ Future<void> upload(drive.DriveApi driveApi, drive.File driveFile,
     title = utf8.fuse(base64).encode(title);
     var text = element.text;
     text = utf8.fuse(base64).encode(text);
+    var password = element.password;
+    password = utf8.fuse(base64).encode(password);
     // time is type int and is an exception
     var time = element.time;
     var resetCheckBoxs = element.resetCheckBoxs;
@@ -91,7 +93,7 @@ Future<void> upload(drive.DriveApi driveApi, drive.File driveFile,
           "title": title,
           "text": text,
           "time": time,
-          "isChecked" : isChecked,
+          "isChecked": isChecked,
           "imageDescList": imageDescList,
           "imageImageList": imageImageList,
           "voiceTitleList": voiceTitleList,
@@ -99,7 +101,8 @@ Future<void> upload(drive.DriveApi driveApi, drive.File driveFile,
           "taskTitleList": taskTitleList,
           "taskIsDoneList": taskIsDoneList,
           "resetCheckBoxs": resetCheckBoxs,
-          "color": color
+          "color": color,
+          "password": password,
         };
     // completing all the string json format to real json
     var my_json = toJson();
@@ -143,6 +146,8 @@ Future<void> download(
       title = utf8.fuse(base64).decode(title);
       var text = list[i]['text'];
       text = utf8.fuse(base64).decode(text);
+      var password = list[i]['password'];
+      password = utf8.fuse(base64).decode(password);
       int time = list[i]['time'];
       bool resetCheckBoxs = list[i]['resetCheckBoxs'];
       int color = list[i]['color'];
@@ -177,8 +182,8 @@ Future<void> download(
             utf8.fuse(base64).decode(taskTaskListDownloaded[i]) == 'true');
         taskList.add(task);
       }
-      await noteBox.add(Note(title, text, isChecked, time, color, time, imageList,
-          voiceList, taskList, resetCheckBoxs));
+      await noteBox.add(Note(title, text, isChecked, time, color, time,
+          imageList, voiceList, taskList, resetCheckBoxs, password));
     }
     await EasyLoading.dismiss();
     await EasyLoading.showSuccess(downloadDone);

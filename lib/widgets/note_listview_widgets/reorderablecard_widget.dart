@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screen_lock/functions.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
@@ -53,7 +54,8 @@ class ReorderableCardWidget extends StatelessWidget {
             bnote.imageList,
             bnote.voiceList,
             bnote.taskList,
-            bnote.resetCheckBoxs);
+            bnote.resetCheckBoxs,
+            bnote.password);
         notes.delete(keys[index]);
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(uiKit.MySnackBar(
@@ -101,24 +103,56 @@ class ReorderableCardWidget extends StatelessWidget {
                         children: [
                           snapShot.data.time != 0
                               ? InkWell(
-                                  onTap: () {
-                                    if (!(_timerState.isRunning
-                                        .any((element) => element == true))) {
-                                      _timerState.loadTimer(
-                                        keys,
-                                        index,
-                                        context,
+                                  // This is fun is probable to be executed if the 
+                                  // note include time 
+                                  onTap: () async {
+                                    if (snapShot.data.password == '' ||
+                                        snapShot.data.password == null) {
+                                      // does not have a password
+                                      if (!(_timerState.isRunning
+                                          .any((element) => element == true))) {
+                                        _timerState.loadTimer(
+                                          keys,
+                                          index,
+                                          context,
+                                        );
+                                      }
+                                      _myProvider
+                                          .loadNote(context, keys, index)
+                                          .then((value) {
+                                        Navigator.push(
+                                            context,
+                                            SliderTransition(
+                                                uiKit.MyNotesEditing()));
+                                      });
+                                    } else {
+                                      // have the password and it must be checked
+                                      await screenLock<void>(
+                                        context: context,
+                                        correctString: snapShot.data.password,
+                                        canCancel: true,
+                                        didUnlocked: () {
+                                          Navigator.pop(context);
+                                          if (!(_timerState.isRunning.any(
+                                              (element) => element == true))) {
+                                            _timerState.loadTimer(
+                                              keys,
+                                              index,
+                                              context,
+                                            );
+                                          }
+                                          _myProvider
+                                              .loadNote(context, keys, index)
+                                              .then((value) {
+                                            Navigator.push(
+                                                context,
+                                                SliderTransition(
+                                                    uiKit.MyNotesEditing()));
+                                          });
+                                        },
+                                        digits: snapShot.data.password.length,
                                       );
                                     }
-
-                                    _myProvider.loadNote(context, keys, index).then((value) {
-                                                                          Navigator.push(
-                                        context,
-                                        SliderTransition(
-                                            uiKit.MyNotesEditing()));
-                                    }
-                                    );
-
                                   },
                                   child: Container(
                                     padding: EdgeInsets.all(4),
@@ -129,7 +163,7 @@ class ReorderableCardWidget extends StatelessWidget {
                                       ),
                                       child: Directionality(
                                         textDirection: TextDirection.ltr,
-                                        child:  Row(
+                                        child: Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           mainAxisAlignment:
@@ -240,7 +274,7 @@ class ReorderableCardWidget extends StatelessWidget {
                               ),
                               child: ExpansionTile(
                                 initiallyExpanded: false,
-                                
+
                                 // tried too hard to make the expanion color and
                                 // collapsed color personalized but threre was  a problem
                                 // Every widget when We call the notifier in the provider
@@ -254,32 +288,33 @@ class ReorderableCardWidget extends StatelessWidget {
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          _myProvider
-                                              .updateIsChecked(keys, index);
+                                          _myProvider.updateIsChecked(
+                                              keys, index);
                                         },
                                         child: Container(
                                             height: SizeX * 0.04,
                                             width: SizeX * 0.04,
                                             decoration: BoxDecoration(
-                                                
                                                 border: Border.all(
-                                                    color: _themeProvider.textColor,
+                                                    color: _themeProvider
+                                                        .textColor,
                                                     width: 1.5),
-                                                borderRadius: BorderRadius.circular(10),
-                                                color: snapShot.data.isChecked
-                                                             ??
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: snapShot
+                                                            .data.isChecked ??
                                                         false
-                                                    ? Color(snapShot.data.color).withOpacity(0.2)
+                                                    ? Color(snapShot.data.color)
+                                                        .withOpacity(0.2)
                                                     : null),
-                                            child: snapShot.data.isChecked
-                                                        ??
-                                                    false
-                                                ? Icon(
-                                                    Icons.check_rounded,
-                                                    size: SizeX * 0.03,
-                                                    color: Colors.white,
-                                                  )
-                                                : Container()),
+                                            child:
+                                                snapShot.data.isChecked ?? false
+                                                    ? Icon(
+                                                        Icons.check_rounded,
+                                                        size: SizeX * 0.03,
+                                                        color: Colors.white,
+                                                      )
+                                                    : Container()),
                                       ),
                                       Expanded(
                                         flex: 8,
@@ -313,28 +348,66 @@ class ReorderableCardWidget extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  onTap: () {
-                                    if (!(_timerState.isRunning
-                                        .any((element) => element == true))) {
-                                      _timerState.loadTimer(
-                                        keys,
-                                        index,
-                                        context,
+                                  onTap: () async {
+                                    if (snapShot.data.password == '' ||
+                                        snapShot.data.password == null) {
+                                      // does not have a password
+                                      if (!(_timerState.isRunning
+                                          .any((element) => element == true))) {
+                                        _timerState.loadTimer(
+                                          keys,
+                                          index,
+                                          context,
+                                        );
+                                      }
+                                      _myProvider
+                                          .loadNote(context, keys, index)
+                                          .then((value) {
+                                        Navigator.push(
+                                            context,
+                                            SliderTransition(
+                                                uiKit.MyNotesEditing()));
+                                      });
+                                    } else {
+                                      // have the password and it must be checked
+                                      await screenLock<void>(
+                                        context: context,
+                                        correctString: snapShot.data.password,
+                                        canCancel: true,
+                                        didUnlocked: () {
+                                          Navigator.pop(context);
+                                          if (!(_timerState.isRunning.any(
+                                              (element) => element == true))) {
+                                            _timerState.loadTimer(
+                                              keys,
+                                              index,
+                                              context,
+                                            );
+                                          }
+                                          _myProvider
+                                              .loadNote(context, keys, index)
+                                              .then((value) {
+                                            Navigator.push(
+                                                context,
+                                                SliderTransition(
+                                                    uiKit.MyNotesEditing()));
+                                          });
+                                        },
+                                        digits: snapShot.data.password.length,
                                       );
                                     }
-                                    _myProvider.loadNote(context, keys, index).then((value) {
-                                                                          Navigator.push(
-                                        context,
-                                        SliderTransition(
-                                            uiKit.MyNotesEditing()));
-                                    });
                                   },
                                 ),
                                 children: [
                                   Container(
                                     padding: EdgeInsets.all(SizeY * 0.05),
                                     child: Text(
-                                      snapShot.data.text.length > 1500 ? snapShot.data.text.toString().substring(0 , 1500) + "..." :snapShot.data.text ,
+                                      snapShot.data.text.length > 1500
+                                          ? snapShot.data.text
+                                                  .toString()
+                                                  .substring(0, 1500) +
+                                              "..."
+                                          : snapShot.data.text,
                                       style: TextStyle(
                                         color: _themeProvider.textColor,
                                         fontSize: SizeX * SizeY * 0.00008,
