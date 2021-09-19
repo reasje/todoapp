@@ -98,7 +98,7 @@ class BottomNavProvider with ChangeNotifier {
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Row(
                 children: [
                   uiKit.MyButton(
@@ -125,6 +125,14 @@ class BottomNavProvider with ChangeNotifier {
                     iconData: Icons.color_lens_outlined,
                     id: 'color',
                   ),
+                  uiKit.MyButton(
+                    backgroundColor: items[0].color,
+                    sizePU: SizeXSizeY * 0.00017,
+                    sizePD: SizeXSizeY * 0.00018,
+                    iconSize: SizeX * SizeY * 0.00008,
+                    iconData: Icons.vpn_key_rounded,
+                    id: 'password',
+                  ),                  
                 ],
               ),
             ),
