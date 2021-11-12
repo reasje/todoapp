@@ -56,7 +56,7 @@ class _MyRorderableState extends State<MyRorderable> {
                               Align(
 
                                 child: Container(
-                                    height: SizeX*0.83,
+                                    height: SizeX*0.84,
                                     child: ScrollConfiguration(
                                       behavior: NoGlowBehaviour(),
                                       child: AnimationLimiter(

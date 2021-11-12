@@ -54,23 +54,10 @@ class _PicDetailState extends State<PicDetail> {
       textSize = TextSize.small;
     }
     return Scaffold(
+      
       backgroundColor: _themeProvider.mainColor,
       body: InkWell(
-        onTap: () {
-          if (_showButton) {
-            _showButton = false;
-            timer.cancel();
-          } else {
-            _showButton = true;
-            timer.cancel();
-            timer = Timer(Duration(seconds: 5), () {
-              _showButton = false;
-              setState(() {});
-            });
-          }
-
-          setState(() {});
-        },
+        onTap: helli,
         child: Container(
           height: SizeX,
           width: SizeY,
@@ -159,5 +146,8 @@ class _PicDetailState extends State<PicDetail> {
           : Container(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  void helli() {
   }
 }
