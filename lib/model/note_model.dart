@@ -16,28 +16,22 @@ class Note {
   @HiveField(2)
   bool isChecked;
   @HiveField(3)
-  int time;
-  @HiveField(4)
   int color;
-  @HiveField(5)
-  int leftTime;
-  @HiveField(6)
+  @HiveField(4)
   List<Image> imageList;
-  @HiveField(7)
+  @HiveField(5)
   List<Voice> voiceList;
-  @HiveField(8)
+  @HiveField(6)
   List<Task> taskList;
-  @HiveField(9)
+  @HiveField(7)
   bool resetCheckBoxs;
-  @HiveField(10)
+  @HiveField(8)
   String password;
   Note(
       this.title,
       this.text,
       this.isChecked,
-      this.time,
       this.color,
-      this.leftTime,
       this.imageList,
       this.voiceList,
       this.taskList,

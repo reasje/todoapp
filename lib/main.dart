@@ -7,24 +7,22 @@ import 'package:todoapp/model/image_model.dart' as imageModel;
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/task_model.dart';
 import 'package:todoapp/model/voice_model.dart';
-import 'package:todoapp/provider/bottomnav_provider.dart';
-import 'package:todoapp/provider/conn_provider.dart';
-import 'package:todoapp/provider/donate_provider.dart';
-import 'package:todoapp/provider/note_provider.dart';
+import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
+import 'package:todoapp/app/donate/logic/donate_provider.dart';
+import 'package:todoapp/app/note_screen/logic/note_provider.dart';
 import 'package:hive/hive.dart';
-import 'package:todoapp/provider/notecolor_provider.dart';
-import 'package:todoapp/provider/noteimage_provider.dart';
-import 'package:todoapp/provider/notepassword_provider.dart';
-import 'package:todoapp/provider/notetask_provider.dart';
-import 'package:todoapp/provider/notetitletext_provider.dart';
-import 'package:todoapp/provider/notevoice_player_provider.dart';
-import 'package:todoapp/provider/notevoice_recorder_provider.dart';
-import 'package:todoapp/provider/reorderable_provider.dart';
-import 'package:todoapp/provider/signin_provider.dart';
-import 'package:todoapp/provider/theme_provider.dart';
-import 'package:todoapp/provider/timer_provider.dart';
-import 'package:todoapp/provider/uncheck_provider.dart';
-import 'package:todoapp/screens/splash_screen.dart';
+import 'package:todoapp/app/note_screen/logic/notecolor_provider.dart';
+import 'package:todoapp/app/note_screen/logic/noteimage_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notepassword_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notetask_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notetitletext_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notevoice_player_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notevoice_recorder_provider.dart';
+import 'package:todoapp/app/settings/logic/signin_provider.dart';
+import 'package:todoapp/app/logic/theme_provider.dart';
+import 'app/logic/connection_provider.dart';
+import 'app/logic/uncheck_provider.dart';
+import 'app/splash/screen/splash_screen.dart';
 import 'applocalizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -33,8 +31,7 @@ const String noteBoxName = 'Note';
 const String prefsBoxName = 'prefs';
 
 // Flutter notifications
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 // void printHello() {
 //   print('object');
 // }
@@ -43,21 +40,16 @@ void main() async {
   // ensurening that the init is done !
   WidgetsFlutterBinding.ensureInitialized();
   // flutter notifications
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-  var initializationSettingsAndroid =
-      AndroidInitializationSettings('todoapplogo');
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  var initializationSettingsAndroid = AndroidInitializationSettings('todoapplogo');
   var initializationSettingsIOS = IOSInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
       requestSoundPermission: true,
-      onDidReceiveLocalNotification:
-          (int id, String title, String body, String payload) async {});
-  var initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-      
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: (String payload) async {
+      onDidReceiveLocalNotification: (int id, String title, String body, String payload) async {});
+  var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: (String payload) async {
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
     }
@@ -120,21 +112,17 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(
             create: (context) => NoteProvider(),
           ),
-          ChangeNotifierProvider(create: (context) => TimerProvider()),
-          ChangeNotifierProvider(create: (context) => ConnState()),
-          ChangeNotifierProvider(create: (context) => SigninState()),
+          ChangeNotifierProvider(create: (context) => ConnectionProvider()),
+          ChangeNotifierProvider(create: (context) => SignInProvider()),
           ChangeNotifierProvider(create: (context) => ThemeProvider()),
           ChangeNotifierProvider(create: (context) => UnCheckProvider()),
           ChangeNotifierProvider(create: (context) => BottomNavProvider()),
           ChangeNotifierProvider(create: (context) => NoteImageProvider()),
-          ChangeNotifierProvider(
-              create: (context) => NoteVoiceRecorderProvider()),
-          ChangeNotifierProvider(
-              create: (context) => NoteVoicePlayerProvider()),
+          ChangeNotifierProvider(create: (context) => NoteVoiceRecorderProvider()),
+          ChangeNotifierProvider(create: (context) => NoteVoicePlayerProvider()),
           ChangeNotifierProvider(create: (context) => NoteTaskProvider()),
           ChangeNotifierProvider(create: (context) => NoteTitleTextProvider()),
           ChangeNotifierProvider(create: (context) => NoteColorProvider()),
-          ChangeNotifierProvider(create: (context) => ReorderableProvider()),
           ChangeNotifierProvider(create: (context) => DonateProvider()),
           ChangeNotifierProvider(create: (context) => NotePasswordProvider()),
         ],
@@ -167,11 +155,8 @@ class _MyAppState extends State<MyApp> {
               //   return supportedLocales.first;
               // },
               debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                  visualDensity: VisualDensity.adaptivePlatformDensity,
-                  fontFamily:
-                      _themeProvider.isEn ? "Ubuntu Condensed" : "Dubai"),
-              home: MySplashScreen(),
+              theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity, fontFamily: _themeProvider.isEn ? "Ubuntu Condensed" : "Dubai"),
+              home: SplashScreen(),
               builder: EasyLoading.init(),
             );
           },

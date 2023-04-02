@@ -2,23 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapp/app/donate/screen/donate_screen.dart';
+import 'package:todoapp/app/notes%20list/screen/notes_screen.dart';
 import 'package:todoapp/model/note_model.dart';
-import 'package:todoapp/provider/conn_provider.dart';
-import 'package:todoapp/provider/donate_provider.dart';
-import 'package:todoapp/provider/drive_provider.dart';
-import 'package:todoapp/provider/note_provider.dart';
-import 'package:todoapp/provider/notecolor_provider.dart';
-import 'package:todoapp/provider/noteimage_provider.dart';
-import 'package:todoapp/provider/notetitletext_provider.dart';
-import 'package:todoapp/provider/notevoice_recorder_provider.dart';
-import 'package:todoapp/provider/signin_provider.dart';
-import 'package:todoapp/provider/theme_provider.dart';
-import 'package:todoapp/provider/timer_provider.dart';
-import 'package:todoapp/uiKit.dart' as uiKit;
+import 'package:todoapp/app/donate/logic/donate_provider.dart';
+import 'package:todoapp/app/settings/logic/drive_provider.dart';
+import 'package:todoapp/app/note_screen/logic/note_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notecolor_provider.dart';
+import 'package:todoapp/app/note_screen/logic/noteimage_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notetitletext_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notevoice_recorder_provider.dart';
+import 'package:todoapp/app/settings/logic/signin_provider.dart';
+import 'package:todoapp/app/logic/theme_provider.dart';
 
+import '../app/logic/connection_provider.dart';
+import '../app/note_screen/screen/note_screen.dart';
+import '../app/settings/screen/setting_screen.dart';
+import '../applocalizations.dart';
 import '../main.dart';
+import 'dialog.dart';
 
-class MyButton extends StatefulWidget {
+class ButtonWidget extends StatefulWidget {
   final IconData iconData;
   final double sizePU;
   final double sizePD;
@@ -26,38 +30,24 @@ class MyButton extends StatefulWidget {
   final String id;
   final BuildContext timerContext;
   final Color backgroundColor;
-  const MyButton(
-      {Key key,
-      this.sizePU,
-      this.sizePD,
-      this.iconSize,
-      this.iconData,
-      this.id,
-      this.timerContext,
-      this.backgroundColor})
+  const ButtonWidget({Key key, this.sizePU, this.sizePD, this.iconSize, this.iconData, this.id, this.timerContext, this.backgroundColor})
       : super(key: key);
 
   @override
   _MyButtonState createState() => _MyButtonState();
 }
 
-class _MyButtonState extends State<MyButton> {
+class _MyButtonState extends State<ButtonWidget> {
   bool isTapped = false;
 
   @override
   Widget build(BuildContext context) {
-    final _myProvider = Provider.of<NoteProvider>(context);
-    final _timerState = Provider.of<TimerProvider>(context);
-    final _signinState = Provider.of<SigninState>(context);
+    final _signInProvider = Provider.of<SignInProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
     Color backgroundColor = widget.backgroundColor;
-    bool floating = widget.id == 'newpic' ||
-        widget.id == 'newvoice' ||
-        widget.id == 'pausevoice' ||
-        widget.id == 'stopvoice' ||
-        widget.id == 'resumevoice';
-    var shaded =
-        floating ? Colors.transparent : backgroundColor.withOpacity(0.1);
+    bool floating =
+        widget.id == 'newpic' || widget.id == 'newvoice' || widget.id == 'pausevoice' || widget.id == 'stopvoice' || widget.id == 'resumevoice';
+    var shaded = floating ? Colors.transparent : backgroundColor.withOpacity(0.1);
     IconData iconData = widget.iconData;
     String id = widget.id;
     double iconSize = widget.iconSize;
@@ -76,29 +66,17 @@ class _MyButtonState extends State<MyButton> {
           if (mounted) {
             setState(() {
               Future.delayed(Duration(milliseconds: 100), () async {
-                final _myProvider =
-                    Provider.of<NoteProvider>(context, listen: false);
-                final _timerState =
-                    Provider.of<TimerProvider>(context, listen: false);
-                final _signinState =
-                    Provider.of<SigninState>(context, listen: false);
-                final _connState =
-                    Provider.of<ConnState>(context, listen: false);
-                final _noteImageProvider =
-                    Provider.of<NoteImageProvider>(context, listen: false);
-                final _noteVoiceRecorderProvider =
-                    Provider.of<NoteVoiceRecorderProvider>(context,
-                        listen: false);
-                final _noteTitleTextProvider =
-                    Provider.of<NoteTitleTextProvider>(context, listen: false);
-                final _noteColorProvider =
-                    Provider.of<NoteColorProvider>(context, listen: false);
-                final _donateProvider =
-                    Provider.of<DonateProvider>(context, listen: false);
-                final _themeProvider =
-                    Provider.of<ThemeProvider>(context, listen: false);
-                double SizeX = MediaQuery.of(context).size.height;
-                double SizeY = MediaQuery.of(context).size.width;
+                final _myProvider = Provider.of<NoteProvider>(context, listen: false);
+                final _signInProvider = Provider.of<SignInProvider>(context, listen: false);
+                final _connState = Provider.of<ConnectionProvider>(context, listen: false);
+                final _noteImageProvider = Provider.of<NoteImageProvider>(context, listen: false);
+                final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(context, listen: false);
+                final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(context, listen: false);
+                final _noteColorProvider = Provider.of<NoteColorProvider>(context, listen: false);
+                final _donateProvider = Provider.of<DonateProvider>(context, listen: false);
+                final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+                double h = MediaQuery.of(context).size.height;
+                double w = MediaQuery.of(context).size.width;
                 LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
                 switch (widget.id) {
                   case 'dogedonate':
@@ -106,137 +84,35 @@ class _MyButtonState extends State<MyButton> {
                     _donateProvider.showDogeCopied(context);
                     break;
                   case 'home':
-                    Navigator.pushReplacement(
-                        context, SliderTransition(uiKit.MyRorderable()));
+                    Navigator.pushReplacement(context, SliderTransition(NotesScreen()));
                     _themeProvider.changeFirstTime();
                     break;
                   case 'menu':
                     // Navigator.push(context,
                     //     MaterialPageRoute(builder: (BuildContext context) {
-                    //   return uiKit.Home();
+                    //   return  Home();
                     // }));
                     Navigator.pop(context);
                     // TODO Delete _myProvider.changeTimerStack();
                     break;
-                  case 'start':
-                    if (!(_timerState.isRunning
-                        .any((element) => element == true))) {
-                      _timerState.startTimer(context);
-                    } else {
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          uiKit.MySnackBar(
-                              uiKit.AppLocalizations.of(context)
-                                  .translate('timerOn'),
-                              'timerOn',
-                              false,
-                              context: context));
-                    }
-
-                    //startTimer();
-                    break;
-                  case 'stop':
-                    _timerState.stopTimer();
-                    break;
-                  case 'reset':
-                    _timerState.resetTimer(context);
-                    break;
                   case 'redo':
-                    _noteTitleTextProvider.canRedo
-                        ? _noteTitleTextProvider.changesRedo()
-                        : null;
+                    _noteTitleTextProvider.canRedo ? _noteTitleTextProvider.changesRedo() : null;
                     break;
                   case 'lan':
                     _themeProvider.changeLan();
                     break;
                   case 'new':
                     await _myProvider.newNoteClicked(context);
-                    Navigator.push(
-                        context, SliderTransition(uiKit.MyNotesEditing()));
+                    Navigator.push(context, SliderTransition(NoteScreen()));
                     break;
                   case 'lamp':
                     _themeProvider.changeBrigness();
                     break;
                   case 'undo':
                     {
-                      _noteTitleTextProvider.canUndo
-                          ? _noteTitleTextProvider.changesUndo()
-                          : null;
+                      _noteTitleTextProvider.canUndo ? _noteTitleTextProvider.changesUndo() : null;
                     }
                     break;
-                  case 'timer':
-                    {
-                      // showCupertinoModalPopup(
-                      //     context: context,
-                      //     builder: (context) => Container(
-                      //           child: CupertinoActionSheet(
-                      //             actions: [uiKit.MyDatePicker(context)],
-                      //             cancelButton: Container(
-                      //               decoration: BoxDecoration(
-                      //                   color: _themeProvider.mainColor,
-                      //                   borderRadius:
-                      //                       BorderRadius.all(Radius.circular(10))),
-                      //               child: CupertinoActionSheetAction(
-                      //                 child: Text(uiKit.AppLocalizations.of(context)
-                      //                     .translate('done')),
-                      //                 onPressed: () {
-                      //                   _myProvider.timerDone();
-                      //                   Navigator.pop(context);
-                      //                 },
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         ));
-
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return Container(
-                              color: Color(0xFF737373),
-                              height: SizeX * 0.3,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: _themeProvider.mainColor,
-                                    borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(20),
-                                        topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      flex: 4,
-                                      child: Center(
-                                        child: uiKit.MyDatePicker(context),
-                                      ),
-                                    ),
-                                    Divider(),
-                                    Expanded(
-                                      child: Center(
-                                        child: InkWell(
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text(
-                                            uiKit.AppLocalizations.of(context)
-                                                .translate('done'),
-                                            style: TextStyle(
-                                                color: _themeProvider.titleColor
-                                                    .withOpacity(0.6),
-                                                fontSize: _themeProvider.isEn
-                                                    ? SizeX * SizeY * 0.00007
-                                                    : SizeX * SizeY * 0.00006),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
-                          }).then((value) => _timerState.timerDone());
-                    }
-                    break;
-
                   case 'color':
                     List<Color> colors = _themeProvider.getNoteColors();
                     showModalBottomSheet(
@@ -244,34 +120,25 @@ class _MyButtonState extends State<MyButton> {
                         builder: (context) {
                           return Container(
                             color: Color(0xFF737373),
-                            height: SizeX * 0.1,
+                            height: h * 0.1,
                             child: Container(
                               decoration: BoxDecoration(
                                   color: _themeProvider.mainColor,
-                                  borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(20),
-                                      topLeft: Radius.circular(20))),
+                                  borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft: Radius.circular(20))),
                               child: GridView(
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        mainAxisSpacing: SizeX * 0.05,
-                                        crossAxisSpacing: SizeX * 0.06,
-                                        crossAxisCount: 5),
-                                padding: EdgeInsets.all(SizeX * 0.01),
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                    mainAxisSpacing: h * 0.05, crossAxisSpacing: h * 0.06, crossAxisCount: 5),
+                                padding: EdgeInsets.all(h * 0.01),
                                 children: colors
                                     .map((color) => InkWell(
                                           onTap: () {
-                                            _noteColorProvider
-                                                .noteColorSelected(color);
+                                            _noteColorProvider.noteColorSelected(color);
                                             Navigator.pop(context);
                                           },
                                           child: Container(
-                                            height: SizeX * 0.05,
-                                            width: SizeX * 0.05,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(40),
-                                                color: color),
+                                            height: h * 0.05,
+                                            width: h * 0.05,
+                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: color),
                                           ),
                                         ))
                                     .toList(),
@@ -288,11 +155,11 @@ class _MyButtonState extends State<MyButton> {
 
                     // Navigator.push(context,
                     //     MaterialPageRoute(builder: (BuildContext context) {
-                    //   return uiKit.Home();
+                    //   return  Home();
                     // }));
                     break;
                   case 'coder':
-                    Navigator.push(context, SliderTransition(uiKit.MyDoante()));
+                    Navigator.push(context, SliderTransition(DonateScreen()));
                     // TODO Delete _myProvider.gotoDonate(context);
                     break;
                   case 'donate':
@@ -302,17 +169,16 @@ class _MyButtonState extends State<MyButton> {
                     login(true, context);
                     break;
                   case 'setting':
-                    Navigator.push(
-                        context, SliderTransition(uiKit.SettingScreen()));
+                    Navigator.push(context, SliderTransition(SettingScreen()));
                     break;
                   case 'download':
                     login(false, context);
                     break;
                   case 'google':
                     if (_connState.is_conn) {
-                      _signinState.signinToAccount();
+                      _signInProvider.signInToAccount();
                     } else {
-                      uiKit.showAlertDialog(context, id: 'internet');
+                      showAlertDialog(context, id: 'internet');
                     }
                     break;
                   case 'newpic':
@@ -351,13 +217,11 @@ class _MyButtonState extends State<MyButton> {
                         builder: (context) {
                           return Container(
                             color: Color(0xFF737373),
-                            height: SizeX * 0.2,
+                            height: h * 0.2,
                             child: Container(
                               decoration: BoxDecoration(
                                   color: _themeProvider.mainColor,
-                                  borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(20),
-                                      topLeft: Radius.circular(20))),
+                                  borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft: Radius.circular(20))),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -365,19 +229,14 @@ class _MyButtonState extends State<MyButton> {
                                     child: Center(
                                       child: InkWell(
                                         onTap: () {
-                                          _noteImageProvider
-                                              .imagePickerCamera();
+                                          _noteImageProvider.imagePickerCamera();
                                           Navigator.pop(context);
                                         },
                                         child: Text(
-                                          uiKit.AppLocalizations.of(context)
-                                              .translate('camera'),
+                                          AppLocalizations.of(context).translate('camera'),
                                           style: TextStyle(
-                                              color: _themeProvider.titleColor
-                                                  .withOpacity(0.6),
-                                              fontSize: _themeProvider.isEn
-                                                  ? SizeX * SizeY * 0.00008
-                                                  : SizeX * SizeY * 0.00007),
+                                              color: _themeProvider.titleColor.withOpacity(0.6),
+                                              fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00007),
                                         ),
                                       ),
                                     ),
@@ -387,19 +246,14 @@ class _MyButtonState extends State<MyButton> {
                                     child: Center(
                                       child: InkWell(
                                         onTap: () {
-                                          _noteImageProvider
-                                              .imagePickerGalley();
+                                          _noteImageProvider.imagePickerGalley();
                                           Navigator.pop(context);
                                         },
                                         child: Text(
-                                          uiKit.AppLocalizations.of(context)
-                                              .translate('gallery'),
+                                          AppLocalizations.of(context).translate('gallery'),
                                           style: TextStyle(
-                                              color: _themeProvider.titleColor
-                                                  .withOpacity(0.6),
-                                              fontSize: _themeProvider.isEn
-                                                  ? SizeX * SizeY * 0.00008
-                                                  : SizeX * SizeY * 0.00007),
+                                              color: _themeProvider.titleColor.withOpacity(0.6),
+                                              fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00007),
                                         ),
                                       ),
                                     ),
@@ -424,10 +278,9 @@ class _MyButtonState extends State<MyButton> {
                     await _noteVoiceRecorderProvider.resumeRecorder();
                     break;
                   case 'password':
-                    uiKit.showAlertDialog(
+                    showAlertDialog(
                       context,
                       id: 'password',
-                      
                     );
                     break;
                 }
@@ -457,7 +310,7 @@ class _MyButtonState extends State<MyButton> {
                     widget.iconData,
                     size: widget.iconSize * 0.8,
                     color: widget.id == 'google'
-                        ? _signinState.isSignedin
+                        ? _signInProvider.isSignedin
                             ? Colors.green
                             : Colors.red
                         : floating
@@ -509,7 +362,7 @@ class _MyButtonState extends State<MyButton> {
 //           final _myProvider = Provider.of<NoteProvider>(context, listen: false);
 //           final _timerState =
 //               Provider.of<TimerProvider>(context, listen: false);
-//           final _signinState = Provider.of<SigninState>(context, listen: false);
+//           final _signInProvider = Provider.of<SignInProvider>(context, listen: false);
 //           final _connState = Provider.of<ConnState>(context, listen: false);
 //           final _noteImageProvider =
 //               Provider.of<NoteImageProvider>(context, listen: false);
@@ -523,8 +376,8 @@ class _MyButtonState extends State<MyButton> {
 //               Provider.of<DonateProvider>(context, listen: false);
 //           final _themeProvider =
 //               Provider.of<ThemeProvider>(context, listen: false);
-//           double SizeX = MediaQuery.of(context).size.height;
-//           double SizeY = MediaQuery.of(context).size.width;
+//           double h = MediaQuery.of(context).size.height;
+//           double w = MediaQuery.of(context).size.width;
 //           LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
 //           switch (widget.id) {
 //             case 'dogedonate':
@@ -533,13 +386,13 @@ class _MyButtonState extends State<MyButton> {
 //               break;
 //             case 'home':
 //               Navigator.pushReplacement(
-//                   context, SliderTransition(uiKit.MyRorderable()));
+//                   context, SliderTransition( MyRorderable()));
 //               _themeProvider.changeFirstTime();
 //               break;
 //             case 'menu':
 //               // Navigator.push(context,
 //               //     MaterialPageRoute(builder: (BuildContext context) {
-//               //   return uiKit.Home();
+//               //   return  Home();
 //               // }));
 //               Navigator.pop(context);
 //               // TODO Delete _myProvider.changeTimerStack();
@@ -549,8 +402,8 @@ class _MyButtonState extends State<MyButton> {
 //                 _timerState.startTimer(context);
 //               } else {
 //                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
-//                 ScaffoldMessenger.of(context).showSnackBar(uiKit.MySnackBar(
-//                     uiKit.AppLocalizations.of(context).translate('timerOn'),
+//                 ScaffoldMessenger.of(context).showSnackBar( MySnackBar(
+//                      AppLocalizations.of(context).translate('timerOn'),
 //                     'timerOn',
 //                     false,
 //                     context: context));
@@ -574,7 +427,7 @@ class _MyButtonState extends State<MyButton> {
 //               break;
 //             case 'new':
 //               await _myProvider.newNoteClicked(context);
-//               Navigator.push(context, SliderTransition(uiKit.MyNotesEditing()));
+//               Navigator.push(context, SliderTransition( NoteScreen()));
 //               break;
 //             case 'lamp':
 //               _themeProvider.changeBrigness();
@@ -592,14 +445,14 @@ class _MyButtonState extends State<MyButton> {
 //                 //     context: context,
 //                 //     builder: (context) => Container(
 //                 //           child: CupertinoActionSheet(
-//                 //             actions: [uiKit.MyDatePicker(context)],
+//                 //             actions: [ MyDatePicker(context)],
 //                 //             cancelButton: Container(
 //                 //               decoration: BoxDecoration(
 //                 //                   color: _themeProvider.mainColor,
 //                 //                   borderRadius:
 //                 //                       BorderRadius.all(Radius.circular(10))),
 //                 //               child: CupertinoActionSheetAction(
-//                 //                 child: Text(uiKit.AppLocalizations.of(context)
+//                 //                 child: Text( AppLocalizations.of(context)
 //                 //                     .translate('done')),
 //                 //                 onPressed: () {
 //                 //                   _myProvider.timerDone();
@@ -615,7 +468,7 @@ class _MyButtonState extends State<MyButton> {
 //                     builder: (context) {
 //                       return Container(
 //                         color: Color(0xFF737373),
-//                         height: SizeX * 0.3,
+//                         height: h * 0.3,
 //                         child: Container(
 //                           decoration: BoxDecoration(
 //                               color: _themeProvider.mainColor,
@@ -628,7 +481,7 @@ class _MyButtonState extends State<MyButton> {
 //                               Expanded(
 //                                 flex: 4,
 //                                 child: Center(
-//                                   child: uiKit.MyDatePicker(context),
+//                                   child:  MyDatePicker(context),
 //                                 ),
 //                               ),
 //                               Divider(),
@@ -639,14 +492,14 @@ class _MyButtonState extends State<MyButton> {
 //                                       Navigator.pop(context);
 //                                     },
 //                                     child: Text(
-//                                       uiKit.AppLocalizations.of(context)
+//                                        AppLocalizations.of(context)
 //                                           .translate('done'),
 //                                       style: TextStyle(
 //                                           color: _themeProvider.titleColor
 //                                               .withOpacity(0.6),
 //                                           fontSize: _themeProvider.isEn
-//                                               ? SizeX * SizeY * 0.00007
-//                                               : SizeX * SizeY * 0.00006),
+//                                               ? h * w * 0.00007
+//                                               : h * w * 0.00006),
 //                                     ),
 //                                   ),
 //                                 ),
@@ -666,7 +519,7 @@ class _MyButtonState extends State<MyButton> {
 //                   builder: (context) {
 //                     return Container(
 //                       color: Color(0xFF737373),
-//                       height: SizeX * 0.1,
+//                       height: h * 0.1,
 //                       child: Container(
 //                         decoration: BoxDecoration(
 //                             color: _themeProvider.mainColor,
@@ -676,10 +529,10 @@ class _MyButtonState extends State<MyButton> {
 //                         child: GridView(
 //                           gridDelegate:
 //                               SliverGridDelegateWithFixedCrossAxisCount(
-//                                   mainAxisSpacing: SizeX * 0.05,
-//                                   crossAxisSpacing: SizeX * 0.06,
+//                                   mainAxisSpacing: h * 0.05,
+//                                   crossAxisSpacing: h * 0.06,
 //                                   crossAxisCount: 5),
-//                           padding: EdgeInsets.all(SizeX * 0.01),
+//                           padding: EdgeInsets.all(h * 0.01),
 //                           children: colors
 //                               .map((color) => InkWell(
 //                                     onTap: () {
@@ -688,8 +541,8 @@ class _MyButtonState extends State<MyButton> {
 //                                       Navigator.pop(context);
 //                                     },
 //                                     child: Container(
-//                                       height: SizeX * 0.05,
-//                                       width: SizeX * 0.05,
+//                                       height: h * 0.05,
+//                                       width: h * 0.05,
 //                                       decoration: BoxDecoration(
 //                                           borderRadius:
 //                                               BorderRadius.circular(40),
@@ -710,11 +563,11 @@ class _MyButtonState extends State<MyButton> {
 
 //               // Navigator.push(context,
 //               //     MaterialPageRoute(builder: (BuildContext context) {
-//               //   return uiKit.Home();
+//               //   return  Home();
 //               // }));
 //               break;
 //             case 'coder':
-//               Navigator.push(context, SliderTransition(uiKit.MyDoante()));
+//               Navigator.push(context, SliderTransition( MyDoante()));
 //               // TODO Delete _myProvider.gotoDonate(context);
 //               break;
 //             case 'donate':
@@ -724,16 +577,16 @@ class _MyButtonState extends State<MyButton> {
 //               login(true, context);
 //               break;
 //             case 'setting':
-//               Navigator.push(context, SliderTransition(uiKit.SettingScreen()));
+//               Navigator.push(context, SliderTransition( SettingScreen()));
 //               break;
 //             case 'download':
 //               login(false, context);
 //               break;
 //             case 'google':
 //               if (_connState.is_conn) {
-//                 _signinState.signinToAccount();
+//                 _signInProvider.signinToAccount();
 //               } else {
-//                 uiKit.showAlertDialog(context, id: 'internet');
+//                  showAlertDialog(context, id: 'internet');
 //               }
 //               break;
 //             case 'newpic':
@@ -772,7 +625,7 @@ class _MyButtonState extends State<MyButton> {
 //                   builder: (context) {
 //                     return Container(
 //                       color: Color(0xFF737373),
-//                       height: SizeX * 0.2,
+//                       height: h * 0.2,
 //                       child: Container(
 //                         decoration: BoxDecoration(
 //                             color: _themeProvider.mainColor,
@@ -790,14 +643,14 @@ class _MyButtonState extends State<MyButton> {
 //                                     Navigator.pop(context);
 //                                   },
 //                                   child: Text(
-//                                     uiKit.AppLocalizations.of(context)
+//                                      AppLocalizations.of(context)
 //                                         .translate('camera'),
 //                                     style: TextStyle(
 //                                         color: _themeProvider.titleColor
 //                                             .withOpacity(0.6),
 //                                         fontSize: _themeProvider.isEn
-//                                             ? SizeX * SizeY * 0.00008
-//                                             : SizeX * SizeY * 0.00007),
+//                                             ? h * w * 0.00008
+//                                             : h * w * 0.00007),
 //                                   ),
 //                                 ),
 //                               ),
@@ -811,14 +664,14 @@ class _MyButtonState extends State<MyButton> {
 //                                     Navigator.pop(context);
 //                                   },
 //                                   child: Text(
-//                                     uiKit.AppLocalizations.of(context)
+//                                      AppLocalizations.of(context)
 //                                         .translate('gallery'),
 //                                     style: TextStyle(
 //                                         color: _themeProvider.titleColor
 //                                             .withOpacity(0.6),
 //                                         fontSize: _themeProvider.isEn
-//                                             ? SizeX * SizeY * 0.00008
-//                                             : SizeX * SizeY * 0.00007),
+//                                             ? h * w * 0.00008
+//                                             : h * w * 0.00007),
 //                                   ),
 //                                 ),
 //                               ),
@@ -852,7 +705,7 @@ class _MyButtonState extends State<MyButton> {
 //   Widget build(BuildContext context) {
 //     final _myProvider = Provider.of<NoteProvider>(context);
 //     final _timerState = Provider.of<TimerProvider>(context);
-//     final _signinState = Provider.of<SigninState>(context);
+//     final _signInProvider = Provider.of<SignInProvider>(context);
 //     final _themeProvider = Provider.of<ThemeProvider>(context);
 //     Color backgroundColor = widget.backgroundColor;
 //     bool floating = widget.id == 'newpic' ||
@@ -887,7 +740,7 @@ class _MyButtonState extends State<MyButton> {
 //                         widget.iconData,
 //                         size: widget.iconSize * 0.8,
 //                         color: widget.id == 'google'
-//                             ? _signinState.isSignedin
+//                             ? _signInProvider.isSignedin
 //                                 ? Colors.green
 //                                 : Colors.red
 //                             : floating
@@ -913,7 +766,7 @@ class _MyButtonState extends State<MyButton> {
 //                       textDirection: TextDirection.ltr,
 //                       size: widget.iconSize,
 //                       color: widget.id == 'google'
-//                           ? _signinState.isSignedin
+//                           ? _signInProvider.isSignedin
 //                               ? Colors.green
 //                               : Colors.red
 //                           : floating
@@ -932,13 +785,9 @@ class SliderTransition extends PageRouteBuilder {
             transitionDuration: Duration(milliseconds: 1500),
             reverseTransitionDuration: Duration(milliseconds: 400),
             transitionsBuilder: (context, animation, anotherAnimation, child) {
-              animation = CurvedAnimation(
-                  curve: Curves.fastLinearToSlowEaseIn,
-                  parent: animation,
-                  reverseCurve: Curves.fastOutSlowIn);
+              animation = CurvedAnimation(curve: Curves.fastLinearToSlowEaseIn, parent: animation, reverseCurve: Curves.fastOutSlowIn);
               return SlideTransition(
-                position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                    .animate(animation),
+                position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0)).animate(animation),
                 child: page,
               );
             });

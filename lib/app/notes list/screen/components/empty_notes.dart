@@ -1,0 +1,74 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todoapp/app/logic/theme_provider.dart';
+
+import '../../../../applocalizations.dart';
+
+class EmptyNotes extends StatelessWidget {
+  const EmptyNotes({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _themeProvider = Provider.of<ThemeProvider>(context);
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
+
+    return Container(
+      height: h * 0.7,
+      child: Column(
+        children: [
+          Container(
+            height: h * 0.45,
+            width: w * 0.8,
+            child: Padding(
+              padding: EdgeInsets.only(top: h * 0.019),
+              child: Container(
+                height: h * 0.45,
+                width: w,
+                child: Image.asset(
+                  _themeProvider.noTaskImage,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              //padding: EdgeInsets.only(bottom: h * 0.2),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    height: h * 0.1,
+                    width: w * 0.7,
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(h * w * 0.0001), color: _themeProvider.textColor.withOpacity(0.1)),
+                    child: Center(
+                      child: Text(
+                        AppLocalizations.of(context).translate('NoNotesyet'),
+                        style: TextStyle(color: _themeProvider.textColor, fontWeight: FontWeight.w400, fontSize: w * 0.06),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: h * 0.1,
+                    width: w * 0.9,
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(h * w * 0.0001), color: _themeProvider.textColor.withOpacity(0.1)),
+                    child: Center(
+                      child: Text(
+                        AppLocalizations.of(context).translate('addNewNotePlease'),
+                        style: TextStyle(
+                            color: _themeProvider.textColor, fontWeight: FontWeight.w500, fontSize: _themeProvider.isEn ? w * 0.06 : w * 0.04),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}

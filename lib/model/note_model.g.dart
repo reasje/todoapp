@@ -21,20 +21,18 @@ class NoteAdapter extends TypeAdapter<Note> {
       fields[1] as String,
       fields[2] as bool,
       fields[3] as int,
-      fields[4] as int,
-      fields[5] as int,
-      (fields[6] as List)?.cast<Image>(),
-      (fields[7] as List)?.cast<Voice>(),
-      (fields[8] as List)?.cast<Task>(),
-      fields[9] as bool,
-      fields[10] as String,
+      (fields[4] as List)?.cast<Image>(),
+      (fields[5] as List)?.cast<Voice>(),
+      (fields[6] as List)?.cast<Task>(),
+      fields[7] as bool,
+      fields[8] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Note obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
@@ -42,20 +40,16 @@ class NoteAdapter extends TypeAdapter<Note> {
       ..writeByte(2)
       ..write(obj.isChecked)
       ..writeByte(3)
-      ..write(obj.time)
-      ..writeByte(4)
       ..write(obj.color)
-      ..writeByte(5)
-      ..write(obj.leftTime)
-      ..writeByte(6)
+      ..writeByte(4)
       ..write(obj.imageList)
-      ..writeByte(7)
+      ..writeByte(5)
       ..write(obj.voiceList)
-      ..writeByte(8)
+      ..writeByte(6)
       ..write(obj.taskList)
-      ..writeByte(9)
+      ..writeByte(7)
       ..write(obj.resetCheckBoxs)
-      ..writeByte(10)
+      ..writeByte(8)
       ..write(obj.password);
   }
 
