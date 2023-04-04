@@ -3,9 +3,13 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
+import 'package:todoapp/app/settings/logic/drive_provider.dart';
 
 import '../../../applocalizations.dart';
 import '../../../widgets/buttons.dart';
+import '../../../widgets/dialog.dart';
+import '../../logic/connection_provider.dart';
+import '../logic/signin_provider.dart';
 
 class SettingScreen extends StatefulWidget {
   SettingScreen({Key key}) : super(key: key);
@@ -43,7 +47,9 @@ class _SettingScreenState extends State<SettingScreen> {
                       sizePD: h * w * 0.00018,
                       iconSize: h * w * 0.00008,
                       iconData: Icons.arrow_back_ios,
-                      id: 'menu',
+                      function: () {
+                        Navigator.pop(context);
+                      },
                     ),
                   ],
                 ),
@@ -78,7 +84,9 @@ class _SettingScreenState extends State<SettingScreen> {
                               sizePD: h * w * 0.00013,
                               iconSize: h * w * 0.00006,
                               iconData: FontAwesome.download,
-                              id: 'download',
+                              function: () {
+                                DriveLogic.login(false, context);
+                              },
                             ),
                           ),
                           Container(
@@ -90,7 +98,9 @@ class _SettingScreenState extends State<SettingScreen> {
                               sizePD: h * w * 0.00013,
                               iconSize: h * w * 0.00006,
                               iconData: FontAwesome.upload,
-                              id: 'upload',
+                              function: () {
+                                DriveLogic.login(true, context);
+                              },
                             ),
                           ),
                           Container(
@@ -100,9 +110,18 @@ class _SettingScreenState extends State<SettingScreen> {
                               backgroundColor: _themeProvider.textColor,
                               sizePU: h * w * 0.00012,
                               sizePD: h * w * 0.00013,
-                              iconSize: h * w * 0.00006,
-                              iconData: FontAwesome.google,
-                              id: 'google',
+                              function: () {
+                                if (Provider.of<ConnectionProvider>(context, listen: false).is_conn) {
+                                  Provider.of<SignInProvider>(context, listen: false).signInToAccount();
+                                } else {
+                                  showAlertDialog(context,title: AppLocalizations.of(context).translate('noInternet'),okButtonText: AppLocalizations.of(context).translate('ok'),cancelButtonText: AppLocalizations.of(context).translate('cancel'));
+                                }
+                              },
+                              child: Icon(
+                                FontAwesome.google,
+                                size: h * w * 0.00006 * 0.8,
+                                color: Provider.of<SignInProvider>(context, listen: false).isSignedin ? Colors.green : Colors.red,
+                              ),
                             ),
                           ),
                         ],
@@ -134,7 +153,9 @@ class _SettingScreenState extends State<SettingScreen> {
                         sizePD: h * w * 0.00018,
                         iconSize: h * w * 0.0001,
                         iconData: FontAwesome.language,
-                        id: 'lan',
+                        function: () {
+                          _themeProvider.changeLan();
+                        },
                       ),
                       ButtonWidget(
                         backgroundColor: _themeProvider.textColor,
@@ -142,7 +163,9 @@ class _SettingScreenState extends State<SettingScreen> {
                         sizePD: h * w * 0.00018,
                         iconSize: h * w * 0.0001,
                         iconData: FontAwesome.lightbulb_o,
-                        id: 'lamp',
+                        function: () {
+                          _themeProvider.changeBrightness();
+                        },
                       ),
                     ],
                   ),

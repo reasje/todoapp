@@ -62,8 +62,8 @@ class _NoteScreenState extends State<NoteScreen> {
                         index: 0,
                       ),
                       TabView(
-                              index: 1,
-                            ),
+                        index: 1,
+                      ),
                       TabView(
                         index: 2,
                       ),

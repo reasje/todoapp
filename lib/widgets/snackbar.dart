@@ -39,7 +39,7 @@ Widget MySnackBar(
     ),
     action: isAction
         ? SnackBarAction(
-            textColor: _themeProvider.swachColor,
+            textColor: _themeProvider.swashColor,
             label: AppLocalizations.of(context).translate('undo'),
             onPressed: () {
               if (id == 'undoVoice') {

@@ -30,7 +30,7 @@ class TitleTextField extends StatelessWidget {
         focusNode: _noteTitleTextProvider.fTitle,
         keyboardType: TextInputType.multiline,
         maxLines: null,
-        cursorColor: _themeProvider.swachColor,
+        cursorColor: _themeProvider.swashColor,
         cursorHeight: h * 0.055,
         style: TextStyle(
             color: _themeProvider.textColor, fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00006, fontWeight: FontWeight.w600),

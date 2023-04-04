@@ -7,7 +7,8 @@ import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:todoapp/model/voice_model.dart';
-
+import 'package:provider/provider.dart';
+import '../../../applocalizations.dart';
 import '../../../widgets/dialog.dart';
 
 class NoteVoiceRecorderProvider with ChangeNotifier {
@@ -31,7 +32,7 @@ class NoteVoiceRecorderProvider with ChangeNotifier {
     PermissionStatus status = await Permission.microphone.request();
     if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
       //throw RecordingPermissionException("Microphone permission not granted");
-      showAlertDialog(voiceContext, id: 'microphoneRequired');
+      showAlertDialog(voiceContext,title: AppLocalizations.of(context).translate('microphoneRequired'),cancelButtonText: AppLocalizations.of(context).translate('cancel'),okButtonText: AppLocalizations.of(context).translate('ok'));
       return;
     }
     // StreamSink<Food> _playerSubscription;
@@ -78,8 +79,9 @@ class NoteVoiceRecorderProvider with ChangeNotifier {
   void stopRecorder() async {
     // finishing up the recorded voice
     String path = await flutterSoundRecorder.stopRecorder();
-
-    await showAlertDialog(Get.overlayContext, id: 'voiceTitle');
+      final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(Get.overlayContext, listen: false);
+    TextEditingController dialogController = TextEditingController(text: '');
+    await showAlertDialog(Get.overlayContext,title: AppLocalizations.of(Get.overlayContext).translate('voiceTitle'),hastTextField: true,textFieldHintText: AppLocalizations.of(Get.overlayContext).translate('titleHint'),okButtonText: AppLocalizations.of(Get.overlayContext).translate('ok'),cancelButtonText: AppLocalizations.of(Get.overlayContext).translate('cancel'),okButtonFunction: (){_noteVoiceRecorderProvider.setVoiceTitle(dialogController.text);});
 
     // time to save the file with path inside the
     // datatbase as the Uint8List

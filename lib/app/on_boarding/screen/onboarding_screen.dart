@@ -6,6 +6,7 @@ import 'package:todoapp/app/logic/theme_provider.dart';
 
 import '../../../applocalizations.dart';
 import '../../../widgets/buttons.dart';
+import '../../notes list/screen/notes_screen.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   OnBoardingScreen({Key key}) : super(key: key);
@@ -45,7 +46,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     sizePD: h * 0.08,
                     iconSize: h * w * 0.0001,
                     iconData: Icons.arrow_forward_ios,
-                    id: 'home',
+                    function: () {
+                      Navigator.pushReplacement(context, SliderTransition(NotesScreen()));
+                      _themeProvider.changeFirstTime();
+                    },
                   ),
                 ],
               ),

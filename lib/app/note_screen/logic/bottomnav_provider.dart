@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:todoapp/model/bottomnav_tab_model.dart';
 import 'package:todoapp/model/navigationitem_model.dart';
-
+import 'package:provider/provider.dart';
+import '../../../widgets/dialog.dart';
+import '../../logic/theme_provider.dart';
 import '../screen/components/image_listview_widget.dart';
 import '../screen/components/task_listview_widget.dart';
 import '../screen/components/text_textfield_widget.dart';
@@ -10,6 +13,10 @@ import '../screen/components/title_textfield_widget.dart';
 import '../screen/components/voice_listview_widget.dart';
 import '../../../applocalizations.dart';
 import '../../../widgets/buttons.dart';
+import 'note_provider.dart';
+import 'notecolor_provider.dart';
+import 'notepassword_provider.dart';
+import 'notetitletext_provider.dart';
 
 class BottomNavProvider with ChangeNotifier {
   int selectedTab = 0;
@@ -76,7 +83,9 @@ class BottomNavProvider with ChangeNotifier {
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00008,
                   iconData: Icons.arrow_back_ios_new_rounded,
-                  id: 'save',
+                  function: () {
+                    Provider.of<NoteProvider>(context, listen: false).doneClicked(context);
+                  },
                 ),
               ),
             ),
@@ -90,7 +99,10 @@ class BottomNavProvider with ChangeNotifier {
                     sizePD: h * w * 0.00018,
                     iconSize: h * w * 0.00008,
                     iconData: Icons.undo_rounded,
-                    id: 'undo',
+                    function: () {
+                      final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(context, listen: false);
+                      _noteTitleTextProvider.canUndo ? _noteTitleTextProvider.changesUndo() : null;
+                    },
                   ),
                   ButtonWidget(
                     backgroundColor: items[0].color,
@@ -98,7 +110,10 @@ class BottomNavProvider with ChangeNotifier {
                     sizePD: h * w * 0.00018,
                     iconSize: h * w * 0.00008,
                     iconData: Icons.redo_rounded,
-                    id: 'redo',
+                    function: () {
+                      final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(context, listen: false);
+                      _noteTitleTextProvider.canRedo ? _noteTitleTextProvider.changesRedo() : null;
+                    },
                   ),
                   ButtonWidget(
                     backgroundColor: items[0].color,
@@ -106,7 +121,40 @@ class BottomNavProvider with ChangeNotifier {
                     sizePD: h * w * 0.00018,
                     iconSize: h * w * 0.00008,
                     iconData: Icons.color_lens_outlined,
-                    id: 'color',
+                    function: () {
+                      List<Color> colors = Provider.of<ThemeProvider>(context, listen: false).getNoteColors();
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return Container(
+                              color: Color(0xFF737373),
+                              height: h * 0.1,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Provider.of<ThemeProvider>(context, listen: false).mainColor,
+                                    borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+                                child: GridView(
+                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                      mainAxisSpacing: h * 0.05, crossAxisSpacing: h * 0.06, crossAxisCount: 5),
+                                  padding: EdgeInsets.all(h * 0.01),
+                                  children: colors
+                                      .map((color) => InkWell(
+                                            onTap: () {
+                                              Provider.of<NoteColorProvider>(context, listen: false).noteColorSelected(color);
+                                              Navigator.pop(context);
+                                            },
+                                            child: Container(
+                                              height: h * 0.05,
+                                              width: h * 0.05,
+                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: color),
+                                            ),
+                                          ))
+                                      .toList(),
+                                ),
+                              ),
+                            );
+                          });
+                    },
                   ),
                   ButtonWidget(
                     backgroundColor: items[0].color,
@@ -114,7 +162,18 @@ class BottomNavProvider with ChangeNotifier {
                     sizePD: h * w * 0.00018,
                     iconSize: h * w * 0.00008,
                     iconData: Icons.vpn_key_rounded,
-                    id: 'password',
+                    function: () {
+                      TextEditingController dialogController = TextEditingController(text: '');
+                      final _notePasswordProvider = Provider.of<NotePasswordProvider>(Get.overlayContext, listen: false);
+                      dialogController.text = _notePasswordProvider.password;
+                      showAlertDialog(context,
+                          title: AppLocalizations.of(context).translate('setPassword'),
+                          hastTextField: true,
+                          dialogController: dialogController,
+                          textFieldHintText: AppLocalizations.of(Get.overlayContext).translate('passwordHint'),
+                          textInputType: TextInputType.number,
+                          okButtonText: AppLocalizations.of(context).translate('ok'),cancelButtonText: AppLocalizations.of(context).translate('cancel'),okButtonFunction: (){_notePasswordProvider.setPassword(dialogController.text);});
+                    },
                   ),
                 ],
               ),
@@ -129,7 +188,9 @@ class BottomNavProvider with ChangeNotifier {
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00008,
                   iconData: Icons.close_rounded,
-                  id: 'cancel',
+                  function: () {
+                    Provider.of<NoteProvider>(context, listen: false).cancelClicked(context);
+                  },
                 ),
               ),
             ),
@@ -148,7 +209,9 @@ class BottomNavProvider with ChangeNotifier {
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00008,
                   iconData: Icons.arrow_back_ios_new_rounded,
-                  id: 'save',
+                  function: () {
+                    Provider.of<NoteProvider>(context, listen: false).doneClicked(context);
+                  },
                 ),
               ),
             ),
@@ -161,7 +224,9 @@ class BottomNavProvider with ChangeNotifier {
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00008,
                   iconData: Icons.close_rounded,
-                  id: 'cancel',
+                  function: () {
+                    Provider.of<NoteProvider>(context, listen: false).cancelClicked(context);
+                  },
                 ),
               ),
             ),
@@ -180,7 +245,9 @@ class BottomNavProvider with ChangeNotifier {
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00008,
                   iconData: Icons.arrow_back_ios_new_rounded,
-                  id: 'save',
+                  function: () {
+                    Provider.of<NoteProvider>(context, listen: false).doneClicked(context);
+                  },
                 ),
               ),
             ),
@@ -193,7 +260,9 @@ class BottomNavProvider with ChangeNotifier {
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00008,
                   iconData: Icons.close_rounded,
-                  id: 'cancel',
+                  function: () {
+                    Provider.of<NoteProvider>(context, listen: false).cancelClicked(context);
+                  },
                 ),
               ),
             ),
@@ -216,7 +285,9 @@ class BottomNavProvider with ChangeNotifier {
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00008,
                   iconData: Icons.arrow_back_ios_new_rounded,
-                  id: 'save',
+                  function: () {
+                    Provider.of<NoteProvider>(context, listen: false).doneClicked(context);
+                  },
                 ),
               ),
             ),
@@ -229,7 +300,9 @@ class BottomNavProvider with ChangeNotifier {
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00008,
                   iconData: Icons.close_rounded,
-                  id: 'cancel',
+                  function: () {
+                    Provider.of<NoteProvider>(context, listen: false).cancelClicked(context);
+                  },
                 ),
               ),
             ),

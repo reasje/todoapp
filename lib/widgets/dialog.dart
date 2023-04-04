@@ -14,21 +14,34 @@ import 'package:google_sign_in/google_sign_in.dart' as signIn;
 import 'package:todoapp/app/settings/logic/drive_provider.dart';
 
 Future showAlertDialog(BuildContext context,
-    {String id, drive.DriveApi driveApi, drive.File driveFile, LazyBox<Note> noteBox, String fileId, int index, String desc}) async {
+    {
+    String title,
+    drive.DriveApi driveApi,
+    drive.File driveFile,
+    LazyBox<Note> noteBox,
+    String fileId,
+    int index,
+    String desc,
+    Widget buttons,
+    bool hastTextField = false,
+    int textFieldMaxLength = 10,
+    String textFieldHintText = "",
+    TextInputType textInputType,
+    String okButtonText,
+    String cancelButtonText,
+    Function okButtonFunction,
+    Function cancelButtonFunction,
+    TextEditingController dialogController
+    }) async {
   bool _passwordInVisible = true;
 
   var mCtx = context;
 
-  final _notePasswordProvider = Provider.of<NotePasswordProvider>(mCtx, listen: false);
-
-  final _noteImageProvider = Provider.of<NoteImageProvider>(mCtx, listen: false);
-
   final _themeProvider = Provider.of<ThemeProvider>(mCtx, listen: false);
 
-  final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(mCtx, listen: false);
 
-  TextEditingController dialogController = TextEditingController(text: desc ?? '');
-  id == 'password' ? dialogController.text = _notePasswordProvider.password : null;
+
+
   double h = MediaQuery.of(mCtx).size.height;
 
   double w = MediaQuery.of(mCtx).size.width;
@@ -42,65 +55,31 @@ Future showAlertDialog(BuildContext context,
               backgroundColor: _themeProvider.mainColor,
               title: Center(
                   child: Text(
-                id == "lan"
-                    ? "Choose you language ! "
-                    : id == "up"
-                        ? AppLocalizations.of(ctx).translate('fileExists')
-                        : id == "internet"
-                            ? AppLocalizations.of(ctx).translate('noInternet')
-                            : id == "signIn"
-                                ? AppLocalizations.of(ctx).translate('signIn')
-                                : id == "noNotes"
-                                    ? AppLocalizations.of(ctx).translate('noNotes')
-                                    : id == 'microphoneRequired'
-                                        ? AppLocalizations.of(ctx).translate('microphoneRequired')
-                                        : id == 'voiceTitle'
-                                            ? AppLocalizations.of(ctx).translate('voiceTitle')
-                                            : id == 'imageDesc'
-                                                ? AppLocalizations.of(ctx).translate('imageDesc')
-                                                : id == 'password'
-                                                    ? AppLocalizations.of(ctx).translate('setPassword')
-                                                    : AppLocalizations.of(ctx).translate('continue'),
+                title,
                 style: TextStyle(
                   color: _themeProvider.textColor,
                 ),
               )),
               content: Container(
-                height: id == 'voiceTitle' || id == 'imageDesc' || id == 'password' ? h * 0.18 : h * 0.1,
+                height: h * 0.18,
                 width: w * 0.7,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    id == 'voiceTitle' || id == 'imageDesc' || id == 'password'
+                    hastTextField
                         ? TextField(
                             obscureText: _passwordInVisible,
                             autofocus: true,
                             controller: dialogController,
-                            keyboardType: id == 'password' ? TextInputType.number : null,
-                            maxLength: id == 'password'
-                                ? 10
-                                : id != 'imageDesc'
-                                    ? 10
-                                    : 415,
-                            cursorColor: _themeProvider.swachColor,
-                            cursorHeight: id != 'imageDesc' ? h * 0.048 : h * 0.03,
+                            keyboardType: textInputType,
+                            maxLength: textFieldMaxLength,
+                            cursorColor: _themeProvider.swashColor,
+                            cursorHeight: h * 0.03,
                             style: TextStyle(
-                                color: _themeProvider.textColor,
-                                fontSize: id != 'imageDesc'
-                                    ? _themeProvider.isEn
-                                        ? w * 0.07
-                                        : w * 0.05
-                                    : _themeProvider.isEn
-                                        ? w * 0.04
-                                        : w * 0.03,
-                                fontWeight: FontWeight.w200),
+                                color: _themeProvider.textColor, fontSize: _themeProvider.isEn ? w * 0.04 : w * 0.03, fontWeight: FontWeight.w200),
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.all(_themeProvider.isEn ? h * w * 0.00001 : h * w * 0.00001),
-                                hintText: id == 'imageDesc'
-                                    ? AppLocalizations.of(ctx).translate('imageDesc')
-                                    : id == 'password'
-                                        ? AppLocalizations.of(ctx).translate('passwordHint')
-                                        : AppLocalizations.of(ctx).translate('titleHint'),
+                                hintText: textFieldHintText,
                                 border: InputBorder.none,
                                 suffixIcon: IconButton(
                                   autofocus: false,
@@ -117,13 +96,7 @@ Future showAlertDialog(BuildContext context,
                                 disabledBorder: InputBorder.none,
                                 hintStyle: TextStyle(
                                     color: _themeProvider.hintColor.withOpacity(0.12),
-                                    fontSize: id != 'imageDesc'
-                                        ? _themeProvider.isEn
-                                            ? w * 0.07
-                                            : w * 0.05
-                                        : _themeProvider.isEn
-                                            ? w * 0.05
-                                            : w * 0.04,
+                                    fontSize: _themeProvider.isEn ? w * 0.05 : w * 0.04,
                                     fontWeight: FontWeight.w400)),
                           )
                         : Container(),
@@ -141,19 +114,15 @@ Future showAlertDialog(BuildContext context,
                               child: InkWell(
                                 child: Center(
                                     child: Text(
-                                  id == "lan"
-                                      ? "فارسی"
-                                      : id == "internet" || id == "signIn" || id == "noNotes" || id == "microphoneRequired"
-                                          ? AppLocalizations.of(ctx).translate('ok')
-                                          : AppLocalizations.of(ctx).translate('cancel'),
+                                  okButtonText,
                                   style: TextStyle(color: _themeProvider.mainColor, fontWeight: FontWeight.bold),
                                 )),
                                 onTap: () {
-                                  id == "lan" ? _themeProvider.changeLanToPersian() : null;
+                                  okButtonFunction();
                                   Navigator.pop(ctx);
                                 },
                               )),
-                          id != "internet" && id != "signIn" && id != "noNotes" && id != "microphoneRequired"
+                          cancelButtonText != null
                               ? Container(
                                   alignment: Alignment.bottomLeft,
                                   height: 50,
@@ -163,23 +132,13 @@ Future showAlertDialog(BuildContext context,
                                   child: InkWell(
                                       child: Center(
                                           child: Text(
-                                        id == "lan" ? "English" : AppLocalizations.of(ctx).translate('ok'),
+                                        cancelButtonText,
                                         style: TextStyle(color: _themeProvider.mainColor, fontWeight: FontWeight.bold),
                                       )),
                                       onTap: () {
-                                        id == 'password'
-                                            ? _notePasswordProvider.setPassword(dialogController.text)
-                                            : id == "lan"
-                                                ? _themeProvider.changeLanToEnglish()
-                                                : id == "up"
-                                                    ? upload(driveApi, driveFile, noteBox, AppLocalizations.of(ctx).translate('uploading'),
-                                                        AppLocalizations.of(ctx).translate('uploadDone'), fileId)
-                                                    : id == "voiceTitle"
-                                                        ? _noteVoiceRecorderProvider.setVoiceTitle(dialogController.text)
-                                                        : id == 'imageDesc'
-                                                            ? _noteImageProvider.updateImageDesc(index, dialogController.text)
-                                                            : download(driveApi, driveFile, AppLocalizations.of(ctx).translate('downloading'),
-                                                                AppLocalizations.of(ctx).translate('downloadDone'), noteBox, fileId);
+                                        if (cancelButtonFunction != null) {
+                                          cancelButtonFunction();
+                                        }
                                         Navigator.pop(ctx);
                                       }))
                               : Container()

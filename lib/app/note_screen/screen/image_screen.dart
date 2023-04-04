@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:get/get.dart';
 import 'package:googleapis/cloudbuild/v1.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
 import 'package:todoapp/app/note_screen/logic/noteimage_provider.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 
+import '../../../applocalizations.dart';
 import '../../../widgets/dialog.dart';
 
 enum TextSize { small, large }
@@ -120,7 +122,10 @@ class _PicDetailState extends State<PicDetail> {
                   backgroundColor: isWhite ? _themeProvider.blackMainColor : _themeProvider.whiteMainColor,
                   child: Icon(Icons.text_fields),
                   onPressed: () async {
-                    showAlertDialog(context, id: 'imageDesc', index: widget.index, desc: _noteImageProvider.imageList[widget.index].desc ?? null);
+                    TextEditingController dialogController = TextEditingController();
+                    showAlertDialog(context,title: AppLocalizations.of(context).translate('imageDesc'), desc: _noteImageProvider.imageList[widget.index].desc ?? null,textFieldMaxLength: 415,hastTextField: true,textFieldHintText: AppLocalizations.of(Get.overlayContext).translate('imageDesc'),okButtonText: AppLocalizations.of(context).translate('ok'),cancelButtonText: AppLocalizations.of(context).translate('cancel'),okButtonFunction: (){
+                      _noteImageProvider.updateImageDesc(widget.index, dialogController.text);
+                    });
                   },
                 ),
               ],

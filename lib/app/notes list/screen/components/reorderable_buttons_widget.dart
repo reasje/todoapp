@@ -5,6 +5,7 @@ import 'package:todoapp/app/logic/theme_provider.dart';
 
 import '../../../../applocalizations.dart';
 import '../../../../widgets/buttons.dart';
+import '../../../donate/screen/donate_screen.dart';
 import '../../../logic/connection_provider.dart';
 
 class ReOrderableListButtonsWidget extends StatelessWidget {
@@ -53,7 +54,7 @@ class ReOrderableListButtonsWidget extends StatelessWidget {
                     iconSize: h * w * 0.00005,
                     sizePD: w * 0.1,
                     sizePU: w * 0.1,
-                    id: 'setting',
+                    function:(){Navigator.push(context, SliderTransition(DonateScreen()));},
                   ),
                   Container(
                     padding: EdgeInsets.all(h * w * 0.00004),
@@ -64,7 +65,7 @@ class ReOrderableListButtonsWidget extends StatelessWidget {
                       sizePU: w * 0.1,
                       iconSize: h * w * 0.00006,
                       iconData: FontAwesome.code,
-                      id: 'coder',
+                      function:(){Navigator.push(context, SliderTransition(DonateScreen()));},
                     ),
                   ),
                 ],

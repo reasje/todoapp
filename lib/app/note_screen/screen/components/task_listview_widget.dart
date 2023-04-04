@@ -141,7 +141,7 @@ class TaskListView extends StatelessWidget {
                                             _noteTaskProvider.checkListOnSubmit(index);
                                           },
                                           focusNode: snapshot.data[index].focusNode,
-                                          cursorColor: _themeProvider.swachColor,
+                                          cursorColor: _themeProvider.swashColor,
                                           cursorHeight: h * 0.04,
                                           style: TextStyle(
                                               color: _themeProvider.textColor,

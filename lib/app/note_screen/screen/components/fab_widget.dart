@@ -6,7 +6,9 @@ import 'package:todoapp/app/note_screen/logic/note_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notevoice_recorder_provider.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 
+import '../../../../applocalizations.dart';
 import '../../../../widgets/buttons.dart';
+import '../../logic/noteimage_provider.dart';
 
 class NoteEditingFloatingActionButtonWidget extends StatefulWidget {
   const NoteEditingFloatingActionButtonWidget({Key key}) : super(key: key);
@@ -45,7 +47,59 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                 sizePD: h * w * 0.00018,
                 iconSize: h * w * 0.00006,
                 iconData: FontAwesome.plus,
-                id: 'newpic',
+                function:(){
+                                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return Container(
+                            color: Color(0xFF737373),
+                            height: h * 0.2,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: _themeProvider.mainColor,
+                                  borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: Center(
+                                      child: InkWell(
+                                        onTap: () {
+                                          Provider.of<NoteImageProvider>(context, listen: false).imagePickerCamera();
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text(
+                                          AppLocalizations.of(context).translate('camera'),
+                                          style: TextStyle(
+                                              color: _themeProvider.titleColor.withOpacity(0.6),
+                                              fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00007),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Divider(),
+                                  Expanded(
+                                    child: Center(
+                                      child: InkWell(
+                                        onTap: () {
+                                          Provider.of<NoteImageProvider>(context, listen: false).imagePickerGalley();
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text(
+                                          AppLocalizations.of(context).translate('gallery'),
+                                          style: TextStyle(
+                                              color: _themeProvider.titleColor.withOpacity(0.6),
+                                              fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00007),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        });
+                },
               ),
             )
           : _bottomNavProvider.tabs[_bottomNavProvider.selectedTab].title == "Voice"
@@ -61,7 +115,9 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                         sizePD: h * w * 0.00018,
                         iconSize: h * w * 0.00006,
                         iconData: FontAwesome.microphone,
-                        id: 'newvoice',
+                        function:()async{
+                          await Provider.of<NoteVoiceRecorderProvider>(context, listen: false).startRecorder(context);
+                        },
                       ))
                   : _noteVoiceRecorderProvider.flutterSoundRecorder.isRecording
                       ? Container(
@@ -81,7 +137,9 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                   sizePD: h * w * 0.00013,
                                   iconSize: h * w * 0.00006,
                                   iconData: FontAwesome.pause,
-                                  id: 'pausevoice',
+                                  function:()async{
+                                    await _noteVoiceRecorderProvider.pauseRecorder();
+                                  },
                                 ),
                               ),
                               Container(
@@ -120,7 +178,9 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                   sizePD: h * w * 0.00013,
                                   iconSize: h * w * 0.00006,
                                   iconData: FontAwesome.stop,
-                                  id: 'stopvoice',
+                                  function:(){
+                                    _noteVoiceRecorderProvider.stopRecorder();
+                                  },
                                 ),
                               ),
                             ],
@@ -143,7 +203,9 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                   sizePD: h * 0.06,
                                   iconSize: h * w * 0.00006,
                                   iconData: FontAwesome.play,
-                                  id: 'resumevoice',
+                                  function:(){
+                                    _noteVoiceRecorderProvider.resumeRecorder();
+                                  },
                                 ),
                               ),
                               Container(
@@ -182,7 +244,9 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                   sizePD: h * 0.06,
                                   iconSize: h * w * 0.00006,
                                   iconData: FontAwesome.stop,
-                                  id: 'stopvoice',
+                                  function:(){
+                                    _noteVoiceRecorderProvider.stopRecorder();
+                                  },
                                 ),
                               ),
                             ],

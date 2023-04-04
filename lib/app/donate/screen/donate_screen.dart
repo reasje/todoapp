@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapp/app/donate/logic/donate_provider.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
@@ -19,6 +20,7 @@ class _DonateScreenState extends State<DonateScreen> {
   @override
   Widget build(BuildContext context) {
     final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _donateProvider = Provider.of<DonateProvider>(context);
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
@@ -42,7 +44,9 @@ class _DonateScreenState extends State<DonateScreen> {
                     sizePD: h * w * 0.00018,
                     iconSize: h * w * 0.00008,
                     iconData: Icons.arrow_back_ios,
-                    id: 'menu',
+                    function: () {
+                      Navigator.pop(context);
+                    },
                   ),
                 ],
               ),
@@ -100,7 +104,9 @@ class _DonateScreenState extends State<DonateScreen> {
                           sizePD: h * 0.1,
                           iconSize: h * w * 0.00014,
                           iconData: FontAwesome.dollar,
-                          id: 'donate',
+                          function: () {
+                            Provider.of<DonateProvider>(context, listen: false).launchURL();
+                          },
                         ),
                         Text(
                           AppLocalizations.of(context).translate('donateRials'),
@@ -120,7 +126,14 @@ class _DonateScreenState extends State<DonateScreen> {
                           sizePD: h * 0.1,
                           iconSize: h * w * 0.00014,
                           iconData: FontAwesome.dollar,
-                          id: 'dogedonate',
+                          function: () {
+                            _donateProvider.copyDogeAdress();
+                            _donateProvider.showDogeCopied(context);
+                          },
+                          child: Image.asset(
+                            'assets/images/dogecoin.png',
+                            fit: BoxFit.fill,
+                          ),
                         ),
                         Text(
                           AppLocalizations.of(context).translate('donateDoge'),
