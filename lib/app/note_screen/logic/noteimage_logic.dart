@@ -5,34 +5,30 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:todoapp/model/image_model.dart' as imageModel;
+import '../state/note_image_state.dart';
+
 
 class NoteImageLogic extends GetxController {
-  // list of images that will be loaded on user tap
-  List<imageModel.Image> imageList = [];
-  List<imageModel.Image> imageListSnapshot = [];
-  imageModel.Image dismissedImage;
-  // used for both loading images and taking images
-  final picker = ImagePicker();
-  PickedFile _image;
+  NoteImageState state = NoteImageState();
   // Show the image picker dilog
   void initialImageList(List<imageModel.Image> givenImageList) {
-    imageList = givenImageList;
+    state.imageList = givenImageList;
   }
   Future<void> updateImageDesc(int index, String desc) async {
-    imageList[index].desc = desc;
+    state.imageList[index].desc = desc;
   }
   void initialImageListSnapshot() {
-    imageListSnapshot = List.from(imageList);
+    state.imageListSnapshot = List.from(state.imageList);
   }
 
   void clearImageList() {
-    imageList.clear();
+    state.imageList.clear();
   }
 
   Future<void> imagePickerGalley() async {
-    _image = await picker.getImage(source: ImageSource.gallery);
-    if (_image != null) {
-      var h = await _image.readAsBytes();
+    state.image = await state.picker.getImage(source: ImageSource.gallery);
+    if (state.image != null) {
+      var h = await state.image.readAsBytes();
       var fileSize = h.lengthInBytes;
       if (fileSize > 300000) {
         if (fileSize < 5000000) {
@@ -57,14 +53,14 @@ class NoteImageLogic extends GetxController {
           );
         }
       }
-      imageList.add(imageModel.Image(h, ''));
+      state.imageList.add(imageModel.Image(h, ''));
     }
   }
 
   Future<void> imagePickerCamera() async {
-    _image = await picker.getImage(source: ImageSource.camera);
-    if (_image != null) {
-      var h = await _image.readAsBytes();
+    state.image = await state.picker.getImage(source: ImageSource.camera);
+    if (state.image != null) {
+      var h = await state.image.readAsBytes();
       var fileSize = h.lengthInBytes;
       if (fileSize > 300000) {
         if (fileSize < 5000000) {
@@ -89,23 +85,23 @@ class NoteImageLogic extends GetxController {
           );
         }
       }
-      imageList.add(imageModel.Image(h, ''));
+      state.imageList.add(imageModel.Image(h, ''));
     }
   }
 
   void imageDissmissed(index) {
-    dismissedImage = imageList.removeAt(index);
+    state.dismissedImage = state.imageList.removeAt(index);
   }
 
   void imageRecover(index) {
-    imageList.insert(index, dismissedImage);
+    state.imageList.insert(index, state.dismissedImage);
   }
 
   void rotateImage(Uint8List image, int index) {
-    imageList[index].image = image;
+    state.imageList[index].image = image;
   }
 
   Future<List<imageModel.Image>> getImageList() async {
-    return imageList;
+    return state.imageList;
   }
 }

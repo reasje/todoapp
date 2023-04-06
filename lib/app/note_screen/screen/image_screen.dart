@@ -50,7 +50,7 @@ class _PicDetailState extends State<PicDetail> {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
-    int textLength = _noteImageLogic.imageList[widget.index].desc.length;
+    int textLength = _noteImageLogic.state.imageList[widget.index].desc.length;
     TextSize textSize;
     if (textLength >= 415) {
       textSize = TextSize.large;
@@ -75,11 +75,11 @@ class _PicDetailState extends State<PicDetail> {
                       tag: 'imageHero',
                       transitionOnUserGestures: true,
                       child: Image.memory(
-                        _noteImageLogic.imageList[widget.index].image,
+                        _noteImageLogic.state.imageList[widget.index].image,
                       )),
                 ),
               ),
-              _noteImageLogic.imageList[widget.index].desc != ''
+              _noteImageLogic.state.imageList[widget.index].desc != ''
                   ? Positioned(
                       bottom: h * 0,
                       child: Container(
@@ -88,8 +88,8 @@ class _PicDetailState extends State<PicDetail> {
                         decoration: BoxDecoration(color: _themeProvider.textColor.withOpacity(0.1)),
                         child: Text(
                           textSize == TextSize.large
-                              ? _noteImageLogic.imageList[widget.index].desc.substring(0, 410) + '...'
-                              : _noteImageLogic.imageList[widget.index].desc,
+                              ? _noteImageLogic.state.imageList[widget.index].desc.substring(0, 410) + '...'
+                              : _noteImageLogic.state.imageList[widget.index].desc,
                           softWrap: true,
                           style: TextStyle(
                               color: _themeProvider.textColor,
@@ -113,7 +113,7 @@ class _PicDetailState extends State<PicDetail> {
                   backgroundColor: isWhite ? _themeProvider.blackMainColor : _themeProvider.whiteMainColor,
                   child: Icon(FontAwesome.rotate_right),
                   onPressed: () async {
-                    var result = await FlutterImageCompress.compressWithList(_noteImageLogic.imageList[widget.index].image, rotate: 90);
+                    var result = await FlutterImageCompress.compressWithList(_noteImageLogic.state.imageList[widget.index].image, rotate: 90);
                     _noteImageLogic.rotateImage(result, widget.index);
                   },
                 ),
@@ -126,7 +126,7 @@ class _PicDetailState extends State<PicDetail> {
                     TextEditingController dialogController = TextEditingController();
                     showAlertDialog(context,
                         title: AppLocalizations.of(context).translate('imageDesc'),
-                        desc: _noteImageLogic.imageList[widget.index].desc ?? null,
+                        desc: _noteImageLogic.state.imageList[widget.index].desc ?? null,
                         textFieldMaxLength: 415,
                         hastTextField: true,
                         textFieldhintText: AppLocalizations.of(Get.overlayContext).translate('imageDesc'),

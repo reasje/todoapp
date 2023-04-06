@@ -134,7 +134,7 @@ class NoteProvider extends ChangeNotifier {
     if (_notePasswordProvider.password == _notePasswordProvider.passwordSnapShot &&
         _noteTitleTextProvider.ttitle == _noteTitleTextProvider.title.text &&
         _noteTitleTextProvider.ttext == _noteTitleTextProvider.text.text &&
-        ListEquality().equals(_noteImageLogic.imageList, _noteImageLogic.imageListSnapshot) &&
+        ListEquality().equals(_noteImageLogic.state.imageList, _noteImageLogic.state.imageListSnapshot) &&
         ListEquality().equals(_noteVoiceRecorderProvider.voiceList, _noteVoiceRecorderProvider.voiceListSnapshot) &&
         ListEquality().equals(_noteTaskProvider.taskControllerList, _noteTaskProvider.taskControllerListSnapShot)) {
       return false;
@@ -317,7 +317,7 @@ class NoteProvider extends ChangeNotifier {
       if (_noteTitleTextProvider.text.text.isEmpty &&
           _noteTitleTextProvider.title.text.isEmpty &&
           _noteTaskProvider.taskControllerList[0].textEditingController.text == "" &&
-          _noteImageLogic.imageList.isEmpty &&
+          _noteImageLogic.state.imageList.isEmpty &&
           _noteVoiceRecorderProvider.voiceList.isEmpty &&
           _notePasswordProvider.password == '') {
         if (notSaving == 0) {
@@ -358,7 +358,7 @@ class NoteProvider extends ChangeNotifier {
             }
           }
         }
-        Note note = Note(noteTitle, noteText, false, color, _noteImageLogic.imageList, _noteVoiceRecorderProvider.voiceList,
+        Note note = Note(noteTitle, noteText, false, color, _noteImageLogic.state.imageList, _noteVoiceRecorderProvider.voiceList,
             _noteTaskProvider.taskList, _noteTaskProvider.resetCheckBoxs, password);
         await noteBox.add(note);
         _noteTitleTextProvider.changes.clearHistory();
@@ -387,7 +387,7 @@ class NoteProvider extends ChangeNotifier {
             }
           }
         }
-        Note note = new Note(noteTitle, _noteTitleTextProvider.text.text, bnote.isChecked, color, _noteImageLogic.imageList,
+        Note note = new Note(noteTitle, _noteTitleTextProvider.text.text, bnote.isChecked, color, _noteImageLogic.state.imageList,
             _noteVoiceRecorderProvider.voiceList, _noteTaskProvider.taskList, _noteTaskProvider.resetCheckBoxs, password);
 
         await noteBox.put(providerKeys[providerIndex], note);
@@ -430,7 +430,7 @@ class NoteProvider extends ChangeNotifier {
       if (_noteTitleTextProvider.text.text.isEmpty &&
           _noteTitleTextProvider.title.text.isEmpty &&
           _noteTaskProvider.taskControllerList[0].textEditingController.text == "" &&
-          _noteImageLogic.imageList.isEmpty &&
+          _noteImageLogic.state.imageList.isEmpty &&
           _noteVoiceRecorderProvider.voiceList.isEmpty &&
           _notePasswordProvider.password == '') {
         ScaffoldMessenger.of(noteContext).clearSnackBars();
