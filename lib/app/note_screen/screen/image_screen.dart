@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:googleapis/cloudbuild/v1.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
-import 'package:todoapp/app/note_screen/logic/noteimage_provider.dart';
+import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 
 import '../../../applocalizations.dart';
@@ -29,6 +29,7 @@ class _PicDetailState extends State<PicDetail> {
   @override
   void initState() {
     super.initState();
+    // For hiding button
     timer = Timer(Duration(seconds: 5), () {
       _showButton = false;
       setState(() {});
@@ -44,12 +45,12 @@ class _PicDetailState extends State<PicDetail> {
   @override
   Widget build(BuildContext context) {
     final _themeProvider = Provider.of<ThemeProvider>(context);
-    final _noteImageProvider = Provider.of<NoteImageProvider>(context, listen: false);
+    final _noteImageLogic = Get.find<NoteImageLogic>();
     var isWhite = _themeProvider.checkIsWhite();
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
-    int textLength = _noteImageProvider.imageList[widget.index].desc.length;
+    int textLength = _noteImageLogic.imageList[widget.index].desc.length;
     TextSize textSize;
     if (textLength >= 415) {
       textSize = TextSize.large;
@@ -74,11 +75,11 @@ class _PicDetailState extends State<PicDetail> {
                       tag: 'imageHero',
                       transitionOnUserGestures: true,
                       child: Image.memory(
-                        _noteImageProvider.imageList[widget.index].image,
+                        _noteImageLogic.imageList[widget.index].image,
                       )),
                 ),
               ),
-              _noteImageProvider.imageList[widget.index].desc != ''
+              _noteImageLogic.imageList[widget.index].desc != ''
                   ? Positioned(
                       bottom: h * 0,
                       child: Container(
@@ -87,8 +88,8 @@ class _PicDetailState extends State<PicDetail> {
                         decoration: BoxDecoration(color: _themeProvider.textColor.withOpacity(0.1)),
                         child: Text(
                           textSize == TextSize.large
-                              ? _noteImageProvider.imageList[widget.index].desc.substring(0, 410) + '...'
-                              : _noteImageProvider.imageList[widget.index].desc,
+                              ? _noteImageLogic.imageList[widget.index].desc.substring(0, 410) + '...'
+                              : _noteImageLogic.imageList[widget.index].desc,
                           softWrap: true,
                           style: TextStyle(
                               color: _themeProvider.textColor,
@@ -112,8 +113,8 @@ class _PicDetailState extends State<PicDetail> {
                   backgroundColor: isWhite ? _themeProvider.blackMainColor : _themeProvider.whiteMainColor,
                   child: Icon(FontAwesome.rotate_right),
                   onPressed: () async {
-                    var result = await FlutterImageCompress.compressWithList(_noteImageProvider.imageList[widget.index].image, rotate: 90);
-                    _noteImageProvider.rotateImage(result, widget.index);
+                    var result = await FlutterImageCompress.compressWithList(_noteImageLogic.imageList[widget.index].image, rotate: 90);
+                    _noteImageLogic.rotateImage(result, widget.index);
                   },
                 ),
                 FloatingActionButton(
@@ -123,8 +124,15 @@ class _PicDetailState extends State<PicDetail> {
                   child: Icon(Icons.text_fields),
                   onPressed: () async {
                     TextEditingController dialogController = TextEditingController();
-                    showAlertDialog(context,title: AppLocalizations.of(context).translate('imageDesc'), desc: _noteImageProvider.imageList[widget.index].desc ?? null,textFieldMaxLength: 415,hastTextField: true,textFieldHintText: AppLocalizations.of(Get.overlayContext).translate('imageDesc'),okButtonText: AppLocalizations.of(context).translate('ok'),cancelButtonText: AppLocalizations.of(context).translate('cancel'),okButtonFunction: (){
-                      _noteImageProvider.updateImageDesc(widget.index, dialogController.text);
+                    showAlertDialog(context,
+                        title: AppLocalizations.of(context).translate('imageDesc'),
+                        desc: _noteImageLogic.imageList[widget.index].desc ?? null,
+                        textFieldMaxLength: 415,
+                        hastTextField: true,
+                        textFieldhintText: AppLocalizations.of(Get.overlayContext).translate('imageDesc'),
+                        okButtonText: AppLocalizations.of(context).translate('ok'),
+                        cancelButtonText: AppLocalizations.of(context).translate('cancel'), okButtonFunction: () {
+                      _noteImageLogic.updateImageDesc(widget.index, dialogController.text);
                     });
                   },
                 ),

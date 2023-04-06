@@ -2,10 +2,11 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:todoapp/model/image_model.dart' as imageModel;
 
-class NoteImageProvider with ChangeNotifier {
+class NoteImageLogic extends GetxController {
   // list of images that will be loaded on user tap
   List<imageModel.Image> imageList = [];
   List<imageModel.Image> imageListSnapshot = [];
@@ -19,7 +20,6 @@ class NoteImageProvider with ChangeNotifier {
   }
   Future<void> updateImageDesc(int index, String desc) async {
     imageList[index].desc = desc;
-    notifyListeners();
   }
   void initialImageListSnapshot() {
     imageListSnapshot = List.from(imageList);
@@ -59,7 +59,6 @@ class NoteImageProvider with ChangeNotifier {
       }
       imageList.add(imageModel.Image(h, ''));
     }
-    notifyListeners();
   }
 
   Future<void> imagePickerCamera() async {
@@ -92,22 +91,18 @@ class NoteImageProvider with ChangeNotifier {
       }
       imageList.add(imageModel.Image(h, ''));
     }
-    notifyListeners();
   }
 
   void imageDissmissed(index) {
     dismissedImage = imageList.removeAt(index);
-    notifyListeners();
   }
 
   void imageRecover(index) {
     imageList.insert(index, dismissedImage);
-    notifyListeners();
   }
 
   void rotateImage(Uint8List image, int index) {
     imageList[index].image = image;
-    notifyListeners();
   }
 
   Future<List<imageModel.Image>> getImageList() async {

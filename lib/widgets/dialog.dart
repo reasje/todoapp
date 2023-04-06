@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
-import 'package:todoapp/app/note_screen/logic/noteimage_provider.dart';
+import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notepassword_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notevoice_recorder_provider.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
@@ -11,11 +11,10 @@ import 'package:todoapp/app/logic/theme_provider.dart';
 import '../applocalizations.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:google_sign_in/google_sign_in.dart' as signIn;
-import 'package:todoapp/app/settings/logic/drive_provider.dart';
+import 'package:todoapp/app/settings/drive_logic.dart';
 
 Future showAlertDialog(BuildContext context,
-    {
-    String title,
+    {String title,
     drive.DriveApi driveApi,
     drive.File driveFile,
     LazyBox<Note> noteBox,
@@ -25,22 +24,18 @@ Future showAlertDialog(BuildContext context,
     Widget buttons,
     bool hastTextField = false,
     int textFieldMaxLength = 10,
-    String textFieldHintText = "",
+    String textFieldhintText = "",
     TextInputType textInputType,
     String okButtonText,
     String cancelButtonText,
     Function okButtonFunction,
     Function cancelButtonFunction,
-    TextEditingController dialogController
-    }) async {
+    TextEditingController dialogController}) async {
   bool _passwordInVisible = true;
 
   var mCtx = context;
 
   final _themeProvider = Provider.of<ThemeProvider>(mCtx, listen: false);
-
-
-
 
   double h = MediaQuery.of(mCtx).size.height;
 
@@ -79,7 +74,7 @@ Future showAlertDialog(BuildContext context,
                                 color: _themeProvider.textColor, fontSize: _themeProvider.isEn ? w * 0.04 : w * 0.03, fontWeight: FontWeight.w200),
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.all(_themeProvider.isEn ? h * w * 0.00001 : h * w * 0.00001),
-                                hintText: textFieldHintText,
+                                hintText: textFieldhintText,
                                 border: InputBorder.none,
                                 suffixIcon: IconButton(
                                   autofocus: false,
@@ -95,7 +90,7 @@ Future showAlertDialog(BuildContext context,
                                 errorBorder: InputBorder.none,
                                 disabledBorder: InputBorder.none,
                                 hintStyle: TextStyle(
-                                    color: _themeProvider.hintColor.withOpacity(0.12),
+                                    color: _themeProvider.hinoteColor.withOpacity(0.12),
                                     fontSize: _themeProvider.isEn ? w * 0.05 : w * 0.04,
                                     fontWeight: FontWeight.w400)),
                           )

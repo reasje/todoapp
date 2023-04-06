@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
-import 'package:todoapp/app/settings/logic/drive_provider.dart';
-
+import 'package:todoapp/app/settings/drive_logic.dart';
+import 'package:provider/provider.dart';
 import '../../../applocalizations.dart';
 import '../../../widgets/buttons.dart';
 import '../../../widgets/dialog.dart';
-import '../../logic/connection_provider.dart';
-import '../logic/signin_provider.dart';
+import '../../splash/connection_logic.dart';
+import '../settings_logic.dart';
 
-class SettingScreen extends StatefulWidget {
-  SettingScreen({Key key}) : super(key: key);
+class SettingsScreen extends StatefulWidget {
+  SettingsScreen({Key key}) : super(key: key);
 
   @override
   _SettingScreenState createState() => _SettingScreenState();
 }
 
-class _SettingScreenState extends State<SettingScreen> {
+class _SettingScreenState extends State<SettingsScreen> {
+  final logic = Get.put(SettingsLogic());
+  final state = Get.find<SettingsLogic>().state;
   @override
   Widget build(BuildContext context) {
     final _themeProvider = Provider.of<ThemeProvider>(context);
@@ -103,26 +105,33 @@ class _SettingScreenState extends State<SettingScreen> {
                               },
                             ),
                           ),
-                          Container(
-                            padding: EdgeInsets.all(h * w * 0.00004),
-                            alignment: Alignment.centerLeft,
-                            child: ButtonWidget(
-                              backgroundColor: _themeProvider.textColor,
-                              sizePU: h * w * 0.00012,
-                              sizePD: h * w * 0.00013,
-                              function: () {
-                                if (Provider.of<ConnectionProvider>(context, listen: false).is_conn) {
-                                  Provider.of<SignInProvider>(context, listen: false).signInToAccount();
-                                } else {
-                                  showAlertDialog(context,title: AppLocalizations.of(context).translate('noInternet'),okButtonText: AppLocalizations.of(context).translate('ok'),cancelButtonText: AppLocalizations.of(context).translate('cancel'));
-                                }
-                              },
-                              child: Icon(
-                                FontAwesome.google,
-                                size: h * w * 0.00006 * 0.8,
-                                color: Provider.of<SignInProvider>(context, listen: false).isSignedin ? Colors.green : Colors.red,
+                          Obx(() {
+                            return Container(
+                              padding: EdgeInsets.all(h * w * 0.00004),
+                              alignment: Alignment.centerLeft,
+                              child: ButtonWidget(
+                                backgroundColor: _themeProvider.textColor,
+                                sizePU: h * w * 0.00012,
+                                sizePD: h * w * 0.00013,
+                                function: () {
+                                  final connectionState = Get.find<ConnectionLogic>().state;
+                                  if (connectionState.isConnected) {
+                                    logic.signInToAccount();
+                                  } else {
+                                    showAlertDialog(context,
+                                        title: AppLocalizations.of(context).translate('noInternet'),
+                                        okButtonText: AppLocalizations.of(context).translate('ok'),
+                                        cancelButtonText: AppLocalizations.of(context).translate('cancel'));
+                                  }
+                                },
+                                child: Icon(
+                                  FontAwesome.google,
+                                  size: h * w * 0.00006 * 0.8,
+                                  color: logic.state.isSignedIn ? Colors.green : Colors.red,
+                                ),
                               ),
-                            ),
+                            );
+                          }
                           ),
                         ],
                       ),

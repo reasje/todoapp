@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapp/app/settings/logic/signin_provider.dart';
+import 'package:todoapp/app/settings/settings_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
-
 
 class ButtonWidget extends StatefulWidget {
   final IconData iconData;
@@ -15,7 +14,17 @@ class ButtonWidget extends StatefulWidget {
   final Color backgroundColor;
   final bool hasFloating;
   final Widget child;
-  const ButtonWidget({Key key, this.sizePU, this.sizePD, this.iconSize, this.iconData, this.function, this.timerContext, this.backgroundColor, this.hasFloating, this.child})
+  const ButtonWidget(
+      {Key key,
+      this.sizePU,
+      this.sizePD,
+      this.iconSize,
+      this.iconData,
+      this.function,
+      this.timerContext,
+      this.backgroundColor,
+      this.hasFloating,
+      this.child})
       : super(key: key);
 
   @override
@@ -27,7 +36,7 @@ class _MyButtonState extends State<ButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final _signInProvider = Provider.of<SignInProvider>(context);
+    final _signInProvider = Provider.of<SettingsLogic>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
     Color backgroundColor = widget.backgroundColor;
     // bool floating =
@@ -50,13 +59,13 @@ class _MyButtonState extends State<ButtonWidget> {
           // if (mounted) {
           //   setState(() {
           //     Future.delayed(Duration(milliseconds: 100), () async {
-          //       final _myProvider = Provider.of<NoteProvider>(context, listen: false);
-          //       final _signInProvider = Provider.of<SignInProvider>(context, listen: false);
-          //       final _connState = Provider.of<ConnectionProvider>(context, listen: false);
-          //       final _noteImageProvider = Provider.of<NoteImageProvider>(context, listen: false);
+          //       final _noteLogic = Provider.of<NoteProvider>(context, listen: false);
+          //       final _signInProvider = Provider.of<SettingsLogic>(context, listen: false);
+          //       final _connState = Provider.of<ConnectionLogic>(context, listen: false);
+          //       final _noteImageLogic = Get.find<NoteImageLogic>();
           //       final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(context, listen: false);
           //       final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(context, listen: false);
-          //       final _noteColorProvider = Provider.of<NoteColorProvider>(context, listen: false);
+          //       final _noteColorLogic = Provider.of<NoteColorLogic>(context, listen: false);
           //       final _donateProvider = Provider.of<DonateProvider>(context, listen: false);
           //       final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
           //       double h = MediaQuery.of(context).size.height;
@@ -64,11 +73,11 @@ class _MyButtonState extends State<ButtonWidget> {
           //       LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);
           //       // switch (widget.id) {
           //       //   case 'new':
-          //       //     await _myProvider.newNoteClicked(context);
+          //       //     await _noteLogic.newNoteClicked(context);
           //       //     Navigator.push(context, SliderTransition(NoteScreen()));
           //       //     break;
           //       //   case 'setting':
-          //       //     Navigator.push(context, SliderTransition(SettingScreen()));
+          //       //     Navigator.push(context, SliderTransition(SettingsScreen()));
           //       //     break;
           //       // }
           //     });

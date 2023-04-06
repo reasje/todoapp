@@ -66,7 +66,7 @@ class VoiceListView extends StatelessWidget {
                                   ScaffoldMessenger.of(context).showSnackBar(MySnackBar(
                                       AppLocalizations.of(context).translate('undoVoice'), 'undoVoice', true,
                                       context: context, index: index));
-                                  _noteVoiceRecorderProvider.voiceDissmissed(index);
+                                  _noteVoiceRecorderProvider.voiceDismissed(index);
                                 },
                                 child: Container(
                                     width: w * 0.8,

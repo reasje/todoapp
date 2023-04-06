@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 
 import '../../../../applocalizations.dart';
 import '../../../../widgets/buttons.dart';
 import '../../../donate/screen/donate_screen.dart';
-import '../../../logic/connection_provider.dart';
+import '../../../splash/connection_logic.dart';
 
 class ReOrderableListButtonsWidget extends StatelessWidget {
   const ReOrderableListButtonsWidget({
@@ -15,7 +16,7 @@ class ReOrderableListButtonsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _connState = Provider.of<ConnectionProvider>(context);
+    final _connectionState = Get.find<ConnectionLogic>().state;
     final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
@@ -40,7 +41,7 @@ class ReOrderableListButtonsWidget extends StatelessWidget {
                     child: Icon(
                       FontAwesome.dot_circle_o,
                       size: h * w * 0.00005,
-                      color: _connState.is_conn ? Colors.green.withOpacity(0.6) : Colors.red.withOpacity(0.6),
+                      color: _connectionState.isConnected ? Colors.green.withOpacity(0.6) : Colors.red.withOpacity(0.6),
                     ),
                   ),
                 ],
@@ -54,7 +55,9 @@ class ReOrderableListButtonsWidget extends StatelessWidget {
                     iconSize: h * w * 0.00005,
                     sizePD: w * 0.1,
                     sizePU: w * 0.1,
-                    function:(){Navigator.push(context, SliderTransition(DonateScreen()));},
+                    function: () {
+                      Navigator.push(context, SliderTransition(DonateScreen()));
+                    },
                   ),
                   Container(
                     padding: EdgeInsets.all(h * w * 0.00004),
@@ -65,7 +68,9 @@ class ReOrderableListButtonsWidget extends StatelessWidget {
                       sizePU: w * 0.1,
                       iconSize: h * w * 0.00006,
                       iconData: FontAwesome.code,
-                      function:(){Navigator.push(context, SliderTransition(DonateScreen()));},
+                      function: () {
+                        Navigator.push(context, SliderTransition(DonateScreen()));
+                      },
                     ),
                   ),
                 ],

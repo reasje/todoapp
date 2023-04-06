@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todoapp/app/note_screen/state/note_color_state.dart';
 import 'package:todoapp/model/bottomnav_tab_model.dart';
 import 'package:todoapp/model/navigationitem_model.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,7 @@ import '../screen/components/voice_listview_widget.dart';
 import '../../../applocalizations.dart';
 import '../../../widgets/buttons.dart';
 import 'note_provider.dart';
-import 'notecolor_provider.dart';
+import 'notecolor_logic.dart';
 import 'notepassword_provider.dart';
 import 'notetitletext_provider.dart';
 
@@ -122,7 +123,7 @@ class BottomNavProvider with ChangeNotifier {
                     iconSize: h * w * 0.00008,
                     iconData: Icons.color_lens_outlined,
                     function: () {
-                      List<Color> colors = Provider.of<ThemeProvider>(context, listen: false).getNoteColors();
+                      List<Color> colors = NoteColorState.noteColors;
                       showModalBottomSheet(
                           context: context,
                           builder: (context) {
@@ -140,7 +141,7 @@ class BottomNavProvider with ChangeNotifier {
                                   children: colors
                                       .map((color) => InkWell(
                                             onTap: () {
-                                              Provider.of<NoteColorProvider>(context, listen: false).noteColorSelected(color);
+                                              Provider.of<NoteColorLogic>(context, listen: false).noteColorSelected(color);
                                               Navigator.pop(context);
                                             },
                                             child: Container(
@@ -170,9 +171,12 @@ class BottomNavProvider with ChangeNotifier {
                           title: AppLocalizations.of(context).translate('setPassword'),
                           hastTextField: true,
                           dialogController: dialogController,
-                          textFieldHintText: AppLocalizations.of(Get.overlayContext).translate('passwordHint'),
+                          textFieldhintText: AppLocalizations.of(Get.overlayContext).translate('passwordHint'),
                           textInputType: TextInputType.number,
-                          okButtonText: AppLocalizations.of(context).translate('ok'),cancelButtonText: AppLocalizations.of(context).translate('cancel'),okButtonFunction: (){_notePasswordProvider.setPassword(dialogController.text);});
+                          okButtonText: AppLocalizations.of(context).translate('ok'),
+                          cancelButtonText: AppLocalizations.of(context).translate('cancel'), okButtonFunction: () {
+                        _notePasswordProvider.setPassword(dialogController.text);
+                      });
                     },
                   ),
                 ],

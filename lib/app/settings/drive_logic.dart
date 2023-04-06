@@ -3,6 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapp/app/splash/connection_logic.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/googleauthclient_model.dart';
@@ -10,12 +11,10 @@ import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:google_sign_in/google_sign_in.dart' as signIn;
 import 'package:todoapp/model/task_model.dart';
 import 'package:todoapp/model/voice_model.dart';
-import 'package:todoapp/app/settings/logic/signin_provider.dart';
+import 'package:todoapp/app/settings/settings_logic.dart';
 import 'dart:convert';
 
 import 'package:todoapp/model/image_model.dart' as imageModel;
-
-import '../../logic/connection_provider.dart';
 import '../../../applocalizations.dart';
 import '../../../widgets/dialog.dart';
 
@@ -184,23 +183,23 @@ class DriveLogic {
     // used to get infromation inside the boxu
     final noteBox = Hive.lazyBox<Note>(noteBoxName);
     //used to sign in to google drive
-    final _connState = Provider.of<ConnectionProvider>(context, listen: false);
-    final _signInProvider = Provider.of<SignInProvider>(context, listen: false);
+    final _connectionState = Get.find<ConnectionLogic>().state;
+    final _settingsLogic = Get.find<SettingsLogic>();
     if (noteBox.isEmpty && command != false) {
       showAlertDialog(context,
           title: AppLocalizations.of(context).translate('noNotes'),
           okButtonText: AppLocalizations.of(context).translate('ok'),
           cancelButtonText: AppLocalizations.of(context).translate('cancel'));
     } else {
-      if (!_connState.is_conn) {
+      if (!_connectionState.isConnected) {
         // I am connected to a mobile network or wifi.
         showAlertDialog(context,
             title: AppLocalizations.of(context).translate('noInternet'),
             okButtonText: AppLocalizations.of(context).translate('ok'),
             cancelButtonText: AppLocalizations.of(context).translate('cancel'));
       } else {
-        _signInProvider.checkSignIn();
-        if (_signInProvider.isSignedin) {
+        _settingsLogic.checkSignIn();
+        if (_settingsLogic.state.isSignedIn) {
           // The user is signed in
           final googleSignIn = signIn.GoogleSignIn.standard(scopes: [drive.DriveApi.driveScope]);
           final signIn.GoogleSignInAccount account = await googleSignIn.signIn();

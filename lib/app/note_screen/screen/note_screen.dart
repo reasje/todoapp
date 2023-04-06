@@ -25,7 +25,7 @@ class NoteScreen extends StatefulWidget {
 class _NoteScreenState extends State<NoteScreen> {
   @override
   Widget build(BuildContext context) {
-    final _myProvider = Provider.of<NoteProvider>(context);
+    final _noteLogic = Provider.of<NoteProvider>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
@@ -37,7 +37,7 @@ class _NoteScreenState extends State<NoteScreen> {
       bottomNavigationBar: BottomNavWidget(),
       body: WillPopScope(
         onWillPop: () {
-          _myProvider.doneClicked(context);
+          _noteLogic.doneClicked(context);
           return;
         },
         child: GestureDetector(

@@ -14,7 +14,7 @@ class ThemeProvider extends ChangeNotifier {
   Color mainColor;
   Color textColor;
   Color titleColor;
-  Color hintColor;
+  Color hinoteColor;
   Brightness brightness;
   Color swashColor = Color(0xFF001b48);
   bool isEn;
@@ -22,23 +22,21 @@ class ThemeProvider extends ChangeNotifier {
   bool isFirstTime;
   Locale locale;
   String noTaskImage;
-  Color red = Color(0xFFff4444);
-  Color green = Color(0xFF00c851);
-  Color yellow = Color(0xFFffbb33);
-  Color blue = Color(0xFF33b5e5);
-  Color purple = Color(0xffaa66cc);
+  // Color red = Color(0xFFff4444);
+  // Color green = Color(0xFF00c851);
+  // Color yellow = Color(0xFFffbb33);
+  // Color blue = Color(0xFF33b5e5);
+  // Color purple = Color(0xffaa66cc);
 
-  List<Color> shadedColors = [];
-
-  List<Color> getNoteColors() {
-    shadedColors.clear();
-    shadedColors.add(red);
-    shadedColors.add(green);
-    shadedColors.add(yellow);
-    shadedColors.add(blue);
-    shadedColors.add(purple);
-    return shadedColors;
-  }
+  // List<Color> getNoteColors() {
+  //   shadedColors.clear();
+  //   shadedColors.add(red);
+  //   shadedColors.add(green);
+  //   shadedColors.add(yellow);
+  //   shadedColors.add(blue);
+  //   shadedColors.add(purple);
+  //   return shadedColors;
+  // }
 
   String splashImage;
   Color whiteMainColor = Color(0xffe6ebf2);
@@ -141,7 +139,7 @@ class ThemeProvider extends ChangeNotifier {
       textColor = blackTextColor;
       brightness = Brightness.dark;
       noteTitleColor.fillRange(0, 100, blackNoteTitleColor);
-      hintColor = textColor.withOpacity(0.5);
+      hinoteColor = textColor.withOpacity(0.5);
       swashColor = swashColor.withOpacity(0.7);
       titleColor = blackTitleColor;
       prefsBox.put('theme', 'black');
@@ -155,7 +153,7 @@ class ThemeProvider extends ChangeNotifier {
       titleColor = whiteTitleColor;
       noteTitleColor.fillRange(0, 100, whiteNoteTitleColor);
       swashColor = swashColor.withOpacity(0.7);
-      hintColor = whiteTextColor.withOpacity(0.5);
+      hinoteColor = whiteTextColor.withOpacity(0.5);
       prefsBox.put('theme', 'white');
     }
     notifyListeners();

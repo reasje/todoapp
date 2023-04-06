@@ -1,51 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:todoapp/app/notes%20list/state.dart';
 import 'package:todoapp/model/note_model.dart';
 
 import '../../main.dart';
 
-class NotesLogic extends GetxController {
-  NotesState state = NotesState();
-
-  void load() {
-    state.isLoading = true;
-  }
-
-  void loadingOver() {
-    state.isLoading = false;
-  }
-
-  Future<void> reorderNoteList(int oldIndex, int newIndex) async {
-    final noteBox = Hive.lazyBox<Note>(noteBoxName);
-    List<int> keys = noteBox.keys.cast<int>().toList();
-
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
-
-    var bnote = await noteBox.get(keys[oldIndex]);
-
-    Note note = bnote;
-    if (newIndex < oldIndex) {
-      for (int i = oldIndex; i > newIndex; i--) {
-        var bnote2 = await noteBox.get(keys[i - 1]);
-        noteBox.put(keys[i], bnote2);
-      }
-    } else {
-      for (int i = oldIndex; i < newIndex; i++) {
-        var bnote = await noteBox.get(keys[i + 1]);
-        noteBox.put(keys[i], bnote);
-      }
-    }
-    noteBox.put(keys[newIndex], note);
-  }
-
-  Future<void> checkDayChange() async {
+class UnCheckLogic {
+  static Future<void> checkDayChange() async {
     // It is used to store
     // the theme status as string
     final prefsBox = Hive.box<String>(prefsBoxName);
+    //BuildContext donateContext;
+    // Hive box for notes
     final noteBox = Hive.lazyBox<Note>(noteBoxName);
     String date = prefsBox.get('date');
     var now = DateTime.now();

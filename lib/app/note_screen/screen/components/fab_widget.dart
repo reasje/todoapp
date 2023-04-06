@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
@@ -8,7 +9,7 @@ import 'package:todoapp/app/logic/theme_provider.dart';
 
 import '../../../../applocalizations.dart';
 import '../../../../widgets/buttons.dart';
-import '../../logic/noteimage_provider.dart';
+import '../../logic/noteimage_logic.dart';
 
 class NoteEditingFloatingActionButtonWidget extends StatefulWidget {
   const NoteEditingFloatingActionButtonWidget({Key key}) : super(key: key);
@@ -47,58 +48,58 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                 sizePD: h * w * 0.00018,
                 iconSize: h * w * 0.00006,
                 iconData: FontAwesome.plus,
-                function:(){
-                                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return Container(
-                            color: Color(0xFF737373),
-                            height: h * 0.2,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: _themeProvider.mainColor,
-                                  borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft: Radius.circular(20))),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Center(
-                                      child: InkWell(
-                                        onTap: () {
-                                          Provider.of<NoteImageProvider>(context, listen: false).imagePickerCamera();
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text(
-                                          AppLocalizations.of(context).translate('camera'),
-                                          style: TextStyle(
-                                              color: _themeProvider.titleColor.withOpacity(0.6),
-                                              fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00007),
-                                        ),
+                function: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Container(
+                          color: Color(0xFF737373),
+                          height: h * 0.2,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: _themeProvider.mainColor,
+                                borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Center(
+                                    child: InkWell(
+                                      onTap: () {
+                                        Get.find<NoteImageLogic>().imagePickerCamera();
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        AppLocalizations.of(context).translate('camera'),
+                                        style: TextStyle(
+                                            color: _themeProvider.titleColor.withOpacity(0.6),
+                                            fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00007),
                                       ),
                                     ),
                                   ),
-                                  Divider(),
-                                  Expanded(
-                                    child: Center(
-                                      child: InkWell(
-                                        onTap: () {
-                                          Provider.of<NoteImageProvider>(context, listen: false).imagePickerGalley();
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text(
-                                          AppLocalizations.of(context).translate('gallery'),
-                                          style: TextStyle(
-                                              color: _themeProvider.titleColor.withOpacity(0.6),
-                                              fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00007),
-                                        ),
+                                ),
+                                Divider(),
+                                Expanded(
+                                  child: Center(
+                                    child: InkWell(
+                                      onTap: () {
+                                        Get.find<NoteImageLogic>().imagePickerGalley();
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        AppLocalizations.of(context).translate('gallery'),
+                                        style: TextStyle(
+                                            color: _themeProvider.titleColor.withOpacity(0.6),
+                                            fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00007),
                                       ),
                                     ),
-                                  )
-                                ],
-                              ),
+                                  ),
+                                )
+                              ],
                             ),
-                          );
-                        });
+                          ),
+                        );
+                      });
                 },
               ),
             )
@@ -115,7 +116,7 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                         sizePD: h * w * 0.00018,
                         iconSize: h * w * 0.00006,
                         iconData: FontAwesome.microphone,
-                        function:()async{
+                        function: () async {
                           await Provider.of<NoteVoiceRecorderProvider>(context, listen: false).startRecorder(context);
                         },
                       ))
@@ -137,7 +138,7 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                   sizePD: h * w * 0.00013,
                                   iconSize: h * w * 0.00006,
                                   iconData: FontAwesome.pause,
-                                  function:()async{
+                                  function: () async {
                                     await _noteVoiceRecorderProvider.pauseRecorder();
                                   },
                                 ),
@@ -178,7 +179,7 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                   sizePD: h * w * 0.00013,
                                   iconSize: h * w * 0.00006,
                                   iconData: FontAwesome.stop,
-                                  function:(){
+                                  function: () {
                                     _noteVoiceRecorderProvider.stopRecorder();
                                   },
                                 ),
@@ -203,7 +204,7 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                   sizePD: h * 0.06,
                                   iconSize: h * w * 0.00006,
                                   iconData: FontAwesome.play,
-                                  function:(){
+                                  function: () {
                                     _noteVoiceRecorderProvider.resumeRecorder();
                                   },
                                 ),
@@ -244,7 +245,7 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                   sizePD: h * 0.06,
                                   iconSize: h * w * 0.00006,
                                   iconData: FontAwesome.stop,
-                                  function:(){
+                                  function: () {
                                     _noteVoiceRecorderProvider.stopRecorder();
                                   },
                                 ),

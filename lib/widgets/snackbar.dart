@@ -1,8 +1,9 @@
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
-import 'package:todoapp/app/note_screen/logic/noteimage_provider.dart';
+import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notetask_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notevoice_recorder_provider.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
@@ -23,7 +24,7 @@ Widget MySnackBar(
   bool isWhite,
 }) {
   final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-  final _noteImageProvider = Provider.of<NoteImageProvider>(context, listen: false);
+  final _noteImageLogic = Get.find<NoteImageLogic>();
   final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(context, listen: false);
   final _noteTaskProvider = Provider.of<NoteTaskProvider>(context, listen: false);
   isWhite = _themeProvider.checkIsWhite();
@@ -47,7 +48,7 @@ Widget MySnackBar(
               } else if (id == 'undoTask') {
                 _noteTaskProvider.taskRecover(index);
               } else if (noteBox == null) {
-                _noteImageProvider.imageRecover(index);
+                _noteImageLogic.imageRecover(index);
               } else {
                 noteBox.put(keys[index], note);
               }

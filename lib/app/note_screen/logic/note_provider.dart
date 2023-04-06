@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/taskController.dart';
 import 'package:todoapp/model/task_model.dart';
 import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
-import 'package:todoapp/app/note_screen/logic/notecolor_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notecolor_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notepassword_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notetitletext_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notevoice_recorder_provider.dart';
@@ -16,7 +17,7 @@ import '../../../main.dart';
 
 import 'package:collection/collection.dart';
 import '../../../widgets/snackbar.dart';
-import 'noteimage_provider.dart';
+import 'noteimage_logic.dart';
 import 'notetask_provider.dart';
 
 class NoteProvider extends ChangeNotifier {
@@ -46,7 +47,8 @@ class NoteProvider extends ChangeNotifier {
 
   // for the clear the form
   void clearControllers() {
-    final _noteImageProvider = Provider.of<NoteImageProvider>(noteContext, listen: false);
+    final _noteImageLogic = Get.find<NoteImageLogic>();
+    
 
     final _notePasswordProvider = Provider.of<NotePasswordProvider>(noteContext, listen: false);
 
@@ -56,9 +58,9 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
 
-    final _noteColorProvider = Provider.of<NoteColorProvider>(noteContext, listen: false);
+    final _noteColorLogic = Get.find<NoteColorLogic>();
 
-    _noteImageProvider.clearImageList();
+    _noteImageLogic.clearImageList();
 
     _notePasswordProvider.clearPassword();
 
@@ -74,7 +76,7 @@ class NoteProvider extends ChangeNotifier {
 
     providerIndex = null;
 
-    _noteColorProvider.clearNoteColor();
+    _noteColorLogic.clearNoteColor();
 
     notifyListeners();
   }
@@ -82,7 +84,8 @@ class NoteProvider extends ChangeNotifier {
   // getting the controller before the user enters the editing area
   // to detect the if any changes has been occured !
   void takeSnapshot() async {
-    final _noteImageProvider = Provider.of<NoteImageProvider>(noteContext, listen: false);
+    final _noteImageLogic = Get.find<NoteImageLogic>();
+    
 
     final _notePasswordProvider = Provider.of<NotePasswordProvider>(noteContext, listen: false);
 
@@ -92,7 +95,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
 
-    final _noteColorProvider = Provider.of<NoteColorProvider>(noteContext, listen: false);
+    final _noteColorLogic = Get.find<NoteColorLogic>();
 
     _noteTitleTextProvider.ttitle = _noteTitleTextProvider.title.text;
 
@@ -100,14 +103,14 @@ class NoteProvider extends ChangeNotifier {
 
     _noteTitleTextProvider.old_value = _noteTitleTextProvider.text.text;
 
-    _noteColorProvider.colorSnapShot = _noteColorProvider.noteColor;
+    _noteColorLogic.state.colorSnapShot = _noteColorLogic.state.noteColor;
 
     _noteTitleTextProvider.begin_edit = false;
 
     _notePasswordProvider.passwordSnapShot = _notePasswordProvider.password;
 
     if (!newNote) {
-      _noteImageProvider.initialImageListSnapshot();
+      _noteImageLogic.initialImageListSnapshot();
 
       _noteVoiceRecorderProvider.initialVoiceListSnapshot();
 
@@ -119,7 +122,8 @@ class NoteProvider extends ChangeNotifier {
   bool isEdited() {
     final _notePasswordProvider = Provider.of<NotePasswordProvider>(noteContext, listen: false);
 
-    final _noteImageProvider = Provider.of<NoteImageProvider>(noteContext, listen: false);
+    final _noteImageLogic = Get.find<NoteImageLogic>();
+    
 
     final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
 
@@ -130,7 +134,7 @@ class NoteProvider extends ChangeNotifier {
     if (_notePasswordProvider.password == _notePasswordProvider.passwordSnapShot &&
         _noteTitleTextProvider.ttitle == _noteTitleTextProvider.title.text &&
         _noteTitleTextProvider.ttext == _noteTitleTextProvider.text.text &&
-        ListEquality().equals(_noteImageProvider.imageList, _noteImageProvider.imageListSnapshot) &&
+        ListEquality().equals(_noteImageLogic.imageList, _noteImageLogic.imageListSnapshot) &&
         ListEquality().equals(_noteVoiceRecorderProvider.voiceList, _noteVoiceRecorderProvider.voiceListSnapshot) &&
         ListEquality().equals(_noteTaskProvider.taskControllerList, _noteTaskProvider.taskControllerListSnapShot)) {
       return false;
@@ -151,11 +155,11 @@ class NoteProvider extends ChangeNotifier {
 
     isChecked = !isChecked;
 
-    var ntitle = bnote.title;
+    var noteTitle = bnote.title;
 
-    var nttext = bnote.text;
+    var noteText = bnote.text;
 
-    var ntcolor = bnote.color;
+    var noteColor = bnote.color;
 
     var ntImageList = bnote.imageList;
 
@@ -167,7 +171,7 @@ class NoteProvider extends ChangeNotifier {
 
     var ntPassword = bnote.password;
 
-    Note note = Note(ntitle, nttext, isChecked, ntcolor, ntImageList, ntVoiceList, ntTaskList, ntResetCheckBoxs, ntPassword);
+    Note note = Note(noteTitle, noteText, isChecked, noteColor, ntImageList, ntVoiceList, ntTaskList, ntResetCheckBoxs, ntPassword);
 
     noteBox.put(providerKeys[providerIndex], note);
 
@@ -216,7 +220,8 @@ class NoteProvider extends ChangeNotifier {
 
     final _bottomNavProvider = Provider.of<BottomNavProvider>(context, listen: false);
 
-    final _noteImageProvider = Provider.of<NoteImageProvider>(noteContext, listen: false);
+    final _noteImageLogic = Get.find<NoteImageLogic>();
+    
 
     final _notePasswordProvider = Provider.of<NotePasswordProvider>(noteContext, listen: false);
 
@@ -226,7 +231,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
 
-    final _noteColorProvider = Provider.of<NoteColorProvider>(noteContext, listen: false);
+    final _noteColorLogic = Get.find<NoteColorLogic>();
 
     _bottomNavProvider.initialSelectedTab();
 
@@ -235,7 +240,7 @@ class NoteProvider extends ChangeNotifier {
 
     // if the note doesnot include any notes pass
     if (bnote.imageList?.isNotEmpty ?? false) {
-      _noteImageProvider.initialImageList(bnote.imageList);
+      _noteImageLogic.initialImageList(bnote.imageList);
     }
 
     if (bnote.voiceList?.isNotEmpty ?? false) {
@@ -272,7 +277,7 @@ class NoteProvider extends ChangeNotifier {
 
     _noteTitleTextProvider.text.selection = TextSelection.fromPosition(TextPosition(offset: _noteTitleTextProvider.text.text.length));
 
-    _noteColorProvider.initialNoteColor(Color(bnote.color));
+    _noteColorLogic.initialNoteColor(Color(bnote.color));
 
     newNote = false;
 
@@ -293,7 +298,8 @@ class NoteProvider extends ChangeNotifier {
 
     final _notePasswordProvider = Provider.of<NotePasswordProvider>(noteContext, listen: false);
 
-    final _noteImageProvider = Provider.of<NoteImageProvider>(noteContext, listen: false);
+    final _noteImageLogic = Get.find<NoteImageLogic>();
+    
 
     final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
 
@@ -301,7 +307,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
 
-    final _noteColorProvider = Provider.of<NoteColorProvider>(noteContext, listen: false);
+    final _noteColorLogic = Get.find<NoteColorLogic>();
 
     // checking whether your going to update the note or add new one
     // that is done by chekcing the newNote true or false
@@ -311,7 +317,7 @@ class NoteProvider extends ChangeNotifier {
       if (_noteTitleTextProvider.text.text.isEmpty &&
           _noteTitleTextProvider.title.text.isEmpty &&
           _noteTaskProvider.taskControllerList[0].textEditingController.text == "" &&
-          _noteImageProvider.imageList.isEmpty &&
+          _noteImageLogic.imageList.isEmpty &&
           _noteVoiceRecorderProvider.voiceList.isEmpty &&
           _notePasswordProvider.password == '') {
         if (notSaving == 0) {
@@ -339,8 +345,8 @@ class NoteProvider extends ChangeNotifier {
 
         var noteText = _noteTitleTextProvider.text.text;
 
-        print("_noteColorProvider.noteColor? ${_noteColorProvider.noteColor}");
-        var color = _noteColorProvider.noteColor?.value ?? _bottomNavProvider.tabColors[0].value;
+        print("_noteColorLogic.noteColor? ${_noteColorLogic.state.noteColor}");
+        var color = _noteColorLogic.state.noteColor.value;
 
         var password = _notePasswordProvider.password;
 
@@ -352,7 +358,7 @@ class NoteProvider extends ChangeNotifier {
             }
           }
         }
-        Note note = Note(noteTitle, noteText, false, color, _noteImageProvider.imageList, _noteVoiceRecorderProvider.voiceList,
+        Note note = Note(noteTitle, noteText, false, color, _noteImageLogic.imageList, _noteVoiceRecorderProvider.voiceList,
             _noteTaskProvider.taskList, _noteTaskProvider.resetCheckBoxs, password);
         await noteBox.add(note);
         _noteTitleTextProvider.changes.clearHistory();
@@ -369,7 +375,7 @@ class NoteProvider extends ChangeNotifier {
 
         _noteTitleTextProvider.title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = _noteTitleTextProvider.title.text;
 
-        var color = _noteColorProvider.noteColor?.value ?? _bottomNavProvider.tabColors[0].value;
+        var color = _noteColorLogic.state.noteColor.value;
 
         var password = _notePasswordProvider.password;
 
@@ -381,7 +387,7 @@ class NoteProvider extends ChangeNotifier {
             }
           }
         }
-        Note note = new Note(noteTitle, _noteTitleTextProvider.text.text, bnote.isChecked, color, _noteImageProvider.imageList,
+        Note note = new Note(noteTitle, _noteTitleTextProvider.text.text, bnote.isChecked, color, _noteImageLogic.imageList,
             _noteVoiceRecorderProvider.voiceList, _noteTaskProvider.taskList, _noteTaskProvider.resetCheckBoxs, password);
 
         await noteBox.put(providerKeys[providerIndex], note);
@@ -411,7 +417,8 @@ class NoteProvider extends ChangeNotifier {
 
     final _notePasswordProvider = Provider.of<NotePasswordProvider>(noteContext, listen: false);
 
-    final _noteImageProvider = Provider.of<NoteImageProvider>(noteContext, listen: false);
+    final _noteImageLogic = Get.find<NoteImageLogic>();
+    
 
     final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
 
@@ -423,7 +430,7 @@ class NoteProvider extends ChangeNotifier {
       if (_noteTitleTextProvider.text.text.isEmpty &&
           _noteTitleTextProvider.title.text.isEmpty &&
           _noteTaskProvider.taskControllerList[0].textEditingController.text == "" &&
-          _noteImageProvider.imageList.isEmpty &&
+          _noteImageLogic.imageList.isEmpty &&
           _noteVoiceRecorderProvider.voiceList.isEmpty &&
           _notePasswordProvider.password == '') {
         ScaffoldMessenger.of(noteContext).clearSnackBars();

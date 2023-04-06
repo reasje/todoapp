@@ -16,7 +16,7 @@ class FloatingActionButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _myProvider = Provider.of<NoteProvider>(context, listen: false);
+    final _noteLogic = Provider.of<NoteProvider>(context, listen: false);
     final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     final _notesLogic = Provider.of<NotesLogic>(context, listen: false);
     return FloatingActionButton(
@@ -29,7 +29,7 @@ class FloatingActionButtonWidget extends StatelessWidget {
       ),
       onPressed: () {
         _notesLogic.load();
-        _myProvider.newNoteClicked(context).then((value) {
+        _noteLogic.newNoteClicked(context).then((value) {
           Navigator.push(context, SliderTransition(NoteScreen()));
           _notesLogic.loadingOver();
         });

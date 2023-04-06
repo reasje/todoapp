@@ -11,17 +11,17 @@ import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
 import 'package:todoapp/app/donate/logic/donate_provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
 import 'package:hive/hive.dart';
-import 'package:todoapp/app/note_screen/logic/notecolor_provider.dart';
-import 'package:todoapp/app/note_screen/logic/noteimage_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notecolor_logic.dart';
+import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notepassword_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notetask_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notetitletext_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notevoice_player_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notevoice_recorder_provider.dart';
-import 'package:todoapp/app/settings/logic/signin_provider.dart';
+import 'package:todoapp/app/settings/settings_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
-import 'app/logic/connection_provider.dart';
-import 'app/logic/uncheck_provider.dart';
+import 'app/splash/connection_logic.dart';
+import 'app/splash/uncheck_logic.dart';
 import 'app/splash/screen/splash_screen.dart';
 import 'applocalizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -112,17 +112,12 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(
             create: (context) => NoteProvider(),
           ),
-          ChangeNotifierProvider(create: (context) => ConnectionProvider()),
-          ChangeNotifierProvider(create: (context) => SignInProvider()),
           ChangeNotifierProvider(create: (context) => ThemeProvider()),
-          ChangeNotifierProvider(create: (context) => UnCheckProvider()),
           ChangeNotifierProvider(create: (context) => BottomNavProvider()),
-          ChangeNotifierProvider(create: (context) => NoteImageProvider()),
           ChangeNotifierProvider(create: (context) => NoteVoiceRecorderProvider()),
           ChangeNotifierProvider(create: (context) => NoteVoicePlayerProvider()),
           ChangeNotifierProvider(create: (context) => NoteTaskProvider()),
           ChangeNotifierProvider(create: (context) => NoteTitleTextProvider()),
-          ChangeNotifierProvider(create: (context) => NoteColorProvider()),
           ChangeNotifierProvider(create: (context) => DonateProvider()),
           ChangeNotifierProvider(create: (context) => NotePasswordProvider()),
         ],

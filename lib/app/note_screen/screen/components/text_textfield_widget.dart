@@ -52,7 +52,7 @@ class TextTextField extends StatelessWidget {
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
             hintStyle: TextStyle(
-                color: _themeProvider.hintColor.withOpacity(0.12),
+                color: _themeProvider.hinoteColor.withOpacity(0.12),
                 fontSize: _themeProvider.isEn ? h * w * 0.00007 : h * w * 0.00005,
                 fontWeight: FontWeight.w400)),
       ),
