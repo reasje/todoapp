@@ -37,7 +37,7 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
 
     bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
-    return Consumer< ThemeProvider>(builder: (ctx, _themeProvider, _) {
+    return Consumer<ThemeProvider>(builder: (ctx, _themeProvider, _) {
       return Obx(
         () {
           return _bottomNavLogic.state.tabs[_bottomNavLogic.state.selectedTab].title == "Image"
@@ -72,7 +72,7 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                         child: InkWell(
                                           onTap: () {
                                             Get.find<NoteImageLogic>().imagePickerCamera();
-                                            Navigator.pop(context);
+                                            Get.back();
                                           },
                                           child: Text(
                                             AppLocalizations.of(context).translate('camera'),
@@ -89,7 +89,7 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                         child: InkWell(
                                           onTap: () {
                                             Get.find<NoteImageLogic>().imagePickerGalley();
-                                            Navigator.pop(context);
+                                            Get.back();
                                           },
                                           child: Text(
                                             AppLocalizations.of(context).translate('gallery'),
@@ -157,15 +157,18 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                       children: [
                                         Text(
                                           '${((_noteVoiceRecorderLogic.state.recorderDuration.inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}',
-                                          style: TextStyle(color: _bottomNavLogic.state.tabs[_bottomNavLogic.state.selectedTab].color, fontSize: h * w * 0.0001),
+                                          style: TextStyle(
+                                              color: _bottomNavLogic.state.tabs[_bottomNavLogic.state.selectedTab].color, fontSize: h * w * 0.0001),
                                         ),
                                         Text(
                                           ':',
-                                          style: TextStyle(color: _bottomNavLogic.state.tabs[_bottomNavLogic.state.selectedTab].color, fontSize: h * w * 0.0001),
+                                          style: TextStyle(
+                                              color: _bottomNavLogic.state.tabs[_bottomNavLogic.state.selectedTab].color, fontSize: h * w * 0.0001),
                                         ),
                                         Text(
                                           '${((_noteVoiceRecorderLogic.state.recorderDuration.inSeconds) % 60).floor().toString().padLeft(2, '0')}',
-                                          style: TextStyle(color: _bottomNavLogic.state.tabs[_bottomNavLogic.state.selectedTab].color, fontSize: h * w * 0.0001),
+                                          style: TextStyle(
+                                              color: _bottomNavLogic.state.tabs[_bottomNavLogic.state.selectedTab].color, fontSize: h * w * 0.0001),
                                         ),
                                       ],
                                     ),
@@ -220,15 +223,18 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                       children: [
                                         Text(
                                           '${((_noteVoiceRecorderLogic.state.recorderDuration.inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}',
-                                          style: TextStyle(color: _bottomNavLogic.state.tabs[_bottomNavLogic.state.selectedTab].color, fontSize: h * w * 0.0001),
+                                          style: TextStyle(
+                                              color: _bottomNavLogic.state.tabs[_bottomNavLogic.state.selectedTab].color, fontSize: h * w * 0.0001),
                                         ),
                                         Text(
                                           ':',
-                                          style: TextStyle(color: _bottomNavLogic.state.tabs[_bottomNavLogic.state.selectedTab].color, fontSize: h * w * 0.0001),
+                                          style: TextStyle(
+                                              color: _bottomNavLogic.state.tabs[_bottomNavLogic.state.selectedTab].color, fontSize: h * w * 0.0001),
                                         ),
                                         Text(
                                           '${((_noteVoiceRecorderLogic.state.recorderDuration.inSeconds) % 60).floor().toString().padLeft(2, '0')}',
-                                          style: TextStyle(color: _bottomNavLogic.state.tabs[_bottomNavLogic.state.selectedTab].color, fontSize: h * w * 0.0001),
+                                          style: TextStyle(
+                                              color: _bottomNavLogic.state.tabs[_bottomNavLogic.state.selectedTab].color, fontSize: h * w * 0.0001),
                                         ),
                                       ],
                                     ),

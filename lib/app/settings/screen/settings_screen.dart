@@ -50,7 +50,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                       iconSize: h * w * 0.00008,
                       iconData: Icons.arrow_back_ios,
                       function: () {
-                        Navigator.pop(context);
+                        Get.back();
                       },
                     ),
                   ],
@@ -131,8 +131,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                                 ),
                               ),
                             );
-                          }
-                          ),
+                          }),
                         ],
                       ),
                     ),

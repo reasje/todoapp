@@ -45,7 +45,7 @@ class _DonateScreenState extends State<DonateScreen> {
                     iconSize: h * w * 0.00008,
                     iconData: Icons.arrow_back_ios,
                     function: () {
-                      Navigator.pop(context);
+                      Get.back();
                     },
                   ),
                 ],

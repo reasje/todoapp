@@ -74,10 +74,10 @@ class _MyButtonState extends State<ButtonWidget> {
           //       // switch (widget.id) {
           //       //   case 'new':
           //       //     await _noteLogic.newNoteClicked(context);
-          //       //     Navigator.push(context, SliderTransition(NoteScreen()));
+          //       //     Get.to(context, SliderTransition(NoteScreen()));
           //       //     break;
           //       //   case 'setting':
-          //       //     Navigator.push(context, SliderTransition(SettingsScreen()));
+          //       //     Get.to(context, SliderTransition(SettingsScreen()));
           //       //     break;
           //       // }
           //     });

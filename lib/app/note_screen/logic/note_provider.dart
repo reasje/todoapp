@@ -330,7 +330,7 @@ class NoteProvider extends ChangeNotifier {
           });
         } else {
           notSaving = 0;
-          Navigator.pop(noteContext);
+          Get.back();
           _noteTitleTextLogic.state.changes.clearHistory();
           clearControllers();
         }
@@ -360,7 +360,7 @@ class NoteProvider extends ChangeNotifier {
         _noteTitleTextLogic.state.changes.clearHistory();
         clearControllers();
         notifyListeners();
-        Navigator.pop(noteContext);
+        Get.back();
       }
     } else {
       // One of the title or text fields must be filled
@@ -392,7 +392,7 @@ class NoteProvider extends ChangeNotifier {
 
         clearControllers();
 
-        Navigator.pop(noteContext);
+        Get.back();
       } else {
         await noteBox.delete(providerKeys[providerIndex]);
 
@@ -400,7 +400,7 @@ class NoteProvider extends ChangeNotifier {
 
         clearControllers();
 
-        Navigator.pop(noteContext);
+        Get.back();
       }
     }
   }
@@ -433,7 +433,7 @@ class NoteProvider extends ChangeNotifier {
         ScaffoldMessenger.of(noteContext)
             .showSnackBar(MySnackBar(AppLocalizations.of(noteContext).translate('willingToDelete'), 'willingToDelete', false, context: noteContext));
 
-        Navigator.pop(noteContext);
+        Get.back();
 
         clearControllers();
       } else {
@@ -451,7 +451,7 @@ class NoteProvider extends ChangeNotifier {
         } else {
           notSaving = 0;
 
-          Navigator.pop(noteContext);
+          Get.back();
 
           _noteTitleTextLogic.state.changes.clearHistory();
 
@@ -468,7 +468,7 @@ class NoteProvider extends ChangeNotifier {
       // changing the stacks and getting back to listview Screen !
       clearControllers();
 
-      Navigator.pop(noteContext);
+      Get.back();
     }
   }
 }

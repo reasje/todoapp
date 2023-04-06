@@ -84,8 +84,8 @@ class ImageLisView extends StatelessWidget {
                                             ? ClipRRect(
                                                 borderRadius: BorderRadius.circular(16.0),
                                                 child: InkWell(
-                                                  onTap: () => Navigator.push(
-                                                      context, MaterialPageRoute(builder: (BuildContext context) => PicDetail(index: index))),
+                                                  onTap: () =>
+                                                      Get.to(PicDetail(index: index), transition: Transition.rightToLeft),
                                                   child: Hero(
                                                       tag: 'pic${index}',
                                                       child: Image.memory(

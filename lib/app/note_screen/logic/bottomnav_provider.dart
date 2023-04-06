@@ -21,7 +21,7 @@ import 'notepassword_logic.dart';
 import 'notetitletext_logic.dart';
 
 class BottomNavLogic extends GetxController {
-      BottomNavState state = BottomNavState();
+  BottomNavState state = BottomNavState();
 
   void initialSelectedTab() {
     state.selectedTab == null ? state.selectedTab = 0 : null;
@@ -34,13 +34,11 @@ class BottomNavLogic extends GetxController {
   void newTabSelected(int index) {
     state.selectedTab = index;
     state.pageController.jumpToPage(index);
-  
   }
 
   void newTabSelectedAnimation(int index) {
     state.selectedTab = index;
     state.pageController.animateToPage(index, duration: Duration(seconds: 1), curve: Curves.ease);
-  
   }
 
   Future<void> initialTabs(
@@ -135,7 +133,7 @@ class BottomNavLogic extends GetxController {
                                       .map((color) => InkWell(
                                             onTap: () {
                                               Provider.of<NoteColorLogic>(context, listen: false).noteColorSelected(color);
-                                              Navigator.pop(context);
+                                              Get.back();
                                             },
                                             child: Container(
                                               height: h * 0.05,
@@ -305,7 +303,5 @@ class BottomNavLogic extends GetxController {
             ),
           ])
     ]);
-
-  
   }
 }

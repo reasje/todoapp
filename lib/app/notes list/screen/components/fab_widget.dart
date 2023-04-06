@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/notes%20list/logic.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
@@ -30,7 +31,7 @@ class FloatingActionButtonWidget extends StatelessWidget {
       onPressed: () {
         _notesLogic.load();
         _noteLogic.newNoteClicked(context).then((value) {
-          Navigator.push(context, SliderTransition(NoteScreen()));
+          Get.to(NoteScreen(), transition: Transition.rightToLeft);
           _notesLogic.loadingOver();
         });
       },

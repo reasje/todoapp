@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/functions.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
@@ -95,7 +96,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                     if (snapShot.data.password == '' || snapShot.data.password == null) {
                                       // does not have a password
                                       _noteProvider.loadNote(context, keys, index).then((value) {
-                                        Navigator.push(context, SliderTransition(NoteScreen()));
+                                        Get.to(NoteScreen(), transition: Transition.rightToLeft);
                                       });
                                     } else {
                                       // have the password and it must be checked
@@ -104,10 +105,9 @@ class ReOrderableCardWidget extends StatelessWidget {
                                         correctString: snapShot.data.password,
                                         canCancel: true,
                                         didUnlocked: () {
-                                          Navigator.pop(context);
-
+                                          Get.back();
                                           _noteProvider.loadNote(context, keys, index).then((value) {
-                                            Navigator.push(context, SliderTransition(NoteScreen()));
+                                            Get.to(NoteScreen(), transition: Transition.rightToLeft);
                                           });
                                         },
                                         digits: snapShot.data.password.length,
@@ -228,7 +228,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                     if (snapShot.data.password == '' || snapShot.data.password == null) {
                                       // does not have a password
                                       _noteProvider.loadNote(context, keys, index).then((value) {
-                                        Navigator.push(context, SliderTransition(NoteScreen()));
+                                        Get.to(NoteScreen(), transition: Transition.rightToLeft);
                                       });
                                     } else {
                                       print(snapShot.data.password);
@@ -238,9 +238,9 @@ class ReOrderableCardWidget extends StatelessWidget {
                                         correctString: snapShot.data.password,
                                         canCancel: true,
                                         didUnlocked: () {
-                                          Navigator.pop(context);
+                                          Get.back();
                                           _noteProvider.loadNote(context, keys, index).then((value) {
-                                            Navigator.push(context, SliderTransition(NoteScreen()));
+                                            Get.to(NoteScreen(), transition: Transition.rightToLeft);
                                           });
                                         },
                                         digits: snapShot.data.password.length,

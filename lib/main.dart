@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/image_model.dart' as imageModel;
@@ -117,7 +118,7 @@ class _MyAppState extends State<MyApp> {
         ],
         child: Consumer<ThemeProvider>(
           builder: (context, _themeProvider, _) {
-            return new MaterialApp(
+            return new GetMaterialApp(
               locale: _themeProvider.locale,
               localizationsDelegates: [
                 AppLocalizations.delegate,

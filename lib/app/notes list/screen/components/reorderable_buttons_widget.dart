@@ -3,6 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
+import 'package:todoapp/app/settings/screen/settings_screen.dart';
 
 import '../../../../applocalizations.dart';
 import '../../../../widgets/buttons.dart';
@@ -56,7 +57,7 @@ class ReOrderableListButtonsWidget extends StatelessWidget {
                     sizePD: w * 0.1,
                     sizePU: w * 0.1,
                     function: () {
-                      Navigator.push(context, SliderTransition(DonateScreen()));
+                      Get.to(SettingsScreen(), transition: Transition.rightToLeft);
                     },
                   ),
                   Container(
@@ -69,7 +70,7 @@ class ReOrderableListButtonsWidget extends StatelessWidget {
                       iconSize: h * w * 0.00006,
                       iconData: FontAwesome.code,
                       function: () {
-                        Navigator.push(context, SliderTransition(DonateScreen()));
+                        Get.to(DonateScreen(), transition: Transition.rightToLeft);
                       },
                     ),
                   ),
