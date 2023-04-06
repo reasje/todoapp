@@ -22,31 +22,9 @@ class ThemeProvider extends ChangeNotifier {
   bool isFirstTime;
   Locale locale;
   String noTaskImage;
-  // Color red = Color(0xFFff4444);
-  // Color green = Color(0xFF00c851);
-  // Color yellow = Color(0xFFffbb33);
-  // Color blue = Color(0xFF33b5e5);
-  // Color purple = Color(0xffaa66cc);
-
-  // List<Color> getNoteColors() {
-  //   shadedColors.clear();
-  //   shadedColors.add(red);
-  //   shadedColors.add(green);
-  //   shadedColors.add(yellow);
-  //   shadedColors.add(blue);
-  //   shadedColors.add(purple);
-  //   return shadedColors;
-  // }
-
   String splashImage;
   Color whiteMainColor = Color(0xffe6ebf2);
   Color blackMainColor = Color(0xff303234);
-  // Color whiteShadowColor = Colors.black;
-  // Color whiteShimmer = Colors.grey.withOpacity(0.6);
-  // Color blackShimmer = Colors.grey.withOpacity(0.5);
-  // Color blackShadowColor = Color(0xff000000).withOpacity(0.4);
-  // Color whiteLightShadowColor = Colors.white;
-  // Color blackLightShadowColor = Color(0xff494949).withOpacity(0.4);
   Color whiteTextColor = Colors.black.withOpacity(.5);
   Color blackTextColor = Colors.white.withOpacity(.5);
   Color whiteTitleColor = Colors.black;

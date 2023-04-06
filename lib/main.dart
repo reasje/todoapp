@@ -114,7 +114,6 @@ class _MyAppState extends State<MyApp> {
             create: (context) => NoteProvider(),
           ),
           ChangeNotifierProvider(create: (context) => ThemeProvider()),
-          ChangeNotifierProvider(create: (context) => DonateProvider()),
         ],
         child: Consumer<ThemeProvider>(
           builder: (context, _themeProvider, _) {

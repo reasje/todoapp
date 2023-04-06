@@ -66,7 +66,7 @@ class _MyButtonState extends State<ButtonWidget> {
           //       final _noteVoiceRecorderLogic = Get.find<NoteVoiceRecorderLogic>();;
           //       final _noteTitleTextLogic = Get.find<NoteTitleTextLogic>();
           //       final _noteColorLogic = Provider.of<NoteColorLogic>(context, listen: false);
-          //       final _donateProvider = Provider.of<DonateProvider>(context, listen: false);
+          //       final _donateProvider = Provider.of<DonateLogic>(context, listen: false);
           //       final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
           //       double h = MediaQuery.of(context).size.height;
           //       double w = MediaQuery.of(context).size.width;

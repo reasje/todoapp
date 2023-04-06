@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/donate/logic/donate_provider.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
@@ -20,7 +21,7 @@ class _DonateScreenState extends State<DonateScreen> {
   @override
   Widget build(BuildContext context) {
     final _themeProvider = Provider.of<ThemeProvider>(context);
-    final _donateProvider = Provider.of<DonateProvider>(context);
+    final _donateProvider = Provider.of<DonateLogic>(context);
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
@@ -105,7 +106,7 @@ class _DonateScreenState extends State<DonateScreen> {
                           iconSize: h * w * 0.00014,
                           iconData: FontAwesome.dollar,
                           function: () {
-                            Provider.of<DonateProvider>(context, listen: false).launchURL();
+                            Provider.of<DonateLogic>(context, listen: false).launchURL();
                           },
                         ),
                         Text(

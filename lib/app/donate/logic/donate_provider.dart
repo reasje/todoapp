@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../applocalizations.dart';
 import '../../../widgets/snackbar.dart';
 
-class DonateProvider with ChangeNotifier {
+class DonateLogic extends GetxController {
   showDogeCopied(BuildContext context) {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
