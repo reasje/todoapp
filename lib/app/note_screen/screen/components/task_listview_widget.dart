@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
-import 'package:todoapp/app/note_screen/logic/notetask_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notetask_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 
 import '../../../../applocalizations.dart';
@@ -17,7 +17,7 @@ class TaskListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final _themeProvider = Provider.of<ThemeProvider>(context);
 
-    final _noteTaskProvider = Provider.of<NoteTaskProvider>(context);
+    final _noteTaskLogic = Provider.of<NoteTaskLogic>(context);
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
@@ -42,9 +42,9 @@ class TaskListView extends StatelessWidget {
                   activeColor: color,
                   inactiveTrackColor: _themeProvider.textColor,
                   inactiveThumbColor: _themeProvider.mainColor,
-                  value: _noteTaskProvider.resetCheckBoxs,
+                  value: _noteTaskLogic.resetCheckBoxs,
                   onChanged: (value) {
-                    _noteTaskProvider.changeResetCheckBoxs(value);
+                    _noteTaskLogic.changeResetCheckBoxs(value);
                   },
                 ),
               ],
@@ -54,7 +54,7 @@ class TaskListView extends StatelessWidget {
           Container(
             height: h * 0.7,
             child: FutureBuilder(
-              future: _noteTaskProvider.getTaskList(),
+              future: _noteTaskLogic.getTaskList(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Theme(
@@ -63,12 +63,12 @@ class TaskListView extends StatelessWidget {
                       shadowColor: Colors.transparent,
                     ),
                     child: ReorderableListView(
-                        scrollController: _noteTaskProvider.scrollController,
+                        scrollController: _noteTaskLogic.state.scrollController,
                         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                         physics: ClampingScrollPhysics(),
                         shrinkWrap: true,
                         onReorder: (oldIndex, newIndex) {
-                          _noteTaskProvider.reorderTaskList(oldIndex, newIndex);
+                          _noteTaskLogic.reorderTaskList(oldIndex, newIndex);
                         },
                         children: List.generate(snapshot.data.length, (index) {
                           return AnimatedContainer(
@@ -102,7 +102,7 @@ class TaskListView extends StatelessWidget {
                                   ScaffoldMessenger.of(context).showSnackBar(MySnackBar(
                                       AppLocalizations.of(context).translate('undoTask'), 'undoTask', true,
                                       context: context, index: index));
-                                  _noteTaskProvider.taskDissmissed(index);
+                                  _noteTaskLogic.taskDissmissed(index);
                                 },
                                 child: Container(
                                   height: h * w * 0.00022,
@@ -114,7 +114,7 @@ class TaskListView extends StatelessWidget {
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          _noteTaskProvider.taskCheckBoxChanged(index);
+                                          _noteTaskLogic.taskCheckBoxChanged(index);
                                         },
                                         child: Container(
                                             height: h * 0.03,
@@ -138,7 +138,7 @@ class TaskListView extends StatelessWidget {
                                         child: TextField(
                                           controller: snapshot.data[index].textEditingController,
                                           onSubmitted: (value) {
-                                            _noteTaskProvider.checkListOnSubmit(index);
+                                            _noteTaskLogic.checkListOnSubmit(index);
                                           },
                                           focusNode: snapshot.data[index].focusNode,
                                           cursorColor: _themeProvider.swashColor,

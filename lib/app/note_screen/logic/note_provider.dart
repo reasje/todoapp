@@ -18,7 +18,7 @@ import '../../../main.dart';
 import 'package:collection/collection.dart';
 import '../../../widgets/snackbar.dart';
 import 'noteimage_logic.dart';
-import 'notetask_provider.dart';
+import 'notetask_logic.dart';
 
 class NoteProvider extends ChangeNotifier {
   // It is used to store
@@ -53,7 +53,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
 
-    final _noteTaskProvider = Provider.of<NoteTaskProvider>(noteContext, listen: false);
+    final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
     final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
 
@@ -69,9 +69,9 @@ class NoteProvider extends ChangeNotifier {
 
     _noteVoiceRecorderProvider.clearVoiceList();
 
-    _noteTaskProvider.clearTaskList();
+    _noteTaskLogic.clearTaskList();
 
-    _noteTaskProvider.clearTaskControllerList();
+    _noteTaskLogic.clearTaskControllerList();
 
     providerIndex = null;
 
@@ -89,7 +89,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
 
-    final _noteTaskProvider = Provider.of<NoteTaskProvider>(noteContext, listen: false);
+    final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
     final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
 
@@ -112,7 +112,7 @@ class NoteProvider extends ChangeNotifier {
 
       _noteVoiceRecorderProvider.initialVoiceListSnapshot();
 
-      _noteTaskProvider.initialTaskControllerList();
+      _noteTaskLogic.initialTaskControllerList();
     }
   }
 
@@ -124,7 +124,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
 
-    final _noteTaskProvider = Provider.of<NoteTaskProvider>(noteContext, listen: false);
+    final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
     final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
 
@@ -133,7 +133,7 @@ class NoteProvider extends ChangeNotifier {
         _noteTitleTextProvider.ttext == _noteTitleTextProvider.text.text &&
         ListEquality().equals(_noteImageLogic.state.imageList, _noteImageLogic.state.imageListSnapshot) &&
         ListEquality().equals(_noteVoiceRecorderProvider.voiceList, _noteVoiceRecorderProvider.voiceListSnapshot) &&
-        ListEquality().equals(_noteTaskProvider.taskControllerList, _noteTaskProvider.taskControllerListSnapShot)) {
+        ListEquality().equals(_noteTaskLogic.state.taskControllerList, _noteTaskLogic.state.taskControllerListSnapShot)) {
       return false;
     } else {
       return true;
@@ -179,7 +179,7 @@ class NoteProvider extends ChangeNotifier {
   Future newNoteClicked(BuildContext context) async {
     final _bottomNavProvider = Provider.of<BottomNavProvider>(context, listen: false);
 
-    final _noteTaskProvider = Provider.of<NoteTaskProvider>(context, listen: false);
+    final _noteTaskLogic = Provider.of<NoteTaskLogic>(context, listen: false);
 
     noteContext = context;
     // When the add icon is tapped this function will be executed and
@@ -187,8 +187,7 @@ class NoteProvider extends ChangeNotifier {
 
     clearControllers();
 
-    _noteTaskProvider.taskControllerList
-        .add(TaskController(TextEditingController(text: ""), false, FocusNode(), PageStorageKey<String>('pageKey 0')));
+    _noteTaskLogic.state..taskControllerList.add(TaskController(TextEditingController(text: ""), false, FocusNode(), PageStorageKey<String>('pageKey 0')));
 
     newNote = true;
 
@@ -196,7 +195,7 @@ class NoteProvider extends ChangeNotifier {
 
     _bottomNavProvider.initialPage();
 
-    _noteTaskProvider.resetCheckBoxs = false;
+    _noteTaskLogic.resetCheckBoxs = false;
 
     await _bottomNavProvider.initialTabs(context);
 
@@ -223,7 +222,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
 
-    final _noteTaskProvider = Provider.of<NoteTaskProvider>(noteContext, listen: false);
+    final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
     final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
 
@@ -244,23 +243,22 @@ class NoteProvider extends ChangeNotifier {
     }
 
     if (bnote.taskList?.isNotEmpty ?? false) {
-      _noteTaskProvider.initialTaskList(bnote.taskList);
+      _noteTaskLogic.initialTaskList(bnote.taskList);
 
-      for (int i = 0; i < _noteTaskProvider.taskList.length; i++) {
-        _noteTaskProvider.taskControllerList.add(TaskController(TextEditingController(text: _noteTaskProvider.taskList[i].title),
-            _noteTaskProvider.taskList[i].isDone, FocusNode(), PageStorageKey<String>('pageKey ${DateTime.now().microsecondsSinceEpoch}')));
+      for (int i = 0; i < _noteTaskLogic.state.taskList.length; i++) {
+        _noteTaskLogic.state.taskControllerList.add(TaskController(TextEditingController(text: _noteTaskLogic.state.taskList[i].title),
+            _noteTaskLogic.state.taskList[i].isDone, FocusNode(), PageStorageKey<String>('pageKey ${DateTime.now().microsecondsSinceEpoch}')));
       }
 
       // clearing the taskList because
       // the needed information has been
       // obtained
-      _noteTaskProvider.clearTaskList();
+      _noteTaskLogic.clearTaskList();
     } else {
-      _noteTaskProvider.taskControllerList
-          .add(TaskController(TextEditingController(text: ""), false, FocusNode(), PageStorageKey<String>('pageKey 0')));
+      _noteTaskLogic.state.taskControllerList.add(TaskController(TextEditingController(text: ""), false, FocusNode(), PageStorageKey<String>('pageKey 0')));
     }
 
-    _noteTaskProvider.resetCheckBoxs = bnote.resetCheckBoxs;
+    _noteTaskLogic.resetCheckBoxs = bnote.resetCheckBoxs;
 
     _noteTitleTextProvider.title.text = bnote.title;
 
@@ -298,7 +296,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
 
-    final _noteTaskProvider = Provider.of<NoteTaskProvider>(noteContext, listen: false);
+    final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
     final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
 
@@ -311,7 +309,7 @@ class NoteProvider extends ChangeNotifier {
 
       if (_noteTitleTextProvider.text.text.isEmpty &&
           _noteTitleTextProvider.title.text.isEmpty &&
-          _noteTaskProvider.taskControllerList[0].textEditingController.text == "" &&
+          _noteTaskLogic.state.taskControllerList[0].textEditingController.text == "" &&
           _noteImageLogic.state.imageList.isEmpty &&
           _noteVoiceRecorderProvider.voiceList.isEmpty &&
           _notePasswordLogic.state.password == '') {
@@ -345,16 +343,16 @@ class NoteProvider extends ChangeNotifier {
 
         var password = _notePasswordLogic.state.password;
 
-        if (_noteTaskProvider.taskControllerList.isNotEmpty) {
-          for (int i = 0; i < _noteTaskProvider.taskControllerList.length; i++) {
-            if (_noteTaskProvider.taskControllerList[i].textEditingController.text != '') {
-              _noteTaskProvider.taskList
-                  .add(Task(_noteTaskProvider.taskControllerList[i].textEditingController.text, _noteTaskProvider.taskControllerList[i].isDone));
+        if (_noteTaskLogic.state.taskControllerList.isNotEmpty) {
+          for (int i = 0; i < _noteTaskLogic.state.taskControllerList.length; i++) {
+            if (_noteTaskLogic.state.taskControllerList[i].textEditingController.text != '') {
+              _noteTaskLogic.state.taskList
+                  .add(Task(_noteTaskLogic.state.taskControllerList[i].textEditingController.text, _noteTaskLogic.state.taskControllerList[i].isDone));
             }
           }
         }
         Note note = Note(noteTitle, noteText, false, color, _noteImageLogic.state.imageList, _noteVoiceRecorderProvider.voiceList,
-            _noteTaskProvider.taskList, _noteTaskProvider.resetCheckBoxs, password);
+            _noteTaskLogic.state.taskList, _noteTaskLogic.resetCheckBoxs, password);
         await noteBox.add(note);
         _noteTitleTextProvider.changes.clearHistory();
         clearControllers();
@@ -374,16 +372,16 @@ class NoteProvider extends ChangeNotifier {
 
         var password = _notePasswordLogic.state.password;
 
-        if (_noteTaskProvider.taskControllerList.isNotEmpty) {
-          for (int i = 0; i < _noteTaskProvider.taskControllerList.length; i++) {
-            if (_noteTaskProvider.taskControllerList[i].textEditingController.text != '') {
-              _noteTaskProvider.taskList
-                  .add(Task(_noteTaskProvider.taskControllerList[i].textEditingController.text, _noteTaskProvider.taskControllerList[i].isDone));
+        if (_noteTaskLogic.state.taskControllerList.isNotEmpty) {
+          for (int i = 0; i < _noteTaskLogic.state.taskControllerList.length; i++) {
+            if (_noteTaskLogic.state.taskControllerList[i].textEditingController.text != '') {
+              _noteTaskLogic.state.taskList
+                  .add(Task(_noteTaskLogic.state.taskControllerList[i].textEditingController.text, _noteTaskLogic.state.taskControllerList[i].isDone));
             }
           }
         }
         Note note = new Note(noteTitle, _noteTitleTextProvider.text.text, bnote.isChecked, color, _noteImageLogic.state.imageList,
-            _noteVoiceRecorderProvider.voiceList, _noteTaskProvider.taskList, _noteTaskProvider.resetCheckBoxs, password);
+            _noteVoiceRecorderProvider.voiceList, _noteTaskLogic.state.taskList, _noteTaskLogic.resetCheckBoxs, password);
 
         await noteBox.put(providerKeys[providerIndex], note);
 
@@ -416,14 +414,14 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
 
-    final _noteTaskProvider = Provider.of<NoteTaskProvider>(noteContext, listen: false);
+    final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
     final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
 
     if (isEdited()) {
       if (_noteTitleTextProvider.text.text.isEmpty &&
           _noteTitleTextProvider.title.text.isEmpty &&
-          _noteTaskProvider.taskControllerList[0].textEditingController.text == "" &&
+          _noteTaskLogic.state.taskControllerList[0].textEditingController.text == "" &&
           _noteImageLogic.state.imageList.isEmpty &&
           _noteVoiceRecorderProvider.voiceList.isEmpty &&
           _notePasswordLogic.state.password == '') {
