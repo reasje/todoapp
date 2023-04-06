@@ -5,7 +5,7 @@ import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
 import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notetask_logic.dart';
-import 'package:todoapp/app/note_screen/logic/notevoice_recorder_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notevoice_recorder_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -25,7 +25,7 @@ Widget MySnackBar(
 }) {
   final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
   final _noteImageLogic = Get.find<NoteImageLogic>();
-  final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(context, listen: false);
+  final _noteVoiceRecorderLogic = Provider.of<NoteVoiceRecorderLogic>(context, listen: false);
   final _noteTaskLogic = Provider.of<NoteTaskLogic>(context, listen: false);
   isWhite = _themeProvider.checkIsWhite();
   return SnackBar(
@@ -44,7 +44,7 @@ Widget MySnackBar(
             label: AppLocalizations.of(context).translate('undo'),
             onPressed: () {
               if (id == 'undoVoice') {
-                _noteVoiceRecorderProvider.voiceRecover(index);
+                _noteVoiceRecorderLogic.voiceRecover(index);
               } else if (id == 'undoTask') {
                 _noteTaskLogic.taskRecover(index);
               } else if (noteBox == null) {

@@ -6,7 +6,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notevoice_player_logic.dart';
-import 'package:todoapp/app/note_screen/logic/notevoice_recorder_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notevoice_recorder_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 
 import '../../../../applocalizations.dart';
@@ -33,18 +33,18 @@ class VoiceListView extends StatelessWidget {
         width: double.maxFinite,
         child: ScrollConfiguration(
           behavior: NoGlowBehavior(),
-          child: Consumer3<NoteVoiceRecorderProvider, BottomNavProvider, ThemeProvider>(
-            builder: (ctx, _noteVoiceRecorderProvider, _bottomNavProvider, _themeProvider, _) {
+          child: Consumer3<NoteVoiceRecorderLogic, BottomNavProvider, ThemeProvider>(
+            builder: (ctx, _noteVoiceRecorderLogic, _bottomNavProvider, _themeProvider, _) {
               return Obx(() {
                 return ListView.builder(
-                    itemCount: _noteVoiceRecorderProvider.voiceList != null ? _noteVoiceRecorderProvider.voiceList.length + 1 : 1,
+                    itemCount: _noteVoiceRecorderLogic.state.voiceList != null ? _noteVoiceRecorderLogic.state.voiceList.length + 1 : 1,
                     scrollDirection: Axis.vertical,
                     itemBuilder: (context, index) {
-                      if (index == (_noteVoiceRecorderProvider.voiceList != null ? _noteVoiceRecorderProvider.voiceList.length : 0)) {
+                      if (index == (_noteVoiceRecorderLogic.state.voiceList != null ? _noteVoiceRecorderLogic.state.voiceList.length : 0)) {
                         return Container();
                       } else {
                         return FutureBuilder(
-                            future: _noteVoiceRecorderProvider.getVoiceList(),
+                            future: _noteVoiceRecorderLogic.getVoiceList(),
                             builder: (context, snapShot) {
                               if (snapShot.hasData) {
                                 return Dismissible(
@@ -70,7 +70,7 @@ class VoiceListView extends StatelessWidget {
                                     ScaffoldMessenger.of(context).showSnackBar(MySnackBar(
                                         AppLocalizations.of(context).translate('undoVoice'), 'undoVoice', true,
                                         context: context, index: index));
-                                    _noteVoiceRecorderProvider.voiceDismissed(index);
+                                    _noteVoiceRecorderLogic.voiceDismissed(index);
                                   },
                                   child: Container(
                                       width: w * 0.8,
@@ -78,7 +78,7 @@ class VoiceListView extends StatelessWidget {
                                       margin: EdgeInsets.symmetric(horizontal: w * 0.08, vertical: h * 0.03),
                                       decoration: BoxDecoration(
                                           color: backGroundColor.withOpacity(0.2), borderRadius: BorderRadius.all(Radius.circular(h * 0.02))),
-                                      child: _noteVoiceRecorderProvider.voiceList != null
+                                      child: _noteVoiceRecorderLogic.state.voiceList != null
                                           ? Container(
                                               alignment: Alignment.centerLeft,
                                               child: Row(
@@ -128,7 +128,7 @@ class VoiceListView extends StatelessWidget {
                                                             FittedBox(
                                                               fit: BoxFit.cover,
                                                               child: Text(
-                                                                _noteVoiceRecorderProvider.voiceList[index].title,
+                                                                _noteVoiceRecorderLogic.state.voiceList[index].title,
                                                                 softWrap: false,
                                                               ),
                                                             ),

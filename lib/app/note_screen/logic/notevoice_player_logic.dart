@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapp/app/note_screen/logic/notevoice_recorder_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notevoice_recorder_logic.dart';
 
 import '../state/note_voice_player_state.dart';
 
@@ -11,10 +11,11 @@ class NoteVoicePlayerLogic extends GetxController {
   NoteVoicePlayerState state = NoteVoicePlayerState();
 
   Future<void> startPlayingRecorded(int index, BuildContext context) async {
-    final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(context, listen: false);
+    final _noteVoiceRecorderLogic = Provider.of<NoteVoiceRecorderLogic>(context, listen: false);
     await checkForPlayingPlayers();
     state.flutterSoundPlayer[index].openAudioSession();
-    state.voiceDuration[index] = await state.flutterSoundPlayer[index].startPlayer(fromDataBuffer: _noteVoiceRecorderProvider.voiceList[index].voice);
+    state.voiceDuration[index] =
+        await state.flutterSoundPlayer[index].startPlayer(fromDataBuffer: _noteVoiceRecorderLogic.state.voiceList[index].voice);
     timerOn(index);
   }
 

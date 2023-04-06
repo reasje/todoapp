@@ -11,7 +11,7 @@ import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notecolor_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notepassword_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notetitletext_logic.dart';
-import 'package:todoapp/app/note_screen/logic/notevoice_recorder_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notevoice_recorder_logic.dart';
 import '../../../applocalizations.dart';
 import '../../../main.dart';
 
@@ -51,7 +51,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _notePasswordLogic = Get.find<NotePasswordLogic>();
 
-    final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
+    final _noteVoiceRecorderLogic = Get.find<NoteVoiceRecorderLogic>();
 
     final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
@@ -67,7 +67,7 @@ class NoteProvider extends ChangeNotifier {
 
     _noteTitleTextLogic.clearText();
 
-    _noteVoiceRecorderProvider.clearVoiceList();
+    _noteVoiceRecorderLogic.clearVoiceList();
 
     _noteTaskLogic.clearTaskList();
 
@@ -87,7 +87,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _notePasswordLogic = Get.find<NotePasswordLogic>();
 
-    final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
+    final _noteVoiceRecorderLogic = Get.find<NoteVoiceRecorderLogic>();
 
     final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
@@ -110,7 +110,7 @@ class NoteProvider extends ChangeNotifier {
     if (!newNote) {
       _noteImageLogic.initialImageListSnapshot();
 
-      _noteVoiceRecorderProvider.initialVoiceListSnapshot();
+      _noteVoiceRecorderLogic.initialVoiceListSnapshot();
 
       _noteTaskLogic.initialTaskControllerList();
     }
@@ -122,7 +122,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteImageLogic = Get.find<NoteImageLogic>();
 
-    final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
+    final _noteVoiceRecorderLogic = Get.find<NoteVoiceRecorderLogic>();
 
     final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
@@ -132,7 +132,7 @@ class NoteProvider extends ChangeNotifier {
         _noteTitleTextLogic.state.titleSnapShot == _noteTitleTextLogic.state.titleController.text &&
         _noteTitleTextLogic.state.textSnapShot == _noteTitleTextLogic.state.textController.text &&
         ListEquality().equals(_noteImageLogic.state.imageList, _noteImageLogic.state.imageListSnapshot) &&
-        ListEquality().equals(_noteVoiceRecorderProvider.voiceList, _noteVoiceRecorderProvider.voiceListSnapshot) &&
+        ListEquality().equals(_noteVoiceRecorderLogic.state.voiceList, _noteVoiceRecorderLogic.state.voiceListSnapshot) &&
         ListEquality().equals(_noteTaskLogic.state.taskControllerList, _noteTaskLogic.state.taskControllerListSnapShot)) {
       return false;
     } else {
@@ -221,7 +221,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _notePasswordLogic = Get.find<NotePasswordLogic>();
 
-    final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
+    final _noteVoiceRecorderLogic = Get.find<NoteVoiceRecorderLogic>();
 
     final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
@@ -240,7 +240,7 @@ class NoteProvider extends ChangeNotifier {
     }
 
     if (bnote.voiceList?.isNotEmpty ?? false) {
-      _noteVoiceRecorderProvider.initialVoiceList(bnote.voiceList);
+      _noteVoiceRecorderLogic.initialVoiceList(bnote.voiceList);
     }
 
     if (bnote.taskList?.isNotEmpty ?? false) {
@@ -271,7 +271,8 @@ class NoteProvider extends ChangeNotifier {
     // saving password
     _notePasswordLogic.state.password = bnote.password;
 
-    _noteTitleTextLogic.state.textController.selection = TextSelection.fromPosition(TextPosition(offset: _noteTitleTextLogic.state.textController.text.length));
+    _noteTitleTextLogic.state.textController.selection =
+        TextSelection.fromPosition(TextPosition(offset: _noteTitleTextLogic.state.textController.text.length));
 
     _noteColorLogic.initialNoteColor(Color(bnote.color));
 
@@ -296,7 +297,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteImageLogic = Get.find<NoteImageLogic>();
 
-    final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
+    final _noteVoiceRecorderLogic = Get.find<NoteVoiceRecorderLogic>();
 
     final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
@@ -313,7 +314,7 @@ class NoteProvider extends ChangeNotifier {
           _noteTitleTextLogic.state.titleController.text.isEmpty &&
           _noteTaskLogic.state.taskControllerList[0].textEditingController.text == "" &&
           _noteImageLogic.state.imageList.isEmpty &&
-          _noteVoiceRecorderProvider.voiceList.isEmpty &&
+          _noteVoiceRecorderLogic.state.voiceList.isEmpty &&
           _notePasswordLogic.state.password == '') {
         if (notSaving == 0) {
           ScaffoldMessenger.of(noteContext).showSnackBar(MySnackBar(
@@ -353,7 +354,7 @@ class NoteProvider extends ChangeNotifier {
             }
           }
         }
-        Note note = Note(noteTitle, noteText, false, color, _noteImageLogic.state.imageList, _noteVoiceRecorderProvider.voiceList,
+        Note note = Note(noteTitle, noteText, false, color, _noteImageLogic.state.imageList, _noteVoiceRecorderLogic.state.voiceList,
             _noteTaskLogic.state.taskList, _noteTaskLogic.resetCheckBoxs, password);
         await noteBox.add(note);
         _noteTitleTextLogic.state.changes.clearHistory();
@@ -383,7 +384,7 @@ class NoteProvider extends ChangeNotifier {
           }
         }
         Note note = new Note(noteTitle, _noteTitleTextLogic.state.textController.text, bnote.isChecked, color, _noteImageLogic.state.imageList,
-            _noteVoiceRecorderProvider.voiceList, _noteTaskLogic.state.taskList, _noteTaskLogic.resetCheckBoxs, password);
+            _noteVoiceRecorderLogic.state.voiceList, _noteTaskLogic.state.taskList, _noteTaskLogic.resetCheckBoxs, password);
 
         await noteBox.put(providerKeys[providerIndex], note);
 
@@ -414,7 +415,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteImageLogic = Get.find<NoteImageLogic>();
 
-    final _noteVoiceRecorderProvider = Provider.of<NoteVoiceRecorderProvider>(noteContext, listen: false);
+    final _noteVoiceRecorderLogic = Get.find<NoteVoiceRecorderLogic>();
 
     final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
@@ -425,7 +426,7 @@ class NoteProvider extends ChangeNotifier {
           _noteTitleTextLogic.state.titleController.text.isEmpty &&
           _noteTaskLogic.state.taskControllerList[0].textEditingController.text == "" &&
           _noteImageLogic.state.imageList.isEmpty &&
-          _noteVoiceRecorderProvider.voiceList.isEmpty &&
+          _noteVoiceRecorderLogic.state.voiceList.isEmpty &&
           _notePasswordLogic.state.password == '') {
         ScaffoldMessenger.of(noteContext).clearSnackBars();
 
