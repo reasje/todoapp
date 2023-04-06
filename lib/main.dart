@@ -16,7 +16,7 @@ import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notepassword_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notetask_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notetitletext_logic.dart';
-import 'package:todoapp/app/note_screen/logic/notevoice_player_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notevoice_player_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notevoice_recorder_provider.dart';
 import 'package:todoapp/app/settings/settings_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
@@ -115,7 +115,6 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (context) => ThemeProvider()),
           ChangeNotifierProvider(create: (context) => BottomNavProvider()),
           ChangeNotifierProvider(create: (context) => NoteVoiceRecorderProvider()),
-          ChangeNotifierProvider(create: (context) => NoteVoicePlayerProvider()),
           ChangeNotifierProvider(create: (context) => DonateProvider()),
         ],
         child: Consumer<ThemeProvider>(
