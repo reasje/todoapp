@@ -6,20 +6,24 @@ import 'package:shimmer/shimmer.dart';
 import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notevoice_player_logic.dart';
-import 'package:todoapp/app/note_screen/logic/notevoice_recorder_logic.dart';
+
 import 'package:todoapp/app/logic/theme_provider.dart';
 
 import '../../../../applocalizations.dart';
 import '../../../../widgets/no_glow_behavior.dart';
 import '../../../../widgets/snackbar.dart';
+import '../../logic/notevoice_recorder_provider.dart';
 import '../../state/note_voice_player_state.dart';
 
 class VoiceListView extends StatelessWidget {
   final Color backGroundColor;
-  const VoiceListView({
+  VoiceListView({
     Key key,
     this.backGroundColor,
   }) : super(key: key);
+
+  final _noteVoiceRecorderLogic = Get.find<NoteVoiceRecorderLogic>();
+  final _bottomNavLogic = Get.find<BottomNavLogic>();
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +37,8 @@ class VoiceListView extends StatelessWidget {
         width: double.maxFinite,
         child: ScrollConfiguration(
           behavior: NoGlowBehavior(),
-          child: Consumer3<NoteVoiceRecorderLogic, BottomNavProvider, ThemeProvider>(
-            builder: (ctx, _noteVoiceRecorderLogic, _bottomNavProvider, _themeProvider, _) {
+          child: Consumer< ThemeProvider>(
+            builder: (ctx, _themeProvider, _) {
               return Obx(() {
                 return ListView.builder(
                     itemCount: _noteVoiceRecorderLogic.state.voiceList != null ? _noteVoiceRecorderLogic.state.voiceList.length + 1 : 1,
@@ -61,7 +65,7 @@ class VoiceListView extends StatelessWidget {
                                       child: Icon(
                                         Icons.delete_sweep,
                                         size: h * w * 0.00022,
-                                        color: _bottomNavProvider.tabs[_bottomNavProvider.selectedTab].color,
+                                        color: _bottomNavLogic.state.tabs[_bottomNavLogic.state.selectedTab].color,
                                       ),
                                     ),
                                   ),
@@ -197,8 +201,8 @@ class VoiceListView extends StatelessWidget {
                                   // child: Shimmer.fromColors(
                                   //   period: Duration(seconds: 1),
                                   //   baseColor:
-                                  //   _bottomNavProvider
-                                  //       .tabs[_bottomNavProvider.selectedTab]
+                                  //   _bottomNavLogic
+                                  //       .tabs[_bottomNavLogic.selectedTab]
                                   //       .color
                                   //       .withOpacity(0.3),
                                   //   highlightColor: _themeProvider.shimmerColor,

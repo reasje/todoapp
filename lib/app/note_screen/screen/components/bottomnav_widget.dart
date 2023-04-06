@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/navigationitem_model.dart';
 import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
@@ -44,12 +45,13 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-    final _bottomNavProvider = Provider.of<BottomNavProvider>(context);
+    final _bottomNavLogic = Get.find<BottomNavLogic>();
     return Container(
         width: MediaQuery.of(context).size.width,
         height: h * 0.08,
@@ -60,12 +62,12 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
         child: Row(
           textDirection: TextDirection.ltr,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _bottomNavProvider.items.map((item) {
-            var itemIndex = _bottomNavProvider.items.indexOf(item);
+          children: _bottomNavLogic.state.items.map((item) {
+            var itemIndex = _bottomNavLogic.state.items.indexOf(item);
             return GestureDetector(
-              child: _buildItem(item, _bottomNavProvider.selectedTab == itemIndex, context),
+              child: _buildItem(item, _bottomNavLogic.state.selectedTab == itemIndex, context),
               onTap: () {
-                _bottomNavProvider.newTabSelected(itemIndex);
+                _bottomNavLogic.newTabSelected(itemIndex);
               },
             );
           }).toList(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
@@ -24,37 +25,40 @@ class _TabViewState extends State<TabView> {
   Widget build(BuildContext context) {
     int index = widget.index;
     bool timerOn = widget.timerOn ?? false;
-    final _bottomNavProvider = Provider.of<BottomNavProvider>(context);
+    final _bottomNavLogic = Get.find<BottomNavLogic>();
     double h = MediaQuery.of(context).size.height;
     final _themeProvider = Provider.of<ThemeProvider>(context);
     double w = MediaQuery.of(context).size.width;
     return ScrollConfiguration(
       behavior: NoGlowBehavior(),
-      child: ListView(
-        children: [
-          Container(
-            height: h * 0.05,
-            width: double.maxFinite,
-            margin: EdgeInsets.only(top: h * 0.02),
-            child: Row(
-              textDirection: TextDirection.ltr,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [if (!timerOn) ..._bottomNavProvider.tabs[index].buttons else _bottomNavProvider.tabs[index].buttons[0]],
-            ),
-          ),
-          if (!timerOn)
-            ..._bottomNavProvider.tabs[index].tabs
-          else
-            Center(
-              child: Text(
-                AppLocalizations.of(context).translate('timerOn'),
-                style: TextStyle(
-                    color: _bottomNavProvider.tabColors[_bottomNavProvider.selectedTab],
-                    fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00006,
-                    fontWeight: FontWeight.w400),
+      child: Obx((){
+        return ListView(
+          children: [
+            Container(
+              height: h * 0.05,
+              width: double.maxFinite,
+              margin: EdgeInsets.only(top: h * 0.02),
+              child: Row(
+                textDirection: TextDirection.ltr,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [if (!timerOn) ..._bottomNavLogic.state.tabs[index].buttons else _bottomNavLogic.state.tabs[index].buttons[0]],
               ),
             ),
-        ],
+            if (!timerOn)
+              ..._bottomNavLogic.state.tabs[index].tabs
+            else
+              Center(
+                child: Text(
+                  AppLocalizations.of(context).translate('timerOn'),
+                  style: TextStyle(
+                      color: _bottomNavLogic.state.tabColors[_bottomNavLogic.state.selectedTab],
+                      fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00006,
+                      fontWeight: FontWeight.w400),
+                ),
+              ),
+          ],
+        );
+      }
       ),
     );
   }

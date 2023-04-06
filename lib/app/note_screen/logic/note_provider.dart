@@ -11,7 +11,6 @@ import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notecolor_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notepassword_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notetitletext_logic.dart';
-import 'package:todoapp/app/note_screen/logic/notevoice_recorder_logic.dart';
 import '../../../applocalizations.dart';
 import '../../../main.dart';
 
@@ -19,6 +18,7 @@ import 'package:collection/collection.dart';
 import '../../../widgets/snackbar.dart';
 import 'noteimage_logic.dart';
 import 'notetask_logic.dart';
+import 'notevoice_recorder_provider.dart';
 
 class NoteProvider extends ChangeNotifier {
   // It is used to store
@@ -177,7 +177,7 @@ class NoteProvider extends ChangeNotifier {
 
   // new Note clieked
   Future newNoteClicked(BuildContext context) async {
-    final _bottomNavProvider = Provider.of<BottomNavProvider>(context, listen: false);
+    final _bottomNavLogic = Provider.of<BottomNavLogic>(context, listen: false);
 
     final _noteTaskLogic = Provider.of<NoteTaskLogic>(context, listen: false);
 
@@ -192,13 +192,13 @@ class NoteProvider extends ChangeNotifier {
 
     newNote = true;
 
-    _bottomNavProvider.initialSelectedTab();
+    _bottomNavLogic.initialSelectedTab();
 
-    _bottomNavProvider.initialPage();
+    _bottomNavLogic.initialPage();
 
     _noteTaskLogic.resetCheckBoxs = false;
 
-    await _bottomNavProvider.initialTabs(context);
+    await _bottomNavLogic.initialTabs(context);
 
     takeSnapshot();
 
@@ -215,7 +215,7 @@ class NoteProvider extends ChangeNotifier {
 
     providerIndex = index;
 
-    final _bottomNavProvider = Provider.of<BottomNavProvider>(context, listen: false);
+    final _bottomNavLogic = Provider.of<BottomNavLogic>(context, listen: false);
 
     final _noteImageLogic = Get.find<NoteImageLogic>();
 
@@ -229,7 +229,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteColorLogic = Get.find<NoteColorLogic>();
 
-    _bottomNavProvider.initialSelectedTab();
+    _bottomNavLogic.initialSelectedTab();
 
     // getting the pics form the database.
     var bnote = await noteBox.get(providerKeys[providerIndex]);
@@ -278,9 +278,9 @@ class NoteProvider extends ChangeNotifier {
 
     newNote = false;
 
-    await _bottomNavProvider.initialTabs(context);
+    await _bottomNavLogic.initialTabs(context);
 
-    _bottomNavProvider.initialPage();
+    _bottomNavLogic.initialPage();
 
     notifyListeners();
 
@@ -291,7 +291,7 @@ class NoteProvider extends ChangeNotifier {
   void doneClicked(BuildContext context) async {
     noteContext = context;
 
-    final _bottomNavProvider = Provider.of<BottomNavProvider>(context, listen: false);
+    final _bottomNavLogic = Provider.of<BottomNavLogic>(context, listen: false);
 
     final _notePasswordLogic = Get.find<NotePasswordLogic>();
 

@@ -50,13 +50,13 @@ class _NoteScreenState extends State<NoteScreen> {
               width: isLandscape ? w * 0.8 : w,
               // padding: EdgeInsets.only(
               //     bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: Consumer<BottomNavProvider>(
-                builder: (ctx, _bottomNavProvider, _) {
+              child: Consumer<BottomNavLogic>(
+                builder: (ctx, _bottomNavLogic, _) {
                   return PageView(
                     onPageChanged: (value) {
-                      _bottomNavProvider.newTabSelectedAnimation(value);
+                      _bottomNavLogic.newTabSelectedAnimation(value);
                     },
-                    controller: _bottomNavProvider.pageController,
+                    controller: _bottomNavLogic.state.pageController,
                     children: [
                       TabView(
                         index: 0,

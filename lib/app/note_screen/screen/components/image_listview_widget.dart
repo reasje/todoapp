@@ -28,10 +28,10 @@ class ImageLisView extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: w * 0.05),
         child: ScrollConfiguration(
           behavior: NoGlowBehavior(),
-          child:
-              Consumer2<ThemeProvider,  BottomNavProvider>(builder: (ctx, _themeProvider,_bottomNavProvider, _) {
+          child: Consumer<ThemeProvider>(builder: (ctx, _themeProvider, _) {
             return Obx(() {
               final _noteImageLogic = Get.find<NoteImageLogic>();
+              final _bottomNavLogic = Get.find<BottomNavLogic>();
               return GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, childAspectRatio: 0.8, mainAxisSpacing: h * 0.05, crossAxisSpacing: w * 0.03),
@@ -53,7 +53,7 @@ class ImageLisView extends StatelessWidget {
                                     child: Icon(
                                       Icons.delete_sweep,
                                       size: h * w * 0.0002,
-                                      color: _bottomNavProvider.tabs[_bottomNavProvider.selectedTab].color,
+                                      color: _bottomNavLogic.state.tabs[_bottomNavLogic.state.selectedTab].color,
                                     ),
                                   ),
                                 ),
@@ -102,7 +102,7 @@ class ImageLisView extends StatelessWidget {
                               return Container(
                                 child: Shimmer.fromColors(
                                   period: Duration(seconds: 1),
-                                  baseColor: _bottomNavProvider.tabs[_bottomNavProvider.selectedTab].color.withOpacity(0.3),
+                                  baseColor: _bottomNavLogic.state.tabs[_bottomNavLogic.state.selectedTab].color.withOpacity(0.3),
                                   highlightColor: _themeProvider.shimmerColor,
                                   child: Container(
                                     margin: EdgeInsets.symmetric(horizontal: w * 0.03),
@@ -117,8 +117,7 @@ class ImageLisView extends StatelessWidget {
                           });
                     }
                   });
-            }
-            );
+            });
           }),
         ));
   }

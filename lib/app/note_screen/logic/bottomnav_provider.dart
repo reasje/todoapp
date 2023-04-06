@@ -14,40 +14,33 @@ import '../screen/components/title_textfield_widget.dart';
 import '../screen/components/voice_listview_widget.dart';
 import '../../../applocalizations.dart';
 import '../../../widgets/buttons.dart';
+import '../state/bottim_navigation_state.dart';
 import 'note_provider.dart';
 import 'notecolor_logic.dart';
 import 'notepassword_logic.dart';
 import 'notetitletext_logic.dart';
 
-class BottomNavProvider with ChangeNotifier {
-  int selectedTab = 0;
-
-  List<BottomNavTab> tabs = [];
-
-  List<Color> tabColors = [Color(0xffaa66cc), Color(0xFFff4444), Color(0xFFffbb33), Color(0xFF33b5e5), Color(0xFF00c851)];
-
-  PageController pageController;
-
-  List<NavigationItem> items;
+class BottomNavLogic extends GetxController {
+      BottomNavState state = BottomNavState();
 
   void initialSelectedTab() {
-    selectedTab == null ? selectedTab = 0 : null;
+    state.selectedTab == null ? state.selectedTab = 0 : null;
   }
 
   void initialPage() {
-    pageController = new PageController(initialPage: selectedTab, keepPage: true);
+    state.pageController = new PageController(initialPage: state.selectedTab, keepPage: true);
   }
 
   void newTabSelected(int index) {
-    selectedTab = index;
-    pageController.jumpToPage(index);
-    notifyListeners();
+    state.selectedTab = index;
+    state.pageController.jumpToPage(index);
+  
   }
 
   void newTabSelectedAnimation(int index) {
-    selectedTab = index;
-    pageController.animateToPage(index, duration: Duration(seconds: 1), curve: Curves.ease);
-    notifyListeners();
+    state.selectedTab = index;
+    state.pageController.animateToPage(index, duration: Duration(seconds: 1), curve: Curves.ease);
+  
   }
 
   Future<void> initialTabs(
@@ -56,30 +49,30 @@ class BottomNavProvider with ChangeNotifier {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
-    tabColors.shuffle();
-    items = [
-      NavigationItem(Icon(Icons.text_fields), Text(AppLocalizations.of(context).translate('text')), tabColors[0]),
-      NavigationItem(Icon(Icons.hourglass_empty), Text(AppLocalizations.of(context).translate('timer')), tabColors[1]),
-      NavigationItem(Icon(Icons.image_outlined), Text(AppLocalizations.of(context).translate('image')), tabColors[2]),
-      NavigationItem(Icon(Icons.voicemail), Text(AppLocalizations.of(context).translate('voice')), tabColors[3]),
-      NavigationItem(Icon(Icons.check), Text(AppLocalizations.of(context).translate('task')), tabColors[4]),
-    ];
+    state.tabColors.shuffle();
+    state.items.addAll([
+      NavigationItem(Icon(Icons.text_fields), Text(AppLocalizations.of(context).translate('text')), state.tabColors[0]),
+      NavigationItem(Icon(Icons.hourglass_empty), Text(AppLocalizations.of(context).translate('timer')), state.tabColors[1]),
+      NavigationItem(Icon(Icons.image_outlined), Text(AppLocalizations.of(context).translate('image')), state.tabColors[2]),
+      NavigationItem(Icon(Icons.voicemail), Text(AppLocalizations.of(context).translate('voice')), state.tabColors[3]),
+      NavigationItem(Icon(Icons.check), Text(AppLocalizations.of(context).translate('task')), state.tabColors[4]),
+    ]);
 
-    tabs = [
+    state.tabs.addAll([
       BottomNavTab(
           'Text',
           [
             TitleTextField(),
             TextTextField(),
           ],
-          items[0].color,
+          state.items[0].color,
           [
             Expanded(
               flex: 1,
               child: Container(
                 alignment: Alignment.centerLeft,
                 child: ButtonWidget(
-                  backgroundColor: items[0].color,
+                  backgroundColor: state.items[0].color,
                   sizePU: h * w * 0.00017,
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00008,
@@ -95,7 +88,7 @@ class BottomNavProvider with ChangeNotifier {
               child: Row(
                 children: [
                   ButtonWidget(
-                    backgroundColor: items[0].color,
+                    backgroundColor: state.items[0].color,
                     sizePU: h * w * 0.00017,
                     sizePD: h * w * 0.00018,
                     iconSize: h * w * 0.00008,
@@ -106,7 +99,7 @@ class BottomNavProvider with ChangeNotifier {
                     },
                   ),
                   ButtonWidget(
-                    backgroundColor: items[0].color,
+                    backgroundColor: state.items[0].color,
                     sizePU: h * w * 0.00017,
                     sizePD: h * w * 0.00018,
                     iconSize: h * w * 0.00008,
@@ -117,7 +110,7 @@ class BottomNavProvider with ChangeNotifier {
                     },
                   ),
                   ButtonWidget(
-                    backgroundColor: items[0].color,
+                    backgroundColor: state.items[0].color,
                     sizePU: h * w * 0.00017,
                     sizePD: h * w * 0.00018,
                     iconSize: h * w * 0.00008,
@@ -158,7 +151,7 @@ class BottomNavProvider with ChangeNotifier {
                     },
                   ),
                   ButtonWidget(
-                    backgroundColor: items[0].color,
+                    backgroundColor: state.items[0].color,
                     sizePU: h * w * 0.00017,
                     sizePD: h * w * 0.00018,
                     iconSize: h * w * 0.00008,
@@ -187,7 +180,7 @@ class BottomNavProvider with ChangeNotifier {
               child: Container(
                 alignment: Alignment.centerRight,
                 child: ButtonWidget(
-                  backgroundColor: items[0].color,
+                  backgroundColor: state.items[0].color,
                   sizePU: h * w * 0.00017,
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00008,
@@ -202,13 +195,13 @@ class BottomNavProvider with ChangeNotifier {
       BottomNavTab(
           "Image",
           [ImageLisView()],
-          items[2].color,
+          state.items[2].color,
           [
             Expanded(
               child: Container(
                 alignment: Alignment.centerLeft,
                 child: ButtonWidget(
-                  backgroundColor: items[2].color,
+                  backgroundColor: state.items[2].color,
                   sizePU: h * w * 0.00017,
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00008,
@@ -223,7 +216,7 @@ class BottomNavProvider with ChangeNotifier {
               child: Container(
                 alignment: Alignment.centerRight,
                 child: ButtonWidget(
-                  backgroundColor: items[2].color,
+                  backgroundColor: state.items[2].color,
                   sizePU: h * w * 0.00017,
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00008,
@@ -237,14 +230,14 @@ class BottomNavProvider with ChangeNotifier {
           ]),
       BottomNavTab(
           'Voice',
-          [VoiceListView(backGroundColor: items[3].color)],
-          items[3].color,
+          [VoiceListView(backGroundColor: state.items[3].color)],
+          state.items[3].color,
           [
             Expanded(
               child: Container(
                 alignment: Alignment.centerLeft,
                 child: ButtonWidget(
-                  backgroundColor: items[3].color,
+                  backgroundColor: state.items[3].color,
                   sizePU: h * w * 0.00017,
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00008,
@@ -259,7 +252,7 @@ class BottomNavProvider with ChangeNotifier {
               child: Container(
                 alignment: Alignment.centerRight,
                 child: ButtonWidget(
-                  backgroundColor: items[3].color,
+                  backgroundColor: state.items[3].color,
                   sizePU: h * w * 0.00017,
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00008,
@@ -275,16 +268,16 @@ class BottomNavProvider with ChangeNotifier {
           'Task',
           [
             TaskListView(
-              color: items[4].color,
+              color: state.items[4].color,
             )
           ],
-          items[4].color,
+          state.items[4].color,
           [
             Expanded(
               child: Container(
                 alignment: Alignment.centerLeft,
                 child: ButtonWidget(
-                  backgroundColor: items[4].color,
+                  backgroundColor: state.items[4].color,
                   sizePU: h * w * 0.00017,
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00008,
@@ -299,7 +292,7 @@ class BottomNavProvider with ChangeNotifier {
               child: Container(
                 alignment: Alignment.centerRight,
                 child: ButtonWidget(
-                  backgroundColor: items[4].color,
+                  backgroundColor: state.items[4].color,
                   sizePU: h * w * 0.00017,
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00008,
@@ -311,8 +304,8 @@ class BottomNavProvider with ChangeNotifier {
               ),
             ),
           ])
-    ];
+    ]);
 
-    notifyListeners();
+  
   }
 }

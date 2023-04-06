@@ -5,11 +5,12 @@ import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
 import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notetask_logic.dart';
-import 'package:todoapp/app/note_screen/logic/notevoice_recorder_logic.dart';
+
 import 'package:todoapp/app/logic/theme_provider.dart';
 
 import 'package:flutter/material.dart';
 
+import '../app/note_screen/logic/notevoice_recorder_provider.dart';
 import '../applocalizations.dart';
 
 Widget MySnackBar(
@@ -25,7 +26,8 @@ Widget MySnackBar(
 }) {
   final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
   final _noteImageLogic = Get.find<NoteImageLogic>();
-  final _noteVoiceRecorderLogic = Provider.of<NoteVoiceRecorderLogic>(context, listen: false);
+  final _noteVoiceRecorderLogic = Get.find<NoteVoiceRecorderLogic>();
+  ;
   final _noteTaskLogic = Provider.of<NoteTaskLogic>(context, listen: false);
   isWhite = _themeProvider.checkIsWhite();
   return SnackBar(

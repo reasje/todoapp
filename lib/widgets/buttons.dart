@@ -63,7 +63,7 @@ class _MyButtonState extends State<ButtonWidget> {
           //       final _signInProvider = Provider.of<SettingsLogic>(context, listen: false);
           //       final _connState = Provider.of<ConnectionLogic>(context, listen: false);
           //       final _noteImageLogic = Get.find<NoteImageLogic>();
-          //       final _noteVoiceRecorderLogic = Provider.of<NoteVoiceRecorderLogic>(context, listen: false);
+          //       final _noteVoiceRecorderLogic = Get.find<NoteVoiceRecorderLogic>();;
           //       final _noteTitleTextLogic = Get.find<NoteTitleTextLogic>();
           //       final _noteColorLogic = Provider.of<NoteColorLogic>(context, listen: false);
           //       final _donateProvider = Provider.of<DonateProvider>(context, listen: false);
