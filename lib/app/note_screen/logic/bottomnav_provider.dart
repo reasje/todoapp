@@ -17,7 +17,7 @@ import '../../../widgets/buttons.dart';
 import 'note_provider.dart';
 import 'notecolor_logic.dart';
 import 'notepassword_logic.dart';
-import 'notetitletext_provider.dart';
+import 'notetitletext_logic.dart';
 
 class BottomNavProvider with ChangeNotifier {
   int selectedTab = 0;
@@ -101,8 +101,8 @@ class BottomNavProvider with ChangeNotifier {
                     iconSize: h * w * 0.00008,
                     iconData: Icons.undo_rounded,
                     function: () {
-                      final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(context, listen: false);
-                      _noteTitleTextProvider.canUndo ? _noteTitleTextProvider.changesUndo() : null;
+                      final _noteTitleTextLogic = Get.find<NoteTitleTextLogic>();
+                      _noteTitleTextLogic.state.canUndo ? _noteTitleTextLogic.changesUndo() : null;
                     },
                   ),
                   ButtonWidget(
@@ -112,8 +112,8 @@ class BottomNavProvider with ChangeNotifier {
                     iconSize: h * w * 0.00008,
                     iconData: Icons.redo_rounded,
                     function: () {
-                      final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(context, listen: false);
-                      _noteTitleTextProvider.canRedo ? _noteTitleTextProvider.changesRedo() : null;
+                      final _noteTitleTextLogic = Get.find<NoteTitleTextLogic>();
+                      _noteTitleTextLogic.state.canRedo ? _noteTitleTextLogic.changesRedo() : null;
                     },
                   ),
                   ButtonWidget(

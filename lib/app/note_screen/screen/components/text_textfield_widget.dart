@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
-import 'package:todoapp/app/note_screen/logic/notetitletext_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notetitletext_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 
 import '../../../../applocalizations.dart';
@@ -13,7 +14,7 @@ class TextTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _themeProvider = Provider.of<ThemeProvider>(context);
-    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(context, listen: false);
+    final _noteTitleTextLogic = Get.find<NoteTitleTextLogic>();
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
@@ -24,10 +25,10 @@ class TextTextField extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(h * 0.016)),
       ),
       child: TextField(
-        controller: _noteTitleTextProvider.text,
-        focusNode: _noteTitleTextProvider.ftext,
+        controller: _noteTitleTextLogic.state.textController,
+        focusNode: _noteTitleTextLogic.state.textFocusNode,
         onChanged: (newVal) {
-          _noteTitleTextProvider.listenerActivated(newVal);
+          _noteTitleTextLogic.listenerActivated(newVal);
         },
         keyboardType: TextInputType.multiline,
         maxLines: null,
@@ -39,7 +40,7 @@ class TextTextField extends StatelessWidget {
             suffixIcon: IconButton(
               icon: Icon(Icons.clear_sharp),
               onPressed: () {
-                _noteTitleTextProvider.clearText();
+                _noteTitleTextLogic.clearText();
               },
             ),
             contentPadding: EdgeInsets.symmetric(

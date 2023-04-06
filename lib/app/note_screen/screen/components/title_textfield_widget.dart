@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
-import 'package:todoapp/app/note_screen/logic/notetitletext_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notetitletext_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 
 import '../../../../applocalizations.dart';
@@ -14,7 +15,7 @@ class TitleTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _themeProvider = Provider.of<ThemeProvider>(context);
-    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(context, listen: false);
+    final _noteTitleTextLogic = Get.find<NoteTitleTextLogic>();
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
@@ -25,8 +26,8 @@ class TitleTextField extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(h * 0.016)),
       ),
       child: TextField(
-        controller: _noteTitleTextProvider.title,
-        focusNode: _noteTitleTextProvider.fTitle,
+        controller: _noteTitleTextLogic.state.titleController,
+        focusNode: _noteTitleTextLogic.state.titleFocusNode,
         keyboardType: TextInputType.multiline,
         maxLines: null,
         cursorColor: _themeProvider.swashColor,
@@ -38,7 +39,7 @@ class TitleTextField extends StatelessWidget {
             suffixIcon: IconButton(
               icon: Icon(Icons.clear_sharp),
               onPressed: () {
-                _noteTitleTextProvider.clearTitle();
+                _noteTitleTextLogic.clearTitle();
               },
             ),
             hintText: AppLocalizations.of(context).translate('titleHint'),

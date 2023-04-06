@@ -10,7 +10,7 @@ import 'package:todoapp/model/task_model.dart';
 import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notecolor_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notepassword_logic.dart';
-import 'package:todoapp/app/note_screen/logic/notetitletext_provider.dart';
+import 'package:todoapp/app/note_screen/logic/notetitletext_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notevoice_recorder_provider.dart';
 import '../../../applocalizations.dart';
 import '../../../main.dart';
@@ -55,7 +55,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
-    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+    final _noteTitleTextLogic = Get.find<NoteTitleTextLogic>();
 
     final _noteColorLogic = Get.find<NoteColorLogic>();
 
@@ -63,9 +63,9 @@ class NoteProvider extends ChangeNotifier {
 
     _notePasswordLogic.clearPassword();
 
-    _noteTitleTextProvider.clearTitle();
+    _noteTitleTextLogic.clearTitle();
 
-    _noteTitleTextProvider.clearText();
+    _noteTitleTextLogic.clearText();
 
     _noteVoiceRecorderProvider.clearVoiceList();
 
@@ -91,19 +91,19 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
-    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+    final _noteTitleTextLogic = Get.find<NoteTitleTextLogic>();
 
     final _noteColorLogic = Get.find<NoteColorLogic>();
 
-    _noteTitleTextProvider.ttitle = _noteTitleTextProvider.title.text;
+    _noteTitleTextLogic.state.titleSnapShot = _noteTitleTextLogic.state.titleController.text;
 
-    _noteTitleTextProvider.ttext = _noteTitleTextProvider.text.text;
+    _noteTitleTextLogic.state.textSnapShot = _noteTitleTextLogic.state.textController.text;
 
-    _noteTitleTextProvider.old_value = _noteTitleTextProvider.text.text;
+    _noteTitleTextLogic.state.textOldValue = _noteTitleTextLogic.state.textController.text;
 
     _noteColorLogic.state.colorSnapShot = _noteColorLogic.state.noteColor;
 
-    _noteTitleTextProvider.begin_edit = false;
+    _noteTitleTextLogic.state.beginEdit = false;
 
     _notePasswordLogic.state.passwordSnapShot = _notePasswordLogic.state.password;
 
@@ -126,11 +126,11 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
-    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+    final _noteTitleTextLogic = Get.find<NoteTitleTextLogic>();
 
     if (_notePasswordLogic.state.password == _notePasswordLogic.state.passwordSnapShot &&
-        _noteTitleTextProvider.ttitle == _noteTitleTextProvider.title.text &&
-        _noteTitleTextProvider.ttext == _noteTitleTextProvider.text.text &&
+        _noteTitleTextLogic.state.titleSnapShot == _noteTitleTextLogic.state.titleController.text &&
+        _noteTitleTextLogic.state.textSnapShot == _noteTitleTextLogic.state.textController.text &&
         ListEquality().equals(_noteImageLogic.state.imageList, _noteImageLogic.state.imageListSnapshot) &&
         ListEquality().equals(_noteVoiceRecorderProvider.voiceList, _noteVoiceRecorderProvider.voiceListSnapshot) &&
         ListEquality().equals(_noteTaskLogic.state.taskControllerList, _noteTaskLogic.state.taskControllerListSnapShot)) {
@@ -187,7 +187,8 @@ class NoteProvider extends ChangeNotifier {
 
     clearControllers();
 
-    _noteTaskLogic.state..taskControllerList.add(TaskController(TextEditingController(text: ""), false, FocusNode(), PageStorageKey<String>('pageKey 0')));
+    _noteTaskLogic.state
+      ..taskControllerList.add(TaskController(TextEditingController(text: ""), false, FocusNode(), PageStorageKey<String>('pageKey 0')));
 
     newNote = true;
 
@@ -224,7 +225,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
-    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+    final _noteTitleTextLogic = Get.find<NoteTitleTextLogic>();
 
     final _noteColorLogic = Get.find<NoteColorLogic>();
 
@@ -255,21 +256,22 @@ class NoteProvider extends ChangeNotifier {
       // obtained
       _noteTaskLogic.clearTaskList();
     } else {
-      _noteTaskLogic.state.taskControllerList.add(TaskController(TextEditingController(text: ""), false, FocusNode(), PageStorageKey<String>('pageKey 0')));
+      _noteTaskLogic.state.taskControllerList
+          .add(TaskController(TextEditingController(text: ""), false, FocusNode(), PageStorageKey<String>('pageKey 0')));
     }
 
     _noteTaskLogic.resetCheckBoxs = bnote.resetCheckBoxs;
 
-    _noteTitleTextProvider.title.text = bnote.title;
+    _noteTitleTextLogic.state.titleController.text = bnote.title;
 
-    _noteTitleTextProvider.text.text = bnote.text;
+    _noteTitleTextLogic.state.textController.text = bnote.text;
 
-    _noteTitleTextProvider.ftext.requestFocus();
+    _noteTitleTextLogic.state.textFocusNode.requestFocus();
 
     // saving password
     _notePasswordLogic.state.password = bnote.password;
 
-    _noteTitleTextProvider.text.selection = TextSelection.fromPosition(TextPosition(offset: _noteTitleTextProvider.text.text.length));
+    _noteTitleTextLogic.state.textController.selection = TextSelection.fromPosition(TextPosition(offset: _noteTitleTextLogic.state.textController.text.length));
 
     _noteColorLogic.initialNoteColor(Color(bnote.color));
 
@@ -298,7 +300,7 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
-    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+    final _noteTitleTextLogic = Get.find<NoteTitleTextLogic>();
 
     final _noteColorLogic = Get.find<NoteColorLogic>();
 
@@ -307,8 +309,8 @@ class NoteProvider extends ChangeNotifier {
     if (newNote) {
       // One of the title or text fields must be filled for the new Note
 
-      if (_noteTitleTextProvider.text.text.isEmpty &&
-          _noteTitleTextProvider.title.text.isEmpty &&
+      if (_noteTitleTextLogic.state.textController.text.isEmpty &&
+          _noteTitleTextLogic.state.titleController.text.isEmpty &&
           _noteTaskLogic.state.taskControllerList[0].textEditingController.text == "" &&
           _noteImageLogic.state.imageList.isEmpty &&
           _noteVoiceRecorderProvider.voiceList.isEmpty &&
@@ -328,15 +330,15 @@ class NoteProvider extends ChangeNotifier {
         } else {
           notSaving = 0;
           Navigator.pop(noteContext);
-          _noteTitleTextProvider.changes.clearHistory();
+          _noteTitleTextLogic.state.changes.clearHistory();
           clearControllers();
         }
       } else {
         String noteTitle;
 
-        _noteTitleTextProvider.title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = _noteTitleTextProvider.title.text;
+        _noteTitleTextLogic.state.titleController.text.isEmpty ? noteTitle = "Unamed" : noteTitle = _noteTitleTextLogic.state.titleController.text;
 
-        var noteText = _noteTitleTextProvider.text.text;
+        var noteText = _noteTitleTextLogic.state.textController.text;
 
         print("_noteColorLogic.noteColor? ${_noteColorLogic.state.noteColor}");
         var color = _noteColorLogic.state.noteColor.value;
@@ -346,27 +348,27 @@ class NoteProvider extends ChangeNotifier {
         if (_noteTaskLogic.state.taskControllerList.isNotEmpty) {
           for (int i = 0; i < _noteTaskLogic.state.taskControllerList.length; i++) {
             if (_noteTaskLogic.state.taskControllerList[i].textEditingController.text != '') {
-              _noteTaskLogic.state.taskList
-                  .add(Task(_noteTaskLogic.state.taskControllerList[i].textEditingController.text, _noteTaskLogic.state.taskControllerList[i].isDone));
+              _noteTaskLogic.state.taskList.add(
+                  Task(_noteTaskLogic.state.taskControllerList[i].textEditingController.text, _noteTaskLogic.state.taskControllerList[i].isDone));
             }
           }
         }
         Note note = Note(noteTitle, noteText, false, color, _noteImageLogic.state.imageList, _noteVoiceRecorderProvider.voiceList,
             _noteTaskLogic.state.taskList, _noteTaskLogic.resetCheckBoxs, password);
         await noteBox.add(note);
-        _noteTitleTextProvider.changes.clearHistory();
+        _noteTitleTextLogic.state.changes.clearHistory();
         clearControllers();
         notifyListeners();
         Navigator.pop(noteContext);
       }
     } else {
       // One of the title or text fields must be filled
-      if (_noteTitleTextProvider.text.text.isNotEmpty || _noteTitleTextProvider.title.text.isNotEmpty) {
+      if (_noteTitleTextLogic.state.textController.text.isNotEmpty || _noteTitleTextLogic.state.titleController.text.isNotEmpty) {
         var bnote = await noteBox.get(providerKeys[providerIndex]);
 
         var noteTitle;
 
-        _noteTitleTextProvider.title.text.isEmpty ? noteTitle = "Unamed" : noteTitle = _noteTitleTextProvider.title.text;
+        _noteTitleTextLogic.state.titleController.text.isEmpty ? noteTitle = "Unamed" : noteTitle = _noteTitleTextLogic.state.titleController.text;
 
         var color = _noteColorLogic.state.noteColor.value;
 
@@ -375,17 +377,17 @@ class NoteProvider extends ChangeNotifier {
         if (_noteTaskLogic.state.taskControllerList.isNotEmpty) {
           for (int i = 0; i < _noteTaskLogic.state.taskControllerList.length; i++) {
             if (_noteTaskLogic.state.taskControllerList[i].textEditingController.text != '') {
-              _noteTaskLogic.state.taskList
-                  .add(Task(_noteTaskLogic.state.taskControllerList[i].textEditingController.text, _noteTaskLogic.state.taskControllerList[i].isDone));
+              _noteTaskLogic.state.taskList.add(
+                  Task(_noteTaskLogic.state.taskControllerList[i].textEditingController.text, _noteTaskLogic.state.taskControllerList[i].isDone));
             }
           }
         }
-        Note note = new Note(noteTitle, _noteTitleTextProvider.text.text, bnote.isChecked, color, _noteImageLogic.state.imageList,
+        Note note = new Note(noteTitle, _noteTitleTextLogic.state.textController.text, bnote.isChecked, color, _noteImageLogic.state.imageList,
             _noteVoiceRecorderProvider.voiceList, _noteTaskLogic.state.taskList, _noteTaskLogic.resetCheckBoxs, password);
 
         await noteBox.put(providerKeys[providerIndex], note);
 
-        _noteTitleTextProvider.changes.clearHistory();
+        _noteTitleTextLogic.state.changes.clearHistory();
 
         clearControllers();
 
@@ -393,7 +395,7 @@ class NoteProvider extends ChangeNotifier {
       } else {
         await noteBox.delete(providerKeys[providerIndex]);
 
-        _noteTitleTextProvider.changes.clearHistory();
+        _noteTitleTextLogic.state.changes.clearHistory();
 
         clearControllers();
 
@@ -416,11 +418,11 @@ class NoteProvider extends ChangeNotifier {
 
     final _noteTaskLogic = Get.find<NoteTaskLogic>();
 
-    final _noteTitleTextProvider = Provider.of<NoteTitleTextProvider>(noteContext, listen: false);
+    final _noteTitleTextLogic = Get.find<NoteTitleTextLogic>();
 
     if (isEdited()) {
-      if (_noteTitleTextProvider.text.text.isEmpty &&
-          _noteTitleTextProvider.title.text.isEmpty &&
+      if (_noteTitleTextLogic.state.textController.text.isEmpty &&
+          _noteTitleTextLogic.state.titleController.text.isEmpty &&
           _noteTaskLogic.state.taskControllerList[0].textEditingController.text == "" &&
           _noteImageLogic.state.imageList.isEmpty &&
           _noteVoiceRecorderProvider.voiceList.isEmpty &&
@@ -450,7 +452,7 @@ class NoteProvider extends ChangeNotifier {
 
           Navigator.pop(noteContext);
 
-          _noteTitleTextProvider.changes.clearHistory();
+          _noteTitleTextLogic.state.changes.clearHistory();
 
           clearControllers();
         }
@@ -460,7 +462,7 @@ class NoteProvider extends ChangeNotifier {
       // future undo will be deleted to prevent the future problem
       // causes !
 
-      _noteTitleTextProvider.changes.clearHistory();
+      _noteTitleTextLogic.state.changes.clearHistory();
 
       // changing the stacks and getting back to listview Screen !
       clearControllers();
