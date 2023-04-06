@@ -16,7 +16,7 @@ import '../../../applocalizations.dart';
 import '../../../widgets/buttons.dart';
 import 'note_provider.dart';
 import 'notecolor_logic.dart';
-import 'notepassword_provider.dart';
+import 'notepassword_logic.dart';
 import 'notetitletext_provider.dart';
 
 class BottomNavProvider with ChangeNotifier {
@@ -165,8 +165,8 @@ class BottomNavProvider with ChangeNotifier {
                     iconData: Icons.vpn_key_rounded,
                     function: () {
                       TextEditingController dialogController = TextEditingController(text: '');
-                      final _notePasswordProvider = Provider.of<NotePasswordProvider>(Get.overlayContext, listen: false);
-                      dialogController.text = _notePasswordProvider.password;
+                      final _notePasswordLogic = Provider.of<NotePasswordLogic>(Get.overlayContext, listen: false);
+                      dialogController.text = _notePasswordLogic.state.password;
                       showAlertDialog(context,
                           title: AppLocalizations.of(context).translate('setPassword'),
                           hastTextField: true,
@@ -175,7 +175,7 @@ class BottomNavProvider with ChangeNotifier {
                           textInputType: TextInputType.number,
                           okButtonText: AppLocalizations.of(context).translate('ok'),
                           cancelButtonText: AppLocalizations.of(context).translate('cancel'), okButtonFunction: () {
-                        _notePasswordProvider.setPassword(dialogController.text);
+                        _notePasswordLogic.setPassword(dialogController.text);
                       });
                     },
                   ),
