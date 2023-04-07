@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/app/donate/logic/donate_provider.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:todoapp/app/note_screen/logic/note_provider.dart';
+import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/locales/locales.dart' as locale;
 import 'package:get/get.dart';
 import '../../../applocalizations.dart';

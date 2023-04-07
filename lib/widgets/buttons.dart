@@ -59,7 +59,7 @@ class _MyButtonState extends State<ButtonWidget> {
           // if (mounted) {
           //   setState(() {
           //     Future.delayed(Duration(milliseconds: 100), () async {
-          //       final _noteLogic = Provider.of<NoteProvider>(context, listen: false);
+          //       final _noteLogic = Provider.of< NoteLogic>(context, listen: false);
           //       final _signInProvider = Provider.of<SettingsLogic>(context, listen: false);
           //       final _connState = Provider.of<ConnectionLogic>(context, listen: false);
           //       final _noteImageLogic = Get.find<NoteImageLogic>();

@@ -1,10 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapp/app/note_screen/logic/notecolor_logic.dart';
+import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
+import 'package:todoapp/app/note_screen/logic/notepassword_logic.dart';
+import 'package:todoapp/app/note_screen/logic/notetask_logic.dart';
+import 'package:todoapp/app/note_screen/logic/notetitletext_logic.dart';
+import 'package:todoapp/app/note_screen/logic/notevoice_player_logic.dart';
+import 'package:todoapp/app/note_screen/logic/notevoice_recorder_provider.dart';
 import 'package:todoapp/model/note_model.dart';
-import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
-import 'package:todoapp/app/note_screen/logic/note_provider.dart';
+import 'package:todoapp/app/note_screen/logic/bottomnav_logic.dart';
+import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 
 import '../../../main.dart';
@@ -23,9 +31,19 @@ class NoteScreen extends StatefulWidget {
 }
 
 class _NoteScreenState extends State<NoteScreen> {
+  final _bottomNavLogic = Get.put(BottomNavLogic);
+  final _noteLogic = Get.put(NoteLogic);
+  final _noteColorLogic = Get.put(NoteColorLogic);
+  final _noteImageLogic = Get.put(NoteImageLogic);
+  final _noteTaskLogic = Get.put(NoteTaskLogic);
+  final _noteVoicePlayerLogic = Get.put(NoteVoicePlayerLogic);
+  final _noteVoiceRecorderLogic = Get.put(NoteVoiceRecorderLogic);
+  final _noteTitleTextLogic = Get.put(NoteTitleTextLogic);
+  final _notePasswordLogic = Get.put(NotePasswordLogic);
+
   @override
   Widget build(BuildContext context) {
-    final _noteLogic = Provider.of<NoteProvider>(context);
+    final _noteLogic = Provider.of<NoteLogic>(context);
     final _themeProvider = Provider.of<ThemeProvider>(context);
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
@@ -37,7 +55,7 @@ class _NoteScreenState extends State<NoteScreen> {
       bottomNavigationBar: BottomNavWidget(),
       body: WillPopScope(
         onWillPop: () {
-          _noteLogic.doneClicked(context);
+          _noteLogic.doneClicked();
           return;
         },
         child: GestureDetector(

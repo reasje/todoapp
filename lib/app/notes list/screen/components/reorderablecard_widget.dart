@@ -4,7 +4,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
-import 'package:todoapp/app/note_screen/logic/note_provider.dart';
+import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 import 'package:todoapp/locales/locales.dart' as locale;
 import 'package:get/get.dart';
@@ -21,7 +21,8 @@ class ReOrderableCardWidget extends StatelessWidget {
   final index;
   @override
   Widget build(BuildContext context) {
-    final _noteProvider = Provider.of<NoteProvider>(context, listen: false);
+    final _noteLogic = Get.find<NoteLogic>();
+    ;
 
     final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     List<int> keys = notes.keys.cast<int>().toList();
@@ -51,7 +52,7 @@ class ReOrderableCardWidget extends StatelessWidget {
         notes.delete(keys[index]);
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(MySnackBar(
-           locale.undoNote.tr,
+          locale.undoNote.tr,
           'undoNote',
           true,
           context: context,
@@ -96,7 +97,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                   onTap: () async {
                                     if (snapShot.data.password == '' || snapShot.data.password == null) {
                                       // does not have a password
-                                      _noteProvider.loadNote(context, keys, index).then((value) {
+                                      _noteLogic.loadNote( keys, index).then((value) {
                                         Get.to(NoteScreen(), transition: Transition.rightToLeft);
                                       });
                                     } else {
@@ -107,7 +108,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                         canCancel: true,
                                         didUnlocked: () {
                                           Get.back();
-                                          _noteProvider.loadNote(context, keys, index).then((value) {
+                                          _noteLogic.loadNote( keys, index).then((value) {
                                             Get.to(NoteScreen(), transition: Transition.rightToLeft);
                                           });
                                         },
@@ -188,7 +189,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          _noteProvider.updateIsChecked(keys, index);
+                                          _noteLogic.updateIsChecked(keys, index);
                                         },
                                         child: Container(
                                             height: h * 0.04,
@@ -228,7 +229,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                   onTap: () async {
                                     if (snapShot.data.password == '' || snapShot.data.password == null) {
                                       // does not have a password
-                                      _noteProvider.loadNote(context, keys, index).then((value) {
+                                      _noteLogic.loadNote( keys, index).then((value) {
                                         Get.to(NoteScreen(), transition: Transition.rightToLeft);
                                       });
                                     } else {
@@ -240,7 +241,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                         canCancel: true,
                                         didUnlocked: () {
                                           Get.back();
-                                          _noteProvider.loadNote(context, keys, index).then((value) {
+                                          _noteLogic.loadNote( keys, index).then((value) {
                                             Get.to(NoteScreen(), transition: Transition.rightToLeft);
                                           });
                                         },

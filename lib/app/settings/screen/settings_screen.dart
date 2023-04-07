@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:get/get.dart';
-import 'package:todoapp/app/note_screen/logic/note_provider.dart';
+import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 import 'package:todoapp/app/settings/drive_logic.dart';
 import 'package:provider/provider.dart';

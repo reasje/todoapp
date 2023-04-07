@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/taskController.dart';
 import 'package:todoapp/model/task_model.dart';
-import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
+import 'package:todoapp/app/note_screen/logic/bottomnav_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notecolor_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notepassword_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notetitletext_logic.dart';
@@ -16,35 +16,20 @@ import '../../../main.dart';
 
 import 'package:collection/collection.dart';
 import '../../../widgets/snackbar.dart';
+import '../state/note_state.dart';
 import 'noteimage_logic.dart';
 import 'notetask_logic.dart';
 import 'notevoice_recorder_provider.dart';
 
-class NoteProvider extends ChangeNotifier {
-  // It is used to store
-  // the theme status as string
-  final prefsBox = Hive.box<String>(prefsBoxName);
+class NoteLogic extends GetxController {
+    NoteState state = NoteState();
+  @override
+  void onInit() {
+      state.prefsBox = Hive.box<String>(prefsBoxName);
 
-  //BuildContext donateContext;
-  // Hive box for notes
-  final noteBox = Hive.lazyBox<Note>(noteBoxName);
-
-  // this is used for showing the SnackBar
-  BuildContext noteContext;
-
-  // the index of the main stack and the floating stack
-  // to press the back button twice for getting back to the notes list ! without saving
-  int notSaving = 0;
-
-  // used to save the keys in provider
-  List<int> providerKeys;
-
-  int providerIndex;
-
-  bool newNote;
-
-  Note bnote;
-
+  state.noteBox = Hive.lazyBox<Note>(noteBoxName);
+    super.onInit();
+  }
   // for the clear the form
   void clearControllers() {
     final _noteImageLogic = Get.find<NoteImageLogic>();
@@ -73,11 +58,10 @@ class NoteProvider extends ChangeNotifier {
 
     _noteTaskLogic.clearTaskControllerList();
 
-    providerIndex = null;
+    state.providerIndex = null;
 
     _noteColorLogic.clearNoteColor();
 
-    notifyListeners();
   }
 
   // getting the controller before the user enters the editing area
@@ -107,7 +91,7 @@ class NoteProvider extends ChangeNotifier {
 
     _notePasswordLogic.state.passwordSnapShot = _notePasswordLogic.state.password;
 
-    if (!newNote) {
+    if (!state.newNote) {
       _noteImageLogic.initialImageListSnapshot();
 
       _noteVoiceRecorderLogic.initialVoiceListSnapshot();
@@ -142,11 +126,11 @@ class NoteProvider extends ChangeNotifier {
 
   // updating the database when the check box is checked or unchecked
   void updateIsChecked(List<int> keys, int index) async {
-    providerKeys = keys;
+    state.providerKeys = keys;
 
-    providerIndex = index;
+    state.providerIndex = index;
 
-    var bnote = await noteBox.get(providerKeys[providerIndex]);
+    var bnote = await state.noteBox.get(state.providerKeys[state.providerIndex]);
 
     var isChecked = bnote.isChecked;
 
@@ -170,18 +154,18 @@ class NoteProvider extends ChangeNotifier {
 
     Note note = Note(noteTitle, noteText, isChecked, noteColor, ntImageList, ntVoiceList, ntTaskList, ntResetCheckBoxs, ntPassword);
 
-    noteBox.put(providerKeys[providerIndex], note);
+    state.noteBox.put(state.providerKeys[state.providerIndex], note);
 
-    //notifyListeners();
+  
   }
 
   // new Note clieked
-  Future newNoteClicked(BuildContext context) async {
-    final _bottomNavLogic = Provider.of<BottomNavLogic>(context, listen: false);
+  Future newNoteClicked() async {
+    final _bottomNavLogic = Provider.of<BottomNavLogic>(Get.overlayContext, listen: false);
 
-    final _noteTaskLogic = Provider.of<NoteTaskLogic>(context, listen: false);
+    final _noteTaskLogic = Provider.of<NoteTaskLogic>(Get.overlayContext, listen: false);
 
-    noteContext = context;
+     
     // When the add icon is tapped this function will be executed and
     // prepare the provider for the new Note
 
@@ -190,7 +174,7 @@ class NoteProvider extends ChangeNotifier {
     _noteTaskLogic.state
       ..taskControllerList.add(TaskController(TextEditingController(text: ""), false, FocusNode(), PageStorageKey<String>('pageKey 0')));
 
-    newNote = true;
+    state.newNote = true;
 
     _bottomNavLogic.initialSelectedTab();
 
@@ -198,24 +182,23 @@ class NoteProvider extends ChangeNotifier {
 
     _noteTaskLogic.resetCheckBoxs = false;
 
-    await _bottomNavLogic.initialTabs(context);
+    await _bottomNavLogic.initialTabs(Get.overlayContext);
 
     takeSnapshot();
 
-    notifyListeners();
 
     return true;
   }
 
   // used indie list view after an elemt of listview is tapped
-  Future<void> loadNote(BuildContext context, [List<int> keys, int index]) async {
-    noteContext = context;
+  Future<void> loadNote(  [List<int> keys, int index]) async {
+     
 
-    providerKeys = keys;
+    state.providerKeys = keys;
 
-    providerIndex = index;
+    state.providerIndex = index;
 
-    final _bottomNavLogic = Provider.of<BottomNavLogic>(context, listen: false);
+    final _bottomNavLogic = Provider.of<BottomNavLogic>(Get.overlayContext, listen: false);
 
     final _noteImageLogic = Get.find<NoteImageLogic>();
 
@@ -232,7 +215,7 @@ class NoteProvider extends ChangeNotifier {
     _bottomNavLogic.initialSelectedTab();
 
     // getting the pics form the database.
-    var bnote = await noteBox.get(providerKeys[providerIndex]);
+    var bnote = await state.noteBox.get(state.providerKeys[state.providerIndex]);
 
     // if the note doesnot include any notes pass
     if (bnote.imageList?.isNotEmpty ?? false) {
@@ -276,22 +259,21 @@ class NoteProvider extends ChangeNotifier {
 
     _noteColorLogic.initialNoteColor(Color(bnote.color));
 
-    newNote = false;
+    state.newNote = false;
 
-    await _bottomNavLogic.initialTabs(context);
+    await _bottomNavLogic.initialTabs(Get.overlayContext);
 
     _bottomNavLogic.initialPage();
 
-    notifyListeners();
 
     takeSnapshot();
   }
 
   // executed when the user tapped on the check floating button (done icon FAB)
-  void doneClicked(BuildContext context) async {
-    noteContext = context;
+  void doneClicked(  ) async {
+     
 
-    final _bottomNavLogic = Provider.of<BottomNavLogic>(context, listen: false);
+    final _bottomNavLogic = Provider.of<BottomNavLogic>(Get.overlayContext, listen: false);
 
     final _notePasswordLogic = Get.find<NotePasswordLogic>();
 
@@ -307,7 +289,7 @@ class NoteProvider extends ChangeNotifier {
 
     // checking whether your going to update the note or add new one
     // that is done by chekcing the newNote true or false
-    if (newNote) {
+    if (state.newNote) {
       // One of the title or text fields must be filled for the new Note
 
       if (_noteTitleTextLogic.state.textController.text.isEmpty &&
@@ -316,20 +298,20 @@ class NoteProvider extends ChangeNotifier {
           _noteImageLogic.state.imageList.isEmpty &&
           _noteVoiceRecorderLogic.state.voiceList.isEmpty &&
           _notePasswordLogic.state.password == '') {
-        if (notSaving == 0) {
-          ScaffoldMessenger.of(noteContext).showSnackBar(MySnackBar(
+        if (state.notSaving == 0) {
+          ScaffoldMessenger.of(Get.overlayContext).showSnackBar(MySnackBar(
             // TODO making better the emptyFieldAlert to title and text must not be null
-            AppLocalizations.of(noteContext).translate('emptyFieldsAlert'),
+            AppLocalizations.of(Get.overlayContext).translate('emptyFieldsAlert'),
             'emptyFieldsAlert',
             false,
-            context: noteContext,
+            context: Get.overlayContext,
           ));
-          notSaving = notSaving + 1;
+          state.notSaving = state.notSaving + 1;
           Future.delayed(Duration(seconds: 10), () {
-            notSaving = 0;
+            state.notSaving = 0;
           });
         } else {
-          notSaving = 0;
+          state.notSaving = 0;
           Get.back();
           _noteTitleTextLogic.state.changes.clearHistory();
           clearControllers();
@@ -356,16 +338,16 @@ class NoteProvider extends ChangeNotifier {
         }
         Note note = Note(noteTitle, noteText, false, color, _noteImageLogic.state.imageList, _noteVoiceRecorderLogic.state.voiceList,
             _noteTaskLogic.state.taskList, _noteTaskLogic.resetCheckBoxs, password);
-        await noteBox.add(note);
+        await state.noteBox.add(note);
         _noteTitleTextLogic.state.changes.clearHistory();
         clearControllers();
-        notifyListeners();
+  
         Get.back();
       }
     } else {
       // One of the title or text fields must be filled
       if (_noteTitleTextLogic.state.textController.text.isNotEmpty || _noteTitleTextLogic.state.titleController.text.isNotEmpty) {
-        var bnote = await noteBox.get(providerKeys[providerIndex]);
+        var bnote = await state.noteBox.get(state.providerKeys[state.providerIndex]);
 
         var noteTitle;
 
@@ -386,7 +368,7 @@ class NoteProvider extends ChangeNotifier {
         Note note = new Note(noteTitle, _noteTitleTextLogic.state.textController.text, bnote.isChecked, color, _noteImageLogic.state.imageList,
             _noteVoiceRecorderLogic.state.voiceList, _noteTaskLogic.state.taskList, _noteTaskLogic.resetCheckBoxs, password);
 
-        await noteBox.put(providerKeys[providerIndex], note);
+        await state.noteBox.put(state.providerKeys[state.providerIndex], note);
 
         _noteTitleTextLogic.state.changes.clearHistory();
 
@@ -394,7 +376,7 @@ class NoteProvider extends ChangeNotifier {
 
         Get.back();
       } else {
-        await noteBox.delete(providerKeys[providerIndex]);
+        await state.noteBox.delete(state.providerKeys[state.providerIndex]);
 
         _noteTitleTextLogic.state.changes.clearHistory();
 
@@ -408,8 +390,8 @@ class NoteProvider extends ChangeNotifier {
   // When the clear Icon clicked or back button is tapped
   // this fucntion will be executed checking for changes
   // if the changes has been made it is going to show an alert
-  void cancelClicked(BuildContext context) {
-    noteContext = context;
+  void cancelClicked(  ) {
+     
 
     final _notePasswordLogic = Get.find<NotePasswordLogic>();
 
@@ -428,28 +410,28 @@ class NoteProvider extends ChangeNotifier {
           _noteImageLogic.state.imageList.isEmpty &&
           _noteVoiceRecorderLogic.state.voiceList.isEmpty &&
           _notePasswordLogic.state.password == '') {
-        ScaffoldMessenger.of(noteContext).clearSnackBars();
+        ScaffoldMessenger.of(Get.overlayContext).clearSnackBars();
 
-        ScaffoldMessenger.of(noteContext)
-            .showSnackBar(MySnackBar(AppLocalizations.of(noteContext).translate('willingToDelete'), 'willingToDelete', false, context: noteContext));
+        ScaffoldMessenger.of(Get.overlayContext)
+            .showSnackBar(MySnackBar(AppLocalizations.of(Get.overlayContext).translate('willingToDelete'), 'willingToDelete', false, context: Get.overlayContext));
 
         Get.back();
 
         clearControllers();
       } else {
-        if (notSaving == 0) {
-          ScaffoldMessenger.of(noteContext).clearSnackBars();
+        if (state.notSaving == 0) {
+          ScaffoldMessenger.of(Get.overlayContext).clearSnackBars();
 
-          ScaffoldMessenger.of(noteContext)
-              .showSnackBar(MySnackBar(AppLocalizations.of(noteContext).translate('notSavingAlert'), 'notSavingAlert', false, context: noteContext));
+          ScaffoldMessenger.of(Get.overlayContext)
+              .showSnackBar(MySnackBar(AppLocalizations.of(Get.overlayContext).translate('notSavingAlert'), 'notSavingAlert', false, context: Get.overlayContext));
 
-          notSaving = notSaving + 1;
+          state.notSaving = state.notSaving + 1;
 
           Future.delayed(Duration(seconds: 10), () {
-            notSaving = 0;
+            state.notSaving = 0;
           });
         } else {
-          notSaving = 0;
+          state.notSaving = 0;
 
           Get.back();
 

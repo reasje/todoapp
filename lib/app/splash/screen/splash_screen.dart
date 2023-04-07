@@ -22,6 +22,9 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final _connectionLogic = Get.put(ConnectionLogic());
+  final _unCheckLogic = Get.put(UnCheckLogic());
+  
   Future<Widget> loadHome() async {
     // TODO: check logic
     final _themeProvider = Provider.of<ThemeProvider>(Get.overlayContext, listen: false);

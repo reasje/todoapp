@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
+import 'package:todoapp/app/note_screen/logic/bottomnav_logic.dart';
 import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 import 'package:todoapp/locales/locales.dart' as locale;

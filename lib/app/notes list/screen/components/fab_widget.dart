@@ -3,7 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/notes%20list/logic.dart';
-import 'package:todoapp/app/note_screen/logic/note_provider.dart';
+import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 
 import 'package:todoapp/widgets/buttons.dart';
@@ -17,7 +17,8 @@ class FloatingActionButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _noteLogic = Provider.of<NoteProvider>(context, listen: false);
+    final _noteLogic = Get.find<NoteLogic>();
+    ;
     final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     final _notesLogic = Provider.of<NotesLogic>(context, listen: false);
     return FloatingActionButton(
@@ -30,7 +31,7 @@ class FloatingActionButtonWidget extends StatelessWidget {
       ),
       onPressed: () {
         _notesLogic.load();
-        _noteLogic.newNoteClicked(context).then((value) {
+        _noteLogic.newNoteClicked().then((value) {
           Get.to(NoteScreen(), transition: Transition.rightToLeft);
           _notesLogic.loadingOver();
         });

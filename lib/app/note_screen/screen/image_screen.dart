@@ -7,7 +7,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:googleapis/cloudbuild/v1.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapp/app/note_screen/logic/note_provider.dart';
+import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 

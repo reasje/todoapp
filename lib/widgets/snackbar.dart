@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
-import 'package:todoapp/app/note_screen/logic/note_provider.dart';
+import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notetask_logic.dart';
 import 'package:todoapp/locales/locales.dart' as locale;

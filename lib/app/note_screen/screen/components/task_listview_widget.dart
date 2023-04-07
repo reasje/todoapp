@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapp/app/note_screen/logic/note_provider.dart';
+import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notetask_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 import 'package:todoapp/locales/locales.dart' as locale;

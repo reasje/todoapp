@@ -8,9 +8,9 @@ import 'package:todoapp/model/image_model.dart' as imageModel;
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/task_model.dart';
 import 'package:todoapp/model/voice_model.dart';
-import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
+import 'package:todoapp/app/note_screen/logic/bottomnav_logic.dart';
 import 'package:todoapp/app/donate/logic/donate_provider.dart';
-import 'package:todoapp/app/note_screen/logic/note_provider.dart';
+import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/app/note_screen/logic/notecolor_logic.dart';
 import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
@@ -109,11 +109,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      
         providers: [
-          ChangeNotifierProvider(
-            create: (context) => NoteProvider(),
-          ),
           ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ],
         child: Consumer<ThemeProvider>(
