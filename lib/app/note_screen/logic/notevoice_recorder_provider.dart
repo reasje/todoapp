@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_sound/public/flutter_sound_recorder.dart';
@@ -20,9 +21,9 @@ class NoteVoiceRecorderLogic with ChangeNotifier {
     if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
       //throw RecordingPermissionException("Microphone permission not granted");
       showAlertDialog(Get.overlayContext,
-          title: AppLocalizations.of(context).translate('microphoneRequired'),
-          cancelButtonText: AppLocalizations.of(context).translate('cancel'),
-          okButtonText: AppLocalizations.of(context).translate('ok'));
+          title:  locale.microphoneRequired.tr,
+          cancelButtonText:  locale.cancel.tr,
+          okButtonText:  locale.ok.tr);
       return;
     }
     // StreamSink<Food> _playerSubscription;
@@ -72,11 +73,11 @@ class NoteVoiceRecorderLogic with ChangeNotifier {
     final _noteVoiceRecorderLogic = Provider.of<NoteVoiceRecorderLogic>(Get.overlayContext, listen: false);
     TextEditingController dialogController = TextEditingController(text: '');
     await showAlertDialog(Get.overlayContext,
-        title: AppLocalizations.of(Get.overlayContext).translate('voiceTitle'),
+        title:  locale.voiceTitle.tr,
         hastTextField: true,
-        textFieldhintText: AppLocalizations.of(Get.overlayContext).translate('titleHint'),
-        okButtonText: AppLocalizations.of(Get.overlayContext).translate('ok'),
-        cancelButtonText: AppLocalizations.of(Get.overlayContext).translate('cancel'), okButtonFunction: () {
+        textFieldhintText:  locale.titleHint.tr,
+        okButtonText:  locale.ok.tr,
+        cancelButtonText:  locale.cancel.tr, okButtonFunction: () {
       _noteVoiceRecorderLogic.setVoiceTitle(dialogController.text);
     });
 

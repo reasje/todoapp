@@ -6,7 +6,8 @@ import 'package:todoapp/app/donate/logic/donate_provider.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
-
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
 import '../../../applocalizations.dart';
 import '../../../widgets/buttons.dart';
 
@@ -68,7 +69,7 @@ class _DonateScreenState extends State<DonateScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            AppLocalizations.of(context).translate('donate'),
+                             locale.donate.tr,
                             style: TextStyle(
                                 color: _themeProvider.textColor,
                                 fontSize: _themeProvider.isEn ? h * w * 0.00009 : h * w * 0.000075,
@@ -110,7 +111,7 @@ class _DonateScreenState extends State<DonateScreen> {
                           },
                         ),
                         Text(
-                          AppLocalizations.of(context).translate('donateRials'),
+                           locale.donateRials.tr,
                           style: TextStyle(
                               color: _themeProvider.textColor,
                               fontSize: _themeProvider.isEn ? h * w * 0.00007 : h * w * 0.00007,
@@ -137,7 +138,7 @@ class _DonateScreenState extends State<DonateScreen> {
                           ),
                         ),
                         Text(
-                          AppLocalizations.of(context).translate('donateDoge'),
+                           locale.donateDoge.tr,
                           style: TextStyle(
                               color: _themeProvider.textColor,
                               fontSize: _themeProvider.isEn ? h * w * 0.00007 : h * w * 0.00006,

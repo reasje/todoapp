@@ -13,7 +13,8 @@ import 'package:todoapp/model/task_model.dart';
 import 'package:todoapp/model/voice_model.dart';
 import 'package:todoapp/app/settings/settings_logic.dart';
 import 'dart:convert';
-
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
 import 'package:todoapp/model/image_model.dart' as imageModel;
 import '../../../applocalizations.dart';
 import '../../../widgets/dialog.dart';
@@ -187,16 +188,16 @@ class DriveLogic {
     final _settingsLogic = Get.find<SettingsLogic>();
     if (noteBox.isEmpty && command != false) {
       showAlertDialog(context,
-          title: AppLocalizations.of(context).translate('noNotes'),
-          okButtonText: AppLocalizations.of(context).translate('ok'),
-          cancelButtonText: AppLocalizations.of(context).translate('cancel'));
+          title:  locale.noNotes.tr,
+          okButtonText:  locale.ok.tr,
+          cancelButtonText:  locale.cancel.tr);
     } else {
       if (!_connectionState.isConnected) {
         // I am connected to a mobile network or wifi.
         showAlertDialog(context,
-            title: AppLocalizations.of(context).translate('noInternet'),
-            okButtonText: AppLocalizations.of(context).translate('ok'),
-            cancelButtonText: AppLocalizations.of(context).translate('cancel'));
+            title:  locale.noInternet.tr,
+            okButtonText:  locale.ok.tr,
+            cancelButtonText:  locale.cancel.tr);
       } else {
         _settingsLogic.checkSignIn();
         if (_settingsLogic.state.isSignedIn) {
@@ -206,9 +207,9 @@ class DriveLogic {
           // getting the signinded account information
           if (account == null) {
             showAlertDialog(context,
-                title: AppLocalizations.of(context).translate('noInternet'),
-                okButtonText: AppLocalizations.of(context).translate('ok'),
-                cancelButtonText: AppLocalizations.of(context).translate('cancel'));
+                title:  locale.noInternet.tr,
+                okButtonText:  locale.ok.tr,
+                cancelButtonText:  locale.cancel.tr);
           } else {
             try {
               final authHeaders = await account.authHeaders;
@@ -221,20 +222,20 @@ class DriveLogic {
               if (command) {
                 if (fileId == null) {
                   // file does not existence
-                  await upload(driveApi, driveFile, noteBox, AppLocalizations.of(context).translate('uploading'),
-                      AppLocalizations.of(context).translate('uploadDone'));
+                  await upload(driveApi, driveFile, noteBox,  locale.uploading.tr,
+                       locale.uploadDone.tr);
                 } else {
                   // show continue dialog
                   showAlertDialog(context,
-                      title: AppLocalizations.of(context).translate('fileExists'),
+                      title:  locale.fileExists.tr,
                       driveApi: driveApi,
                       driveFile: driveFile,
                       noteBox: noteBox,
                       fileId: fileId,
-                      okButtonText: AppLocalizations.of(context).translate('ok'),
-                      cancelButtonText: AppLocalizations.of(context).translate('cancel'), okButtonFunction: () {
-                    DriveLogic.upload(driveApi, driveFile, noteBox, AppLocalizations.of(Get.overlayContext).translate('uploading'),
-                        AppLocalizations.of(Get.overlayContext).translate('uploadDone'), fileId);
+                      okButtonText:  locale.ok.tr,
+                      cancelButtonText:  locale.cancel.tr, okButtonFunction: () {
+                    DriveLogic.upload(driveApi, driveFile, noteBox,  locale.uploading.tr,
+                         locale.uploadDone.tr, fileId);
                   });
                 }
               } else {
@@ -244,39 +245,39 @@ class DriveLogic {
                   await download(
                     driveApi,
                     driveFile,
-                    AppLocalizations.of(context).translate('downloading'),
-                    AppLocalizations.of(context).translate('downloadDone'),
+                     locale.downloading.tr,
+                     locale.downloadDone.tr,
                     noteBox,
                     fileId,
                   );
                 } else {
                   // show continue dialog
                   showAlertDialog(context,
-                      title: AppLocalizations.of(context).translate('continue'),
+                      title:  locale.continuee.tr,
                       driveApi: driveApi,
                       driveFile: driveFile,
                       noteBox: noteBox,
                       fileId: fileId,
-                      okButtonText: AppLocalizations.of(context).translate('ok'),
-                      cancelButtonText: AppLocalizations.of(context).translate('cancel'), okButtonFunction: () {
-                    DriveLogic.download(driveApi, driveFile, AppLocalizations.of(Get.overlayContext).translate('downloading'),
-                        AppLocalizations.of(Get.overlayContext).translate('downloadDone'), noteBox, fileId);
+                      okButtonText:  locale.ok.tr,
+                      cancelButtonText:  locale.cancel.tr, okButtonFunction: () {
+                    DriveLogic.download(driveApi, driveFile,  locale.downloading.tr,
+                         locale.downloadDone.tr, noteBox, fileId);
                   });
                 }
               }
             } catch (err) {
               print("err : $err");
               showAlertDialog(context,
-                  title: AppLocalizations.of(context).translate('noInternet'),
-                  okButtonText: AppLocalizations.of(context).translate('ok'),
-                  cancelButtonText: AppLocalizations.of(context).translate('cancel'));
+                  title:  locale.noInternet.tr,
+                  okButtonText:  locale.ok.tr,
+                  cancelButtonText:  locale.cancel.tr);
             }
           }
         } else {
           showAlertDialog(context,
-              title: AppLocalizations.of(context).translate('signIn'),
-              okButtonText: AppLocalizations.of(context).translate('ok'),
-              cancelButtonText: AppLocalizations.of(context).translate('cancel'));
+              title:  locale.signIn.tr,
+              okButtonText:  locale.ok.tr,
+              cancelButtonText:  locale.cancel.tr);
         }
       }
     }

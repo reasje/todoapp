@@ -5,7 +5,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
 import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
-
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
 import '../../../../applocalizations.dart';
 import '../../../../widgets/no_glow_behavior.dart';
 import '../../../../widgets/snackbar.dart';
@@ -60,7 +61,7 @@ class ImageLisView extends StatelessWidget {
                                 onDismissed: (direction) {
                                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                   ScaffoldMessenger.of(context).showSnackBar(MySnackBar(
-                                      AppLocalizations.of(context).translate('undoImage'), 'undoImage', true,
+                                       locale.undoImage.tr, 'undoImage', true,
                                       context: context, index: index));
                                   _noteImageLogic.imageDissmissed(index);
                                 },

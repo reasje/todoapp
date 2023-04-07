@@ -6,7 +6,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notevoice_player_logic.dart';
-
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 
 import '../../../../applocalizations.dart';
@@ -72,7 +73,7 @@ class VoiceListView extends StatelessWidget {
                                   onDismissed: (direction) {
                                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                     ScaffoldMessenger.of(context).showSnackBar(MySnackBar(
-                                        AppLocalizations.of(context).translate('undoVoice'), 'undoVoice', true,
+                                         locale.undoVoice.tr, 'undoVoice', true,
                                         context: context, index: index));
                                     _noteVoiceRecorderLogic.voiceDismissed(index);
                                   },

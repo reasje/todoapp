@@ -19,6 +19,8 @@ import 'note_provider.dart';
 import 'notecolor_logic.dart';
 import 'notepassword_logic.dart';
 import 'notetitletext_logic.dart';
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
 
 class BottomNavLogic extends GetxController {
   BottomNavState state = BottomNavState();
@@ -49,11 +51,11 @@ class BottomNavLogic extends GetxController {
 
     state.tabColors.shuffle();
     state.items.addAll([
-      NavigationItem(Icon(Icons.text_fields), Text(AppLocalizations.of(context).translate('text')), state.tabColors[0]),
-      NavigationItem(Icon(Icons.hourglass_empty), Text(AppLocalizations.of(context).translate('timer')), state.tabColors[1]),
-      NavigationItem(Icon(Icons.image_outlined), Text(AppLocalizations.of(context).translate('image')), state.tabColors[2]),
-      NavigationItem(Icon(Icons.voicemail), Text(AppLocalizations.of(context).translate('voice')), state.tabColors[3]),
-      NavigationItem(Icon(Icons.check), Text(AppLocalizations.of(context).translate('task')), state.tabColors[4]),
+      NavigationItem(Icon(Icons.text_fields), Text( locale.text.tr), state.tabColors[0]),
+      NavigationItem(Icon(Icons.hourglass_empty), Text( locale.timer.tr), state.tabColors[1]),
+      NavigationItem(Icon(Icons.image_outlined), Text( locale.image.tr), state.tabColors[2]),
+      NavigationItem(Icon(Icons.voicemail), Text( locale.voice.tr), state.tabColors[3]),
+      NavigationItem(Icon(Icons.check), Text( locale.task.tr), state.tabColors[4]),
     ]);
 
     state.tabs.addAll([
@@ -159,13 +161,13 @@ class BottomNavLogic extends GetxController {
                       final _notePasswordLogic = Provider.of<NotePasswordLogic>(Get.overlayContext, listen: false);
                       dialogController.text = _notePasswordLogic.state.password;
                       showAlertDialog(context,
-                          title: AppLocalizations.of(context).translate('setPassword'),
+                          title:  locale.setPassword.tr,
                           hastTextField: true,
                           dialogController: dialogController,
-                          textFieldhintText: AppLocalizations.of(Get.overlayContext).translate('passwordHint'),
+                          textFieldhintText:  locale.passwordHint.tr,
                           textInputType: TextInputType.number,
-                          okButtonText: AppLocalizations.of(context).translate('ok'),
-                          cancelButtonText: AppLocalizations.of(context).translate('cancel'), okButtonFunction: () {
+                          okButtonText:  locale.ok.tr,
+                          cancelButtonText:  locale.cancel.tr, okButtonFunction: () {
                         _notePasswordLogic.setPassword(dialogController.text);
                       });
                     },

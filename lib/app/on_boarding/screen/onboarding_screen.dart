@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/on_boarding/logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
-
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
 import '../../../applocalizations.dart';
 import '../../../widgets/buttons.dart';
 import '../../notes list/screen/notes_screen.dart';
@@ -65,16 +66,16 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         child: PageView(
                           controller: _state.pageController,
                           children: [
-                            onBoardPage("paradise", AppLocalizations.of(context).translate('paradiseTitle'),
-                                AppLocalizations.of(context).translate('paradise'), h, w),
+                            onBoardPage("paradise",  locale.paradiseTitle.tr,
+                                 locale.paradise.tr, h, w),
                             onBoardPage(
-                                "plant", AppLocalizations.of(context).translate('plantTitle'), AppLocalizations.of(context).translate('plant'), h, w),
-                            onBoardPage("deepwork", AppLocalizations.of(context).translate('deepWorkTitle'),
-                                AppLocalizations.of(context).translate('deepWork'), h, w),
-                            onBoardPage("pioritize", AppLocalizations.of(context).translate('pioritizeTitle'),
-                                AppLocalizations.of(context).translate('pioritize'), h, w),
-                            onBoardPage("family", AppLocalizations.of(context).translate('familyTitle'),
-                                AppLocalizations.of(context).translate('family'), h, w),
+                                "plant",  locale.plantTitle.tr,  locale.plant.tr, h, w),
+                            onBoardPage("deepwork",  locale.deepWorkTitle.tr,
+                                 locale.deepWork.tr, h, w),
+                            onBoardPage("pioritize",  locale.pioritizeTitle.tr,
+                                 locale.pioritize.tr, h, w),
+                            onBoardPage("family",  locale.familyTitle.tr,
+                                 locale.family.tr, h, w),
                           ],
                           onPageChanged: (value) => {setCurrentPage(value)},
                         ),

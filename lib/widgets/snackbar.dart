@@ -5,7 +5,8 @@ import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
 import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notetask_logic.dart';
-
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -43,7 +44,7 @@ Widget MySnackBar(
     action: isAction
         ? SnackBarAction(
             textColor: _themeProvider.swashColor,
-            label: AppLocalizations.of(context).translate('undo'),
+            label:  locale.undo.tr,
             onPressed: () {
               if (id == 'undoVoice') {
                 _noteVoiceRecorderLogic.voiceRecover(index);

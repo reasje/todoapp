@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
-
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
 import '../../../../applocalizations.dart';
 import '../../../../widgets/no_glow_behavior.dart';
 
@@ -49,7 +50,7 @@ class _TabViewState extends State<TabView> {
             else
               Center(
                 child: Text(
-                  AppLocalizations.of(context).translate('timerOn'),
+                   locale.timerOn.tr,
                   style: TextStyle(
                       color: _bottomNavLogic.state.tabColors[_bottomNavLogic.state.selectedTab],
                       fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00006,

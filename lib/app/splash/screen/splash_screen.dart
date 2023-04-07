@@ -8,7 +8,8 @@ import 'package:todoapp/app/settings/settings_logic.dart';
 import 'package:splashscreen/splashscreen.dart' as splashScreenPackage;
 import 'package:todoapp/app/logic/theme_provider.dart';
 import 'package:todoapp/app/splash/uncheck_logic.dart';
-
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
 import '../../../applocalizations.dart';
 import '../connection_logic.dart';
 import '../../notes list/screen/notes_screen.dart';
@@ -48,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
         backgroundColor: _themeProvider.mainColor,
         photoSize: 100,
         loadingText: Text(
-          AppLocalizations.of(context).translate('patient'),
+           locale.patient.tr,
           style: TextStyle(color: _themeProvider.textColor),
         ),
       ),

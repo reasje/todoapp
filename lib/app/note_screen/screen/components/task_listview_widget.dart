@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notetask_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
-
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
 import '../../../../applocalizations.dart';
 import '../../../../widgets/snackbar.dart';
 
@@ -32,7 +33,7 @@ class TaskListView extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  AppLocalizations.of(context).translate('reset'),
+                   locale.reset.tr,
                   style: TextStyle(
                       color: _themeProvider.textColor,
                       fontSize: _themeProvider.isEn ? h * w * 0.00007 : h * w * 0.00005,
@@ -100,7 +101,7 @@ class TaskListView extends StatelessWidget {
                                 onDismissed: (direction) {
                                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                   ScaffoldMessenger.of(context).showSnackBar(MySnackBar(
-                                      AppLocalizations.of(context).translate('undoTask'), 'undoTask', true,
+                                       locale.undoTask.tr, 'undoTask', true,
                                       context: context, index: index));
                                   _noteTaskLogic.taskDissmissed(index);
                                 },
@@ -149,7 +150,7 @@ class TaskListView extends StatelessWidget {
                                               fontWeight: FontWeight.w200),
                                           decoration: InputDecoration(
                                               contentPadding: EdgeInsets.all(_themeProvider.isEn ? h * w * 0.00001 : h * w * 0.000008),
-                                              hintText: AppLocalizations.of(context).translate('titleHint'),
+                                              hintText:  locale.titleHint.tr,
                                               border: InputBorder.none,
                                               focusedBorder: InputBorder.none,
                                               enabledBorder: InputBorder.none,

@@ -6,7 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
-
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
 import 'package:todoapp/widgets/buttons.dart';
 
 import '../../../../applocalizations.dart';
@@ -50,7 +51,7 @@ class ReOrderableCardWidget extends StatelessWidget {
         notes.delete(keys[index]);
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(MySnackBar(
-          AppLocalizations.of(context).translate('undoNote'),
+           locale.undoNote.tr,
           'undoNote',
           true,
           context: context,

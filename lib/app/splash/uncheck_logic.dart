@@ -1,12 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/model/note_model.dart';
 
 import '../../main.dart';
 
-class UnCheckLogic {
+class UnCheckLogic extends GetxController{
+
+  @override
+  void onInit() {
+    checkDayChange();
+    super.onInit();
+  }
+  
   static Future<void> checkDayChange() async {
     // It is used to store
     // the theme status as string

@@ -10,6 +10,9 @@ import '../../../widgets/buttons.dart';
 import '../../../widgets/dialog.dart';
 import '../../splash/connection_logic.dart';
 import '../settings_logic.dart';
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
+
 
 class SettingsScreen extends StatefulWidget {
   SettingsScreen({Key key}) : super(key: key);
@@ -67,7 +70,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                             BoxDecoration(color: _themeProvider.textColor.withOpacity(0.1), borderRadius: BorderRadius.circular(h * w * 0.0001)),
                         child: Center(
                           child: Text(
-                            AppLocalizations.of(context).translate('googleBackup'),
+                             locale.googleBackup.tr,
                             style: TextStyle(color: _themeProvider.textColor, fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00007),
                           ),
                         )),
@@ -119,9 +122,9 @@ class _SettingScreenState extends State<SettingsScreen> {
                                     logic.signInToAccount();
                                   } else {
                                     showAlertDialog(context,
-                                        title: AppLocalizations.of(context).translate('noInternet'),
-                                        okButtonText: AppLocalizations.of(context).translate('ok'),
-                                        cancelButtonText: AppLocalizations.of(context).translate('cancel'));
+                                        title:  locale.noInternet.tr,
+                                        okButtonText:  locale.ok.tr,
+                                        cancelButtonText:  locale.cancel.tr);
                                   }
                                 },
                                 child: Icon(
@@ -144,7 +147,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                   decoration: BoxDecoration(color: _themeProvider.textColor.withOpacity(0.1), borderRadius: BorderRadius.circular(h * w * 0.0001)),
                   child: Center(
                     child: Text(
-                      AppLocalizations.of(context).translate('theme'),
+                       locale.theme.tr,
                       style: TextStyle(color: _themeProvider.textColor, fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00007),
                     ),
                   )),

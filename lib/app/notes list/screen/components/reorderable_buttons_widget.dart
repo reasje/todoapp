@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 import 'package:todoapp/app/settings/screen/settings_screen.dart';
-
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
 import '../../../../applocalizations.dart';
 import '../../../../widgets/buttons.dart';
 import '../../../donate/screen/donate_screen.dart';
@@ -35,7 +36,7 @@ class ReOrderableListButtonsWidget extends StatelessWidget {
                       padding: EdgeInsets.only(top: h * 0.03, bottom: h * 0.03, left: h * 0.03),
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        AppLocalizations.of(context).translate('notesApp'),
+                         locale.notesApp.tr,
                         style: TextStyle(color: _themeProvider.titleColor.withOpacity(0.6), fontSize: _themeProvider.isEn ? w * 0.09 : w * 0.07),
                       )),
                   Container(

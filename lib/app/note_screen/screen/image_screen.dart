@@ -1,5 +1,6 @@
 import 'dart:async';
-
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -125,13 +126,13 @@ class _PicDetailState extends State<PicDetail> {
                   onPressed: () async {
                     TextEditingController dialogController = TextEditingController();
                     showAlertDialog(context,
-                        title: AppLocalizations.of(context).translate('imageDesc'),
+                        title:  locale.imageDesc.tr,
                         desc: _noteImageLogic.state.imageList[widget.index].desc ?? null,
                         textFieldMaxLength: 415,
                         hastTextField: true,
-                        textFieldhintText: AppLocalizations.of(Get.overlayContext).translate('imageDesc'),
-                        okButtonText: AppLocalizations.of(context).translate('ok'),
-                        cancelButtonText: AppLocalizations.of(context).translate('cancel'), okButtonFunction: () {
+                        textFieldhintText:  locale.imageDesc.tr,
+                        okButtonText:  locale.ok.tr,
+                        cancelButtonText:  locale.cancel.tr, okButtonFunction: () {
                       _noteImageLogic.updateImageDesc(widget.index, dialogController.text);
                     });
                   },

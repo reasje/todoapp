@@ -4,7 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notetitletext_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
-
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
 import '../../../../applocalizations.dart';
 
 class TitleTextField extends StatelessWidget {
@@ -42,7 +43,7 @@ class TitleTextField extends StatelessWidget {
                 _noteTitleTextLogic.clearTitle();
               },
             ),
-            hintText: AppLocalizations.of(context).translate('titleHint'),
+            hintText:  locale.titleHint.tr,
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,

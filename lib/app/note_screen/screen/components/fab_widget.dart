@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/bottomnav_provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
-
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
 
 import '../../../../applocalizations.dart';
@@ -75,7 +76,7 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                             Get.back();
                                           },
                                           child: Text(
-                                            AppLocalizations.of(context).translate('camera'),
+                                             locale.camera.tr,
                                             style: TextStyle(
                                                 color: _themeProvider.titleColor.withOpacity(0.6),
                                                 fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00007),
@@ -92,7 +93,7 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                             Get.back();
                                           },
                                           child: Text(
-                                            AppLocalizations.of(context).translate('gallery'),
+                                             locale.gallery.tr,
                                             style: TextStyle(
                                                 color: _themeProvider.titleColor.withOpacity(0.6),
                                                 fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00007),

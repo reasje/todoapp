@@ -4,7 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_provider.dart';
 import 'package:todoapp/app/note_screen/logic/notetitletext_logic.dart';
 import 'package:todoapp/app/logic/theme_provider.dart';
-
+import 'package:todoapp/locales/locales.dart' as locale;
+import 'package:get/get.dart';
 import '../../../../applocalizations.dart';
 
 class TextTextField extends StatelessWidget {
@@ -46,7 +47,7 @@ class TextTextField extends StatelessWidget {
             contentPadding: EdgeInsets.symmetric(
                 horizontal: _themeProvider.isEn ? h * w * 0.00004 : h * w * 0.00003,
                 vertical: _themeProvider.isEn ? h * w * 0.00004 : h * w * 0.00003),
-            hintText: AppLocalizations.of(context).translate('textHint'),
+            hintText:  locale.textHint.tr,
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
