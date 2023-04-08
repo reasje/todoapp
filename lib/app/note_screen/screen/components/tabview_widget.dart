@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/bottomnav_logic.dart';
-import 'package:todoapp/app/logic/theme_provider.dart';
+import 'package:todoapp/theme/theme_logic.dart';
 import 'package:todoapp/locales/locales.dart' as locale;
 import 'package:get/get.dart';
 import '../../../../applocalizations.dart';
@@ -28,11 +28,11 @@ class _TabViewState extends State<TabView> {
     bool timerOn = widget.timerOn ?? false;
     final _bottomNavLogic = Get.find<BottomNavLogic>();
     double h = MediaQuery.of(context).size.height;
-    final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _themeState = Get.find<ThemeLogic>().state;
     double w = MediaQuery.of(context).size.width;
     return ScrollConfiguration(
       behavior: NoGlowBehavior(),
-      child: Obx((){
+      child: Obx(() {
         return ListView(
           children: [
             Container(
@@ -50,17 +50,16 @@ class _TabViewState extends State<TabView> {
             else
               Center(
                 child: Text(
-                   locale.timerOn.tr,
+                  locale.timerOn.tr,
                   style: TextStyle(
                       color: _bottomNavLogic.state.tabColors[_bottomNavLogic.state.selectedTab],
-                      fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00006,
+                      fontSize: _themeState.isEn ? h * w * 0.00008 : h * w * 0.00006,
                       fontWeight: FontWeight.w400),
                 ),
               ),
           ],
         );
-      }
-      ),
+      }),
     );
   }
 }

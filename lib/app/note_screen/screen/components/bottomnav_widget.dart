@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/navigationitem_model.dart';
 import 'package:todoapp/app/note_screen/logic/bottomnav_logic.dart';
-import 'package:todoapp/app/logic/theme_provider.dart';
+import 'package:todoapp/theme/theme_logic.dart';
 
 class BottomNavWidget extends StatefulWidget {
   BottomNavWidget({Key key}) : super(key: key);
@@ -18,7 +18,7 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
   Widget _buildItem(NavigationItem item, bool isSelected, BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
-    final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final _themeState = Get.find<ThemeLogic>().state;
     return AnimatedContainer(
       duration: Duration(milliseconds: 450),
       height: double.maxFinite,
@@ -31,11 +31,11 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
           Row(
             textDirection: TextDirection.ltr,
             children: [
-              IconTheme(data: IconThemeData(size: 18, color: isSelected ? item.color : _themeProvider.textColor), child: item.icon),
+              IconTheme(data: IconThemeData(size: 18, color: isSelected ? item.color : _themeState.textColor), child: item.icon),
               Padding(
                 padding: EdgeInsets.only(left: w * 0.03),
                 child: isSelected
-                    ? DefaultTextStyle.merge(style: TextStyle(color: isSelected ? item.color : _themeProvider.textColor), child: item.title)
+                    ? DefaultTextStyle.merge(style: TextStyle(color: isSelected ? item.color : _themeState.textColor), child: item.title)
                     : Container(),
               )
             ],
@@ -45,19 +45,18 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
-    final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final _themeState = Get.find<ThemeLogic>().state;
     final _bottomNavLogic = Get.find<BottomNavLogic>();
     return Container(
         width: MediaQuery.of(context).size.width,
         height: h * 0.08,
         padding: EdgeInsets.symmetric(vertical: h * 0.006, horizontal: w * 0.01),
         decoration: BoxDecoration(
-          color: _themeProvider.mainColor,
+          color: _themeState.mainColor,
         ),
         child: Row(
           textDirection: TextDirection.ltr,

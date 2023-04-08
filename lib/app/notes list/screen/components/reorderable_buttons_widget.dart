@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapp/app/logic/theme_provider.dart';
+import 'package:todoapp/theme/theme_logic.dart';
 import 'package:todoapp/app/settings/screen/settings_screen.dart';
 import 'package:todoapp/locales/locales.dart' as locale;
 import 'package:get/get.dart';
@@ -19,7 +19,7 @@ class ReOrderableListButtonsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _connectionState = Get.find<ConnectionLogic>().state;
-    final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final _themeState = Get.find<ThemeLogic>().state;
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
@@ -36,8 +36,8 @@ class ReOrderableListButtonsWidget extends StatelessWidget {
                       padding: EdgeInsets.only(top: h * 0.03, bottom: h * 0.03, left: h * 0.03),
                       alignment: Alignment.centerLeft,
                       child: Text(
-                         locale.notesApp.tr,
-                        style: TextStyle(color: _themeProvider.titleColor.withOpacity(0.6), fontSize: _themeProvider.isEn ? w * 0.09 : w * 0.07),
+                        locale.notesApp.tr,
+                        style: TextStyle(color: _themeState.titleColor.withOpacity(0.6), fontSize: _themeState.isEn ? w * 0.09 : w * 0.07),
                       )),
                   Container(
                     child: Icon(
@@ -52,7 +52,7 @@ class ReOrderableListButtonsWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ButtonWidget(
-                    backgroundColor: _themeProvider.textColor,
+                    backgroundColor: _themeState.textColor,
                     iconData: Icons.settings,
                     iconSize: h * w * 0.00005,
                     sizePD: w * 0.1,
@@ -65,7 +65,7 @@ class ReOrderableListButtonsWidget extends StatelessWidget {
                     padding: EdgeInsets.all(h * w * 0.00004),
                     alignment: Alignment.centerLeft,
                     child: ButtonWidget(
-                      backgroundColor: _themeProvider.textColor,
+                      backgroundColor: _themeState.textColor,
                       sizePD: w * 0.1,
                       sizePU: w * 0.1,
                       iconSize: h * w * 0.00006,

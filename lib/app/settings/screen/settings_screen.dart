@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/app/note_screen/logic/note_logic.dart';
-import 'package:todoapp/app/logic/theme_provider.dart';
+import 'package:todoapp/theme/theme_logic.dart';
 import 'package:todoapp/app/settings/drive_logic.dart';
 import 'package:provider/provider.dart';
 import '../../../applocalizations.dart';
@@ -12,7 +12,6 @@ import '../../splash/connection_logic.dart';
 import '../settings_logic.dart';
 import 'package:todoapp/locales/locales.dart' as locale;
 import 'package:get/get.dart';
-
 
 class SettingsScreen extends StatefulWidget {
   SettingsScreen({Key key}) : super(key: key);
@@ -26,12 +25,13 @@ class _SettingScreenState extends State<SettingsScreen> {
   final state = Get.find<SettingsLogic>().state;
   @override
   Widget build(BuildContext context) {
-    final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _themeLogic = Get.find<ThemeLogic>();
+    final _themeState = _themeLogic.state;
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: _themeProvider.mainColor,
+      backgroundColor: _themeState.mainColor,
       body: SafeArea(
         child: Container(
           height: h,
@@ -47,7 +47,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     ButtonWidget(
-                      backgroundColor: _themeProvider.textColor,
+                      backgroundColor: _themeState.textColor,
                       sizePU: h * w * 0.00017,
                       sizePD: h * w * 0.00018,
                       iconSize: h * w * 0.00008,
@@ -66,12 +66,11 @@ class _SettingScreenState extends State<SettingsScreen> {
                     Container(
                         height: h * w * 0.00025,
                         width: h * w * 0.0006,
-                        decoration:
-                            BoxDecoration(color: _themeProvider.textColor.withOpacity(0.1), borderRadius: BorderRadius.circular(h * w * 0.0001)),
+                        decoration: BoxDecoration(color: _themeState.textColor.withOpacity(0.1), borderRadius: BorderRadius.circular(h * w * 0.0001)),
                         child: Center(
                           child: Text(
-                             locale.googleBackup.tr,
-                            style: TextStyle(color: _themeProvider.textColor, fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00007),
+                            locale.googleBackup.tr,
+                            style: TextStyle(color: _themeState.textColor, fontSize: _themeState.isEn ? h * w * 0.00008 : h * w * 0.00007),
                           ),
                         )),
                     Container(
@@ -84,7 +83,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                             padding: EdgeInsets.all(h * w * 0.00004),
                             alignment: Alignment.centerLeft,
                             child: ButtonWidget(
-                              backgroundColor: _themeProvider.textColor,
+                              backgroundColor: _themeState.textColor,
                               sizePU: h * w * 0.00012,
                               sizePD: h * w * 0.00013,
                               iconSize: h * w * 0.00006,
@@ -98,7 +97,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                             padding: EdgeInsets.all(h * w * 0.00004),
                             alignment: Alignment.centerLeft,
                             child: ButtonWidget(
-                              backgroundColor: _themeProvider.textColor,
+                              backgroundColor: _themeState.textColor,
                               sizePU: h * w * 0.00012,
                               sizePD: h * w * 0.00013,
                               iconSize: h * w * 0.00006,
@@ -113,7 +112,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                               padding: EdgeInsets.all(h * w * 0.00004),
                               alignment: Alignment.centerLeft,
                               child: ButtonWidget(
-                                backgroundColor: _themeProvider.textColor,
+                                backgroundColor: _themeState.textColor,
                                 sizePU: h * w * 0.00012,
                                 sizePD: h * w * 0.00013,
                                 function: () {
@@ -122,9 +121,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                                     logic.signInToAccount();
                                   } else {
                                     showAlertDialog(context,
-                                        title:  locale.noInternet.tr,
-                                        okButtonText:  locale.ok.tr,
-                                        cancelButtonText:  locale.cancel.tr);
+                                        title: locale.noInternet.tr, okButtonText: locale.ok.tr, cancelButtonText: locale.cancel.tr);
                                   }
                                 },
                                 child: Icon(
@@ -144,11 +141,11 @@ class _SettingScreenState extends State<SettingsScreen> {
               Container(
                   height: h * w * 0.00025,
                   width: h * w * 0.0004,
-                  decoration: BoxDecoration(color: _themeProvider.textColor.withOpacity(0.1), borderRadius: BorderRadius.circular(h * w * 0.0001)),
+                  decoration: BoxDecoration(color: _themeState.textColor.withOpacity(0.1), borderRadius: BorderRadius.circular(h * w * 0.0001)),
                   child: Center(
                     child: Text(
-                       locale.theme.tr,
-                      style: TextStyle(color: _themeProvider.textColor, fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00007),
+                      locale.theme.tr,
+                      style: TextStyle(color: _themeState.textColor, fontSize: _themeState.isEn ? h * w * 0.00008 : h * w * 0.00007),
                     ),
                   )),
               Container(
@@ -159,23 +156,23 @@ class _SettingScreenState extends State<SettingsScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       ButtonWidget(
-                        backgroundColor: _themeProvider.textColor,
+                        backgroundColor: _themeState.textColor,
                         sizePU: h * w * 0.00017,
                         sizePD: h * w * 0.00018,
                         iconSize: h * w * 0.0001,
                         iconData: FontAwesome.language,
                         function: () {
-                          _themeProvider.changeLan();
+                          _themeLogic.changeLan();
                         },
                       ),
                       ButtonWidget(
-                        backgroundColor: _themeProvider.textColor,
+                        backgroundColor: _themeState.textColor,
                         sizePU: h * w * 0.00017,
                         sizePD: h * w * 0.00018,
                         iconSize: h * w * 0.0001,
                         iconData: FontAwesome.lightbulb_o,
                         function: () {
-                          _themeProvider.changeBrightness();
+                          _themeLogic.changeBrightness();
                         },
                       ),
                     ],

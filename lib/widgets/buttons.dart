@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/settings/settings_logic.dart';
-import 'package:todoapp/app/logic/theme_provider.dart';
+import 'package:todoapp/theme/theme_logic.dart';
 
 class ButtonWidget extends StatefulWidget {
   final IconData iconData;
@@ -37,7 +38,7 @@ class _MyButtonState extends State<ButtonWidget> {
   @override
   Widget build(BuildContext context) {
     final _signInProvider = Provider.of<SettingsLogic>(context);
-    final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _themeState = Get.find<ThemeLogic>().state;
     Color backgroundColor = widget.backgroundColor;
     // bool floating =
     //     widget.id == 'newpic' || widget.id == 'newvoice' || widget.id == 'pausevoice' || widget.id == 'stopvoice' || widget.id == 'resumevoice';
@@ -67,7 +68,7 @@ class _MyButtonState extends State<ButtonWidget> {
           //       final _noteTitleTextLogic = Get.find<NoteTitleTextLogic>();
           //       final _noteColorLogic = Provider.of<NoteColorLogic>(context, listen: false);
           //       final _donateProvider = Provider.of<DonateLogic>(context, listen: false);
-          //       final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+          //       final _themeState = Get.find<ThemeLogic>().state;
           //       double h = MediaQuery.of(context).size.height;
           //       double w = MediaQuery.of(context).size.width;
           //       LazyBox<Note> noteBox = Hive.lazyBox<Note>(noteBoxName);

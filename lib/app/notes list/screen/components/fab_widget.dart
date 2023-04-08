@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/notes%20list/logic.dart';
 import 'package:todoapp/app/note_screen/logic/note_logic.dart';
-import 'package:todoapp/app/logic/theme_provider.dart';
+import 'package:todoapp/theme/theme_logic.dart';
 
 import 'package:todoapp/widgets/buttons.dart';
 
@@ -19,15 +19,15 @@ class FloatingActionButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final _noteLogic = Get.find<NoteLogic>();
     ;
-    final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final _themeState = Get.find<ThemeLogic>().state;
     final _notesLogic = Provider.of<NotesLogic>(context, listen: false);
     return FloatingActionButton(
       elevation: 0,
       highlightElevation: 0,
-      backgroundColor: _themeProvider.textColor.withOpacity(0.1),
+      backgroundColor: _themeState.textColor.withOpacity(0.1),
       child: Icon(
         FontAwesome.plus,
-        color: _themeProvider.textColor,
+        color: _themeState.textColor,
       ),
       onPressed: () {
         _notesLogic.load();

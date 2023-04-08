@@ -3,7 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/donate/logic/donate_provider.dart';
-import 'package:todoapp/app/logic/theme_provider.dart';
+import 'package:todoapp/theme/theme_logic.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/locales/locales.dart' as locale;
@@ -21,14 +21,14 @@ class DonateScreen extends StatefulWidget {
 class _DonateScreenState extends State<DonateScreen> {
   @override
   Widget build(BuildContext context) {
-    final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _themeState = Get.find<ThemeLogic>().state;
     final _donateProvider = Provider.of<DonateLogic>(context);
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: _themeProvider.mainColor,
+      backgroundColor: _themeState.mainColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -41,7 +41,7 @@ class _DonateScreenState extends State<DonateScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   ButtonWidget(
-                    backgroundColor: _themeProvider.textColor,
+                    backgroundColor: _themeState.textColor,
                     sizePU: h * w * 0.00017,
                     sizePD: h * w * 0.00018,
                     iconSize: h * w * 0.00008,
@@ -69,10 +69,10 @@ class _DonateScreenState extends State<DonateScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                             locale.donate.tr,
+                            locale.donate.tr,
                             style: TextStyle(
-                                color: _themeProvider.textColor,
-                                fontSize: _themeProvider.isEn ? h * w * 0.00009 : h * w * 0.000075,
+                                color: _themeState.textColor,
+                                fontSize: _themeState.isEn ? h * w * 0.00009 : h * w * 0.000075,
                                 fontWeight: FontWeight.w100),
                           ),
                           Container(
@@ -80,8 +80,8 @@ class _DonateScreenState extends State<DonateScreen> {
                             child: Text(
                               '@Rezaaslejeddian@gmail.com',
                               style: TextStyle(
-                                  color: _themeProvider.textColor,
-                                  fontSize: _themeProvider.isEn ? h * w * 0.00005 : h * w * 0.00006,
+                                  color: _themeState.textColor,
+                                  fontSize: _themeState.isEn ? h * w * 0.00005 : h * w * 0.00006,
                                   fontWeight: FontWeight.w100),
                             ),
                           ),
@@ -101,7 +101,7 @@ class _DonateScreenState extends State<DonateScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ButtonWidget(
-                          backgroundColor: _themeProvider.textColor,
+                          backgroundColor: _themeState.textColor,
                           sizePU: h * 0.1,
                           sizePD: h * 0.1,
                           iconSize: h * w * 0.00014,
@@ -111,10 +111,10 @@ class _DonateScreenState extends State<DonateScreen> {
                           },
                         ),
                         Text(
-                           locale.donateRials.tr,
+                          locale.donateRials.tr,
                           style: TextStyle(
-                              color: _themeProvider.textColor,
-                              fontSize: _themeProvider.isEn ? h * w * 0.00007 : h * w * 0.00007,
+                              color: _themeState.textColor,
+                              fontSize: _themeState.isEn ? h * w * 0.00007 : h * w * 0.00007,
                               fontWeight: FontWeight.w400),
                         )
                       ],
@@ -123,7 +123,7 @@ class _DonateScreenState extends State<DonateScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ButtonWidget(
-                          backgroundColor: _themeProvider.textColor,
+                          backgroundColor: _themeState.textColor,
                           sizePU: h * 0.1,
                           sizePD: h * 0.1,
                           iconSize: h * w * 0.00014,
@@ -138,10 +138,10 @@ class _DonateScreenState extends State<DonateScreen> {
                           ),
                         ),
                         Text(
-                           locale.donateDoge.tr,
+                          locale.donateDoge.tr,
                           style: TextStyle(
-                              color: _themeProvider.textColor,
-                              fontSize: _themeProvider.isEn ? h * w * 0.00007 : h * w * 0.00006,
+                              color: _themeState.textColor,
+                              fontSize: _themeState.isEn ? h * w * 0.00007 : h * w * 0.00006,
                               fontWeight: FontWeight.w400),
                         )
                       ],

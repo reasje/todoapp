@@ -3,12 +3,12 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:todoapp/app/splash/connection_state.dart';
 
 class ConnectionLogic extends GetxController {
+  ConnectionState state = ConnectionState();
   @override
   void onInit() {
     checkConnection();
     super.onInit();
   }
-    ConnectionState state = ConnectionState();
   Future<void> checkConnection() async {
     var connectivityResult = await conn.Connectivity().checkConnectivity();
     if (connectivityResult == conn.ConnectivityResult.none) {

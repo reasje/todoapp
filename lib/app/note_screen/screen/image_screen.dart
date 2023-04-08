@@ -9,7 +9,7 @@ import 'package:googleapis/cloudbuild/v1.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
-import 'package:todoapp/app/logic/theme_provider.dart';
+import 'package:todoapp/theme/theme_logic.dart';
 
 import '../../../applocalizations.dart';
 import '../../../widgets/dialog.dart';
@@ -45,9 +45,10 @@ class _PicDetailState extends State<PicDetail> {
 
   @override
   Widget build(BuildContext context) {
-    final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _themeLogic = Get.find<ThemeLogic>();
+    final _themeState = _themeLogic.state;
     final _noteImageLogic = Get.find<NoteImageLogic>();
-    var isWhite = _themeProvider.checkIsWhite();
+    var isWhite = _themeLogic.checkIsWhite();
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
@@ -59,7 +60,7 @@ class _PicDetailState extends State<PicDetail> {
       textSize = TextSize.small;
     }
     return Scaffold(
-      backgroundColor: _themeProvider.mainColor,
+      backgroundColor: _themeState.mainColor,
       body: InkWell(
         onTap: helli,
         child: Container(
@@ -86,16 +87,16 @@ class _PicDetailState extends State<PicDetail> {
                       child: Container(
                         width: w,
                         padding: EdgeInsets.symmetric(vertical: h * 0.01, horizontal: h * 0.01),
-                        decoration: BoxDecoration(color: _themeProvider.textColor.withOpacity(0.1)),
+                        decoration: BoxDecoration(color: _themeState.textColor.withOpacity(0.1)),
                         child: Text(
                           textSize == TextSize.large
                               ? _noteImageLogic.state.imageList[widget.index].desc.substring(0, 410) + '...'
                               : _noteImageLogic.state.imageList[widget.index].desc,
                           softWrap: true,
                           style: TextStyle(
-                              color: _themeProvider.textColor,
-                              fontSize: _themeProvider.isEn ? h * w * 0.00006 : h * w * 0.00004,
-                              fontWeight: _themeProvider.isEn ? FontWeight.w100 : FontWeight.w600),
+                              color: _themeState.textColor,
+                              fontSize: _themeState.isEn ? h * w * 0.00006 : h * w * 0.00004,
+                              fontWeight: _themeState.isEn ? FontWeight.w100 : FontWeight.w600),
                         ),
                       ),
                     )
@@ -111,7 +112,7 @@ class _PicDetailState extends State<PicDetail> {
                 FloatingActionButton(
                   elevation: 0,
                   heroTag: 'btn1',
-                  backgroundColor: isWhite ? _themeProvider.blackMainColor : _themeProvider.whiteMainColor,
+                  backgroundColor: _themeState.mainOpColor,
                   child: Icon(FontAwesome.rotate_right),
                   onPressed: () async {
                     var result = await FlutterImageCompress.compressWithList(_noteImageLogic.state.imageList[widget.index].image, rotate: 90);
@@ -121,18 +122,18 @@ class _PicDetailState extends State<PicDetail> {
                 FloatingActionButton(
                   elevation: 0,
                   heroTag: 'btn2',
-                  backgroundColor: isWhite ? _themeProvider.blackMainColor : _themeProvider.whiteMainColor,
+                  backgroundColor: _themeState.mainOpColor,
                   child: Icon(Icons.text_fields),
                   onPressed: () async {
                     TextEditingController dialogController = TextEditingController();
                     showAlertDialog(context,
-                        title:  locale.imageDesc.tr,
+                        title: locale.imageDesc.tr,
                         desc: _noteImageLogic.state.imageList[widget.index].desc ?? null,
                         textFieldMaxLength: 415,
                         hastTextField: true,
-                        textFieldhintText:  locale.imageDesc.tr,
-                        okButtonText:  locale.ok.tr,
-                        cancelButtonText:  locale.cancel.tr, okButtonFunction: () {
+                        textFieldhintText: locale.imageDesc.tr,
+                        okButtonText: locale.ok.tr,
+                        cancelButtonText: locale.cancel.tr, okButtonFunction: () {
                       _noteImageLogic.updateImageDesc(widget.index, dialogController.text);
                     });
                   },

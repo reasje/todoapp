@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/app/note_screen/logic/note_logic.dart';
-import 'package:todoapp/app/logic/theme_provider.dart';
+import 'package:todoapp/theme/theme_logic.dart';
 import 'package:todoapp/locales/locales.dart' as locale;
 import 'package:get/get.dart';
 import 'package:todoapp/widgets/buttons.dart';
@@ -24,7 +24,7 @@ class ReOrderableCardWidget extends StatelessWidget {
     final _noteLogic = Get.find<NoteLogic>();
     ;
 
-    final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final _themeState = Get.find<ThemeLogic>().state;
     List<int> keys = notes.keys.cast<int>().toList();
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
@@ -42,7 +42,7 @@ class ReOrderableCardWidget extends StatelessWidget {
         child: Icon(
           Icons.delete_sweep,
           size: h * w * 0.0002,
-          color: _themeProvider.textColor,
+          color: _themeState.textColor,
         ),
       ),
       onDismissed: (direction) async {
@@ -86,7 +86,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                   //clipBehavior: Clip.antiAlias,
                   child: Theme(
                       data: Theme.of(context).copyWith(
-                        unselectedWidgetColor: _themeProvider.textColor,
+                        unselectedWidgetColor: _themeState.textColor,
                       ),
                       child: Column(
                         children: [
@@ -97,7 +97,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                   onTap: () async {
                                     if (snapShot.data.password == '' || snapShot.data.password == null) {
                                       // does not have a password
-                                      _noteLogic.loadNote( keys, index).then((value) {
+                                      _noteLogic.loadNote(keys, index).then((value) {
                                         Get.to(NoteScreen(), transition: Transition.rightToLeft);
                                       });
                                     } else {
@@ -108,7 +108,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                         canCancel: true,
                                         didUnlocked: () {
                                           Get.back();
-                                          _noteLogic.loadNote( keys, index).then((value) {
+                                          _noteLogic.loadNote(keys, index).then((value) {
                                             Get.to(NoteScreen(), transition: Transition.rightToLeft);
                                           });
                                         },
@@ -131,28 +131,28 @@ class ReOrderableCardWidget extends StatelessWidget {
                                           children: [
                                             Text(
                                               ((snapShot.data.leftTime / 3600) % 60).floor().toString().padLeft(2, '0'),
-                                              style: TextStyle(
-                                                  color: _themeProvider.textColor, fontSize: h * w * 0.00012, fontFamily: "Ubuntu Condensed"),
+                                              style:
+                                                  TextStyle(color: _themeState.textColor, fontSize: h * w * 0.00012, fontFamily: "Ubuntu Condensed"),
                                             ),
                                             Text(
                                               ':',
-                                              style: TextStyle(
-                                                  color: _themeProvider.textColor, fontSize: h * w * 0.00012, fontFamily: "Ubuntu Condensed"),
+                                              style:
+                                                  TextStyle(color: _themeState.textColor, fontSize: h * w * 0.00012, fontFamily: "Ubuntu Condensed"),
                                             ),
                                             Text(
                                               ((snapShot.data.leftTime / 60) % 60).floor().toString().padLeft(2, '0'),
-                                              style: TextStyle(
-                                                  color: _themeProvider.textColor, fontSize: h * w * 0.00012, fontFamily: "Ubuntu Condensed"),
+                                              style:
+                                                  TextStyle(color: _themeState.textColor, fontSize: h * w * 0.00012, fontFamily: "Ubuntu Condensed"),
                                             ),
                                             Text(
                                               ':',
-                                              style: TextStyle(
-                                                  color: _themeProvider.textColor, fontSize: h * w * 0.00012, fontFamily: "Ubuntu Condensed"),
+                                              style:
+                                                  TextStyle(color: _themeState.textColor, fontSize: h * w * 0.00012, fontFamily: "Ubuntu Condensed"),
                                             ),
                                             Text(
                                               (snapShot.data.leftTime % 60).floor().toString().padLeft(2, '0'),
-                                              style: TextStyle(
-                                                  color: _themeProvider.textColor, fontSize: h * w * 0.00012, fontFamily: "Ubuntu Condensed"),
+                                              style:
+                                                  TextStyle(color: _themeState.textColor, fontSize: h * w * 0.00012, fontFamily: "Ubuntu Condensed"),
                                             ),
                                           ],
                                         ),
@@ -195,7 +195,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                             height: h * 0.04,
                                             width: h * 0.04,
                                             decoration: BoxDecoration(
-                                                border: Border.all(color: _themeProvider.textColor, width: 1.5),
+                                                border: Border.all(color: _themeState.textColor, width: 1.5),
                                                 borderRadius: BorderRadius.circular(10),
                                                 color: snapShot.data.isChecked ?? false ? Color(snapShot.data.color).withOpacity(0.2) : null),
                                             child: snapShot.data.isChecked ?? false
@@ -217,9 +217,9 @@ class ReOrderableCardWidget extends StatelessWidget {
                                                   : snapShot.data.title,
                                               softWrap: false,
                                               style: TextStyle(
-                                                  color: _themeProvider.noteTitleColor[index],
-                                                  fontSize: _themeProvider.isEn ? h * w * 0.00011 : h * w * 0.00009,
-                                                  fontWeight: _themeProvider.isEn ? FontWeight.w100 : FontWeight.w600),
+                                                  color: _themeState.noteTitleColor[index],
+                                                  fontSize: _themeState.isEn ? h * w * 0.00011 : h * w * 0.00009,
+                                                  fontWeight: _themeState.isEn ? FontWeight.w100 : FontWeight.w600),
                                             ),
                                           ),
                                         ),
@@ -229,7 +229,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                   onTap: () async {
                                     if (snapShot.data.password == '' || snapShot.data.password == null) {
                                       // does not have a password
-                                      _noteLogic.loadNote( keys, index).then((value) {
+                                      _noteLogic.loadNote(keys, index).then((value) {
                                         Get.to(NoteScreen(), transition: Transition.rightToLeft);
                                       });
                                     } else {
@@ -241,7 +241,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                         canCancel: true,
                                         didUnlocked: () {
                                           Get.back();
-                                          _noteLogic.loadNote( keys, index).then((value) {
+                                          _noteLogic.loadNote(keys, index).then((value) {
                                             Get.to(NoteScreen(), transition: Transition.rightToLeft);
                                           });
                                         },
@@ -258,7 +258,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                           ? snapShot.data.text.toString().substring(0, 1500) + "..."
                                           : snapShot.data.text,
                                       style: TextStyle(
-                                        color: _themeProvider.textColor,
+                                        color: _themeState.textColor,
                                         fontSize: h * w * 0.00008,
                                       ),
                                     ),

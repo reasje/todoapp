@@ -12,9 +12,9 @@
 
 //   @override
 //   Widget build(BuildContext context) {
-//               final _themeProvider =
-//               Provider.of<ThemeProvider>(context, listen: false);
-//               List<Color> colors = _themeProvider.getNoteColors();
+//               final _themeState =
+//               Get.find<ThemeLogic>().state;
+//               List<Color> colors = _themeState.getNoteColors();
               
 //               return showModalBottomSheet(
 //                   context: context,

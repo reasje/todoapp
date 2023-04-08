@@ -8,7 +8,7 @@ import 'package:todoapp/model/note_model.dart';
 import '../../applocalizations.dart';
 import '../../main.dart';
 import '../../widgets/dialog.dart';
-import '../logic/theme_provider.dart';
+import '../../theme/theme_logic.dart';
 import 'package:provider/provider.dart';
 
 class OnBoardingLogic extends GetxController {
@@ -16,9 +16,9 @@ class OnBoardingLogic extends GetxController {
 
   @override
   void onInit() {
-    final _themeProvider = Provider.of<ThemeProvider>(Get.overlayContext, listen: false);
+    final _themeState = Provider.of<ThemeLogic>(Get.overlayContext, listen: false);
     showAlertDialog(Get.overlayContext, title: "Choose you language ! ", okButtonText: "فارسی", cancelButtonText: "English", okButtonFunction: () {
-      _themeProvider.changeLanToPersian();
+      _themeState.changeLanToPersian();
     });
     super.onInit();
   }

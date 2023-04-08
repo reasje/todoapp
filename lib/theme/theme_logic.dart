@@ -1,37 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/model/note_model.dart';
 
-import '../../main.dart';
+import '../main.dart';
+import 'colors_pallette.dart';
+import 'theme_state.dart';
 
-class ThemeProvider extends ChangeNotifier {
-  ThemeProvider() {
+class ThemeLogic extends GetxController {
+  ThemeState state = ThemeState();
+
+  @override
+  void onInit() {
     initialColorsAndLan();
+    super.onInit();
   }
-  List<Color> noteTitleColor;
-  Color shimmerColor;
-  Color mainColor;
-  Color textColor;
-  Color titleColor;
-  Color hinoteColor;
-  Brightness brightness;
-  Color swashColor = Color(0xFF001b48);
-  bool isEn;
-  // this ThemeProvider is used to control the showcase
-  bool isFirstTime;
-  Locale locale;
-  String noTaskImage;
-  String splashImage;
-  Color whiteMainColor = Color(0xffe6ebf2);
-  Color blackMainColor = Color(0xff303234);
-  Color whiteTextColor = Colors.black.withOpacity(.5);
-  Color blackTextColor = Colors.white.withOpacity(.5);
-  Color whiteTitleColor = Colors.black;
-  Color blackTitleColor = Colors.white;
-
-  Color whiteNoteTitleColor = Colors.black.withOpacity(.5);
-  Color blackNoteTitleColor = Colors.white.withOpacity(.5);
 
   // It is used to store
   // the theme status as string
@@ -54,9 +38,9 @@ class ThemeProvider extends ChangeNotifier {
       noteBox.clear();
     }
     if (firstTime == "Yes") {
-      isFirstTime = true;
+      state.isFirstTime = true;
     } else {
-      isFirstTime = false;
+      state.isFirstTime = false;
     }
     String lan;
     if (prefsBox.get('lan') != null) {
@@ -66,11 +50,11 @@ class ThemeProvider extends ChangeNotifier {
       lan = 'en';
     }
     if (lan == 'en') {
-      isEn = true;
-      locale = Locale("en", "US");
+      state.isEn = true;
+      state.locale = Locale("en", "US");
     } else {
-      isEn = false;
-      locale = Locale("fa", "IR");
+      state.isEn = false;
+      state.locale = Locale("fa", "IR");
     }
     String theme;
     if (prefsBox.get('theme') != null) {
@@ -83,11 +67,10 @@ class ThemeProvider extends ChangeNotifier {
     // cuz I have deleted the set state for the
     // note when the expansion is changed for the
     // better animation pusrpose
-    noteTitleColor = List<Color>.filled(100, Colors.white);
+    state.noteTitleColor = List<Color>.filled(100, Colors.white);
     // The colors for the timer border
     // will initial the color
     changeBrightness(toWhat: theme);
-    notifyListeners();
   }
 
   void changeBrightness({String toWhat}) {
@@ -110,31 +93,32 @@ class ThemeProvider extends ChangeNotifier {
       }
     }
     if (theme == 'white') {
-      splashImage = 'assets/images/SplashScreenBlack.gif';
-      noTaskImage = "assets/images/notask.png";
+      state.splashImage = 'assets/images/SplashScreenBlack.gif';
+      state.noTaskImage = "assets/images/notask.png";
       // shimmerColor = blackShimmer;
-      mainColor = blackMainColor;
-      textColor = blackTextColor;
-      brightness = Brightness.dark;
-      noteTitleColor.fillRange(0, 100, blackNoteTitleColor);
-      hinoteColor = textColor.withOpacity(0.5);
-      swashColor = swashColor.withOpacity(0.7);
-      titleColor = blackTitleColor;
+      state.mainColor = ColorsPallette.blackMainColor;
+      state.mainOpColor = ColorsPallette.whiteMainColor;
+      state.textColor = ColorsPallette.blackTextColor;
+      state.brightness = Brightness.dark;
+      state.noteTitleColor.fillRange(0, 100, ColorsPallette.blackNoteTitleColor);
+      state.hinoteColor = state.textColor.withOpacity(0.5);
+      state.swashColor = state.swashColor.withOpacity(0.7);
+      state.titleColor = ColorsPallette.blackTitleColor;
       prefsBox.put('theme', 'black');
     } else {
-      splashImage = 'assets/images/SplashScreenWhite.gif';
-      noTaskImage = "assets/images/notask.png";
+      state.splashImage = 'assets/images/SplashScreenWhite.gif';
+      state.noTaskImage = "assets/images/notask.png";
       // shimmerColor = whiteShimmer;
-      mainColor = whiteMainColor;
-      textColor = whiteTextColor;
-      brightness = Brightness.light;
-      titleColor = whiteTitleColor;
-      noteTitleColor.fillRange(0, 100, whiteNoteTitleColor);
-      swashColor = swashColor.withOpacity(0.7);
-      hinoteColor = whiteTextColor.withOpacity(0.5);
+      state.mainColor = ColorsPallette.whiteMainColor;
+      state.mainOpColor = ColorsPallette.blackMainColor;
+      state.textColor = ColorsPallette.whiteTextColor;
+      state.brightness = Brightness.light;
+      state.titleColor = ColorsPallette.whiteTitleColor;
+      state.noteTitleColor.fillRange(0, 100, ColorsPallette.whiteNoteTitleColor);
+      state.swashColor = state.swashColor.withOpacity(0.7);
+      state.hinoteColor = ColorsPallette.whiteTextColor.withOpacity(0.5);
       prefsBox.put('theme', 'white');
     }
-    notifyListeners();
   }
 
   bool checkIsWhite() {
@@ -156,17 +140,15 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   void changeLanToPersian() {
-    isEn = false;
+    state.isEn = false;
     prefsBox.put('lan', 'fa');
-    locale = Locale("fa", "IR");
-    notifyListeners();
+    state.locale = Locale("fa", "IR");
   }
 
   void changeLanToEnglish() {
-    isEn = true;
+    state.isEn = true;
     prefsBox.put('lan', 'en');
-    locale = Locale("en", "US");
-    notifyListeners();
+    state.locale = Locale("en", "US");
   }
 
   // This function will be executed as soon as the user crosses

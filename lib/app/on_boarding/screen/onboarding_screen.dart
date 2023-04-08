@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/on_boarding/logic.dart';
-import 'package:todoapp/app/logic/theme_provider.dart';
+import 'package:todoapp/theme/theme_logic.dart';
 import 'package:todoapp/locales/locales.dart' as locale;
 import 'package:get/get.dart';
 import '../../../applocalizations.dart';
@@ -24,10 +24,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
-    final _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final _themeLogic = Get.find<ThemeLogic>();
+    final _themeState = _themeLogic.state;
 
     return Scaffold(
-      backgroundColor: _themeProvider.mainColor,
+      backgroundColor: _themeState.mainColor,
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -42,14 +43,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ButtonWidget(
-                    backgroundColor: _themeProvider.textColor,
+                    backgroundColor: _themeState.textColor,
                     sizePU: h * 0.07,
                     sizePD: h * 0.08,
                     iconSize: h * w * 0.0001,
                     iconData: Icons.arrow_forward_ios,
                     function: () {
                       Navigator.pushReplacement(context, SliderTransition(NotesScreen()));
-                      _themeProvider.changeFirstTime();
+                      _themeLogic.changeFirstTime();
                     },
                   ),
                 ],
@@ -66,16 +67,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         child: PageView(
                           controller: _state.pageController,
                           children: [
-                            onBoardPage("paradise",  locale.paradiseTitle.tr,
-                                 locale.paradise.tr, h, w),
-                            onBoardPage(
-                                "plant",  locale.plantTitle.tr,  locale.plant.tr, h, w),
-                            onBoardPage("deepwork",  locale.deepWorkTitle.tr,
-                                 locale.deepWork.tr, h, w),
-                            onBoardPage("pioritize",  locale.pioritizeTitle.tr,
-                                 locale.pioritize.tr, h, w),
-                            onBoardPage("family",  locale.familyTitle.tr,
-                                 locale.family.tr, h, w),
+                            onBoardPage("paradise", locale.paradiseTitle.tr, locale.paradise.tr, h, w),
+                            onBoardPage("plant", locale.plantTitle.tr, locale.plant.tr, h, w),
+                            onBoardPage("deepwork", locale.deepWorkTitle.tr, locale.deepWork.tr, h, w),
+                            onBoardPage("pioritize", locale.pioritizeTitle.tr, locale.pioritize.tr, h, w),
+                            onBoardPage("family", locale.familyTitle.tr, locale.family.tr, h, w),
                           ],
                           onPageChanged: (value) => {setCurrentPage(value)},
                         ),

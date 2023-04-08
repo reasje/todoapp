@@ -20,7 +20,7 @@ import 'package:todoapp/app/note_screen/logic/notetitletext_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notevoice_player_logic.dart';
 
 import 'package:todoapp/app/settings/settings_logic.dart';
-import 'package:todoapp/app/logic/theme_provider.dart';
+import 'package:todoapp/theme/theme_logic.dart';
 import 'app/splash/connection_logic.dart';
 import 'app/splash/uncheck_logic.dart';
 import 'app/splash/screen/splash_screen.dart';
@@ -106,46 +106,39 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final _themeState = Get.put(ThemeLogic());
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => ThemeProvider()),
-        ],
-        child: Consumer<ThemeProvider>(
-          builder: (context, _themeProvider, _) {
-            return new GetMaterialApp(
-              locale: _themeProvider.locale,
-              localizationsDelegates: [
-                AppLocalizations.delegate,
-                // A class which loads the strings form JSON files
-                //GlobalCupertinoLocalizations.delegate,
-                // Built-in localization for simple text for Material widgets
-                GlobalMaterialLocalizations.delegate,
-                // Built-in localization for text direction LTR/RTL
-                GlobalWidgetsLocalizations.delegate,
-              ],
-              supportedLocales: [
-                Locale("en", "US"),
-                Locale("fa", "IR"),
-              ],
-              // Return a locale which will be used by the app
-              // localeResolutionCallback: (locale, supportedLocales) {
-              //   // Check if the current device locale is supported
-              //   for (var supportedLocale in supportedLocales) {
-              //     if (supportedLocale.languageCode == locale.languageCode &&
-              //         supportedLocale.countryCode == locale.countryCode) {
-              //       return supportedLocale;
-              //     }
-              //   }
-              //   return supportedLocales.first;
-              // },
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity, fontFamily: _themeProvider.isEn ? "Ubuntu Condensed" : "Dubai"),
-              home: SplashScreen(),
-              builder: EasyLoading.init(),
-            );
-          },
-        ));
+    return GetMaterialApp(
+      // locale: _themeState.locale,
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        // A class which loads the strings form JSON files
+        //GlobalCupertinoLocalizations.delegate,
+        // Built-in localization for simple text for Material widgets
+        GlobalMaterialLocalizations.delegate,
+        // Built-in localization for text direction LTR/RTL
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        Locale("en", "US"),
+        Locale("fa", "IR"),
+      ],
+      // Return a locale which will be used by the app
+      // localeResolutionCallback: (locale, supportedLocales) {
+      //   // Check if the current device locale is supported
+      //   for (var supportedLocale in supportedLocales) {
+      //     if (supportedLocale.languageCode == locale.languageCode &&
+      //         supportedLocale.countryCode == locale.countryCode) {
+      //       return supportedLocale;
+      //     }
+      //   }
+      //   return supportedLocales.first;
+      // },
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity, fontFamily: _themeState.state.isEn ? "Ubuntu Condensed" : "Dubai"),
+      home: SplashScreen(),
+      builder: EasyLoading.init(),
+    );
   }
 }

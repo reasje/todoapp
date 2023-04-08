@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notetask_logic.dart';
-import 'package:todoapp/app/logic/theme_provider.dart';
+import 'package:todoapp/theme/theme_logic.dart';
 import 'package:todoapp/locales/locales.dart' as locale;
 import 'package:get/get.dart';
 import '../../../../applocalizations.dart';
@@ -16,7 +16,7 @@ class TaskListView extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _themeState = Get.find<ThemeLogic>().state;
 
     final _noteTaskLogic = Provider.of<NoteTaskLogic>(context);
     double h = MediaQuery.of(context).size.height;
@@ -33,16 +33,14 @@ class TaskListView extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                   locale.reset.tr,
+                  locale.reset.tr,
                   style: TextStyle(
-                      color: _themeProvider.textColor,
-                      fontSize: _themeProvider.isEn ? h * w * 0.00007 : h * w * 0.00005,
-                      fontWeight: FontWeight.w400),
+                      color: _themeState.textColor, fontSize: _themeState.isEn ? h * w * 0.00007 : h * w * 0.00005, fontWeight: FontWeight.w400),
                 ),
                 Switch(
                   activeColor: color,
-                  inactiveTrackColor: _themeProvider.textColor,
-                  inactiveThumbColor: _themeProvider.mainColor,
+                  inactiveTrackColor: _themeState.textColor,
+                  inactiveThumbColor: _themeState.mainColor,
                   value: _noteTaskLogic.resetCheckBoxs,
                   onChanged: (value) {
                     _noteTaskLogic.changeResetCheckBoxs(value);
@@ -81,7 +79,7 @@ class TaskListView extends StatelessWidget {
                                   padding: EdgeInsets.only(left: w * 0.1, bottom: h * 0.01, right: w * 0.1),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.all(Radius.circular(35)),
-                                    color: _themeProvider.mainColor,
+                                    color: _themeState.mainColor,
                                   ),
                                   alignment: AlignmentDirectional.centerEnd,
                                   child: Container(
@@ -94,15 +92,14 @@ class TaskListView extends StatelessWidget {
                                     child: Icon(
                                       Icons.delete_sweep,
                                       size: h * w * 0.0001,
-                                      color: _themeProvider.mainColor,
+                                      color: _themeState.mainColor,
                                     ),
                                   ),
                                 ),
                                 onDismissed: (direction) {
                                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                  ScaffoldMessenger.of(context).showSnackBar(MySnackBar(
-                                       locale.undoTask.tr, 'undoTask', true,
-                                      context: context, index: index));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(MySnackBar(locale.undoTask.tr, 'undoTask', true, context: context, index: index));
                                   _noteTaskLogic.taskDissmissed(index);
                                 },
                                 child: Container(
@@ -142,23 +139,23 @@ class TaskListView extends StatelessWidget {
                                             _noteTaskLogic.checkListOnSubmit(index);
                                           },
                                           focusNode: snapshot.data[index].focusNode,
-                                          cursorColor: _themeProvider.swashColor,
+                                          cursorColor: _themeState.swashColor,
                                           cursorHeight: h * 0.04,
                                           style: TextStyle(
-                                              color: _themeProvider.textColor,
-                                              fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00006,
+                                              color: _themeState.textColor,
+                                              fontSize: _themeState.isEn ? h * w * 0.00008 : h * w * 0.00006,
                                               fontWeight: FontWeight.w200),
                                           decoration: InputDecoration(
-                                              contentPadding: EdgeInsets.all(_themeProvider.isEn ? h * w * 0.00001 : h * w * 0.000008),
-                                              hintText:  locale.titleHint.tr,
+                                              contentPadding: EdgeInsets.all(_themeState.isEn ? h * w * 0.00001 : h * w * 0.000008),
+                                              hintText: locale.titleHint.tr,
                                               border: InputBorder.none,
                                               focusedBorder: InputBorder.none,
                                               enabledBorder: InputBorder.none,
                                               errorBorder: InputBorder.none,
                                               disabledBorder: InputBorder.none,
                                               hintStyle: TextStyle(
-                                                  color: _themeProvider.hinoteColor.withOpacity(0.12),
-                                                  fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00006,
+                                                  color: _themeState.hinoteColor.withOpacity(0.12),
+                                                  fontSize: _themeState.isEn ? h * w * 0.00008 : h * w * 0.00006,
                                                   fontWeight: FontWeight.w200)),
                                         ),
                                       ),

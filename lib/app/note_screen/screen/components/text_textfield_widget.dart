@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notetitletext_logic.dart';
-import 'package:todoapp/app/logic/theme_provider.dart';
+import 'package:todoapp/theme/theme_logic.dart';
 import 'package:todoapp/locales/locales.dart' as locale;
 import 'package:get/get.dart';
 import '../../../../applocalizations.dart';
@@ -14,7 +14,7 @@ class TextTextField extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _themeState = Get.find<ThemeLogic>().state;
     final _noteTitleTextLogic = Get.find<NoteTitleTextLogic>();
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
@@ -33,10 +33,9 @@ class TextTextField extends StatelessWidget {
         },
         keyboardType: TextInputType.multiline,
         maxLines: null,
-        cursorColor: _themeProvider.swashColor,
+        cursorColor: _themeState.swashColor,
         cursorHeight: h * 0.045,
-        style: TextStyle(
-            color: _themeProvider.textColor, fontSize: _themeProvider.isEn ? h * w * 0.00008 : h * w * 0.00006, fontWeight: FontWeight.w400),
+        style: TextStyle(color: _themeState.textColor, fontSize: _themeState.isEn ? h * w * 0.00008 : h * w * 0.00006, fontWeight: FontWeight.w400),
         decoration: InputDecoration(
             suffixIcon: IconButton(
               icon: Icon(Icons.clear_sharp),
@@ -45,17 +44,16 @@ class TextTextField extends StatelessWidget {
               },
             ),
             contentPadding: EdgeInsets.symmetric(
-                horizontal: _themeProvider.isEn ? h * w * 0.00004 : h * w * 0.00003,
-                vertical: _themeProvider.isEn ? h * w * 0.00004 : h * w * 0.00003),
-            hintText:  locale.textHint.tr,
+                horizontal: _themeState.isEn ? h * w * 0.00004 : h * w * 0.00003, vertical: _themeState.isEn ? h * w * 0.00004 : h * w * 0.00003),
+            hintText: locale.textHint.tr,
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
             hintStyle: TextStyle(
-                color: _themeProvider.hinoteColor.withOpacity(0.12),
-                fontSize: _themeProvider.isEn ? h * w * 0.00007 : h * w * 0.00005,
+                color: _themeState.hinoteColor.withOpacity(0.12),
+                fontSize: _themeState.isEn ? h * w * 0.00007 : h * w * 0.00005,
                 fontWeight: FontWeight.w400)),
       ),
     );

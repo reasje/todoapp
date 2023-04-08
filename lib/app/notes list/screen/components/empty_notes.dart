@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapp/app/logic/theme_provider.dart';
+import 'package:todoapp/theme/theme_logic.dart';
 import 'package:todoapp/locales/locales.dart' as locale;
 import 'package:get/get.dart';
 import '../../../../applocalizations.dart';
@@ -12,7 +12,7 @@ class EmptyNotes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _themeState = Get.find<ThemeLogic>().state;
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
@@ -29,7 +29,7 @@ class EmptyNotes extends StatelessWidget {
                 height: h * 0.45,
                 width: w,
                 child: Image.asset(
-                  _themeProvider.noTaskImage,
+                  _themeState.noTaskImage,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -44,23 +44,22 @@ class EmptyNotes extends StatelessWidget {
                   Container(
                     height: h * 0.1,
                     width: w * 0.7,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(h * w * 0.0001), color: _themeProvider.textColor.withOpacity(0.1)),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(h * w * 0.0001), color: _themeState.textColor.withOpacity(0.1)),
                     child: Center(
                       child: Text(
-                         locale.NoNotesyet.tr,
-                        style: TextStyle(color: _themeProvider.textColor, fontWeight: FontWeight.w400, fontSize: w * 0.06),
+                        locale.NoNotesyet.tr,
+                        style: TextStyle(color: _themeState.textColor, fontWeight: FontWeight.w400, fontSize: w * 0.06),
                       ),
                     ),
                   ),
                   Container(
                     height: h * 0.1,
                     width: w * 0.9,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(h * w * 0.0001), color: _themeProvider.textColor.withOpacity(0.1)),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(h * w * 0.0001), color: _themeState.textColor.withOpacity(0.1)),
                     child: Center(
                       child: Text(
-                         locale.addNewNotePlease.tr,
-                        style: TextStyle(
-                            color: _themeProvider.textColor, fontWeight: FontWeight.w500, fontSize: _themeProvider.isEn ? w * 0.06 : w * 0.04),
+                        locale.addNewNotePlease.tr,
+                        style: TextStyle(color: _themeState.textColor, fontWeight: FontWeight.w500, fontSize: _themeState.isEn ? w * 0.06 : w * 0.04),
                       ),
                     ),
                   ),

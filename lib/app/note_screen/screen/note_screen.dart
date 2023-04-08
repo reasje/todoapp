@@ -13,7 +13,7 @@ import 'package:todoapp/app/note_screen/logic/notevoice_recorder_provider.dart';
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/app/note_screen/logic/bottomnav_logic.dart';
 import 'package:todoapp/app/note_screen/logic/note_logic.dart';
-import 'package:todoapp/app/logic/theme_provider.dart';
+import 'package:todoapp/theme/theme_logic.dart';
 
 import '../../../main.dart';
 import 'components/bottomnav_widget.dart';
@@ -31,27 +31,27 @@ class NoteScreen extends StatefulWidget {
 }
 
 class _NoteScreenState extends State<NoteScreen> {
-  final _bottomNavLogic = Get.put(BottomNavLogic);
-  final _noteLogic = Get.put(NoteLogic);
-  final _noteColorLogic = Get.put(NoteColorLogic);
-  final _noteImageLogic = Get.put(NoteImageLogic);
-  final _noteTaskLogic = Get.put(NoteTaskLogic);
-  final _noteVoicePlayerLogic = Get.put(NoteVoicePlayerLogic);
-  final _noteVoiceRecorderLogic = Get.put(NoteVoiceRecorderLogic);
-  final _noteTitleTextLogic = Get.put(NoteTitleTextLogic);
-  final _notePasswordLogic = Get.put(NotePasswordLogic);
+  final _bottomNavLogic = Get.put(BottomNavLogic());
+  final _noteLogic = Get.put(NoteLogic());
+  final _noteColorLogic = Get.put(NoteColorLogic());
+  final _noteImageLogic = Get.put(NoteImageLogic());
+  final _noteTaskLogic = Get.put(NoteTaskLogic());
+  final _noteVoicePlayerLogic = Get.put(NoteVoicePlayerLogic());
+  final _noteVoiceRecorderLogic = Get.put(NoteVoiceRecorderLogic());
+  final _noteTitleTextLogic = Get.put(NoteTitleTextLogic());
+  final _notePasswordLogic = Get.put(NotePasswordLogic());
 
   @override
   Widget build(BuildContext context) {
     final _noteLogic = Provider.of<NoteLogic>(context);
-    final _themeProvider = Provider.of<ThemeProvider>(context);
+    final _themeState = Get.find<ThemeLogic>().state;
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
     return Scaffold(
       key: noteEditingScaffoldKey,
       //resizeToAvoidBottomInset: false,
-      backgroundColor: _themeProvider.mainColor,
+      backgroundColor: _themeState.mainColor,
       bottomNavigationBar: BottomNavWidget(),
       body: WillPopScope(
         onWillPop: () {
@@ -68,8 +68,8 @@ class _NoteScreenState extends State<NoteScreen> {
               width: isLandscape ? w * 0.8 : w,
               // padding: EdgeInsets.only(
               //     bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: Consumer<BottomNavLogic>(
-                builder: (ctx, _bottomNavLogic, _) {
+              child: Obx(
+                () {
                   return PageView(
                     onPageChanged: (value) {
                       _bottomNavLogic.newTabSelectedAnimation(value);

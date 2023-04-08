@@ -6,7 +6,7 @@ import 'package:todoapp/model/bottomnav_tab_model.dart';
 import 'package:todoapp/model/navigationitem_model.dart';
 import 'package:provider/provider.dart';
 import '../../../widgets/dialog.dart';
-import '../../logic/theme_provider.dart';
+import '../../../theme/theme_logic.dart';
 import '../screen/components/image_listview_widget.dart';
 import '../screen/components/task_listview_widget.dart';
 import '../screen/components/text_textfield_widget.dart';
@@ -125,7 +125,7 @@ class BottomNavLogic extends GetxController {
                               height: h * 0.1,
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: Provider.of<ThemeProvider>(context, listen: false).mainColor,
+                                    color: Get.find<ThemeLogic>().state.mainColor,
                                     borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft: Radius.circular(20))),
                                 child: GridView(
                                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
