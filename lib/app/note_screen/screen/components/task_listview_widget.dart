@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notetask_logic.dart';
 import 'package:todoapp/theme/theme_logic.dart';
@@ -19,7 +19,7 @@ class TaskListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final _themeState = Get.find<ThemeLogic>().state;
 
-    final _noteTaskLogic = Provider.of<NoteTaskLogic>(context);
+    final _noteTaskLogic = Get.find<NoteTaskLogic>();
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;

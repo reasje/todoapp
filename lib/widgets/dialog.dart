@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
+
 import 'package:todoapp/model/note_model.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/app/note_screen/logic/note_logic.dart';
@@ -14,7 +14,7 @@ import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:google_sign_in/google_sign_in.dart' as signIn;
 import 'package:todoapp/app/settings/drive_logic.dart';
 
-Future showAlertDialog(BuildContext context,
+Future showAlertDialog(
     {String? title,
     drive.DriveApi? driveApi,
     drive.File? driveFile,
@@ -34,16 +34,14 @@ Future showAlertDialog(BuildContext context,
     TextEditingController? dialogController}) async {
   bool _passwordInVisible = true;
 
-  var mCtx = context;
-
   final _themeLogic = Get.find<ThemeLogic>().state;
 
-  double h = MediaQuery.of(mCtx).size.height;
+  double h = Get.height;
 
-  double w = MediaQuery.of(mCtx).size.width;
+  double w = Get.width;
 
   return showDialog(
-      context: mCtx,
+      context: Get.overlayContext!,
       builder: (ctxt) {
         return StatefulBuilder(
           builder: (BuildContext ctx, setState) {

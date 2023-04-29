@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:provider/provider.dart';
+
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
@@ -30,7 +30,7 @@ Widget MySnackBar(
   final _noteImageLogic = Get.find<NoteImageLogic>();
   final _noteVoiceRecorderLogic = Get.find<NoteVoiceRecorderLogic>();
   ;
-  final _noteTaskLogic = Provider.of<NoteTaskLogic>(context, listen: false);
+  final _noteTaskLogic =Get.find<NoteTaskLogic>();
   isWhite = _themeLogic.checkIsWhite();
   return SnackBar(
     elevation: 0,

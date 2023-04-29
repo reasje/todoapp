@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 import 'package:todoapp/theme/theme_logic.dart';
 import 'package:todoapp/locales/locales.dart' as locale;
 import 'package:get/get.dart';
@@ -59,7 +59,8 @@ class EmptyNotes extends StatelessWidget {
                     child: Center(
                       child: Text(
                         locale.addNewNotePlease.tr,
-                        style: TextStyle(color: _themeState.textColor, fontWeight: FontWeight.w500, fontSize: _themeState.isEn! ? w * 0.06 : w * 0.04),
+                        style:
+                            TextStyle(color: _themeState.textColor, fontWeight: FontWeight.w500, fontSize: _themeState.isEn! ? w * 0.06 : w * 0.04),
                       ),
                     ),
                   ),

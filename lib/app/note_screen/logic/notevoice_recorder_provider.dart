@@ -8,7 +8,7 @@ import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:todoapp/model/voice_model.dart';
-import 'package:provider/provider.dart';
+
 import '../../../applocalizations.dart';
 import '../../../widgets/dialog.dart';
 import '../state/note_voice_recorder_state.dart';
@@ -20,10 +20,7 @@ class NoteVoiceRecorderLogic with ChangeNotifier {
     PermissionStatus status = await Permission.microphone.request();
     if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
       //throw RecordingPermissionException("Microphone permission not granted");
-      showAlertDialog(Get.overlayContext!,
-          title:  locale.microphoneRequired.tr,
-          cancelButtonText:  locale.cancel.tr,
-          okButtonText:  locale.ok.tr);
+      showAlertDialog(title: locale.microphoneRequired.tr, cancelButtonText: locale.cancel.tr, okButtonText: locale.ok.tr);
       return;
     }
     // StreamSink<Food> _playerSubscription;
@@ -70,16 +67,17 @@ class NoteVoiceRecorderLogic with ChangeNotifier {
   void stopRecorder() async {
     // finishing up the recorded voice
     String path = await (state.flutterSoundRecorder.stopRecorder() as FutureOr<String>);
-    final _noteVoiceRecorderLogic = Provider.of<NoteVoiceRecorderLogic>(Get.overlayContext!, listen: false);
+    final _noteVoiceRecorderLogic = Get.find<NoteVoiceRecorderLogic>();
     TextEditingController dialogController = TextEditingController(text: '');
-    await showAlertDialog(Get.overlayContext!,
-        title:  locale.voiceTitle.tr,
+    await showAlertDialog(
+        title: locale.voiceTitle.tr,
         hastTextField: true,
-        textFieldhintText:  locale.titleHint.tr,
-        okButtonText:  locale.ok.tr,
-        cancelButtonText:  locale.cancel.tr, okButtonFunction: () {
-      _noteVoiceRecorderLogic.setVoiceTitle(dialogController.text);
-    });
+        textFieldhintText: locale.titleHint.tr,
+        okButtonText: locale.ok.tr,
+        cancelButtonText: locale.cancel.tr,
+        okButtonFunction: () {
+          _noteVoiceRecorderLogic.setVoiceTitle(dialogController.text);
+        });
 
     // time to save the file with path inside the
     // datatbase as the Uint8List

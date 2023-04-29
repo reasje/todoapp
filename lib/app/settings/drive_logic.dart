@@ -5,7 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:hive/hive.dart';
-import 'package:provider/provider.dart';
+
 import 'package:todoapp/app/splash/connection_logic.dart';
 import 'package:todoapp/main.dart';
 import 'package:todoapp/model/note_model.dart';
@@ -190,17 +190,11 @@ class DriveLogic {
     final _connectionState = Get.find<ConnectionLogic>().state;
     final _settingsLogic = Get.find<SettingsLogic>();
     if (noteBox.isEmpty && command != false) {
-      showAlertDialog(context,
-          title:  locale.noNotes.tr,
-          okButtonText:  locale.ok.tr,
-          cancelButtonText:  locale.cancel.tr);
+      showAlertDialog(title: locale.noNotes.tr, okButtonText: locale.ok.tr, cancelButtonText: locale.cancel.tr);
     } else {
       if (!_connectionState.isConnected) {
         // I am connected to a mobile network or wifi.
-        showAlertDialog(context,
-            title:  locale.noInternet.tr,
-            okButtonText:  locale.ok.tr,
-            cancelButtonText:  locale.cancel.tr);
+        showAlertDialog(title: locale.noInternet.tr, okButtonText: locale.ok.tr, cancelButtonText: locale.cancel.tr);
       } else {
         _settingsLogic.checkSignIn();
         if (_settingsLogic.state.isSignedIn) {
@@ -209,10 +203,7 @@ class DriveLogic {
           final signIn.GoogleSignInAccount? account = await googleSignIn.signIn();
           // getting the signinded account information
           if (account == null) {
-            showAlertDialog(context,
-                title:  locale.noInternet.tr,
-                okButtonText:  locale.ok.tr,
-                cancelButtonText:  locale.cancel.tr);
+            showAlertDialog(title: locale.noInternet.tr, okButtonText: locale.ok.tr, cancelButtonText: locale.cancel.tr);
           } else {
             try {
               final authHeaders = await account.authHeaders;
@@ -225,21 +216,20 @@ class DriveLogic {
               if (command) {
                 if (fileId == null) {
                   // file does not existence
-                  await upload(driveApi, driveFile, noteBox,  locale.uploading.tr,
-                       locale.uploadDone.tr);
+                  await upload(driveApi, driveFile, noteBox, locale.uploading.tr, locale.uploadDone.tr);
                 } else {
                   // show continue dialog
-                  showAlertDialog(context,
-                      title:  locale.fileExists.tr,
+                  showAlertDialog(
+                      title: locale.fileExists.tr,
                       driveApi: driveApi,
                       driveFile: driveFile,
                       noteBox: noteBox,
                       fileId: fileId,
-                      okButtonText:  locale.ok.tr,
-                      cancelButtonText:  locale.cancel.tr, okButtonFunction: () {
-                    DriveLogic.upload(driveApi, driveFile, noteBox,  locale.uploading.tr,
-                         locale.uploadDone.tr, fileId);
-                  });
+                      okButtonText: locale.ok.tr,
+                      cancelButtonText: locale.cancel.tr,
+                      okButtonFunction: () {
+                        DriveLogic.upload(driveApi, driveFile, noteBox, locale.uploading.tr, locale.uploadDone.tr, fileId);
+                      });
                 }
               } else {
                 // The command is download
@@ -248,39 +238,33 @@ class DriveLogic {
                   await download(
                     driveApi,
                     driveFile,
-                     locale.downloading.tr,
-                     locale.downloadDone.tr,
+                    locale.downloading.tr,
+                    locale.downloadDone.tr,
                     noteBox,
                     fileId!,
                   );
                 } else {
                   // show continue dialog
-                  showAlertDialog(context,
-                      title:  locale.continuee.tr,
+                  showAlertDialog(
+                      title: locale.continuee.tr,
                       driveApi: driveApi,
                       driveFile: driveFile,
                       noteBox: noteBox,
                       fileId: fileId,
-                      okButtonText:  locale.ok.tr,
-                      cancelButtonText:  locale.cancel.tr, okButtonFunction: () {
-                    DriveLogic.download(driveApi, driveFile,  locale.downloading.tr,
-                         locale.downloadDone.tr, noteBox, fileId);
-                  });
+                      okButtonText: locale.ok.tr,
+                      cancelButtonText: locale.cancel.tr,
+                      okButtonFunction: () {
+                        DriveLogic.download(driveApi, driveFile, locale.downloading.tr, locale.downloadDone.tr, noteBox, fileId);
+                      });
                 }
               }
             } catch (err) {
               print("err : $err");
-              showAlertDialog(context,
-                  title:  locale.noInternet.tr,
-                  okButtonText:  locale.ok.tr,
-                  cancelButtonText:  locale.cancel.tr);
+              showAlertDialog(title: locale.noInternet.tr, okButtonText: locale.ok.tr, cancelButtonText: locale.cancel.tr);
             }
           }
         } else {
-          showAlertDialog(context,
-              title:  locale.signIn.tr,
-              okButtonText:  locale.ok.tr,
-              cancelButtonText:  locale.cancel.tr);
+          showAlertDialog(title: locale.signIn.tr, okButtonText: locale.ok.tr, cancelButtonText: locale.cancel.tr);
         }
       }
     }

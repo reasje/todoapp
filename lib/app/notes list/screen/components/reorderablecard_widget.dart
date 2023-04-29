@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/functions.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
+
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/theme/theme_logic.dart';

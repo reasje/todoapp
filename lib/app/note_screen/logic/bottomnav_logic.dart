@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:todoapp/app/note_screen/state/note_color_state.dart';
 import 'package:todoapp/model/bottomnav_tab_model.dart';
 import 'package:todoapp/model/navigationitem_model.dart';
-import 'package:provider/provider.dart';
+
 import '../../../widgets/dialog.dart';
 import '../../../theme/theme_logic.dart';
 import '../screen/components/image_listview_widget.dart';
@@ -134,7 +134,7 @@ class BottomNavLogic extends GetxController {
                                   children: colors
                                       .map((color) => InkWell(
                                             onTap: () {
-                                              Provider.of<NoteColorLogic>(context, listen: false).noteColorSelected(color);
+                                              Get.find<NoteColorLogic>().noteColorSelected(color);
                                               Get.back();
                                             },
                                             child: Container(
@@ -158,18 +158,19 @@ class BottomNavLogic extends GetxController {
                     iconData: Icons.vpn_key_rounded,
                     function: () {
                       TextEditingController dialogController = TextEditingController(text: '');
-                      final _notePasswordLogic = Provider.of<NotePasswordLogic>(Get.overlayContext!, listen: false);
+                      final _notePasswordLogic = Get.find<NotePasswordLogic>();
                       dialogController.text = _notePasswordLogic.state.password!;
-                      showAlertDialog(context,
+                      showAlertDialog(
                           title: locale.setPassword.tr,
                           hastTextField: true,
                           dialogController: dialogController,
                           textFieldhintText: locale.passwordHint.tr,
                           textInputType: TextInputType.number,
                           okButtonText: locale.ok.tr,
-                          cancelButtonText: locale.cancel.tr, okButtonFunction: () {
-                        _notePasswordLogic.setPassword(dialogController.text);
-                      });
+                          cancelButtonText: locale.cancel.tr,
+                          okButtonFunction: () {
+                            _notePasswordLogic.setPassword(dialogController.text);
+                          });
                     },
                   ),
                 ],

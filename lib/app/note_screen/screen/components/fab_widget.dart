@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
+
 import 'package:todoapp/app/note_screen/logic/bottomnav_logic.dart';
 import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/locales/locales.dart' as locale;

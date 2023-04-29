@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:todoapp/app/on_boarding/screen/onboarding_screen.dart';
 import 'package:todoapp/app/settings/settings_logic.dart';
 import 'package:todoapp/theme/theme_logic.dart';
@@ -37,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<Widget> loadHome() async {
     // TODO: check logic
-    final _themeState = Provider.of<ThemeLogic>(Get.overlayContext!, listen: false);
+    final _themeState = Get.find<ThemeLogic>();
     // Timer.periodic(Duration(seconds: 60), (timer) {
     // check for if the day is changed
     // if changed will handle the
@@ -47,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // });
     await _themeState.initialColorsAndLan();
     await Future.delayed(Duration(seconds: 2));
-    return Future.value(Get.find<ThemeLogic>().state.isFirstTime ? OnBoardingScreen() : NotesScreen());
+    return Future.value(Get.find<ThemeLogic>().state.isFirstTime! ? OnBoardingScreen() : NotesScreen());
   }
 
   @override

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:provider/provider.dart';
+
 import 'package:todoapp/app/note_screen/logic/notecolor_logic.dart';
 import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
 import 'package:todoapp/app/note_screen/logic/notepassword_logic.dart';
@@ -43,7 +43,7 @@ class _NoteScreenState extends State<NoteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _noteLogic = Provider.of<NoteLogic>(context);
+    final _noteLogic = Get.find<NoteLogic>();
     final _themeState = Get.find<ThemeLogic>().state;
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;

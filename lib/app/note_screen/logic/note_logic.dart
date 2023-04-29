@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:provider/provider.dart';
+
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/taskController.dart';
 import 'package:todoapp/model/task_model.dart';
@@ -22,14 +22,15 @@ import 'notetask_logic.dart';
 import 'notevoice_recorder_provider.dart';
 
 class NoteLogic extends GetxController {
-    NoteState state = NoteState();
+  NoteState state = NoteState();
   @override
   void onInit() {
-      state.prefsBox = Hive.box<String>(prefsBoxName);
+    state.prefsBox = Hive.box<String>(prefsBoxName);
 
-  state.noteBox = Hive.lazyBox<Note>(noteBoxName);
+    state.noteBox = Hive.lazyBox<Note>(noteBoxName);
     super.onInit();
   }
+
   // for the clear the form
   void clearControllers() {
     final _noteImageLogic = Get.find<NoteImageLogic>();
@@ -61,7 +62,6 @@ class NoteLogic extends GetxController {
     state.providerIndex = null;
 
     _noteColorLogic.clearNoteColor();
-
   }
 
   // getting the controller before the user enters the editing area
@@ -155,17 +155,14 @@ class NoteLogic extends GetxController {
     Note note = Note(noteTitle, noteText, isChecked, noteColor, ntImageList, ntVoiceList, ntTaskList, ntResetCheckBoxs, ntPassword);
 
     state.noteBox!.put(state.providerKeys![state.providerIndex!], note);
-
-  
   }
 
   // new Note clieked
   Future newNoteClicked() async {
-    final _bottomNavLogic = Provider.of<BottomNavLogic>(Get.overlayContext!, listen: false);
+    final _bottomNavLogic = Get.find<BottomNavLogic>( );
 
-    final _noteTaskLogic = Provider.of<NoteTaskLogic>(Get.overlayContext!, listen: false);
+    final _noteTaskLogic = Get.find<NoteTaskLogic>( );
 
-     
     // When the add icon is tapped this function will be executed and
     // prepare the provider for the new Note
 
@@ -186,19 +183,16 @@ class NoteLogic extends GetxController {
 
     takeSnapshot();
 
-
     return true;
   }
 
   // used indie list view after an elemt of listview is tapped
-  Future<void> loadNote(  [List<int>? keys, int? index]) async {
-     
-
+  Future<void> loadNote([List<int>? keys, int? index]) async {
     state.providerKeys = keys as RxList<int>?;
 
     state.providerIndex = index;
 
-    final _bottomNavLogic = Provider.of<BottomNavLogic>(Get.overlayContext!, listen: false);
+    final _bottomNavLogic = Get.find<BottomNavLogic>( );
 
     final _noteImageLogic = Get.find<NoteImageLogic>();
 
@@ -265,15 +259,12 @@ class NoteLogic extends GetxController {
 
     _bottomNavLogic.initialPage();
 
-
     takeSnapshot();
   }
 
   // executed when the user tapped on the check floating button (done icon FAB)
-  void doneClicked(  ) async {
-     
-
-    final _bottomNavLogic = Provider.of<BottomNavLogic>(Get.overlayContext!, listen: false);
+  void doneClicked() async {
+    final _bottomNavLogic = Get.find<BottomNavLogic>( );
 
     final _notePasswordLogic = Get.find<NotePasswordLogic>();
 
@@ -341,7 +332,7 @@ class NoteLogic extends GetxController {
         await state.noteBox!.add(note);
         _noteTitleTextLogic.state.changes.clearHistory();
         clearControllers();
-  
+
         Get.back();
       }
     } else {
@@ -390,9 +381,7 @@ class NoteLogic extends GetxController {
   // When the clear Icon clicked or back button is tapped
   // this fucntion will be executed checking for changes
   // if the changes has been made it is going to show an alert
-  void cancelClicked(  ) {
-     
-
+  void cancelClicked() {
     final _notePasswordLogic = Get.find<NotePasswordLogic>();
 
     final _noteImageLogic = Get.find<NoteImageLogic>();
@@ -412,8 +401,9 @@ class NoteLogic extends GetxController {
           _notePasswordLogic.state.password == '') {
         ScaffoldMessenger.of(Get.overlayContext!).clearSnackBars();
 
-        ScaffoldMessenger.of(Get.overlayContext!)
-            .showSnackBar(MySnackBar(AppLocalizations.of(Get.overlayContext!)!.translate('willingToDelete')!, 'willingToDelete', false, context: Get.overlayContext!) as SnackBar);
+        ScaffoldMessenger.of(Get.overlayContext!).showSnackBar(MySnackBar(
+                AppLocalizations.of(Get.overlayContext!)!.translate('willingToDelete')!, 'willingToDelete', false, context: Get.overlayContext!)
+            as SnackBar);
 
         Get.back();
 
@@ -422,8 +412,9 @@ class NoteLogic extends GetxController {
         if (state.notSaving == 0) {
           ScaffoldMessenger.of(Get.overlayContext!).clearSnackBars();
 
-          ScaffoldMessenger.of(Get.overlayContext!)
-              .showSnackBar(MySnackBar(AppLocalizations.of(Get.overlayContext!)!.translate('notSavingAlert')!, 'notSavingAlert', false, context: Get.overlayContext!) as SnackBar);
+          ScaffoldMessenger.of(Get.overlayContext!).showSnackBar(MySnackBar(
+                  AppLocalizations.of(Get.overlayContext!)!.translate('notSavingAlert')!, 'notSavingAlert', false, context: Get.overlayContext!)
+              as SnackBar);
 
           state.notSaving = state.notSaving + 1;
 

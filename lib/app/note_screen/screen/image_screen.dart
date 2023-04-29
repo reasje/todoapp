@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:googleapis/cloudbuild/v1.dart';
-import 'package:provider/provider.dart';
+
 import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/app/note_screen/logic/noteimage_logic.dart';
 import 'package:todoapp/theme/theme_logic.dart';
@@ -126,16 +126,17 @@ class _PicDetailState extends State<PicDetail> {
                   child: Icon(Icons.text_fields),
                   onPressed: () async {
                     TextEditingController dialogController = TextEditingController();
-                    showAlertDialog(context,
+                    showAlertDialog(
                         title: locale.imageDesc.tr,
                         desc: _noteImageLogic.state.imageList![widget.index]!.desc ?? null,
                         textFieldMaxLength: 415,
                         hastTextField: true,
                         textFieldhintText: locale.imageDesc.tr,
                         okButtonText: locale.ok.tr,
-                        cancelButtonText: locale.cancel.tr, okButtonFunction: () {
-                      _noteImageLogic.updateImageDesc(widget.index, dialogController.text);
-                    });
+                        cancelButtonText: locale.cancel.tr,
+                        okButtonFunction: () {
+                          _noteImageLogic.updateImageDesc(widget.index, dialogController.text);
+                        });
                   },
                 ),
               ],

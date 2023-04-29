@@ -9,17 +9,20 @@ import '../../applocalizations.dart';
 import '../../main.dart';
 import '../../widgets/dialog.dart';
 import '../../theme/theme_logic.dart';
-import 'package:provider/provider.dart';
 
 class OnBoardingLogic extends GetxController {
   OnBoardingState state = OnBoardingState();
 
   @override
   void onInit() {
-    final _themeState = Provider.of<ThemeLogic>(Get.overlayContext!, listen: false);
-    showAlertDialog(Get.overlayContext!, title: "Choose you language ! ", okButtonText: "فارسی", cancelButtonText: "English", okButtonFunction: () {
-      _themeState.changeLanToPersian();
-    });
+    final _themeState = Get.find<ThemeLogic>();
+    showAlertDialog(
+        title: "Choose you language ! ",
+        okButtonText: "فارسی",
+        cancelButtonText: "English",
+        okButtonFunction: () {
+          _themeState.changeLanToPersian();
+        });
     super.onInit();
   }
 }

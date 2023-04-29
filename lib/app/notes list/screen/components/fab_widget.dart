@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
+
 import 'package:todoapp/app/notes%20list/logic.dart';
 import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/theme/theme_logic.dart';
@@ -20,7 +20,7 @@ class FloatingActionButtonWidget extends StatelessWidget {
     final _noteLogic = Get.find<NoteLogic>();
     ;
     final _themeState = Get.find<ThemeLogic>().state;
-    final _notesLogic = Provider.of<NotesLogic>(context, listen: false);
+    final _notesLogic = Get.find<NotesLogic>();
     return FloatingActionButton(
       elevation: 0,
       highlightElevation: 0,

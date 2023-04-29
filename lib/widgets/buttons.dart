@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
+
 import 'package:todoapp/app/settings/settings_logic.dart';
 import 'package:todoapp/theme/theme_logic.dart';
 
@@ -37,7 +37,7 @@ class _MyButtonState extends State<ButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final _signInProvider = Provider.of<SettingsLogic>(context);
+    final _signInProvider = Get.find<SettingsLogic>();
     final _themeState = Get.find<ThemeLogic>().state;
     Color? backgroundColor = widget.backgroundColor;
     // bool floating =

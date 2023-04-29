@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/theme/theme_logic.dart';
 import 'package:todoapp/app/settings/drive_logic.dart';
-import 'package:provider/provider.dart';
+
 import '../../../applocalizations.dart';
 import '../../../widgets/buttons.dart';
 import '../../../widgets/dialog.dart';
@@ -122,8 +122,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                                   if (connectionState.isConnected) {
                                     logic.signInToAccount();
                                   } else {
-                                    showAlertDialog(context,
-                                        title: locale.noInternet.tr, okButtonText: locale.ok.tr, cancelButtonText: locale.cancel.tr);
+                                    showAlertDialog(title: locale.noInternet.tr, okButtonText: locale.ok.tr, cancelButtonText: locale.cancel.tr);
                                   }
                                 },
                                 child: Icon(

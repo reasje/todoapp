@@ -6,30 +6,29 @@ import 'package:todoapp/model/taskController.dart';
 import 'package:todoapp/model/task_model.dart';
 
 class ThemeState {
-
   RxList<Color> noteTitleColor = <Color>[].obs;
 
-  Rx<Color?> _shimmerColor = null.obs;
+  Rxn<Color> _shimmerColor =Rxn<Color>() ;
   set shimmerColor(Color? value) => _shimmerColor.value = value;
   Color? get shimmerColor => _shimmerColor.value;
 
-  Rx<Color?> _mainColor = null.obs;
+  Rxn<Color> _mainColor =Rxn<Color>() ;
   set mainColor(Color? value) => _mainColor.value = value;
   Color? get mainColor => _mainColor.value;
 
-  Rx<Color?> _mainOpColor = null.obs;
+  Rxn<Color> _mainOpColor =Rxn<Color>() ;
   set mainOpColor(Color? value) => _mainOpColor.value = value;
   Color? get mainOpColor => _mainOpColor.value;
 
-  Rx<Color?> _textColor = null.obs;
+  Rxn<Color> _textColor =Rxn<Color>() ;
   set textColor(Color? value) => _textColor.value = value;
   Color? get textColor => _textColor.value;
 
-  Rx<Color?> _titleColor = null.obs;
+  Rxn<Color> _titleColor =Rxn<Color>() ;
   set titleColor(Color? value) => _titleColor.value = value;
   Color? get titleColor => _titleColor.value;
 
-  Rx<Color?> _hinoteColor = null.obs;
+  Rxn<Color> _hinoteColor =Rxn<Color>() ;
   set hinoteColor(Color? value) => _hinoteColor.value = value;
   Color? get hinoteColor => _hinoteColor.value;
 
@@ -37,27 +36,27 @@ class ThemeState {
   set swashColor(Color value) => _swashColor.value = value;
   Color get swashColor => _swashColor.value;
 
-  Rx<Brightness?> _brightness = null.obs;
+  Rxn<Brightness> _brightness =Rxn<Brightness>() ;
   set brightness(Brightness? value) => _brightness.value = value;
   Brightness? get brightness => _brightness.value;
 
-  Rx<bool?> _isEn = null.obs;
+  Rxn<bool> _isEn = Rxn<bool>();
   set isEn(bool? value) => _isEn.value = value;
   bool? get isEn => _isEn.value;
 
-  Rx<bool> _isFirstTime = true.obs;
-  set isFirstTime(bool value) => _isFirstTime.value = value;
-  bool get isFirstTime => _isFirstTime.value;
+  Rxn<bool> _isFirstTime = Rxn<bool>();
+  set isFirstTime(bool? value) => _isFirstTime.value = value;
+  bool? get isFirstTime => _isFirstTime.value;
 
-  Rx<Locale?> _locale = null.obs;
+  Rxn<Locale> _locale =Rxn<Locale>() ;
   set locale(Locale? value) => _locale.value = value;
   Locale? get locale => _locale.value;
 
-  Rx<String?> _noTaskImage = null.obs;
+  Rxn<String> _noTaskImage =Rxn<String>() ;
   set noTaskImage(String? value) => _noTaskImage.value = value;
   String? get noTaskImage => _noTaskImage.value;
 
-  Rx<String?> _splashImage = null.obs;
+  Rxn<String> _splashImage =Rxn<String>() ;
   set splashImage(String? value) => _splashImage.value = value;
   String? get splashImage => _splashImage.value;
 

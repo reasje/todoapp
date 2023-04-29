@@ -27,7 +27,7 @@ class ThemeLogic extends GetxController {
 
   // A function to be executed when the app runs at first
   // and will initialize the colors and language
-  Future initialColorsAndLan() async {
+  Future<bool> initialColorsAndLan() async {
     // checks if it's the first time
     // that the user comes to app
     String? firstTime;
@@ -68,10 +68,12 @@ class ThemeLogic extends GetxController {
     // cuz I have deleted the set state for the
     // note when the expansion is changed for the
     // better animation pusrpose
-    state.noteTitleColor = List<Color>.filled(100, Colors.white) as RxList<Color>;
+    state.noteTitleColor.addAll(List<Color>.filled(100, Colors.white));
     // The colors for the timer border
     // will initial the color
     changeBrightness(toWhat: theme);
+
+    return true;
   }
 
   void changeBrightness({String? toWhat}) {
