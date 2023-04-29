@@ -20,7 +20,7 @@ class SettingsLogic extends GetxController {
     } else {
       state.account = await googleSignIn.signIn();
       if (state.account != null) {
-        var head = googleSignIn.currentUser.authHeaders;
+        var head = googleSignIn.currentUser!.authHeaders;
         print('check account $head');
         state.isSignedIn = true;
       }

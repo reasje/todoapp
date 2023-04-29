@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:googleapis/drive/v3.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/splash/connection_logic.dart';
@@ -24,11 +27,11 @@ import '../../../widgets/dialog.dart';
 // used to upload the file and check wether the file
 // exists or not and
 String _fileName = "NotesAppData";
-BuildContext driverContext;
+BuildContext? driverContext;
 
 class DriveLogic {
   static Future<void> upload(drive.DriveApi driveApi, drive.File driveFile, LazyBox<Note> noteBox, String uploadiung, String downloadDone,
-      [String _fileId]) async {
+      [String? _fileId]) async {
     await EasyLoading.show(
       dismissOnTap: false,
       status: uploadiung,
@@ -45,7 +48,7 @@ class DriveLogic {
       driveApi.files.emptyTrash();
     }
     for (int i = 0; i < noteBox.length; i++) {
-      var element = await noteBox.getAt(i);
+      var element = await (noteBox.getAt(i) as FutureOr<Note>);
       // hint uft8 characters are not as bytes
       // like persian characters
       // persian characters are utf8 type so
@@ -54,11 +57,11 @@ class DriveLogic {
       // then we have no problem uploading
       // When downloading we convert the utf16 to
       // utf8 and utf16
-      var title = element.title;
+      var title = element.title!;
       title = utf8.fuse(base64).encode(title);
-      var text = element.text;
+      var text = element.text!;
       text = utf8.fuse(base64).encode(text);
-      var password = element.password;
+      var password = element.password!;
       password = utf8.fuse(base64).encode(password);
       var resetCheckBoxs = element.resetCheckBoxs;
       var color = element.color;
@@ -68,25 +71,25 @@ class DriveLogic {
       // for (int i = 0; i < element.imageList.length; i++) {
       //   imageList.add(base64Encode(element.imageList[i].image));
       // }
-      List<Voice> voiceList = List.from(element.voiceList);
+      List<Voice> voiceList = List.from(element.voiceList!);
       List<String> voiceTitleList = [];
       List<String> voiceVoiceList = [];
       for (int i = 0; i < voiceList.length; i++) {
-        voiceTitleList.add(utf8.fuse(base64).encode(voiceList[i].title));
-        voiceVoiceList.add(base64Encode(voiceList[i].voice));
+        voiceTitleList.add(utf8.fuse(base64).encode(voiceList[i].title!));
+        voiceVoiceList.add(base64Encode(voiceList[i].voice!));
       }
-      List<imageModel.Image> imageList = List.from(element.imageList);
+      List<imageModel.Image> imageList = List.from(element.imageList!);
       List<String> imageDescList = [];
       List<String> imageImageList = [];
       for (int i = 0; i < imageList.length; i++) {
-        imageDescList.add(utf8.fuse(base64).encode(imageList[i].desc));
-        imageImageList.add(base64Encode(imageList[i].image));
+        imageDescList.add(utf8.fuse(base64).encode(imageList[i].desc!));
+        imageImageList.add(base64Encode(imageList[i].image!));
       }
-      List<Task> taskList = List.from(element.taskList);
+      List<Task> taskList = List.from(element.taskList!);
       List<String> taskTitleList = [];
       List<String> taskIsDoneList = [];
       for (int i = 0; i < taskList.length; i++) {
-        taskTitleList.add(utf8.fuse(base64).encode(taskList[i].title));
+        taskTitleList.add(utf8.fuse(base64).encode(taskList[i].title!));
         taskIsDoneList.add(utf8.fuse(base64).encode(taskList[i].isDone.toString()));
       }
 
@@ -128,7 +131,7 @@ class DriveLogic {
       status: downloading,
     );
     String downloaded = "";
-    drive.Media media = await driveApi.files.get(fileId, downloadOptions: drive.DownloadOptions.fullMedia);
+    drive.Media media = await (driveApi.files.get(fileId, downloadOptions: drive.DownloadOptions.fullMedia) as FutureOr<Media>);
     var sub = media.stream.listen((event) async {
       downloaded = downloaded + String.fromCharCodes(event);
     });
@@ -142,10 +145,10 @@ class DriveLogic {
         text = utf8.fuse(base64).decode(text);
         var password = list[i]['password'];
         password = utf8.fuse(base64).decode(password);
-        int time = list[i]['time'];
-        bool resetCheckBoxs = list[i]['resetCheckBoxs'];
-        int color = list[i]['color'];
-        bool isChecked = list[i]['isChecked'];
+        int? time = list[i]['time'];
+        bool? resetCheckBoxs = list[i]['resetCheckBoxs'];
+        int? color = list[i]['color'];
+        bool? isChecked = list[i]['isChecked'];
         // Downloading voices
         List<Voice> voiceList = [];
         List<String> voiceTitleList = List.from(list[i]['voiceTitleList']);
@@ -203,7 +206,7 @@ class DriveLogic {
         if (_settingsLogic.state.isSignedIn) {
           // The user is signed in
           final googleSignIn = signIn.GoogleSignIn.standard(scopes: [drive.DriveApi.driveScope]);
-          final signIn.GoogleSignInAccount account = await googleSignIn.signIn();
+          final signIn.GoogleSignInAccount? account = await googleSignIn.signIn();
           // getting the signinded account information
           if (account == null) {
             showAlertDialog(context,
@@ -217,7 +220,7 @@ class DriveLogic {
               final driveApi = drive.DriveApi(authenticateClient);
               var driveFile = new drive.File();
               driveApi.files.emptyTrash();
-              String fileId = await checkFileExistence(driveApi);
+              String? fileId = await checkFileExistence(driveApi);
               // if the cmmand is upload or download
               if (command) {
                 if (fileId == null) {
@@ -248,7 +251,7 @@ class DriveLogic {
                      locale.downloading.tr,
                      locale.downloadDone.tr,
                     noteBox,
-                    fileId,
+                    fileId!,
                   );
                 } else {
                   // show continue dialog
@@ -283,16 +286,16 @@ class DriveLogic {
     }
   }
 
-  static Future<String> checkFileExistence(drive.DriveApi driveApi) async {
+  static Future<String?> checkFileExistence(drive.DriveApi driveApi) async {
     // file id
-    String fileId = null;
+    String? fileId = null;
     // looping through the files to check wether the file exsitce or note
     // the if statement is based on the file name
     await driveApi.files.list().then((value) {
       var list = value;
-      for (int i = 0; i < list.files.length; i++) {
-        if (list.files[i].name == _fileName) {
-          fileId = list.files[i].id;
+      for (int i = 0; i < list.files!.length; i++) {
+        if (list.files![i].name == _fileName) {
+          fileId = list.files![i].id;
         }
       }
     });

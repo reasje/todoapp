@@ -14,7 +14,7 @@ class NoteTitleTextLogic extends GetxController {
   // handeling the Redo function
   void changesRedo() {
     state.changes.redo();
-    state.textController.text = state.textRedoValue;
+    state.textController.text = state.textRedoValue!;
     state.textController.selection = TextSelection.fromPosition(TextPosition(offset: state.textController.text.length));
   }
 
@@ -36,7 +36,7 @@ class NoteTitleTextLogic extends GetxController {
       // Staging the state.changes !
       state.changes.add(new Change(state.textOldValue, () {
         state.textRedoValue = newValue;
-      }, (oldValue) {
+      }, (dynamic oldValue) {
         // When the chnage is being apllies or in other words
         // The undo button is selected I want to make the text controller
         // text equal to the oldValue that the change got before .

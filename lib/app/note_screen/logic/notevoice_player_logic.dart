@@ -17,7 +17,7 @@ class NoteVoicePlayerLogic extends GetxController {
     await checkForPlayingPlayers();
     state.flutterSoundPlayer[index].openAudioSession();
     state.voiceDuration[index] =
-        await state.flutterSoundPlayer[index].startPlayer(fromDataBuffer: _noteVoiceRecorderLogic.state.voiceList[index].voice);
+        await state.flutterSoundPlayer[index].startPlayer(fromDataBuffer: _noteVoiceRecorderLogic.state.voiceList![index]!.voice);
     timerOn(index);
   }
 
@@ -40,7 +40,7 @@ class NoteVoicePlayerLogic extends GetxController {
   Future<void> timerOn(int index) async {
     state.soundPlayerState[index] = SoundPlayerState.resumed;
     state.timer[index] = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (state.voiceProgress[index] >= state.voiceDuration[index]) {
+      if (state.voiceProgress[index] >= state.voiceDuration[index]!) {
         state.voiceProgress[index] = Duration(seconds: 0);
         timerOff(index);
         state.soundPlayerState[index] = SoundPlayerState.stopped;

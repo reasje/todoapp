@@ -8,11 +8,11 @@ class LoadingWidget extends StatefulWidget {
 
 class _MyCustomWidgetState extends State<LoadingWidget>
     with TickerProviderStateMixin {
-  AnimationController controller1;
-  Animation<double> animation1;
+  late AnimationController controller1;
+  late Animation<double> animation1;
 
-  AnimationController controller2;
-  Animation<double> animation2;
+  late AnimationController controller2;
+  late Animation<double> animation2;
 
   @override
   void initState() {

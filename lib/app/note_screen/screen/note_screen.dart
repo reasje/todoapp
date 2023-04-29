@@ -24,7 +24,7 @@ final GlobalKey<ScaffoldState> noteEditingScaffoldKey = new GlobalKey<ScaffoldSt
 
 // TODO moving and reordering list view effect
 class NoteScreen extends StatefulWidget {
-  NoteScreen({Key key}) : super(key: key);
+  NoteScreen({Key? key}) : super(key: key);
 
   @override
   _NoteScreenState createState() => _NoteScreenState();
@@ -57,7 +57,7 @@ class _NoteScreenState extends State<NoteScreen> {
         onWillPop: () {
           _noteLogic.doneClicked();
           return;
-        },
+        } as Future<bool> Function()?,
         child: GestureDetector(
           onTap: () {
             FocusScope.of(context).requestFocus(new FocusNode());

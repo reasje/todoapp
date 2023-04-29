@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/note_screen/logic/bottomnav_logic.dart';
@@ -14,7 +15,7 @@ import '../../logic/noteimage_logic.dart';
 import '../../logic/notevoice_recorder_provider.dart';
 
 class NoteEditingFloatingActionButtonWidget extends StatefulWidget {
-  const NoteEditingFloatingActionButtonWidget({Key key}) : super(key: key);
+  const NoteEditingFloatingActionButtonWidget({Key? key}) : super(key: key);
 
   @override
   _NoteEditingFloatingActionButtonWidgetState createState() => _NoteEditingFloatingActionButtonWidgetState();
@@ -52,7 +53,7 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                   sizePU: h * w * 0.00017,
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00006,
-                  iconData: FontAwesome.plus,
+                  iconData: FontAwesomeIcons.plus,
                   function: () {
                     showModalBottomSheet(
                         context: context,
@@ -77,8 +78,8 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                         child: Text(
                                           locale.camera.tr,
                                           style: TextStyle(
-                                              color: _themeState.titleColor.withOpacity(0.6),
-                                              fontSize: _themeState.isEn ? h * w * 0.00008 : h * w * 0.00007),
+                                              color: _themeState.titleColor!.withOpacity(0.6),
+                                              fontSize: _themeState.isEn! ? h * w * 0.00008 : h * w * 0.00007),
                                         ),
                                       ),
                                     ),
@@ -94,8 +95,8 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                         child: Text(
                                           locale.gallery.tr,
                                           style: TextStyle(
-                                              color: _themeState.titleColor.withOpacity(0.6),
-                                              fontSize: _themeState.isEn ? h * w * 0.00008 : h * w * 0.00007),
+                                              color: _themeState.titleColor!.withOpacity(0.6),
+                                              fontSize: _themeState.isEn! ? h * w * 0.00008 : h * w * 0.00007),
                                         ),
                                       ),
                                     ),
@@ -120,7 +121,7 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                           sizePU: h * w * 0.00017,
                           sizePD: h * w * 0.00018,
                           iconSize: h * w * 0.00006,
-                          iconData: FontAwesome.microphone,
+                          iconData: FontAwesomeIcons.microphone,
                           function: () async {
                             await Get.find<NoteVoiceRecorderLogic>().startRecorder(context);
                           },
@@ -142,7 +143,7 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                     sizePU: h * w * 0.00012,
                                     sizePD: h * w * 0.00013,
                                     iconSize: h * w * 0.00006,
-                                    iconData: FontAwesome.pause,
+                                    iconData: Icons.pause,
                                     function: () async {
                                       await _noteVoiceRecorderLogic.pauseRecorder();
                                     },
@@ -183,7 +184,7 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                     sizePU: h * w * 0.00012,
                                     sizePD: h * w * 0.00013,
                                     iconSize: h * w * 0.00006,
-                                    iconData: FontAwesome.stop,
+                                    iconData: Icons.stop,
                                     function: () {
                                       _noteVoiceRecorderLogic.stopRecorder();
                                     },
@@ -208,7 +209,7 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                     sizePU: h * 0.05,
                                     sizePD: h * 0.06,
                                     iconSize: h * w * 0.00006,
-                                    iconData: FontAwesome.play,
+                                    iconData: FontAwesomeIcons.play,
                                     function: () {
                                       _noteVoiceRecorderLogic.resumeRecorder();
                                     },
@@ -249,7 +250,7 @@ class _NoteEditingFloatingActionButtonWidgetState extends State<NoteEditingFloat
                                     sizePU: h * 0.05,
                                     sizePD: h * 0.06,
                                     iconSize: h * w * 0.00006,
-                                    iconData: FontAwesome.stop,
+                                    iconData: Icons.stop,
                                     function: () {
                                       _noteVoiceRecorderLogic.stopRecorder();
                                     },

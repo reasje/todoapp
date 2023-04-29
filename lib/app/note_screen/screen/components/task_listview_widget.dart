@@ -6,12 +6,13 @@ import 'package:todoapp/theme/theme_logic.dart';
 import 'package:todoapp/locales/locales.dart' as locale;
 import 'package:get/get.dart';
 import '../../../../applocalizations.dart';
+import '../../../../model/taskController.dart';
 import '../../../../widgets/snackbar.dart';
 
 class TaskListView extends StatelessWidget {
-  final Color color;
+  final Color? color;
   const TaskListView({
-    Key key,
+    Key? key,
     this.color,
   }) : super(key: key);
   @override
@@ -35,13 +36,13 @@ class TaskListView extends StatelessWidget {
                 Text(
                   locale.reset.tr,
                   style: TextStyle(
-                      color: _themeState.textColor, fontSize: _themeState.isEn ? h * w * 0.00007 : h * w * 0.00005, fontWeight: FontWeight.w400),
+                      color: _themeState.textColor, fontSize: _themeState.isEn! ? h * w * 0.00007 : h * w * 0.00005, fontWeight: FontWeight.w400),
                 ),
                 Switch(
                   activeColor: color,
                   inactiveTrackColor: _themeState.textColor,
                   inactiveThumbColor: _themeState.mainColor,
-                  value: _noteTaskLogic.resetCheckBoxs,
+                  value: _noteTaskLogic.resetCheckBoxs!,
                   onChanged: (value) {
                     _noteTaskLogic.changeResetCheckBoxs(value);
                   },
@@ -52,7 +53,7 @@ class TaskListView extends StatelessWidget {
           ),
           Container(
             height: h * 0.7,
-            child: FutureBuilder(
+            child: FutureBuilder<List<TaskController?>>(
               future: _noteTaskLogic.getTaskList(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
@@ -69,12 +70,12 @@ class TaskListView extends StatelessWidget {
                         onReorder: (oldIndex, newIndex) {
                           _noteTaskLogic.reorderTaskList(oldIndex, newIndex);
                         },
-                        children: List.generate(snapshot.data.length, (index) {
+                        children: List.generate(snapshot.data!.length, (index) {
                           return AnimatedContainer(
-                            key: snapshot.data[index].key,
+                            key: snapshot.data![index]!.key,
                             duration: Duration(seconds: 5),
                             child: Dismissible(
-                                key: snapshot.data[index].key,
+                                key: snapshot.data![index]!.key,
                                 background: Container(
                                   padding: EdgeInsets.only(left: w * 0.1, bottom: h * 0.01, right: w * 0.1),
                                   decoration: BoxDecoration(
@@ -99,7 +100,7 @@ class TaskListView extends StatelessWidget {
                                 onDismissed: (direction) {
                                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                   ScaffoldMessenger.of(context)
-                                      .showSnackBar(MySnackBar(locale.undoTask.tr, 'undoTask', true, context: context, index: index));
+                                      .showSnackBar(MySnackBar(locale.undoTask.tr, 'undoTask', true, context: context, index: index) as SnackBar);
                                   _noteTaskLogic.taskDissmissed(index);
                                 },
                                 child: Container(
@@ -119,9 +120,9 @@ class TaskListView extends StatelessWidget {
                                             width: h * 0.03,
                                             decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
-                                                border: Border.all(color: color, width: 1.5),
-                                                color: snapshot.data[index].isDone ?? false ? color : null),
-                                            child: snapshot.data[index].isDone ?? false
+                                                border: Border.all(color: color!, width: 1.5),
+                                                color: snapshot.data![index]!.isDone ?? false ? color : null),
+                                            child: snapshot.data![index]!.isDone ?? false
                                                 ? Icon(
                                                     Icons.check_rounded,
                                                     size: h * 0.028,
@@ -134,19 +135,19 @@ class TaskListView extends StatelessWidget {
                                         width: w * 0.75,
                                         alignment: Alignment.center,
                                         child: TextField(
-                                          controller: snapshot.data[index].textEditingController,
+                                          controller: snapshot.data![index]!.textEditingController,
                                           onSubmitted: (value) {
                                             _noteTaskLogic.checkListOnSubmit(index);
                                           },
-                                          focusNode: snapshot.data[index].focusNode,
+                                          focusNode: snapshot.data![index]!.focusNode,
                                           cursorColor: _themeState.swashColor,
                                           cursorHeight: h * 0.04,
                                           style: TextStyle(
                                               color: _themeState.textColor,
-                                              fontSize: _themeState.isEn ? h * w * 0.00008 : h * w * 0.00006,
+                                              fontSize: _themeState.isEn! ? h * w * 0.00008 : h * w * 0.00006,
                                               fontWeight: FontWeight.w200),
                                           decoration: InputDecoration(
-                                              contentPadding: EdgeInsets.all(_themeState.isEn ? h * w * 0.00001 : h * w * 0.000008),
+                                              contentPadding: EdgeInsets.all(_themeState.isEn! ? h * w * 0.00001 : h * w * 0.000008),
                                               hintText: locale.titleHint.tr,
                                               border: InputBorder.none,
                                               focusedBorder: InputBorder.none,
@@ -154,8 +155,8 @@ class TaskListView extends StatelessWidget {
                                               errorBorder: InputBorder.none,
                                               disabledBorder: InputBorder.none,
                                               hintStyle: TextStyle(
-                                                  color: _themeState.hinoteColor.withOpacity(0.12),
-                                                  fontSize: _themeState.isEn ? h * w * 0.00008 : h * w * 0.00006,
+                                                  color: _themeState.hinoteColor!.withOpacity(0.12),
+                                                  fontSize: _themeState.isEn! ? h * w * 0.00008 : h * w * 0.00006,
                                                   fontWeight: FontWeight.w200)),
                                         ),
                                       ),

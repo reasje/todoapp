@@ -47,10 +47,10 @@ void main() async {
       requestAlertPermission: true,
       requestBadgePermission: true,
       requestSoundPermission: true,
-      onDidReceiveLocalNotification: (int id, String title, String body, String payload) async {});
+      onDidReceiveLocalNotification: (int id, String? title, String? body, String? payload) async {});
   var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: (String payload) async {
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: (String? payload) async {
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
     }
@@ -100,45 +100,51 @@ void configLoading() {
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({Key key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  final _themeState = Get.put(ThemeLogic());
+  final _themeLogic = Get.put(ThemeLogic());
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      // locale: _themeState.locale,
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        // A class which loads the strings form JSON files
-        //GlobalCupertinoLocalizations.delegate,
-        // Built-in localization for simple text for Material widgets
-        GlobalMaterialLocalizations.delegate,
-        // Built-in localization for text direction LTR/RTL
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: [
-        Locale("en", "US"),
-        Locale("fa", "IR"),
-      ],
-      // Return a locale which will be used by the app
-      // localeResolutionCallback: (locale, supportedLocales) {
-      //   // Check if the current device locale is supported
-      //   for (var supportedLocale in supportedLocales) {
-      //     if (supportedLocale.languageCode == locale.languageCode &&
-      //         supportedLocale.countryCode == locale.countryCode) {
-      //       return supportedLocale;
-      //     }
-      //   }
-      //   return supportedLocales.first;
-      // },
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity, fontFamily: _themeState.state.isEn ? "Ubuntu Condensed" : "Dubai"),
-      home: SplashScreen(),
-      builder: EasyLoading.init(),
-    );
+    return Obx(() {
+      if (_themeLogic.state.isEn != null) {
+        return GetMaterialApp(
+          // locale: _themeState.locale,
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            // A class which loads the strings form JSON files
+            //GlobalCupertinoLocalizations.delegate,
+            // Built-in localization for simple text for Material widgets
+            GlobalMaterialLocalizations.delegate,
+            // Built-in localization for text direction LTR/RTL
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: [
+            Locale("en", "US"),
+            Locale("fa", "IR"),
+          ],
+          // Return a locale which will be used by the app
+          // localeResolutionCallback: (locale, supportedLocales) {
+          //   // Check if the current device locale is supported
+          //   for (var supportedLocale in supportedLocales) {
+          //     if (supportedLocale.languageCode == locale.languageCode &&
+          //         supportedLocale.countryCode == locale.countryCode) {
+          //       return supportedLocale;
+          //     }
+          //   }
+          //   return supportedLocales.first;
+          // },
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity, fontFamily: _themeLogic.state.isEn! ? "Ubuntu Condensed" : "Dubai"),
+          home: SplashScreen(),
+          builder: EasyLoading.init(),
+        );
+      } else {
+        return Container();
+      }
+    });
   }
 }

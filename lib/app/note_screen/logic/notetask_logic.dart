@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:todoapp/model/taskController.dart';
 import 'package:todoapp/model/task_model.dart';
@@ -9,13 +10,13 @@ class NoteTaskLogic extends GetxController {
   NoteTaskState state = NoteTaskState();
 
   // used to control resetCheckBoxs
-  bool resetCheckBoxs = false;
+  bool? resetCheckBoxs = false;
   void changeResetCheckBoxs(bool value) {
     resetCheckBoxs = value;
     
   }
 
-  Future<List<TaskController>> getTaskList() async {
+  Future<List<TaskController?>> getTaskList() async {
     return state.taskControllerList;
   }
 
@@ -44,16 +45,16 @@ class NoteTaskLogic extends GetxController {
 
   void taskCheckBoxChanged(int index) {
     print('object');
-    if (state.taskControllerList[index].isDone) {
-      state.taskControllerList[index].isDone = false;
+    if (state.taskControllerList[index]!.isDone!) {
+      state.taskControllerList[index]!.isDone = false;
     } else {
-      state.taskControllerList[index].isDone = true;
+      state.taskControllerList[index]!.isDone = true;
     }
     
   }
 
   void clearTaskList() {
-    state.taskList.clear();
+    state.taskList!.clear();
   }
 
   void clearTaskControllerList() {
@@ -61,7 +62,7 @@ class NoteTaskLogic extends GetxController {
   }
 
   void initialTaskControllerList() {
-    state.taskControllerList = List.from(state.taskControllerList);
+    state.taskControllerList = List.from(state.taskControllerList) as RxList<TaskController?>;
     // state.taskControllerList.forEach((element) {
     //   element.focusNode.addListener(() {
     //     element.focusNode.hasFocus ?    state.scrollController.animateTo(
@@ -73,8 +74,8 @@ class NoteTaskLogic extends GetxController {
     // });
   }
 
-  void initialTaskList(List<Task> givenTaskList) {
-    state.taskList = givenTaskList;
+  void initialTaskList(List<Task>? givenTaskList) {
+    state.taskList = givenTaskList as RxList<Task>?;
   }
 
   void checkListOnSubmit(index) {
@@ -88,7 +89,7 @@ class NoteTaskLogic extends GetxController {
       duration: const Duration(milliseconds: 300),
     );
 
-    state.taskControllerList[index + 1].focusNode.requestFocus();
+    state.taskControllerList[index + 1]!.focusNode.requestFocus();
     
   }
 
@@ -98,7 +99,7 @@ class NoteTaskLogic extends GetxController {
   }
 
   void taskRecover(int index) {
-    state.dissmissedTask.key = PageStorageKey<String>('pageKey ${DateTime.now().microsecondsSinceEpoch}');
+    state.dissmissedTask!.key = PageStorageKey<String>('pageKey ${DateTime.now().microsecondsSinceEpoch}');
     state.taskControllerList.insert(index, state.dissmissedTask);
     
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/theme/theme_logic.dart';
@@ -13,7 +13,7 @@ import '../../../splash/connection_logic.dart';
 
 class ReOrderableListButtonsWidget extends StatelessWidget {
   const ReOrderableListButtonsWidget({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -37,11 +37,11 @@ class ReOrderableListButtonsWidget extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         locale.notesApp.tr,
-                        style: TextStyle(color: _themeState.titleColor.withOpacity(0.6), fontSize: _themeState.isEn ? w * 0.09 : w * 0.07),
+                        style: TextStyle(color: _themeState.titleColor!.withOpacity(0.6), fontSize: _themeState.isEn! ? w * 0.09 : w * 0.07),
                       )),
                   Container(
                     child: Icon(
-                      FontAwesome.dot_circle_o,
+                      Icons.circle_outlined,
                       size: h * w * 0.00005,
                       color: _connectionState.isConnected ? Colors.green.withOpacity(0.6) : Colors.red.withOpacity(0.6),
                     ),
@@ -69,7 +69,7 @@ class ReOrderableListButtonsWidget extends StatelessWidget {
                       sizePD: w * 0.1,
                       sizePU: w * 0.1,
                       iconSize: h * w * 0.00006,
-                      iconData: FontAwesome.code,
+                      iconData: Icons.code,
                       function: () {
                         Get.to(DonateScreen(), transition: Transition.rightToLeft);
                       },

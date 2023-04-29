@@ -17,8 +17,8 @@ class VoiceAdapter extends TypeAdapter<Voice> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Voice(
-      fields[0] as String,
-      fields[1] as Uint8List,
+      fields[0] as String?,
+      fields[1] as Uint8List?,
     );
   }
 

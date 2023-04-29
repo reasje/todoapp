@@ -17,8 +17,8 @@ class ImageAdapter extends TypeAdapter<Image> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Image(
-      fields[0] as Uint8List,
-      fields[1] as String,
+      fields[0] as Uint8List?,
+      fields[1] as String?,
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/model/note_model.dart';
@@ -29,7 +30,7 @@ class ThemeLogic extends GetxController {
   Future initialColorsAndLan() async {
     // checks if it's the first time
     // that the user comes to app
-    String firstTime;
+    String? firstTime;
     if (prefsBox.get('firstTime') != null) {
       firstTime = prefsBox.get('firstTime');
     } else {
@@ -42,7 +43,7 @@ class ThemeLogic extends GetxController {
     } else {
       state.isFirstTime = false;
     }
-    String lan;
+    String? lan;
     if (prefsBox.get('lan') != null) {
       lan = prefsBox.get('lan');
     } else {
@@ -56,7 +57,7 @@ class ThemeLogic extends GetxController {
       state.isEn = false;
       state.locale = Locale("fa", "IR");
     }
-    String theme;
+    String? theme;
     if (prefsBox.get('theme') != null) {
       theme = prefsBox.get('theme');
     } else {
@@ -67,16 +68,16 @@ class ThemeLogic extends GetxController {
     // cuz I have deleted the set state for the
     // note when the expansion is changed for the
     // better animation pusrpose
-    state.noteTitleColor = List<Color>.filled(100, Colors.white);
+    state.noteTitleColor = List<Color>.filled(100, Colors.white) as RxList<Color>;
     // The colors for the timer border
     // will initial the color
     changeBrightness(toWhat: theme);
   }
 
-  void changeBrightness({String toWhat}) {
+  void changeBrightness({String? toWhat}) {
     // This function is called when the user
     // taps on the lamp to change the brigtness
-    String theme;
+    String? theme;
     // If the function is called from the inital function
     // the to toWhat will not be null and so we will
     // prepare to initilize the color according to
@@ -101,7 +102,7 @@ class ThemeLogic extends GetxController {
       state.textColor = ColorsPallette.blackTextColor;
       state.brightness = Brightness.dark;
       state.noteTitleColor.fillRange(0, 100, ColorsPallette.blackNoteTitleColor);
-      state.hinoteColor = state.textColor.withOpacity(0.5);
+      state.hinoteColor = state.textColor!.withOpacity(0.5);
       state.swashColor = state.swashColor.withOpacity(0.7);
       state.titleColor = ColorsPallette.blackTitleColor;
       prefsBox.put('theme', 'black');
@@ -131,7 +132,7 @@ class ThemeLogic extends GetxController {
 
   // Changes the lan as soon as the user taps on lan button
   void changeLan() {
-    String lan = prefsBox.get('lan') ?? prefsBox.put('lan', 'en');
+    String lan = prefsBox.get('lan') ?? prefsBox.put('lan', 'en') as String;
     if (lan == 'en') {
       changeLanToPersian();
     } else {

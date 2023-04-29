@@ -10,7 +10,7 @@ import '../../../../applocalizations.dart';
 
 class TitleTextField extends StatelessWidget {
   const TitleTextField({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -33,9 +33,9 @@ class TitleTextField extends StatelessWidget {
         maxLines: null,
         cursorColor: _themeState.swashColor,
         cursorHeight: h * 0.055,
-        style: TextStyle(color: _themeState.textColor, fontSize: _themeState.isEn ? h * w * 0.00008 : h * w * 0.00006, fontWeight: FontWeight.w600),
+        style: TextStyle(color: _themeState.textColor, fontSize: _themeState.isEn! ? h * w * 0.00008 : h * w * 0.00006, fontWeight: FontWeight.w600),
         decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(horizontal: _themeState.isEn ? h * w * 0.00004 : h * w * 0.00003),
+            contentPadding: EdgeInsets.symmetric(horizontal: _themeState.isEn! ? h * w * 0.00004 : h * w * 0.00003),
             suffixIcon: IconButton(
               icon: Icon(Icons.clear_sharp),
               onPressed: () {
@@ -49,8 +49,8 @@ class TitleTextField extends StatelessWidget {
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
             hintStyle: TextStyle(
-                color: _themeState.hinoteColor.withOpacity(0.12),
-                fontSize: _themeState.isEn ? h * w * 0.00008 : h * w * 0.00006,
+                color: _themeState.hinoteColor!.withOpacity(0.12),
+                fontSize: _themeState.isEn! ? h * w * 0.00008 : h * w * 0.00006,
                 fontWeight: FontWeight.w400)),
       ),
     );

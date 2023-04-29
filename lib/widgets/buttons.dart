@@ -6,17 +6,17 @@ import 'package:todoapp/app/settings/settings_logic.dart';
 import 'package:todoapp/theme/theme_logic.dart';
 
 class ButtonWidget extends StatefulWidget {
-  final IconData iconData;
-  final double sizePU;
-  final double sizePD;
-  final double iconSize;
-  final Function function;
-  final BuildContext timerContext;
-  final Color backgroundColor;
-  final bool hasFloating;
-  final Widget child;
+  final IconData? iconData;
+  final double? sizePU;
+  final double? sizePD;
+  final double? iconSize;
+  final Function? function;
+  final BuildContext? timerContext;
+  final Color? backgroundColor;
+  final bool? hasFloating;
+  final Widget? child;
   const ButtonWidget(
-      {Key key,
+      {Key? key,
       this.sizePU,
       this.sizePD,
       this.iconSize,
@@ -39,12 +39,12 @@ class _MyButtonState extends State<ButtonWidget> {
   Widget build(BuildContext context) {
     final _signInProvider = Provider.of<SettingsLogic>(context);
     final _themeState = Get.find<ThemeLogic>().state;
-    Color backgroundColor = widget.backgroundColor;
+    Color? backgroundColor = widget.backgroundColor;
     // bool floating =
     //     widget.id == 'newpic' || widget.id == 'newvoice' || widget.id == 'pausevoice' || widget.id == 'stopvoice' || widget.id == 'resumevoice';
-    var shaded = widget.hasFloating ? Colors.transparent : backgroundColor.withOpacity(0.1);
-    IconData iconData = widget.iconData;
-    double iconSize = widget.iconSize;
+    var shaded = widget.hasFloating! ? Colors.transparent : backgroundColor!.withOpacity(0.1);
+    IconData? iconData = widget.iconData;
+    double? iconSize = widget.iconSize;
     return InkWell(
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
@@ -90,8 +90,8 @@ class _MyButtonState extends State<ButtonWidget> {
           child: AnimatedContainer(
             duration: Duration(milliseconds: 50),
             curve: Curves.fastLinearToSlowEaseIn,
-            height: isTapped ? widget.sizePD * 0.4 : widget.sizePU,
-            width: isTapped ? widget.sizePD * 0.4 : widget.sizePU,
+            height: isTapped ? widget.sizePD! * 0.4 : widget.sizePU,
+            width: isTapped ? widget.sizePD! * 0.4 : widget.sizePU,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: shaded,

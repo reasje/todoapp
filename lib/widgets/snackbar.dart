@@ -19,12 +19,12 @@ Widget MySnackBar(
   String text,
   String id,
   bool isAction, {
-  BuildContext context,
-  int index,
-  LazyBox<Note> noteBox,
-  Note note,
-  List<int> keys,
-  bool isWhite,
+  required BuildContext context,
+  int? index,
+  LazyBox<Note?>? noteBox,
+  Note? note,
+  List<int>? keys,
+  bool? isWhite,
 }) {
   final _themeLogic = Get.find<ThemeLogic>();
   final _noteImageLogic = Get.find<NoteImageLogic>();
@@ -50,11 +50,11 @@ Widget MySnackBar(
               if (id == 'undoVoice') {
                 _noteVoiceRecorderLogic.voiceRecover(index);
               } else if (id == 'undoTask') {
-                _noteTaskLogic.taskRecover(index);
+                _noteTaskLogic.taskRecover(index!);
               } else if (noteBox == null) {
                 _noteImageLogic.imageRecover(index);
               } else {
-                noteBox.put(keys[index], note);
+                noteBox.put(keys![index!], note);
               }
             },
           )

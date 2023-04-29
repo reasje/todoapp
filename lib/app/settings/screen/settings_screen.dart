@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:get/get.dart';
 import 'package:todoapp/app/note_screen/logic/note_logic.dart';
 import 'package:todoapp/theme/theme_logic.dart';
@@ -14,7 +15,7 @@ import 'package:todoapp/locales/locales.dart' as locale;
 import 'package:get/get.dart';
 
 class SettingsScreen extends StatefulWidget {
-  SettingsScreen({Key key}) : super(key: key);
+  SettingsScreen({Key? key}) : super(key: key);
 
   @override
   _SettingScreenState createState() => _SettingScreenState();
@@ -66,11 +67,12 @@ class _SettingScreenState extends State<SettingsScreen> {
                     Container(
                         height: h * w * 0.00025,
                         width: h * w * 0.0006,
-                        decoration: BoxDecoration(color: _themeState.textColor.withOpacity(0.1), borderRadius: BorderRadius.circular(h * w * 0.0001)),
+                        decoration:
+                            BoxDecoration(color: _themeState.textColor!.withOpacity(0.1), borderRadius: BorderRadius.circular(h * w * 0.0001)),
                         child: Center(
                           child: Text(
                             locale.googleBackup.tr,
-                            style: TextStyle(color: _themeState.textColor, fontSize: _themeState.isEn ? h * w * 0.00008 : h * w * 0.00007),
+                            style: TextStyle(color: _themeState.textColor, fontSize: _themeState.isEn! ? h * w * 0.00008 : h * w * 0.00007),
                           ),
                         )),
                     Container(
@@ -87,7 +89,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                               sizePU: h * w * 0.00012,
                               sizePD: h * w * 0.00013,
                               iconSize: h * w * 0.00006,
-                              iconData: FontAwesome.download,
+                              iconData: Icons.download,
                               function: () {
                                 DriveLogic.login(false, context);
                               },
@@ -101,7 +103,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                               sizePU: h * w * 0.00012,
                               sizePD: h * w * 0.00013,
                               iconSize: h * w * 0.00006,
-                              iconData: FontAwesome.upload,
+                              iconData: Icons.upload,
                               function: () {
                                 DriveLogic.login(true, context);
                               },
@@ -125,7 +127,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                                   }
                                 },
                                 child: Icon(
-                                  FontAwesome.google,
+                                  FontAwesomeIcons.google,
                                   size: h * w * 0.00006 * 0.8,
                                   color: logic.state.isSignedIn ? Colors.green : Colors.red,
                                 ),
@@ -141,11 +143,11 @@ class _SettingScreenState extends State<SettingsScreen> {
               Container(
                   height: h * w * 0.00025,
                   width: h * w * 0.0004,
-                  decoration: BoxDecoration(color: _themeState.textColor.withOpacity(0.1), borderRadius: BorderRadius.circular(h * w * 0.0001)),
+                  decoration: BoxDecoration(color: _themeState.textColor!.withOpacity(0.1), borderRadius: BorderRadius.circular(h * w * 0.0001)),
                   child: Center(
                     child: Text(
                       locale.theme.tr,
-                      style: TextStyle(color: _themeState.textColor, fontSize: _themeState.isEn ? h * w * 0.00008 : h * w * 0.00007),
+                      style: TextStyle(color: _themeState.textColor, fontSize: _themeState.isEn! ? h * w * 0.00008 : h * w * 0.00007),
                     ),
                   )),
               Container(
@@ -160,7 +162,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                         sizePU: h * w * 0.00017,
                         sizePD: h * w * 0.00018,
                         iconSize: h * w * 0.0001,
-                        iconData: FontAwesome.language,
+                        iconData: Icons.language,
                         function: () {
                           _themeLogic.changeLan();
                         },
@@ -170,7 +172,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                         sizePU: h * w * 0.00017,
                         sizePD: h * w * 0.00018,
                         iconSize: h * w * 0.0001,
-                        iconData: FontAwesome.lightbulb_o,
+                        iconData: FontAwesomeIcons.lightbulb,
                         function: () {
                           _themeLogic.changeBrightness();
                         },

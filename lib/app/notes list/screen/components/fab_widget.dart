@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/notes%20list/logic.dart';
@@ -12,7 +12,7 @@ import '../../../note_screen/screen/note_screen.dart';
 
 class FloatingActionButtonWidget extends StatelessWidget {
   const FloatingActionButtonWidget({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -24,9 +24,9 @@ class FloatingActionButtonWidget extends StatelessWidget {
     return FloatingActionButton(
       elevation: 0,
       highlightElevation: 0,
-      backgroundColor: _themeState.textColor.withOpacity(0.1),
+      backgroundColor: _themeState.textColor!.withOpacity(0.1),
       child: Icon(
-        FontAwesome.plus,
+        Icons.add_rounded,
         color: _themeState.textColor,
       ),
       onPressed: () {

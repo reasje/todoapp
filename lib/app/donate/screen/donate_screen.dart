@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/app/donate/logic/donate_provider.dart';
@@ -12,7 +13,7 @@ import '../../../applocalizations.dart';
 import '../../../widgets/buttons.dart';
 
 class DonateScreen extends StatefulWidget {
-  DonateScreen({Key key}) : super(key: key);
+  DonateScreen({Key? key}) : super(key: key);
 
   @override
   _DonateScreenState createState() => _DonateScreenState();
@@ -72,7 +73,7 @@ class _DonateScreenState extends State<DonateScreen> {
                             locale.donate.tr,
                             style: TextStyle(
                                 color: _themeState.textColor,
-                                fontSize: _themeState.isEn ? h * w * 0.00009 : h * w * 0.000075,
+                                fontSize: _themeState.isEn! ? h * w * 0.00009 : h * w * 0.000075,
                                 fontWeight: FontWeight.w100),
                           ),
                           Container(
@@ -81,7 +82,7 @@ class _DonateScreenState extends State<DonateScreen> {
                               '@Rezaaslejeddian@gmail.com',
                               style: TextStyle(
                                   color: _themeState.textColor,
-                                  fontSize: _themeState.isEn ? h * w * 0.00005 : h * w * 0.00006,
+                                  fontSize: _themeState.isEn! ? h * w * 0.00005 : h * w * 0.00006,
                                   fontWeight: FontWeight.w100),
                             ),
                           ),
@@ -105,7 +106,7 @@ class _DonateScreenState extends State<DonateScreen> {
                           sizePU: h * 0.1,
                           sizePD: h * 0.1,
                           iconSize: h * w * 0.00014,
-                          iconData: FontAwesome.dollar,
+                          iconData: FontAwesomeIcons.dollar,
                           function: () {
                             Provider.of<DonateLogic>(context, listen: false).launchURL();
                           },
@@ -114,7 +115,7 @@ class _DonateScreenState extends State<DonateScreen> {
                           locale.donateRials.tr,
                           style: TextStyle(
                               color: _themeState.textColor,
-                              fontSize: _themeState.isEn ? h * w * 0.00007 : h * w * 0.00007,
+                              fontSize: _themeState.isEn! ? h * w * 0.00007 : h * w * 0.00007,
                               fontWeight: FontWeight.w400),
                         )
                       ],
@@ -127,7 +128,7 @@ class _DonateScreenState extends State<DonateScreen> {
                           sizePU: h * 0.1,
                           sizePD: h * 0.1,
                           iconSize: h * w * 0.00014,
-                          iconData: FontAwesome.dollar,
+                          iconData: FontAwesomeIcons.dollar,
                           function: () {
                             _donateProvider.copyDogeAdress();
                             _donateProvider.showDogeCopied(context);
@@ -141,7 +142,7 @@ class _DonateScreenState extends State<DonateScreen> {
                           locale.donateDoge.tr,
                           style: TextStyle(
                               color: _themeState.textColor,
-                              fontSize: _themeState.isEn ? h * w * 0.00007 : h * w * 0.00006,
+                              fontSize: _themeState.isEn! ? h * w * 0.00007 : h * w * 0.00006,
                               fontWeight: FontWeight.w400),
                         )
                       ],

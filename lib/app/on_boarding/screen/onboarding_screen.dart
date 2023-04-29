@@ -10,7 +10,7 @@ import '../../../widgets/buttons.dart';
 import '../../notes list/screen/notes_screen.dart';
 
 class OnBoardingScreen extends StatefulWidget {
-  OnBoardingScreen({Key key}) : super(key: key);
+  OnBoardingScreen({Key? key}) : super(key: key);
 
   @override
   _OnBoardingScreenState createState() => _OnBoardingScreenState();

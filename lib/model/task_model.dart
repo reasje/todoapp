@@ -5,8 +5,8 @@ part 'task_model.g.dart';
 @HiveType(typeId: 2)
 class Task {
   @HiveField(0)
-  String title;
+  String? title;
   @HiveField(1)
-  bool isDone;
+  bool? isDone;
   Task(this.title, this.isDone);
 }

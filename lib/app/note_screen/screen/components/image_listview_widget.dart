@@ -11,10 +11,11 @@ import '../../../../applocalizations.dart';
 import '../../../../widgets/no_glow_behavior.dart';
 import '../../../../widgets/snackbar.dart';
 import '../image_screen.dart';
+import 'package:todoapp/model/image_model.dart' as imageModel;
 
 class ImageLisView extends StatelessWidget {
   ImageLisView({
-    Key key,
+    Key? key,
   }) : super(key: key);
   final _themeState = Get.find<ThemeLogic>().state;
   @override
@@ -36,12 +37,12 @@ class ImageLisView extends StatelessWidget {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, childAspectRatio: 0.8, mainAxisSpacing: h * 0.05, crossAxisSpacing: w * 0.03),
                   scrollDirection: Axis.vertical,
-                  itemCount: _noteImageLogic.state.imageList != null ? _noteImageLogic.state.imageList.length + 1 : 1,
+                  itemCount: _noteImageLogic.state.imageList != null ? _noteImageLogic.state.imageList!.length + 1 : 1,
                   itemBuilder: (context, index) {
-                    if (index == (_noteImageLogic.state.imageList != null ? _noteImageLogic.state.imageList.length : 0)) {
+                    if (index == (_noteImageLogic.state.imageList != null ? _noteImageLogic.state.imageList!.length : 0)) {
                       return Container();
                     } else {
-                      return FutureBuilder(
+                      return FutureBuilder<List<imageModel.Image?>?>(
                           future: _noteImageLogic.getImageList(),
                           builder: (context, snapShot) {
                             if (snapShot.hasData) {
@@ -60,19 +61,19 @@ class ImageLisView extends StatelessWidget {
                                 onDismissed: (direction) {
                                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                   ScaffoldMessenger.of(context)
-                                      .showSnackBar(MySnackBar(locale.undoImage.tr, 'undoImage', true, context: context, index: index));
+                                      .showSnackBar(MySnackBar(locale.undoImage.tr, 'undoImage', true, context: context, index: index) as SnackBar);
                                   _noteImageLogic.imageDissmissed(index);
                                 },
                                 child: GridTile(
                                   footer: GridTileBar(
-                                      backgroundColor: _themeState.mainColor.withOpacity(0.1),
+                                      backgroundColor: _themeState.mainColor!.withOpacity(0.1),
                                       title: Text(
-                                        snapShot.data[index].desc,
+                                        snapShot.data![index] == null ? "" : snapShot.data![index]!.desc ?? "",
                                         style: TextStyle(
-                                            fontFamily: _themeState.isEn ? "Ubuntu Condensed" : "Dubai",
+                                            fontFamily: _themeState.isEn! ? "Ubuntu Condensed" : "Dubai",
                                             color: _themeState.mainColor,
-                                            fontSize: _themeState.isEn ? h * w * 0.00005 : h * w * 0.00003,
-                                            fontWeight: _themeState.isEn ? FontWeight.w100 : FontWeight.w600),
+                                            fontSize: _themeState.isEn! ? h * w * 0.00005 : h * w * 0.00003,
+                                            fontWeight: _themeState.isEn! ? FontWeight.w100 : FontWeight.w600),
                                         textAlign: TextAlign.center,
                                       )),
                                   child: Center(
@@ -87,7 +88,7 @@ class ImageLisView extends StatelessWidget {
                                                   child: Hero(
                                                       tag: 'pic${index}',
                                                       child: Image.memory(
-                                                        snapShot.data[index].image,
+                                                        snapShot.data![index]!.image!,
                                                         fit: BoxFit.cover,
                                                       )),
                                                 ),
@@ -101,7 +102,7 @@ class ImageLisView extends StatelessWidget {
                                 child: Shimmer.fromColors(
                                   period: Duration(seconds: 1),
                                   baseColor: _bottomNavLogic.state.tabs[_bottomNavLogic.state.selectedTab].color.withOpacity(0.3),
-                                  highlightColor: _themeState.shimmerColor,
+                                  highlightColor: _themeState.shimmerColor!,
                                   child: Container(
                                     margin: EdgeInsets.symmetric(horizontal: w * 0.03),
                                     decoration: BoxDecoration(

@@ -18,7 +18,7 @@ import 'components/reorderable_buttons_widget.dart';
 import 'components/reorderablecard_widget.dart';
 
 class NotesScreen extends StatefulWidget {
-  NotesScreen({Key key}) : super(key: key);
+  NotesScreen({Key? key}) : super(key: key);
 
   @override
   _NotesScreenState createState() => _NotesScreenState();

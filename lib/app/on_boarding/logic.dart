@@ -16,8 +16,8 @@ class OnBoardingLogic extends GetxController {
 
   @override
   void onInit() {
-    final _themeState = Provider.of<ThemeLogic>(Get.overlayContext, listen: false);
-    showAlertDialog(Get.overlayContext, title: "Choose you language ! ", okButtonText: "فارسی", cancelButtonText: "English", okButtonFunction: () {
+    final _themeState = Provider.of<ThemeLogic>(Get.overlayContext!, listen: false);
+    showAlertDialog(Get.overlayContext!, title: "Choose you language ! ", okButtonText: "فارسی", cancelButtonText: "English", okButtonFunction: () {
       _themeState.changeLanToPersian();
     });
     super.onInit();

@@ -6,7 +6,7 @@ import 'package:todoapp/app/note_screen/logic/bottomnav_logic.dart';
 import 'package:todoapp/theme/theme_logic.dart';
 
 class BottomNavWidget extends StatefulWidget {
-  BottomNavWidget({Key key}) : super(key: key);
+  BottomNavWidget({Key? key}) : super(key: key);
 
   @override
   _BottomNavWidgetState createState() => _BottomNavWidgetState();

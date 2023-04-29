@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -17,9 +18,9 @@ import '../../logic/notevoice_recorder_provider.dart';
 import '../../state/note_voice_player_state.dart';
 
 class VoiceListView extends StatelessWidget {
-  final Color backGroundColor;
+  final Color? backGroundColor;
   VoiceListView({
-    Key key,
+    Key? key,
     this.backGroundColor,
   }) : super(key: key);
 
@@ -41,10 +42,10 @@ class VoiceListView extends StatelessWidget {
             behavior: NoGlowBehavior(),
             child: Obx(() {
               return ListView.builder(
-                  itemCount: _noteVoiceRecorderLogic.state.voiceList != null ? _noteVoiceRecorderLogic.state.voiceList.length + 1 : 1,
+                  itemCount: _noteVoiceRecorderLogic.state.voiceList != null ? _noteVoiceRecorderLogic.state.voiceList!.length + 1 : 1,
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
-                    if (index == (_noteVoiceRecorderLogic.state.voiceList != null ? _noteVoiceRecorderLogic.state.voiceList.length : 0)) {
+                    if (index == (_noteVoiceRecorderLogic.state.voiceList != null ? _noteVoiceRecorderLogic.state.voiceList!.length : 0)) {
                       return Container();
                     } else {
                       return FutureBuilder(
@@ -72,7 +73,7 @@ class VoiceListView extends StatelessWidget {
                                 onDismissed: (direction) {
                                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                   ScaffoldMessenger.of(context)
-                                      .showSnackBar(MySnackBar(locale.undoVoice.tr, 'undoVoice', true, context: context, index: index));
+                                      .showSnackBar(MySnackBar(locale.undoVoice.tr, 'undoVoice', true, context: context, index: index) as SnackBar);
                                   _noteVoiceRecorderLogic.voiceDismissed(index);
                                 },
                                 child: Container(
@@ -80,7 +81,7 @@ class VoiceListView extends StatelessWidget {
                                     height: h * 0.12,
                                     margin: EdgeInsets.symmetric(horizontal: w * 0.08, vertical: h * 0.03),
                                     decoration: BoxDecoration(
-                                        color: backGroundColor.withOpacity(0.2), borderRadius: BorderRadius.all(Radius.circular(h * 0.02))),
+                                        color: backGroundColor!.withOpacity(0.2), borderRadius: BorderRadius.all(Radius.circular(h * 0.02))),
                                     child: _noteVoiceRecorderLogic.state.voiceList != null
                                         ? Container(
                                             alignment: Alignment.centerLeft,
@@ -96,13 +97,13 @@ class VoiceListView extends StatelessWidget {
                                                         textDirection: TextDirection.ltr,
                                                         child: Slider(
                                                           key: PageStorageKey<String>('pageKey ${DateTime.now().microsecondsSinceEpoch}'),
-                                                          inactiveColor: backGroundColor.withOpacity(0.1),
+                                                          inactiveColor: backGroundColor!.withOpacity(0.1),
                                                           activeColor: backGroundColor,
                                                           onChangeEnd: (value) {
                                                             _noteVoicePlayerLogic.seekPlayingRecorder(value, index, context);
                                                           },
                                                           value: _noteVoicePlayerLogic.state.voiceProgress[index].inSeconds.toDouble(),
-                                                          max: _noteVoicePlayerLogic.state.voiceDuration[index].inSeconds.toDouble() + 1,
+                                                          max: _noteVoicePlayerLogic.state.voiceDuration[index]!.inSeconds.toDouble() + 1,
                                                           min: 0,
                                                           onChanged: (value) {},
                                                         ),
@@ -131,7 +132,7 @@ class VoiceListView extends StatelessWidget {
                                                           FittedBox(
                                                             fit: BoxFit.cover,
                                                             child: Text(
-                                                              _noteVoiceRecorderLogic.state.voiceList[index].title,
+                                                              _noteVoiceRecorderLogic.state.voiceList![index]!.title!,
                                                               softWrap: false,
                                                             ),
                                                           ),
@@ -141,10 +142,10 @@ class VoiceListView extends StatelessWidget {
                                                               textDirection: TextDirection.ltr,
                                                               children: [
                                                                 Text(
-                                                                    "${((_noteVoicePlayerLogic.state.voiceDuration[index].inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}"),
+                                                                    "${((_noteVoicePlayerLogic.state.voiceDuration[index]!.inSeconds / 60) % 60).floor().toString().padLeft(2, '0')}"),
                                                                 Text(":"),
                                                                 Text(
-                                                                    "${(_noteVoicePlayerLogic.state.voiceDuration[index].inSeconds % 60).floor().toString().padLeft(2, '0')}"),
+                                                                    "${(_noteVoicePlayerLogic.state.voiceDuration[index]!.inSeconds % 60).floor().toString().padLeft(2, '0')}"),
                                                               ],
                                                             ),
                                                           ),
@@ -163,21 +164,21 @@ class VoiceListView extends StatelessWidget {
                                                             onTap: () {
                                                               _noteVoicePlayerLogic.pausePlayingRecorded(index);
                                                             },
-                                                            child: Icon(FontAwesome.pause, color: backGroundColor, size: h * w * 0.00012),
+                                                            child: Icon(Icons.pause, color: backGroundColor, size: h * w * 0.00012),
                                                           )
                                                         : _noteVoicePlayerLogic.state.soundPlayerState[index] == SoundPlayerState.paused
                                                             ? InkWell(
                                                                 onTap: () {
                                                                   _noteVoicePlayerLogic.resumePlayingRecorded(index);
                                                                 },
-                                                                child: Icon(FontAwesome.play, color: backGroundColor, size: h * w * 0.00012),
+                                                                child: Icon(FontAwesomeIcons.play, color: backGroundColor, size: h * w * 0.00012),
                                                               )
                                                             : _noteVoicePlayerLogic.state.soundPlayerState[index] == SoundPlayerState.stopped
                                                                 ? InkWell(
                                                                     onTap: () {
                                                                       _noteVoicePlayerLogic.startPlayingRecorded(index, context);
                                                                     },
-                                                                    child: Icon(FontAwesome.play, color: backGroundColor, size: h * w * 0.00012),
+                                                                    child: Icon(FontAwesomeIcons.play, color: backGroundColor, size: h * w * 0.00012),
                                                                   )
                                                                 : Container())
                                               ],

@@ -15,23 +15,23 @@ import 'package:google_sign_in/google_sign_in.dart' as signIn;
 import 'package:todoapp/app/settings/drive_logic.dart';
 
 Future showAlertDialog(BuildContext context,
-    {String title,
-    drive.DriveApi driveApi,
-    drive.File driveFile,
-    LazyBox<Note> noteBox,
-    String fileId,
-    int index,
-    String desc,
-    Widget buttons,
+    {String? title,
+    drive.DriveApi? driveApi,
+    drive.File? driveFile,
+    LazyBox<Note>? noteBox,
+    String? fileId,
+    int? index,
+    String? desc,
+    Widget? buttons,
     bool hastTextField = false,
     int textFieldMaxLength = 10,
     String textFieldhintText = "",
-    TextInputType textInputType,
-    String okButtonText,
-    String cancelButtonText,
-    Function okButtonFunction,
-    Function cancelButtonFunction,
-    TextEditingController dialogController}) async {
+    TextInputType? textInputType,
+    String? okButtonText,
+    String? cancelButtonText,
+    Function? okButtonFunction,
+    Function? cancelButtonFunction,
+    TextEditingController? dialogController}) async {
   bool _passwordInVisible = true;
 
   var mCtx = context;
@@ -51,7 +51,7 @@ Future showAlertDialog(BuildContext context,
               backgroundColor: _themeLogic.mainColor,
               title: Center(
                   child: Text(
-                title,
+                title!,
                 style: TextStyle(
                   color: _themeLogic.textColor,
                 ),
@@ -72,9 +72,9 @@ Future showAlertDialog(BuildContext context,
                             cursorColor: _themeLogic.swashColor,
                             cursorHeight: h * 0.03,
                             style: TextStyle(
-                                color: _themeLogic.textColor, fontSize: _themeLogic.isEn ? w * 0.04 : w * 0.03, fontWeight: FontWeight.w200),
+                                color: _themeLogic.textColor, fontSize: _themeLogic.isEn! ? w * 0.04 : w * 0.03, fontWeight: FontWeight.w200),
                             decoration: InputDecoration(
-                                contentPadding: EdgeInsets.all(_themeLogic.isEn ? h * w * 0.00001 : h * w * 0.00001),
+                                contentPadding: EdgeInsets.all(_themeLogic.isEn! ? h * w * 0.00001 : h * w * 0.00001),
                                 hintText: textFieldhintText,
                                 border: InputBorder.none,
                                 suffixIcon: IconButton(
@@ -91,8 +91,8 @@ Future showAlertDialog(BuildContext context,
                                 errorBorder: InputBorder.none,
                                 disabledBorder: InputBorder.none,
                                 hintStyle: TextStyle(
-                                    color: _themeLogic.hinoteColor.withOpacity(0.12),
-                                    fontSize: _themeLogic.isEn ? w * 0.05 : w * 0.04,
+                                    color: _themeLogic.hinoteColor!.withOpacity(0.12),
+                                    fontSize: _themeLogic.isEn! ? w * 0.05 : w * 0.04,
                                     fontWeight: FontWeight.w400)),
                           )
                         : Container(),
@@ -110,11 +110,11 @@ Future showAlertDialog(BuildContext context,
                               child: InkWell(
                                 child: Center(
                                     child: Text(
-                                  okButtonText,
+                                  okButtonText!,
                                   style: TextStyle(color: _themeLogic.mainColor, fontWeight: FontWeight.bold),
                                 )),
                                 onTap: () {
-                                  okButtonFunction();
+                                  okButtonFunction!();
                                   Navigator.pop(ctx);
                                 },
                               )),

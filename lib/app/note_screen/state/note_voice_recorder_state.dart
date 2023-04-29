@@ -13,10 +13,10 @@ class NoteVoiceRecorderState {
   FlutterSoundRecorder flutterSoundRecorder = new FlutterSoundRecorder();
 
   // The voice note part
-  RxList<Voice> voiceList = [].obs;
+  RxList<Voice?>? voiceList = [].obs as RxList<Voice?>?;
   // Used to controller if the notes has been edited or not
-  RxList<Voice> voiceListSnapshot = [].obs;
-  RxList<TaskController> taskControllerListSnapShot = [].obs;
+  RxList<Voice> voiceListSnapshot = [].obs as RxList<Voice>;
+  RxList<TaskController> taskControllerListSnapShot = [].obs as RxList<TaskController>;
 
   // This list is return to UI for details
   // Below variable is used to show the recorded time in the UI
@@ -25,9 +25,9 @@ class NoteVoiceRecorderState {
   Duration get recorderDuration => _recorderDuration.value;
 
 // If any of the voices has been dismissed  It wil be saved in this variable
-  Rx<Voice> _dismissedVoice =  null.obs;
-  set dismissedVoice(Voice value) => _dismissedVoice.value = value;
-  Voice get dismissedVoice => _dismissedVoice.value;
+  Rx<Voice?> _dismissedVoice =  null.obs;
+  set dismissedVoice(Voice? value) => _dismissedVoice.value = value;
+  Voice? get dismissedVoice => _dismissedVoice.value;
 
   Rx<String> _voiceName = 'tempraryFileName'.obs;
   set voiceName(String value) => _voiceName.value = value;

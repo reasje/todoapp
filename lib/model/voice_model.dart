@@ -7,9 +7,9 @@ part 'voice_model.g.dart';
 @HiveType(typeId: 1)
 class Voice {
   @HiveField(0)
-  String title;
+  String? title;
   @HiveField(1)
-  Uint8List voice;
+  Uint8List? voice;
 
   Voice(this.title, this.voice);
 

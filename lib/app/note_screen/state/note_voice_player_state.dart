@@ -21,7 +21,7 @@ class NoteVoicePlayerState {
   // this varriable shows the progress of the voice
   RxList<Duration> voiceProgress = List.filled(100, Duration(seconds: 0)).obs;
   // This shows the total duration of the voice
-  RxList<Duration> voiceDuration = List.filled(100, Duration(seconds: 0)).obs;
+  RxList<Duration?> voiceDuration = List.filled(100, Duration(seconds: 0)).obs;
 // This is the periodical timer for incrementing the voiceProgress duration
   RxList<Timer> timer = List.filled(100, Timer(Duration(), () {})).obs;
   // Used to control the playing voices

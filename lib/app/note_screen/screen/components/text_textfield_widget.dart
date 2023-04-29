@@ -10,7 +10,7 @@ import '../../../../applocalizations.dart';
 
 class TextTextField extends StatelessWidget {
   const TextTextField({
-    Key key,
+    Key? key,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class TextTextField extends StatelessWidget {
         maxLines: null,
         cursorColor: _themeState.swashColor,
         cursorHeight: h * 0.045,
-        style: TextStyle(color: _themeState.textColor, fontSize: _themeState.isEn ? h * w * 0.00008 : h * w * 0.00006, fontWeight: FontWeight.w400),
+        style: TextStyle(color: _themeState.textColor, fontSize: _themeState.isEn! ? h * w * 0.00008 : h * w * 0.00006, fontWeight: FontWeight.w400),
         decoration: InputDecoration(
             suffixIcon: IconButton(
               icon: Icon(Icons.clear_sharp),
@@ -44,7 +44,7 @@ class TextTextField extends StatelessWidget {
               },
             ),
             contentPadding: EdgeInsets.symmetric(
-                horizontal: _themeState.isEn ? h * w * 0.00004 : h * w * 0.00003, vertical: _themeState.isEn ? h * w * 0.00004 : h * w * 0.00003),
+                horizontal: _themeState.isEn! ? h * w * 0.00004 : h * w * 0.00003, vertical: _themeState.isEn! ? h * w * 0.00004 : h * w * 0.00003),
             hintText: locale.textHint.tr,
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
@@ -52,8 +52,8 @@ class TextTextField extends StatelessWidget {
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
             hintStyle: TextStyle(
-                color: _themeState.hinoteColor.withOpacity(0.12),
-                fontSize: _themeState.isEn ? h * w * 0.00007 : h * w * 0.00005,
+                color: _themeState.hinoteColor!.withOpacity(0.12),
+                fontSize: _themeState.isEn! ? h * w * 0.00007 : h * w * 0.00005,
                 fontWeight: FontWeight.w400)),
       ),
     );

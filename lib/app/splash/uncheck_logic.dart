@@ -22,7 +22,7 @@ class UnCheckLogic extends GetxController{
     //BuildContext donateContext;
     // Hive box for notes
     final noteBox = Hive.lazyBox<Note>(noteBoxName);
-    String date = prefsBox.get('date');
+    String? date = prefsBox.get('date');
     var now = DateTime.now();
     if (date != null) {
       List<String> dateList = date.split(',');
@@ -32,7 +32,7 @@ class UnCheckLogic extends GetxController{
       if (int.parse(dateList[0]) < year || int.parse(dateList[1]) < month || int.parse(dateList[2]) < day) {
         if (noteBox.length != 0) {
           for (int i = 0; i < noteBox.length; i++) {
-            var bnote = await noteBox.getAt(i);
+            var bnote = await (noteBox.getAt(i) as FutureOr<Note>);
             if (bnote.resetCheckBoxs == true) {
               var noteTitle = bnote.title;
               var noteText = bnote.text;
@@ -40,7 +40,7 @@ class UnCheckLogic extends GetxController{
               var noteColor = bnote.color;
               var ntImageList = bnote.imageList;
               var ntVoiceList = bnote.voiceList;
-              var ntTaskList = bnote.taskList;
+              var ntTaskList = bnote.taskList!;
               var ntPassword = bnote.password;
               // unchecking all the tasks
               ntTaskList.forEach((element) {

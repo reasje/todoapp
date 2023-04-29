@@ -12,7 +12,7 @@ class TabView extends StatefulWidget {
   final index;
   final timerOn;
   TabView({
-    Key key,
+    Key? key,
     this.index,
     this.timerOn,
   }) : super(key: key);
@@ -24,7 +24,7 @@ class TabView extends StatefulWidget {
 class _TabViewState extends State<TabView> {
   @override
   Widget build(BuildContext context) {
-    int index = widget.index;
+    int? index = widget.index;
     bool timerOn = widget.timerOn ?? false;
     final _bottomNavLogic = Get.find<BottomNavLogic>();
     double h = MediaQuery.of(context).size.height;
@@ -42,7 +42,7 @@ class _TabViewState extends State<TabView> {
               child: Row(
                 textDirection: TextDirection.ltr,
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: [if (!timerOn) ..._bottomNavLogic.state.tabs[index].buttons else _bottomNavLogic.state.tabs[index].buttons[0]],
+                children: [if (!timerOn) ..._bottomNavLogic.state.tabs[index!].buttons else _bottomNavLogic.state.tabs[index!].buttons[0]],
               ),
             ),
             if (!timerOn)
@@ -53,7 +53,7 @@ class _TabViewState extends State<TabView> {
                   locale.timerOn.tr,
                   style: TextStyle(
                       color: _bottomNavLogic.state.tabColors[_bottomNavLogic.state.selectedTab],
-                      fontSize: _themeState.isEn ? h * w * 0.00008 : h * w * 0.00006,
+                      fontSize: _themeState.isEn! ? h * w * 0.00008 : h * w * 0.00006,
                       fontWeight: FontWeight.w400),
                 ),
               ),

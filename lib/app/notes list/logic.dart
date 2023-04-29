@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -18,7 +20,7 @@ class NotesLogic extends GetxController {
   }
 
   Future<void> reorderNoteList(int oldIndex, int newIndex) async {
-    final noteBox = Hive.lazyBox<Note>(noteBoxName);
+    final noteBox = Hive.lazyBox<Note?>(noteBoxName);
     List<int> keys = noteBox.keys.cast<int>().toList();
 
     if (oldIndex < newIndex) {
@@ -27,7 +29,7 @@ class NotesLogic extends GetxController {
 
     var bnote = await noteBox.get(keys[oldIndex]);
 
-    Note note = bnote;
+    Note? note = bnote;
     if (newIndex < oldIndex) {
       for (int i = oldIndex; i > newIndex; i--) {
         var bnote2 = await noteBox.get(keys[i - 1]);
@@ -47,7 +49,7 @@ class NotesLogic extends GetxController {
     // the theme status as string
     final prefsBox = Hive.box<String>(prefsBoxName);
     final noteBox = Hive.lazyBox<Note>(noteBoxName);
-    String date = prefsBox.get('date');
+    String? date = prefsBox.get('date');
     var now = DateTime.now();
     if (date != null) {
       List<String> dateList = date.split(',');
@@ -57,7 +59,7 @@ class NotesLogic extends GetxController {
       if (int.parse(dateList[0]) < year || int.parse(dateList[1]) < month || int.parse(dateList[2]) < day) {
         if (noteBox.length != 0) {
           for (int i = 0; i < noteBox.length; i++) {
-            var bnote = await noteBox.getAt(i);
+            var bnote = await (noteBox.getAt(i) as FutureOr<Note>);
             if (bnote.resetCheckBoxs == true) {
               var noteTitle = bnote.title;
               var noteText = bnote.text;
@@ -65,7 +67,7 @@ class NotesLogic extends GetxController {
               var noteColor = bnote.color;
               var ntImageList = bnote.imageList;
               var ntVoiceList = bnote.voiceList;
-              var ntTaskList = bnote.taskList;
+              var ntTaskList = bnote.taskList!;
               var ntPassword = bnote.password;
               // unchecking all the tasks
               ntTaskList.forEach((element) {

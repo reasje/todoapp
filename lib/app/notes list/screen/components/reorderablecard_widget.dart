@@ -15,7 +15,7 @@ import '../../../../widgets/snackbar.dart';
 import '../../../note_screen/screen/note_screen.dart';
 
 class ReOrderableCardWidget extends StatelessWidget {
-  const ReOrderableCardWidget({Key key, this.snapShot, this.notes, this.index}) : super(key: key);
+  const ReOrderableCardWidget({Key? key, this.snapShot, this.notes, this.index}) : super(key: key);
   final snapShot;
   final notes;
   final index;
@@ -25,7 +25,7 @@ class ReOrderableCardWidget extends StatelessWidget {
     ;
 
     final _themeState = Get.find<ThemeLogic>().state;
-    List<int> keys = notes.keys.cast<int>().toList();
+    List<int>? keys = notes.keys.cast<int>().toList();
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
@@ -46,7 +46,7 @@ class ReOrderableCardWidget extends StatelessWidget {
         ),
       ),
       onDismissed: (direction) async {
-        var bnote = await notes.get(keys[index]);
+        var bnote = await notes.get(keys![index]);
         Note note = Note(bnote.title, bnote.text, bnote.isChecked, bnote.color, bnote.bnote.imageList, bnote.voiceList, bnote.taskList,
             bnote.resetCheckBoxs, bnote.password);
         notes.delete(keys[index]);
@@ -60,7 +60,7 @@ class ReOrderableCardWidget extends StatelessWidget {
           noteBox: notes,
           note: note,
           keys: keys,
-        ));
+        ) as SnackBar);
       },
       child: AnimationConfiguration.staggeredList(
         position: index,
@@ -80,7 +80,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: w * 0.009, vertical: w * 0.04),
                   margin: EdgeInsets.only(bottom: h * 0.01, top: isLandscape ? w * 0.1 : h * 0.002),
                   decoration: BoxDecoration(
-                      color: Color(snapShot.data.color).withOpacity(0.5) ?? Colors.white,
+                      color: Color(snapShot.data.color).withOpacity(0.5),
                       //border: Border.all(width: 1, color:  Colors.whiteSmoke),
                       borderRadius: BorderRadius.all(Radius.circular(10))),
                   //clipBehavior: Clip.antiAlias,
@@ -195,7 +195,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                             height: h * 0.04,
                                             width: h * 0.04,
                                             decoration: BoxDecoration(
-                                                border: Border.all(color: _themeState.textColor, width: 1.5),
+                                                border: Border.all(color: _themeState.textColor!, width: 1.5),
                                                 borderRadius: BorderRadius.circular(10),
                                                 color: snapShot.data.isChecked ?? false ? Color(snapShot.data.color).withOpacity(0.2) : null),
                                             child: snapShot.data.isChecked ?? false
@@ -218,8 +218,8 @@ class ReOrderableCardWidget extends StatelessWidget {
                                               softWrap: false,
                                               style: TextStyle(
                                                   color: _themeState.noteTitleColor[index],
-                                                  fontSize: _themeState.isEn ? h * w * 0.00011 : h * w * 0.00009,
-                                                  fontWeight: _themeState.isEn ? FontWeight.w100 : FontWeight.w600),
+                                                  fontSize: _themeState.isEn! ? h * w * 0.00011 : h * w * 0.00009,
+                                                  fontWeight: _themeState.isEn! ? FontWeight.w100 : FontWeight.w600),
                                             ),
                                           ),
                                         ),

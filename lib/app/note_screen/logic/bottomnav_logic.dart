@@ -35,12 +35,12 @@ class BottomNavLogic extends GetxController {
 
   void newTabSelected(int index) {
     state.selectedTab = index;
-    state.pageController.jumpToPage(index);
+    state.pageController!.jumpToPage(index);
   }
 
   void newTabSelectedAnimation(int index) {
     state.selectedTab = index;
-    state.pageController.animateToPage(index, duration: Duration(seconds: 1), curve: Curves.ease);
+    state.pageController!.animateToPage(index, duration: Duration(seconds: 1), curve: Curves.ease);
   }
 
   Future<void> initialTabs(
@@ -158,8 +158,8 @@ class BottomNavLogic extends GetxController {
                     iconData: Icons.vpn_key_rounded,
                     function: () {
                       TextEditingController dialogController = TextEditingController(text: '');
-                      final _notePasswordLogic = Provider.of<NotePasswordLogic>(Get.overlayContext, listen: false);
-                      dialogController.text = _notePasswordLogic.state.password;
+                      final _notePasswordLogic = Provider.of<NotePasswordLogic>(Get.overlayContext!, listen: false);
+                      dialogController.text = _notePasswordLogic.state.password!;
                       showAlertDialog(context,
                           title: locale.setPassword.tr,
                           hastTextField: true,

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:todoapp/locales/locales.dart' as locale;
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:googleapis/cloudbuild/v1.dart';
@@ -18,7 +18,7 @@ enum TextSize { small, large }
 
 class PicDetail extends StatefulWidget {
   final index;
-  const PicDetail({Key key, this.index}) : super(key: key);
+  const PicDetail({Key? key, this.index}) : super(key: key);
 
   @override
   _PicDetailState createState() => _PicDetailState();
@@ -26,7 +26,7 @@ class PicDetail extends StatefulWidget {
 
 class _PicDetailState extends State<PicDetail> {
   bool _showButton = true;
-  Timer timer;
+  late Timer timer;
   @override
   void initState() {
     super.initState();
@@ -52,7 +52,7 @@ class _PicDetailState extends State<PicDetail> {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
-    int textLength = _noteImageLogic.state.imageList[widget.index].desc.length;
+    int textLength = _noteImageLogic.state.imageList![widget.index]!.desc!.length;
     TextSize textSize;
     if (textLength >= 415) {
       textSize = TextSize.large;
@@ -77,26 +77,26 @@ class _PicDetailState extends State<PicDetail> {
                       tag: 'imageHero',
                       transitionOnUserGestures: true,
                       child: Image.memory(
-                        _noteImageLogic.state.imageList[widget.index].image,
+                        _noteImageLogic.state.imageList![widget.index]!.image!,
                       )),
                 ),
               ),
-              _noteImageLogic.state.imageList[widget.index].desc != ''
+              _noteImageLogic.state.imageList![widget.index]!.desc != ''
                   ? Positioned(
                       bottom: h * 0,
                       child: Container(
                         width: w,
                         padding: EdgeInsets.symmetric(vertical: h * 0.01, horizontal: h * 0.01),
-                        decoration: BoxDecoration(color: _themeState.textColor.withOpacity(0.1)),
+                        decoration: BoxDecoration(color: _themeState.textColor!.withOpacity(0.1)),
                         child: Text(
                           textSize == TextSize.large
-                              ? _noteImageLogic.state.imageList[widget.index].desc.substring(0, 410) + '...'
-                              : _noteImageLogic.state.imageList[widget.index].desc,
+                              ? _noteImageLogic.state.imageList![widget.index]!.desc!.substring(0, 410) + '...'
+                              : _noteImageLogic.state.imageList![widget.index]!.desc!,
                           softWrap: true,
                           style: TextStyle(
                               color: _themeState.textColor,
-                              fontSize: _themeState.isEn ? h * w * 0.00006 : h * w * 0.00004,
-                              fontWeight: _themeState.isEn ? FontWeight.w100 : FontWeight.w600),
+                              fontSize: _themeState.isEn! ? h * w * 0.00006 : h * w * 0.00004,
+                              fontWeight: _themeState.isEn! ? FontWeight.w100 : FontWeight.w600),
                         ),
                       ),
                     )
@@ -113,9 +113,9 @@ class _PicDetailState extends State<PicDetail> {
                   elevation: 0,
                   heroTag: 'btn1',
                   backgroundColor: _themeState.mainOpColor,
-                  child: Icon(FontAwesome.rotate_right),
+                  child: Icon(Icons.rotate_right),
                   onPressed: () async {
-                    var result = await FlutterImageCompress.compressWithList(_noteImageLogic.state.imageList[widget.index].image, rotate: 90);
+                    var result = await FlutterImageCompress.compressWithList(_noteImageLogic.state.imageList![widget.index]!.image!, rotate: 90);
                     _noteImageLogic.rotateImage(result, widget.index);
                   },
                 ),
@@ -128,7 +128,7 @@ class _PicDetailState extends State<PicDetail> {
                     TextEditingController dialogController = TextEditingController();
                     showAlertDialog(context,
                         title: locale.imageDesc.tr,
-                        desc: _noteImageLogic.state.imageList[widget.index].desc ?? null,
+                        desc: _noteImageLogic.state.imageList![widget.index]!.desc ?? null,
                         textFieldMaxLength: 415,
                         hastTextField: true,
                         textFieldhintText: locale.imageDesc.tr,

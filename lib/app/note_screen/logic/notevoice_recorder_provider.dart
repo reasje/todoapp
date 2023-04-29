@@ -20,7 +20,7 @@ class NoteVoiceRecorderLogic with ChangeNotifier {
     PermissionStatus status = await Permission.microphone.request();
     if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
       //throw RecordingPermissionException("Microphone permission not granted");
-      showAlertDialog(Get.overlayContext,
+      showAlertDialog(Get.overlayContext!,
           title:  locale.microphoneRequired.tr,
           cancelButtonText:  locale.cancel.tr,
           okButtonText:  locale.ok.tr);
@@ -32,11 +32,11 @@ class NoteVoiceRecorderLogic with ChangeNotifier {
     // starting the recording session by adding the file name to
     await state.flutterSoundRecorder.startRecorder(toFile: state.voiceName, codec: Codec.defaultCodec);
     // This stream updates the recording duration
-    StreamSubscription<RecordingDisposition> sub;
-    sub = state.flutterSoundRecorder.onProgress.listen((event) async {
+    late StreamSubscription<RecordingDisposition> sub;
+    sub = state.flutterSoundRecorder.onProgress!.listen((event) async {
       if (event.duration > Duration(minutes: 58)) {
         sub.cancel();
-        await stopRecorder();
+        stopRecorder();
       } else {
         state.recorderDuration = event.duration;
         notifyListeners();
@@ -56,23 +56,23 @@ class NoteVoiceRecorderLogic with ChangeNotifier {
   }
 
   void clearVoiceList() {
-    state.voiceList.clear();
+    state.voiceList!.clear();
   }
 
-  void initialVoiceList(List<Voice> givenVoiceList) {
-    state.voiceList = givenVoiceList;
+  void initialVoiceList(List<Voice?>? givenVoiceList) {
+    state.voiceList = givenVoiceList as RxList<Voice?>?;
   }
 
   void initialVoiceListSnapshot() {
-    state.voiceListSnapshot = List.from(state.voiceList);
+    state.voiceListSnapshot = List.from(state.voiceList!) as RxList<Voice>;
   }
 
   void stopRecorder() async {
     // finishing up the recorded voice
-    String path = await state.flutterSoundRecorder.stopRecorder();
-    final _noteVoiceRecorderLogic = Provider.of<NoteVoiceRecorderLogic>(Get.overlayContext, listen: false);
+    String path = await (state.flutterSoundRecorder.stopRecorder() as FutureOr<String>);
+    final _noteVoiceRecorderLogic = Provider.of<NoteVoiceRecorderLogic>(Get.overlayContext!, listen: false);
     TextEditingController dialogController = TextEditingController(text: '');
-    await showAlertDialog(Get.overlayContext,
+    await showAlertDialog(Get.overlayContext!,
         title:  locale.voiceTitle.tr,
         hastTextField: true,
         textFieldhintText:  locale.titleHint.tr,
@@ -86,29 +86,29 @@ class NoteVoiceRecorderLogic with ChangeNotifier {
     File file = File(path);
     var h = await file.readAsBytes();
     var v = Voice((voiceTitle == null || voiceTitle == "") ? 'Unamed' : voiceTitle, h);
-    state.voiceList.add(v);
+    state.voiceList!.add(v);
     voiceTitle = null;
     // Time to delete the file to avoid space overflow
     state.flutterSoundRecorder.deleteRecord(fileName: state.voiceName);
     notifyListeners();
   }
 
-  String voiceTitle;
+  String? voiceTitle;
   void setVoiceTitle(String title) {
     voiceTitle = title;
   }
 
   void voiceDismissed(index) {
-    state.dismissedVoice = state.voiceList.removeAt(index);
+    state.dismissedVoice = state.voiceList!.removeAt(index);
     notifyListeners();
   }
 
   void voiceRecover(index) {
-    state.voiceList.insert(index, state.dismissedVoice);
+    state.voiceList!.insert(index, state.dismissedVoice);
     notifyListeners();
   }
 
-  Future<List<Voice>> getVoiceList() async {
+  Future<List<Voice?>?> getVoiceList() async {
     return state.voiceList;
   }
 }

@@ -10,14 +10,14 @@ class AppLocalizations extends ChangeNotifier {
 
   // Helper method to keep the code inside the widget concise
   // Localizations are accessed using an InheritedWidget "of" syntax
-  static AppLocalizations of(BuildContext context) {
+  static AppLocalizations? of(BuildContext context) {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
   static const LocalizationsDelegate<AppLocalizations> delegate =
       _AppLocalizationsDelegate();
 
-  Map<String, String> _localizedString;
+  late Map<String, String> _localizedString;
 
   Future<bool> load() async {
     // Load the language JSON file form the "lang" folder
@@ -30,7 +30,7 @@ class AppLocalizations extends ChangeNotifier {
     return true;
   }
 
-  String translate(String key) {
+  String? translate(String key) {
     return _localizedString[key];
   }
 }

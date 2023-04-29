@@ -7,7 +7,7 @@ import '../../../../applocalizations.dart';
 
 class EmptyNotes extends StatelessWidget {
   const EmptyNotes({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -29,7 +29,7 @@ class EmptyNotes extends StatelessWidget {
                 height: h * 0.45,
                 width: w,
                 child: Image.asset(
-                  _themeState.noTaskImage,
+                  _themeState.noTaskImage!,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -44,7 +44,7 @@ class EmptyNotes extends StatelessWidget {
                   Container(
                     height: h * 0.1,
                     width: w * 0.7,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(h * w * 0.0001), color: _themeState.textColor.withOpacity(0.1)),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(h * w * 0.0001), color: _themeState.textColor!.withOpacity(0.1)),
                     child: Center(
                       child: Text(
                         locale.NoNotesyet.tr,
@@ -55,11 +55,11 @@ class EmptyNotes extends StatelessWidget {
                   Container(
                     height: h * 0.1,
                     width: w * 0.9,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(h * w * 0.0001), color: _themeState.textColor.withOpacity(0.1)),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(h * w * 0.0001), color: _themeState.textColor!.withOpacity(0.1)),
                     child: Center(
                       child: Text(
                         locale.addNewNotePlease.tr,
-                        style: TextStyle(color: _themeState.textColor, fontWeight: FontWeight.w500, fontSize: _themeState.isEn ? w * 0.06 : w * 0.04),
+                        style: TextStyle(color: _themeState.textColor, fontWeight: FontWeight.w500, fontSize: _themeState.isEn! ? w * 0.06 : w * 0.04),
                       ),
                     ),
                   ),

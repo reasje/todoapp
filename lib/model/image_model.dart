@@ -7,8 +7,8 @@ part 'image_model.g.dart';
 @HiveType(typeId: 3)
 class Image {
   @HiveField(0)
-  Uint8List image;
+  Uint8List? image;
   @HiveField(1)
-  String desc;
+  String? desc;
   Image(this.image, this.desc);
 }

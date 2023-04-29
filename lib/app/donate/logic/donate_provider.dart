@@ -14,7 +14,7 @@ class DonateLogic extends GetxController {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
     ScaffoldMessenger.of(context)
-        .showSnackBar(MySnackBar( locale.dogeAddressCopied.tr, 'dogeAddressCopied', false, context: context));
+        .showSnackBar(MySnackBar( locale.dogeAddressCopied.tr, 'dogeAddressCopied', false, context: context) as SnackBar);
   }
 
   final _url = 'https://idpay.ir/todoapp';

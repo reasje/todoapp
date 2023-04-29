@@ -10,23 +10,23 @@ part 'note_model.g.dart';
 @HiveType(typeId: 0)
 class Note {
   @HiveField(0)
-  String title;
+  String? title;
   @HiveField(1)
-  String text;
+  String? text;
   @HiveField(2)
-  bool isChecked;
+  bool? isChecked;
   @HiveField(3)
-  int color;
+  int? color;
   @HiveField(4)
-  List<Image> imageList;
+  List<Image?>? imageList;
   @HiveField(5)
-  List<Voice> voiceList;
+  List<Voice?>? voiceList;
   @HiveField(6)
-  List<Task> taskList;
+  List<Task>? taskList;
   @HiveField(7)
-  bool resetCheckBoxs;
+  bool? resetCheckBoxs;
   @HiveField(8)
-  String password;
+  String? password;
   Note(
       this.title,
       this.text,
