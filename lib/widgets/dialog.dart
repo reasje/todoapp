@@ -41,7 +41,7 @@ Future showAlertDialog(
   double w = Get.width;
 
   return showDialog(
-      context: Get.overlayContext!,
+      context: Get.context!,
       builder: (ctxt) {
         return StatefulBuilder(
           builder: (BuildContext ctx, setState) {
@@ -113,7 +113,7 @@ Future showAlertDialog(
                                 )),
                                 onTap: () {
                                   okButtonFunction!();
-                                  Navigator.pop(ctx);
+                                  Get.back();
                                 },
                               )),
                           cancelButtonText != null
@@ -133,7 +133,7 @@ Future showAlertDialog(
                                         if (cancelButtonFunction != null) {
                                           cancelButtonFunction();
                                         }
-                                        Navigator.pop(ctx);
+                                        Get.back();
                                       }))
                               : Container()
                         ],

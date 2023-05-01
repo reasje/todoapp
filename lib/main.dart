@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'package:todoapp/locales/locales.dart' as locale;
 import 'package:todoapp/model/image_model.dart' as imageModel;
 import 'package:todoapp/model/note_model.dart';
 import 'package:todoapp/model/task_model.dart';
@@ -138,6 +138,8 @@ class _MyAppState extends State<MyApp> {
           //   return supportedLocales.first;
           // },
           debugShowCheckedModeBanner: false,
+          translations: locale.TranslationService(),
+          locale: _themeLogic.state.locale ?? locale.TranslationService.locale,
           theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity, fontFamily: _themeLogic.state.isEn! ? "Ubuntu Condensed" : "Dubai"),
           home: SplashScreen(),
           builder: EasyLoading.init(),

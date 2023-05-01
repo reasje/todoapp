@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(
       Duration(seconds: 2),
       () {
-        loadHome().then((value) => Get.to(() => value));
+        loadHome().then((value) => Get.off(() => value));
       },
     );
   }
@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // new day .
     UnCheckLogic.checkDayChange();
     // });
-    await _themeState.initialColorsAndLan();
+    // await _themeState.initialColorsAndLan();
     await Future.delayed(Duration(seconds: 2));
     return Future.value(Get.find<ThemeLogic>().state.isFirstTime! ? OnBoardingScreen() : NotesScreen());
   }

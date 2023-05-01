@@ -15,14 +15,21 @@ class OnBoardingLogic extends GetxController {
 
   @override
   void onInit() {
-    final _themeState = Get.find<ThemeLogic>();
-    showAlertDialog(
-        title: "Choose you language ! ",
-        okButtonText: "فارسی",
-        cancelButtonText: "English",
-        okButtonFunction: () {
-          _themeState.changeLanToPersian();
-        });
+    Future.delayed(Duration(seconds: 2), () {
+      final _themeState = Get.find<ThemeLogic>();
+      showAlertDialog(
+          title: "Choose you language ! ",
+          okButtonText: "فارسی",
+          cancelButtonText: "English",
+          okButtonFunction: () {
+            _themeState.changeLanToPersian();
+          });
+    });
     super.onInit();
+  }
+
+  setCurrentPage(int value) {
+    print("Changing page!");
+    state.currentPage = value;
   }
 }

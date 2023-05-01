@@ -22,7 +22,6 @@ class ReOrderableCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _noteLogic = Get.find<NoteLogic>();
-    ;
 
     final _themeState = Get.find<ThemeLogic>().state;
     List<int>? keys = notes.keys.cast<int>().toList();

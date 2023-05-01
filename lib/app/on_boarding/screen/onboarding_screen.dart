@@ -25,6 +25,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     final _themeLogic = Get.find<ThemeLogic>();
+    final _onBoardingLogic = Get.find<OnBoardingLogic>();
     final _themeState = _themeLogic.state;
 
     return Scaffold(
@@ -49,7 +50,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     iconSize: h * w * 0.0001,
                     iconData: Icons.arrow_forward_ios,
                     function: () {
-                      Navigator.pushReplacement(context, SliderTransition(NotesScreen()));
+                      print("Calling this");
+                      Get.to(()=>NotesScreen(),transition: Transition.rightToLeft);
                       _themeLogic.changeFirstTime();
                     },
                   ),
@@ -73,7 +75,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             onBoardPage("pioritize", locale.pioritizeTitle.tr, locale.pioritize.tr, h, w),
                             onBoardPage("family", locale.familyTitle.tr, locale.family.tr, h, w),
                           ],
-                          onPageChanged: (value) => {setCurrentPage(value)},
+                          onPageChanged: (value) => {_onBoardingLogic.setCurrentPage(value)},
                         ),
                       ),
                       Container(
@@ -93,14 +95,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     );
   }
 
-  AnimatedContainer getIndicator(int pageNo) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
-      height: 10,
-      width: (_state.currentPage == pageNo) ? 20 : 10,
-      margin: EdgeInsets.symmetric(horizontal: 5),
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: (_state.currentPage == pageNo) ? Colors.black : Colors.grey),
+  Widget getIndicator(int pageNo) {
+    return Obx((){
+      return AnimatedContainer(
+        duration: Duration(milliseconds: 200),
+        height: 10,
+        width: (_state.currentPage == pageNo) ? 20 : 10,
+        margin: EdgeInsets.symmetric(horizontal: 5),
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: (_state.currentPage == pageNo) ? Colors.black : Colors.grey),
+      );
+    }
     );
   }
 
@@ -131,8 +136,5 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     );
   }
 
-  setCurrentPage(int value) {
-    _state.currentPage = value;
-    setState(() {});
-  }
+
 }

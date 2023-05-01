@@ -10,7 +10,7 @@ class ButtonWidget extends StatefulWidget {
   final double? sizePU;
   final double? sizePD;
   final double? iconSize;
-  final Function? function;
+  final Function function;
   final BuildContext? timerContext;
   final Color? backgroundColor;
   final bool? hasFloating;
@@ -21,10 +21,10 @@ class ButtonWidget extends StatefulWidget {
       this.sizePD,
       this.iconSize,
       this.iconData,
-      this.function,
+      required this.function,
       this.timerContext,
       this.backgroundColor,
-      this.hasFloating,
+      this.hasFloating=false,
       this.child})
       : super(key: key);
 
@@ -37,8 +37,6 @@ class _MyButtonState extends State<ButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final _signInProvider = Get.find<SettingsLogic>();
-    final _themeState = Get.find<ThemeLogic>().state;
     Color? backgroundColor = widget.backgroundColor;
     // bool floating =
     //     widget.id == 'newpic' || widget.id == 'newvoice' || widget.id == 'pausevoice' || widget.id == 'stopvoice' || widget.id == 'resumevoice';
@@ -57,6 +55,7 @@ class _MyButtonState extends State<ButtonWidget> {
               isTapped == true ? isTapped = false : isTapped = true;
             });
           });
+          widget.function();
           // if (mounted) {
           //   setState(() {
           //     Future.delayed(Duration(milliseconds: 100), () async {
