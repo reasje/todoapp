@@ -15,7 +15,7 @@ class NoteColorLogic extends GetxController {
   }
 
   void clearNoteColor() {
-    state.noteColor = null;
+    state.noteColor = NoteColorState.noteColors[0];
   }
 
   // getting the color that was choosen by the user

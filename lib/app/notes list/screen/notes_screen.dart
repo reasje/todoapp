@@ -10,6 +10,15 @@ import 'package:todoapp/theme/theme_logic.dart';
 import '../../../main.dart';
 import '../../../widgets/loading_widget.dart';
 import '../../../widgets/no_glow_behavior.dart';
+import '../../note_screen/logic/bottomnav_logic.dart';
+import '../../note_screen/logic/note_logic.dart';
+import '../../note_screen/logic/notecolor_logic.dart';
+import '../../note_screen/logic/noteimage_logic.dart';
+import '../../note_screen/logic/notepassword_logic.dart';
+import '../../note_screen/logic/notetask_logic.dart';
+import '../../note_screen/logic/notetitletext_logic.dart';
+import '../../note_screen/logic/notevoice_player_logic.dart';
+import '../../note_screen/logic/notevoice_recorder_provider.dart';
 import '../logic.dart';
 import 'components/empty_notes.dart';
 import 'components/fab_widget.dart';
@@ -26,6 +35,18 @@ class NotesScreen extends StatefulWidget {
 
 class _NotesScreenState extends State<NotesScreen> {
   final _logic = Get.put(NotesLogic());
+
+  final _noteLogic = Get.put(NoteLogic());
+  final _noteColorLogic = Get.put(NoteColorLogic());
+  final _noteImageLogic = Get.put(NoteImageLogic());
+  final _noteTaskLogic = Get.put(NoteTaskLogic());
+  final _noteVoicePlayerLogic = Get.put(NoteVoicePlayerLogic());
+  final _noteVoiceRecorderLogic = Get.put(NoteVoiceRecorderLogic());
+  final _noteTitleTextLogic = Get.put(NoteTitleTextLogic());
+  final _notePasswordLogic = Get.put(NotePasswordLogic());
+  final _bottomNavLogic = Get.put(BottomNavLogic());
+
+
   final _state = Get.find<NotesLogic>().state;
   final _themeState = Get.find<ThemeLogic>().state;
   @override

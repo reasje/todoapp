@@ -18,9 +18,9 @@ class Note {
   @HiveField(3)
   int? color;
   @HiveField(4)
-  List<Image?>? imageList;
+  List<Image>? imageList;
   @HiveField(5)
-  List<Voice?>? voiceList;
+  List<Voice>? voiceList;
   @HiveField(6)
   List<Task>? taskList;
   @HiveField(7)

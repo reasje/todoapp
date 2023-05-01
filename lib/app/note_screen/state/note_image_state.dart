@@ -7,8 +7,8 @@ class NoteImageState {
   final picker = ImagePicker();
 
   // list of images that will be loaded on user tap
-  RxList<imageModel.Image?>? imageList = [].obs as RxList<imageModel.Image?>?;
-  RxList<imageModel.Image> imageListSnapshot = [].obs as RxList<imageModel.Image>;
+  RxList<imageModel.Image> imageList = <imageModel.Image>[].obs;
+  RxList<imageModel.Image> imageListSnapshot = <imageModel.Image>[].obs ;
 
   Rx<imageModel.Image?> _dismissedImage = null.obs;
   set dismissedImage(imageModel.Image? value) => _dismissedImage.value = value;

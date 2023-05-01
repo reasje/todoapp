@@ -16,13 +16,13 @@ class NoteColorState {
     Color(0xffaa66cc),
   ];
 
-  final Rx<Color?> _noteColor = noteColors[0].obs;
-  set noteColor(Color? value) => _noteColor.value = value;
-  Color? get noteColor => _noteColor.value;
+  final Rx<Color> _noteColor = noteColors[0].obs;
+  set noteColor(Color value) => _noteColor.value = value;
+  Color get noteColor => _noteColor.value;
 
-  final Rx<Color?> _colorSnapShot = noteColors[0].obs;
-  set colorSnapShot(Color? value) => _colorSnapShot.value = value;
-  Color? get colorSnapShot => _colorSnapShot.value;
+  final Rx<Color> _colorSnapShot = noteColors[0].obs;
+  set colorSnapShot(Color value) => _colorSnapShot.value = value;
+  Color get colorSnapShot => _colorSnapShot.value;
   
   final _indexOfSelectedColor = 1.obs;
   set indexOfSelectedColor(int value) => _indexOfSelectedColor.value = value;

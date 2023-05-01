@@ -32,7 +32,7 @@ class FloatingActionButtonWidget extends StatelessWidget {
       onPressed: () {
         _notesLogic.load();
         _noteLogic.newNoteClicked().then((value) {
-          Get.to(NoteScreen(), transition: Transition.rightToLeft);
+          Get.to(()=> NoteScreen(), transition: Transition.rightToLeft);
           _notesLogic.loadingOver();
         });
       },

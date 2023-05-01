@@ -42,10 +42,10 @@ class VoiceListView extends StatelessWidget {
             behavior: NoGlowBehavior(),
             child: Obx(() {
               return ListView.builder(
-                  itemCount: _noteVoiceRecorderLogic.state.voiceList != null ? _noteVoiceRecorderLogic.state.voiceList!.length + 1 : 1,
+                  itemCount: _noteVoiceRecorderLogic.state.voiceList != null ? _noteVoiceRecorderLogic.state.voiceList.length + 1 : 1,
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
-                    if (index == (_noteVoiceRecorderLogic.state.voiceList != null ? _noteVoiceRecorderLogic.state.voiceList!.length : 0)) {
+                    if (index == (_noteVoiceRecorderLogic.state.voiceList != null ? _noteVoiceRecorderLogic.state.voiceList.length : 0)) {
                       return Container();
                     } else {
                       return FutureBuilder(
@@ -132,7 +132,7 @@ class VoiceListView extends StatelessWidget {
                                                           FittedBox(
                                                             fit: BoxFit.cover,
                                                             child: Text(
-                                                              _noteVoiceRecorderLogic.state.voiceList![index]!.title!,
+                                                              _noteVoiceRecorderLogic.state.voiceList[index].title!,
                                                               softWrap: false,
                                                             ),
                                                           ),

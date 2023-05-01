@@ -7,7 +7,7 @@ import '../../../model/note_model.dart';
 class NoteState {
 
   // used to save the keys in provider
-  RxList<int>? providerKeys = [].obs as RxList<int>?;
+  RxList<int> providerKeys = <int>[].obs;
 
   // the index of the main stack and the floating stack
   // to press the back button twice for getting back to the notes list ! without saving
@@ -15,7 +15,7 @@ class NoteState {
   set notSaving(int value) => _notSaving.value = value;
   int get notSaving => _notSaving.value;
 
-  Rx<int?> _providerIndex = null.obs;
+  Rxn<int?> _providerIndex = Rxn<int?>();
   set providerIndex(int? value) => _providerIndex.value = value;
   int? get providerIndex => _providerIndex.value;
 
@@ -23,7 +23,7 @@ class NoteState {
   set newNote(bool value) => _newNote.value = value;
   bool get newNote => _newNote.value;
 
-  Rx<Note?> _bnote = null.obs;
+  Rxn<Note?> _bnote = Rxn<Note?>();
   set bnote(Note? value) => _bnote.value = value;
   Note? get bnote => _bnote.value;
 

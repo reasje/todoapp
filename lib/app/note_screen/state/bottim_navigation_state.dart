@@ -12,9 +12,9 @@ class BottomNavState {
   ScrollController scrollController = new ScrollController();
 
   // list of images that will be loaded on user tap
-  RxList<BottomNavTab> tabs = [].obs as RxList<BottomNavTab>;
+  RxList<BottomNavTab> tabs = <BottomNavTab>[].obs;
 
-  RxList<NavigationItem> items = [].obs as RxList<NavigationItem>;
+  RxList<NavigationItem> items = <NavigationItem>[].obs;
 
   Rx<int> _selectedTab = 0.obs;
   set selectedTab(int value) => _selectedTab.value = value;

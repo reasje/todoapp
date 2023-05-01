@@ -26,12 +26,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(
-      Duration(seconds: 2),
-      () {
+
         loadHome().then((value) => Get.off(() => value));
-      },
-    );
+
   }
 
   Future<Widget> loadHome() async {
@@ -45,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
     UnCheckLogic.checkDayChange();
     // });
     // await _themeState.initialColorsAndLan();
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 2,));
     return Future.value(Get.find<ThemeLogic>().state.isFirstTime! ? OnBoardingScreen() : NotesScreen());
   }
 

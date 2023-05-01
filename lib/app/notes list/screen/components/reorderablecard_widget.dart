@@ -97,7 +97,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                     if (snapShot.data.password == '' || snapShot.data.password == null) {
                                       // does not have a password
                                       _noteLogic.loadNote(keys, index).then((value) {
-                                        Get.to(NoteScreen(), transition: Transition.rightToLeft);
+                                        Get.to(()=> NoteScreen(), transition: Transition.rightToLeft);
                                       });
                                     } else {
                                       // have the password and it must be checked
@@ -108,7 +108,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                         didUnlocked: () {
                                           Get.back();
                                           _noteLogic.loadNote(keys, index).then((value) {
-                                            Get.to(NoteScreen(), transition: Transition.rightToLeft);
+                                            Get.to(()=> NoteScreen(), transition: Transition.rightToLeft);
                                           });
                                         },
                                         digits: snapShot.data.password.length,
@@ -229,7 +229,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                     if (snapShot.data.password == '' || snapShot.data.password == null) {
                                       // does not have a password
                                       _noteLogic.loadNote(keys, index).then((value) {
-                                        Get.to(NoteScreen(), transition: Transition.rightToLeft);
+                                        Get.to(()=> NoteScreen(), transition: Transition.rightToLeft);
                                       });
                                     } else {
                                       print(snapShot.data.password);
@@ -241,7 +241,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                         didUnlocked: () {
                                           Get.back();
                                           _noteLogic.loadNote(keys, index).then((value) {
-                                            Get.to(NoteScreen(), transition: Transition.rightToLeft);
+                                            Get.to(()=> NoteScreen(), transition: Transition.rightToLeft);
                                           });
                                         },
                                         digits: snapShot.data.password.length,

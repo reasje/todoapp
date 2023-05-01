@@ -126,11 +126,11 @@ class NoteLogic extends GetxController {
 
   // updating the database when the check box is checked or unchecked
   void updateIsChecked(List<int>? keys, int? index) async {
-    state.providerKeys = keys as RxList<int>?;
+    state.providerKeys = keys as RxList<int>;
 
     state.providerIndex = index;
 
-    var bnote = await (state.noteBox!.get(state.providerKeys![state.providerIndex!]) as FutureOr<Note>);
+    var bnote = await (state.noteBox!.get(state.providerKeys[state.providerIndex!]) as FutureOr<Note>);
 
     var isChecked = bnote.isChecked!;
 
@@ -154,7 +154,7 @@ class NoteLogic extends GetxController {
 
     Note note = Note(noteTitle, noteText, isChecked, noteColor, ntImageList, ntVoiceList, ntTaskList, ntResetCheckBoxs, ntPassword);
 
-    state.noteBox!.put(state.providerKeys![state.providerIndex!], note);
+    state.noteBox!.put(state.providerKeys[state.providerIndex!], note);
   }
 
   // new Note clieked
@@ -188,7 +188,7 @@ class NoteLogic extends GetxController {
 
   // used indie list view after an elemt of listview is tapped
   Future<void> loadNote([List<int>? keys, int? index]) async {
-    state.providerKeys = keys as RxList<int>?;
+    state.providerKeys = keys as RxList<int>;
 
     state.providerIndex = index;
 
@@ -209,15 +209,15 @@ class NoteLogic extends GetxController {
     _bottomNavLogic.initialSelectedTab();
 
     // getting the pics form the database.
-    var bnote = await (state.noteBox!.get(state.providerKeys![state.providerIndex!]) as FutureOr<Note>);
+    var bnote = await (state.noteBox!.get(state.providerKeys[state.providerIndex!]) as FutureOr<Note>);
 
     // if the note doesnot include any notes pass
     if (bnote.imageList?.isNotEmpty ?? false) {
-      _noteImageLogic.initialImageList(bnote.imageList);
+      _noteImageLogic.initialImageList(bnote.imageList!);
     }
 
     if (bnote.voiceList?.isNotEmpty ?? false) {
-      _noteVoiceRecorderLogic.initialVoiceList(bnote.voiceList);
+      _noteVoiceRecorderLogic.initialVoiceList(bnote.voiceList!);
     }
 
     if (bnote.taskList?.isNotEmpty ?? false) {
@@ -286,8 +286,8 @@ class NoteLogic extends GetxController {
       if (_noteTitleTextLogic.state.textController.text.isEmpty &&
           _noteTitleTextLogic.state.titleController.text.isEmpty &&
           _noteTaskLogic.state.taskControllerList[0]!.textEditingController.text == "" &&
-          _noteImageLogic.state.imageList!.isEmpty &&
-          _noteVoiceRecorderLogic.state.voiceList!.isEmpty &&
+          _noteImageLogic.state.imageList.isEmpty &&
+          _noteVoiceRecorderLogic.state.voiceList.isEmpty &&
           _notePasswordLogic.state.password == '') {
         if (state.notSaving == 0) {
           ScaffoldMessenger.of(Get.overlayContext!).showSnackBar(MySnackBar(
@@ -315,7 +315,7 @@ class NoteLogic extends GetxController {
         var noteText = _noteTitleTextLogic.state.textController.text;
 
         print("_noteColorLogic.noteColor? ${_noteColorLogic.state.noteColor}");
-        var color = _noteColorLogic.state.noteColor!.value;
+        var color = _noteColorLogic.state.noteColor.value;
 
         var password = _notePasswordLogic.state.password;
 
@@ -338,13 +338,13 @@ class NoteLogic extends GetxController {
     } else {
       // One of the title or text fields must be filled
       if (_noteTitleTextLogic.state.textController.text.isNotEmpty || _noteTitleTextLogic.state.titleController.text.isNotEmpty) {
-        var bnote = await (state.noteBox!.get(state.providerKeys![state.providerIndex!]) as FutureOr<Note>);
+        var bnote = await (state.noteBox!.get(state.providerKeys[state.providerIndex!]) as FutureOr<Note>);
 
         var noteTitle;
 
         _noteTitleTextLogic.state.titleController.text.isEmpty ? noteTitle = "Unamed" : noteTitle = _noteTitleTextLogic.state.titleController.text;
 
-        var color = _noteColorLogic.state.noteColor!.value;
+        var color = _noteColorLogic.state.noteColor.value;
 
         var password = _notePasswordLogic.state.password;
 
@@ -359,7 +359,7 @@ class NoteLogic extends GetxController {
         Note note = new Note(noteTitle, _noteTitleTextLogic.state.textController.text, bnote.isChecked, color, _noteImageLogic.state.imageList,
             _noteVoiceRecorderLogic.state.voiceList, _noteTaskLogic.state.taskList, _noteTaskLogic.resetCheckBoxs, password);
 
-        await state.noteBox!.put(state.providerKeys![state.providerIndex!], note);
+        await state.noteBox!.put(state.providerKeys[state.providerIndex!], note);
 
         _noteTitleTextLogic.state.changes.clearHistory();
 
@@ -367,7 +367,7 @@ class NoteLogic extends GetxController {
 
         Get.back();
       } else {
-        await state.noteBox!.delete(state.providerKeys![state.providerIndex!]);
+        await state.noteBox!.delete(state.providerKeys[state.providerIndex!]);
 
         _noteTitleTextLogic.state.changes.clearHistory();
 
@@ -396,8 +396,8 @@ class NoteLogic extends GetxController {
       if (_noteTitleTextLogic.state.textController.text.isEmpty &&
           _noteTitleTextLogic.state.titleController.text.isEmpty &&
           _noteTaskLogic.state.taskControllerList[0]!.textEditingController.text == "" &&
-          _noteImageLogic.state.imageList!.isEmpty &&
-          _noteVoiceRecorderLogic.state.voiceList!.isEmpty &&
+          _noteImageLogic.state.imageList.isEmpty &&
+          _noteVoiceRecorderLogic.state.voiceList.isEmpty &&
           _notePasswordLogic.state.password == '') {
         ScaffoldMessenger.of(Get.overlayContext!).clearSnackBars();
 

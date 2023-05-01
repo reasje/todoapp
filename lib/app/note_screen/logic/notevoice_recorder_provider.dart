@@ -53,15 +53,15 @@ class NoteVoiceRecorderLogic with ChangeNotifier {
   }
 
   void clearVoiceList() {
-    state.voiceList!.clear();
+    state.voiceList.clear();
   }
 
-  void initialVoiceList(List<Voice?>? givenVoiceList) {
-    state.voiceList = givenVoiceList as RxList<Voice?>?;
+  void initialVoiceList(List<Voice> givenVoiceList) {
+    state.voiceList = givenVoiceList as RxList<Voice>;
   }
 
   void initialVoiceListSnapshot() {
-    state.voiceListSnapshot = List.from(state.voiceList!) as RxList<Voice>;
+    state.voiceListSnapshot = List.from(state.voiceList) as RxList<Voice>;
   }
 
   void stopRecorder() async {
@@ -84,7 +84,7 @@ class NoteVoiceRecorderLogic with ChangeNotifier {
     File file = File(path);
     var h = await file.readAsBytes();
     var v = Voice((voiceTitle == null || voiceTitle == "") ? 'Unamed' : voiceTitle, h);
-    state.voiceList!.add(v);
+    state.voiceList.add(v);
     voiceTitle = null;
     // Time to delete the file to avoid space overflow
     state.flutterSoundRecorder.deleteRecord(fileName: state.voiceName);
@@ -97,12 +97,12 @@ class NoteVoiceRecorderLogic with ChangeNotifier {
   }
 
   void voiceDismissed(index) {
-    state.dismissedVoice = state.voiceList!.removeAt(index);
+    state.dismissedVoice = state.voiceList.removeAt(index);
     notifyListeners();
   }
 
   void voiceRecover(index) {
-    state.voiceList!.insert(index, state.dismissedVoice);
+    state.voiceList.insert(index, state.dismissedVoice!);
     notifyListeners();
   }
 

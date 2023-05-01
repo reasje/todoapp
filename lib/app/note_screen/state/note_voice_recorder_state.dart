@@ -13,10 +13,10 @@ class NoteVoiceRecorderState {
   FlutterSoundRecorder flutterSoundRecorder = new FlutterSoundRecorder();
 
   // The voice note part
-  RxList<Voice?>? voiceList = [].obs as RxList<Voice?>?;
+  RxList<Voice> voiceList = <Voice>[].obs;
   // Used to controller if the notes has been edited or not
-  RxList<Voice> voiceListSnapshot = [].obs as RxList<Voice>;
-  RxList<TaskController> taskControllerListSnapShot = [].obs as RxList<TaskController>;
+  RxList<Voice> voiceListSnapshot = <Voice>[].obs;
+  RxList<TaskController> taskControllerListSnapShot = <TaskController>[].obs;
 
   // This list is return to UI for details
   // Below variable is used to show the recorded time in the UI

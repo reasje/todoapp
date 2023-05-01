@@ -4,11 +4,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:todoapp/model/image_model.dart' as imageModel;
 class NotePasswordState {
 
-  Rx<String?> _password = null.obs;
+  Rxn<String> _password = Rxn<String>();
   set password(String? value) => _password.value = value;
   String? get password => _password.value;
   
-  Rx<String?> _passwordSnapShot = null.obs;
+  Rxn<String> _passwordSnapShot = Rxn<String>();
   set passwordSnapShot(String? value) => _passwordSnapShot.value = value;
   String? get passwordSnapShot => _passwordSnapShot.value;
 

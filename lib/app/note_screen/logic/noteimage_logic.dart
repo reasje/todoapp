@@ -12,18 +12,19 @@ import '../state/note_image_state.dart';
 class NoteImageLogic extends GetxController {
   NoteImageState state = NoteImageState();
   // Show the image picker dilog
-  void initialImageList(List<imageModel.Image?>? givenImageList) {
-    state.imageList = givenImageList as RxList<imageModel.Image?>?;
+  void initialImageList(List<imageModel.Image> givenImageList) {
+    state.imageList.clear();
+    state.imageList.addAll(givenImageList);
   }
   Future<void> updateImageDesc(int index, String desc) async {
-    state.imageList![index]!.desc = desc;
+    state.imageList[index].desc = desc;
   }
   void initialImageListSnapshot() {
-    state.imageListSnapshot = List.from(state.imageList!) as RxList<imageModel.Image>;
+    state.imageListSnapshot = List.from(state.imageList) as RxList<imageModel.Image>;
   }
 
   void clearImageList() {
-    state.imageList!.clear();
+    state.imageList.clear();
   }
 
   Future<void> imagePickerGalley() async {
@@ -54,7 +55,7 @@ class NoteImageLogic extends GetxController {
           );
         }
       }
-      state.imageList!.add(imageModel.Image(h, ''));
+      state.imageList.add(imageModel.Image(h, ''));
     }
   }
 
@@ -86,20 +87,20 @@ class NoteImageLogic extends GetxController {
           );
         }
       }
-      state.imageList!.add(imageModel.Image(h, ''));
+      state.imageList.add(imageModel.Image(h, ''));
     }
   }
 
   void imageDissmissed(index) {
-    state.dismissedImage = state.imageList!.removeAt(index);
+    state.dismissedImage = state.imageList.removeAt(index);
   }
 
   void imageRecover(index) {
-    state.imageList!.insert(index, state.dismissedImage);
+    state.imageList.insert(index, state.dismissedImage!);
   }
 
   void rotateImage(Uint8List image, int index) {
-    state.imageList![index]!.image = image;
+    state.imageList[index].image = image;
   }
 
   Future<List<imageModel.Image?>?>? getImageList() async {

@@ -37,9 +37,9 @@ class ImageLisView extends StatelessWidget {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, childAspectRatio: 0.8, mainAxisSpacing: h * 0.05, crossAxisSpacing: w * 0.03),
                   scrollDirection: Axis.vertical,
-                  itemCount: _noteImageLogic.state.imageList != null ? _noteImageLogic.state.imageList!.length + 1 : 1,
+                  itemCount: _noteImageLogic.state.imageList != null ? _noteImageLogic.state.imageList.length + 1 : 1,
                   itemBuilder: (context, index) {
-                    if (index == (_noteImageLogic.state.imageList != null ? _noteImageLogic.state.imageList!.length : 0)) {
+                    if (index == (_noteImageLogic.state.imageList != null ? _noteImageLogic.state.imageList.length : 0)) {
                       return Container();
                     } else {
                       return FutureBuilder<List<imageModel.Image?>?>(

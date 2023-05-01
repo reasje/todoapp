@@ -17,7 +17,7 @@ class NoteVoicePlayerLogic extends GetxController {
     await checkForPlayingPlayers();
     state.flutterSoundPlayer[index].openAudioSession();
     state.voiceDuration[index] =
-        await state.flutterSoundPlayer[index].startPlayer(fromDataBuffer: _noteVoiceRecorderLogic.state.voiceList![index]!.voice);
+        await state.flutterSoundPlayer[index].startPlayer(fromDataBuffer: _noteVoiceRecorderLogic.state.voiceList[index].voice);
     timerOn(index);
   }
 

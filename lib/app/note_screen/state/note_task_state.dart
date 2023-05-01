@@ -9,9 +9,9 @@ class NoteTaskState {
   ScrollController scrollController = new ScrollController();
 
   // list of images that will be loaded on user tap
-  RxList<Task>? taskList = [].obs as RxList<Task>?;
-  RxList<TaskController?> taskControllerList = [].obs as RxList<TaskController?>;
-  RxList<TaskController> taskControllerListSnapShot = [].obs as RxList<TaskController>;
+  RxList<Task>? taskList = <Task>[].obs;
+  RxList<TaskController?> taskControllerList = <TaskController>[].obs;
+  RxList<TaskController> taskControllerListSnapShot = <TaskController>[].obs;
 
   Rx<TaskController?> _dissmissedTask = null.obs;
   set dissmissedTask(TaskController? value) => _dissmissedTask.value = value;
