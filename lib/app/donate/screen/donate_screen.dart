@@ -23,7 +23,7 @@ class _DonateScreenState extends State<DonateScreen> {
   @override
   Widget build(BuildContext context) {
     final _themeState = Get.find<ThemeLogic>().state;
-    final _donateProvider = Get.find<DonateLogic>();
+    final _donateProvider = Get.put(DonateLogic());
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 

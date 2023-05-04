@@ -17,7 +17,8 @@ class DonateLogic extends GetxController {
         .showSnackBar(MySnackBar( locale.dogeAddressCopied.tr, 'dogeAddressCopied', false, context: context) as SnackBar);
   }
 
-  final _url = 'https://idpay.ir/todoapp';
+  final _url = Uri.parse("https://idpay.ir/todoapp");
+
   final _dogeAdress = 'bnb1g3thz6z0t2gz2fffthdvv6mxpjvgfacp7hfjml';
   Future<void> copyDogeAdress() async {
     ClipboardData data = ClipboardData(text: _dogeAdress);
@@ -26,6 +27,7 @@ class DonateLogic extends GetxController {
   }
 
   void launchURL() async {
-    await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+    await launchUrl(_url);
+    // (await canLaunchUrl(_url)) ? await launchUrl(_url) : throw 'Could not launch ${_url.host}';
   }
 }
