@@ -58,18 +58,21 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
         decoration: BoxDecoration(
           color: _themeState.mainColor,
         ),
-        child: Row(
-          textDirection: TextDirection.ltr,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _bottomNavLogic.state.items.map((item) {
-            var itemIndex = _bottomNavLogic.state.items.indexOf(item);
-            return GestureDetector(
-              child: _buildItem(item, _bottomNavLogic.state.selectedTab == itemIndex, context),
-              onTap: () {
-                _bottomNavLogic.newTabSelected(itemIndex);
-              },
-            );
-          }).toList(),
+        child: Obx((){
+          return Row(
+            textDirection: TextDirection.ltr,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: _bottomNavLogic.state.items.map((item) {
+              var itemIndex = _bottomNavLogic.state.items.indexOf(item);
+              return GestureDetector(
+                child: _buildItem(item, _bottomNavLogic.state.selectedTab == itemIndex, context),
+                onTap: () {
+                  _bottomNavLogic.newTabSelected(itemIndex);
+                },
+              );
+            }).toList(),
+          );
+        }
         ));
   }
 }

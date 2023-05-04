@@ -25,10 +25,6 @@ import 'package:get/get.dart';
 class BottomNavLogic extends GetxController {
   BottomNavState state = BottomNavState();
 
-  void initialSelectedTab() {
-    state.selectedTab == null ? state.selectedTab = 0 : null;
-  }
-
   void initialPage() {
     state.pageController = new PageController(initialPage: state.selectedTab, keepPage: true);
   }
@@ -52,7 +48,6 @@ class BottomNavLogic extends GetxController {
     state.tabColors.shuffle();
     state.items.addAll([
       NavigationItem(Icon(Icons.text_fields), Text(locale.text.tr), state.tabColors[0]),
-      NavigationItem(Icon(Icons.hourglass_empty), Text(locale.timer.tr), state.tabColors[1]),
       NavigationItem(Icon(Icons.image_outlined), Text(locale.image.tr), state.tabColors[2]),
       NavigationItem(Icon(Icons.voicemail), Text(locale.voice.tr), state.tabColors[3]),
       NavigationItem(Icon(Icons.check), Text(locale.task.tr), state.tabColors[4]),
@@ -196,6 +191,42 @@ class BottomNavLogic extends GetxController {
       BottomNavTab(
           "Image",
           [ImageLisView()],
+          state.items[1].color,
+          [
+            Expanded(
+              child: Container(
+                alignment: Alignment.centerLeft,
+                child: ButtonWidget(
+                  backgroundColor: state.items[1].color,
+                  sizePU: h * w * 0.00017,
+                  sizePD: h * w * 0.00018,
+                  iconSize: h * w * 0.00008,
+                  iconData: Icons.arrow_back_ios_new_rounded,
+                  function: () {
+                    Get.find<NoteLogic>().doneClicked();
+                  },
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                alignment: Alignment.centerRight,
+                child: ButtonWidget(
+                  backgroundColor: state.items[1].color,
+                  sizePU: h * w * 0.00017,
+                  sizePD: h * w * 0.00018,
+                  iconSize: h * w * 0.00008,
+                  iconData: Icons.close_rounded,
+                  function: () {
+                    Get.find<NoteLogic>().cancelClicked();
+                  },
+                ),
+              ),
+            ),
+          ]),
+      BottomNavTab(
+          'Voice',
+          [VoiceListView(backGroundColor: state.items[2].color)],
           state.items[2].color,
           [
             Expanded(
@@ -230,8 +261,12 @@ class BottomNavLogic extends GetxController {
             ),
           ]),
       BottomNavTab(
-          'Voice',
-          [VoiceListView(backGroundColor: state.items[3].color)],
+          'Task',
+          [
+            TaskListView(
+              color: state.items[3].color,
+            )
+          ],
           state.items[3].color,
           [
             Expanded(
@@ -254,46 +289,6 @@ class BottomNavLogic extends GetxController {
                 alignment: Alignment.centerRight,
                 child: ButtonWidget(
                   backgroundColor: state.items[3].color,
-                  sizePU: h * w * 0.00017,
-                  sizePD: h * w * 0.00018,
-                  iconSize: h * w * 0.00008,
-                  iconData: Icons.close_rounded,
-                  function: () {
-                    Get.find<NoteLogic>().cancelClicked();
-                  },
-                ),
-              ),
-            ),
-          ]),
-      BottomNavTab(
-          'Task',
-          [
-            TaskListView(
-              color: state.items[4].color,
-            )
-          ],
-          state.items[4].color,
-          [
-            Expanded(
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: ButtonWidget(
-                  backgroundColor: state.items[4].color,
-                  sizePU: h * w * 0.00017,
-                  sizePD: h * w * 0.00018,
-                  iconSize: h * w * 0.00008,
-                  iconData: Icons.arrow_back_ios_new_rounded,
-                  function: () {
-                    Get.find<NoteLogic>().doneClicked();
-                  },
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                alignment: Alignment.centerRight,
-                child: ButtonWidget(
-                  backgroundColor: state.items[4].color,
                   sizePU: h * w * 0.00017,
                   sizePD: h * w * 0.00018,
                   iconSize: h * w * 0.00008,

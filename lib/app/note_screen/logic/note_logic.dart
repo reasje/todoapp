@@ -173,7 +173,6 @@ class NoteLogic extends GetxController {
 
     state.newNote = true;
 
-    _bottomNavLogic.initialSelectedTab();
 
     _bottomNavLogic.initialPage();
 
@@ -206,7 +205,6 @@ class NoteLogic extends GetxController {
 
     final _noteColorLogic = Get.find<NoteColorLogic>();
 
-    _bottomNavLogic.initialSelectedTab();
 
     // getting the pics form the database.
     var bnote = await (state.noteBox!.get(state.providerKeys[state.providerIndex!]) as FutureOr<Note>);
