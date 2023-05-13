@@ -15,8 +15,8 @@ import '../../../../widgets/snackbar.dart';
 import '../../../note_screen/screen/note_screen.dart';
 
 class ReOrderableCardWidget extends StatelessWidget {
-  const ReOrderableCardWidget({Key? key, this.snapShot, this.notes, this.index}) : super(key: key);
-  final snapShot;
+  const ReOrderableCardWidget({Key? key, required this.note, this.notes, this.index}) : super(key: key);
+  final Note note;
   final notes;
   final index;
   @override
@@ -79,7 +79,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: w * 0.009, vertical: w * 0.04),
                   margin: EdgeInsets.only(bottom: h * 0.01, top: isLandscape ? w * 0.1 : h * 0.002),
                   decoration: BoxDecoration(
-                      color: Color(snapShot.data.color).withOpacity(0.5),
+                      color: Color(note.color!).withOpacity(0.5),
                       //border: Border.all(width: 1, color:  Colors.whiteSmoke),
                       borderRadius: BorderRadius.all(Radius.circular(10))),
                   //clipBehavior: Clip.antiAlias,
@@ -89,84 +89,6 @@ class ReOrderableCardWidget extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          snapShot.data.time != 0
-                              ? InkWell(
-                                  // This is fun is probable to be executed if the
-                                  // note include time
-                                  onTap: () async {
-                                    if (snapShot.data.password == '' || snapShot.data.password == null) {
-                                      // does not have a password
-                                      _noteLogic.loadNote(keys, index).then((value) {
-                                        Get.to(()=> NoteScreen(), transition: Transition.rightToLeft);
-                                      });
-                                    } else {
-                                      // have the password and it must be checked
-                                      await screenLock<void>(
-                                        context: context,
-                                        correctString: snapShot.data.password,
-                                        canCancel: true,
-                                        didUnlocked: () {
-                                          Get.back();
-                                          _noteLogic.loadNote(keys, index).then((value) {
-                                            Get.to(()=> NoteScreen(), transition: Transition.rightToLeft);
-                                          });
-                                        },
-                                        digits: snapShot.data.password.length,
-                                      );
-                                    }
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.all(4),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                                      ),
-                                      child: Directionality(
-                                        textDirection: TextDirection.ltr,
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Text(
-                                              ((snapShot.data.leftTime / 3600) % 60).floor().toString().padLeft(2, '0'),
-                                              style:
-                                                  TextStyle(color: _themeState.textColor, fontSize: h * w * 0.00012, fontFamily: "Ubuntu Condensed"),
-                                            ),
-                                            Text(
-                                              ':',
-                                              style:
-                                                  TextStyle(color: _themeState.textColor, fontSize: h * w * 0.00012, fontFamily: "Ubuntu Condensed"),
-                                            ),
-                                            Text(
-                                              ((snapShot.data.leftTime / 60) % 60).floor().toString().padLeft(2, '0'),
-                                              style:
-                                                  TextStyle(color: _themeState.textColor, fontSize: h * w * 0.00012, fontFamily: "Ubuntu Condensed"),
-                                            ),
-                                            Text(
-                                              ':',
-                                              style:
-                                                  TextStyle(color: _themeState.textColor, fontSize: h * w * 0.00012, fontFamily: "Ubuntu Condensed"),
-                                            ),
-                                            Text(
-                                              (snapShot.data.leftTime % 60).floor().toString().padLeft(2, '0'),
-                                              style:
-                                                  TextStyle(color: _themeState.textColor, fontSize: h * w * 0.00012, fontFamily: "Ubuntu Condensed"),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              // In this case the note doesnt have a
-                              : Container(),
-                          snapShot.data.time != 0
-                              ? Container(
-                                  width: double.infinity,
-                                  height: h * 0.02,
-                                )
-                              : Container(),
                           Container(
                             padding: EdgeInsets.all(2),
                             child: Container(
@@ -176,11 +98,11 @@ class ReOrderableCardWidget extends StatelessWidget {
                               child: ExpansionTile(
                                 initiallyExpanded: false,
 
-                                // tried too hard to make the expanion color and
-                                // collapsed color personalized but threre was  a problem
+                                // tried too hard to make the expansion color and
+                                // collapsed color personalized but there was  a problem
                                 // Every widget when We call the notifier in the provider
                                 // as I called one is ExpansionTile the Tile will be
-                                // recreated so We have to defin this spesific listTile
+                                // recreated so We have to define this specific listTile
                                 // a key that the widget won't be changed !
                                 title: InkWell(
                                   child: Row(
@@ -196,8 +118,8 @@ class ReOrderableCardWidget extends StatelessWidget {
                                             decoration: BoxDecoration(
                                                 border: Border.all(color: _themeState.textColor!, width: 1.5),
                                                 borderRadius: BorderRadius.circular(10),
-                                                color: snapShot.data.isChecked ?? false ? Color(snapShot.data.color).withOpacity(0.2) : null),
-                                            child: snapShot.data.isChecked ?? false
+                                                color: note.isChecked ?? false ? Color(note.color!).withOpacity(0.2) : null),
+                                            child: note.isChecked ?? false
                                                 ? Icon(
                                                     Icons.check_rounded,
                                                     size: h * 0.03,
@@ -211,9 +133,9 @@ class ReOrderableCardWidget extends StatelessWidget {
                                           child: FittedBox(
                                             fit: BoxFit.cover,
                                             child: Text(
-                                              snapShot.data.title.length >= (w * 0.08).round()
-                                                  ? snapShot.data.title.substring(0, (w * 0.08).round()) + "..."
-                                                  : snapShot.data.title,
+                                              note.title!.length >= (w * 0.08).round()
+                                                  ? note.title!.substring(0, (w * 0.08).round()) + "..."
+                                                  : note.title!,
                                               softWrap: false,
                                               style: TextStyle(
                                                   color: _themeState.noteTitleColor[index],
@@ -226,25 +148,26 @@ class ReOrderableCardWidget extends StatelessWidget {
                                     ],
                                   ),
                                   onTap: () async {
-                                    if (snapShot.data.password == '' || snapShot.data.password == null) {
+                                    if (note.password! == '' || note.password == null) {
                                       // does not have a password
                                       _noteLogic.loadNote(keys, index).then((value) {
-                                        Get.to(()=> NoteScreen(), transition: Transition.rightToLeft);
+                                        Get.to(() => NoteScreen(), transition: Transition.rightToLeft);
                                       });
                                     } else {
-                                      print(snapShot.data.password);
+                                      print(note.password!);
                                       // have the password and it must be checked
                                       await screenLock<void>(
                                         context: context,
-                                        correctString: snapShot.data.password,
+                                        correctString: note.password!,
                                         canCancel: true,
                                         didUnlocked: () {
                                           Get.back();
                                           _noteLogic.loadNote(keys, index).then((value) {
-                                            Get.to(()=> NoteScreen(), transition: Transition.rightToLeft);
+                                            print("Halo");
+                                            Get.to(() => NoteScreen(), transition: Transition.rightToLeft);
                                           });
                                         },
-                                        digits: snapShot.data.password.length,
+                                        digits: note.password!.length,
                                       );
                                     }
                                   },
@@ -253,9 +176,7 @@ class ReOrderableCardWidget extends StatelessWidget {
                                   Container(
                                     padding: EdgeInsets.all(w * 0.05),
                                     child: Text(
-                                      snapShot.data.text.length > 1500
-                                          ? snapShot.data.text.toString().substring(0, 1500) + "..."
-                                          : snapShot.data.text,
+                                      note.text!.length > 1500 ? note.text!.toString().substring(0, 1500) + "..." : note.text!,
                                       style: TextStyle(
                                         color: _themeState.textColor,
                                         fontSize: h * w * 0.00008,

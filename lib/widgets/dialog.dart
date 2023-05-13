@@ -55,7 +55,7 @@ Future showAlertDialog(
                 ),
               )),
               content: Container(
-                height: h * 0.18,
+                height: hastTextField ? h * 0.25 : h * 0.18,
                 width: w * 0.7,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -178,7 +178,7 @@ class NoteLogic extends GetxController {
 
     _noteTaskLogic.resetCheckBoxs = false;
 
-    await _bottomNavLogic.initialTabs(Get.overlayContext!);
+    // await _bottomNavLogic.initialTabs(Get.overlayContext!);
 
     takeSnapshot();
 
@@ -187,7 +187,8 @@ class NoteLogic extends GetxController {
 
   // used indie list view after an elemt of listview is tapped
   Future<void> loadNote([List<int>? keys, int? index]) async {
-    state.providerKeys = keys as RxList<int>;
+    state.providerKeys.clear();
+    state.providerKeys.addAll(keys??[]);
 
     state.providerIndex = index;
 
@@ -207,10 +208,10 @@ class NoteLogic extends GetxController {
 
 
     // getting the pics form the database.
-    var bnote = await (state.noteBox!.get(state.providerKeys[state.providerIndex!]) as FutureOr<Note>);
+    var bnote = await (state.noteBox!.get(state.providerKeys[state.providerIndex!]));
 
     // if the note doesnot include any notes pass
-    if (bnote.imageList?.isNotEmpty ?? false) {
+    if (bnote!.imageList?.isNotEmpty ?? false) {
       _noteImageLogic.initialImageList(bnote.imageList!);
     }
 
@@ -253,7 +254,7 @@ class NoteLogic extends GetxController {
 
     state.newNote = false;
 
-    await _bottomNavLogic.initialTabs(Get.overlayContext!);
+    // await _bottomNavLogic.initialTabs(Get.overlayContext!);
 
     _bottomNavLogic.initialPage();
 

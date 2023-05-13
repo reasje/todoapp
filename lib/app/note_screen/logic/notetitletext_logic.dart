@@ -9,6 +9,7 @@ class NoteTitleTextLogic extends GetxController {
   // Handeling the Undo function
   void changesUndo() {
     state.changes.undo();
+    state.canRedo = true;
   }
 
   // handeling the Redo function
@@ -16,6 +17,7 @@ class NoteTitleTextLogic extends GetxController {
     state.changes.redo();
     state.textController.text = state.textRedoValue!;
     state.textController.selection = TextSelection.fromPosition(TextPosition(offset: state.textController.text.length));
+    state.canUndo = true;
   }
 
   // fo the clear button in the form
@@ -36,16 +38,17 @@ class NoteTitleTextLogic extends GetxController {
       // Staging the state.changes !
       state.changes.add(new Change(state.textOldValue, () {
         state.textRedoValue = newValue;
-      }, (dynamic oldValue) {
-        // When the chnage is being apllies or in other words
+      }, (String? oldValue) {
+        // When the change is being applies or in other words
         // The undo button is selected I want to make the text controller
         // text equal to the oldValue that the change got before .
-        state.textController.text = oldValue;
+        state.textController.text = oldValue!;
         // Updating the textOldValue and making it ready for the next change
         state.textOldValue = oldValue;
         // Making the cursor stay at the right position
         state.textController.selection = TextSelection.fromPosition(TextPosition(offset: state.textController.text.length));
       }));
+      state.canUndo = true;
       // After giving the value of the textOldValue as Oldvalue to the change
       // It's Time to update textOldValue for the next change
       state.textOldValue = state.textController.text;

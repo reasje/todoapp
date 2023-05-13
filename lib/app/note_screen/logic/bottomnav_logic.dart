@@ -25,6 +25,12 @@ import 'package:get/get.dart';
 class BottomNavLogic extends GetxController {
   BottomNavState state = BottomNavState();
 
+  @override
+  void onInit() {
+    initialTabs();
+    super.onInit();
+  }
+
   void initialPage() {
     state.pageController = new PageController(initialPage: state.selectedTab, keepPage: true);
   }
@@ -40,10 +46,9 @@ class BottomNavLogic extends GetxController {
   }
 
   Future<void> initialTabs(
-    BuildContext context,
   ) async {
-    double h = MediaQuery.of(context).size.height;
-    double w = MediaQuery.of(context).size.width;
+    double h = Get.height;
+    double w = Get.width;
 
     state.tabColors.shuffle();
     state.items.addAll([
@@ -113,7 +118,7 @@ class BottomNavLogic extends GetxController {
                     function: () {
                       List<Color> colors = NoteColorState.noteColors;
                       showModalBottomSheet(
-                          context: context,
+                          context: Get.context!,
                           builder: (context) {
                             return Container(
                               color: Color(0xFF737373),

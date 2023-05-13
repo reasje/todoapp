@@ -46,7 +46,6 @@ class _NotesScreenState extends State<NotesScreen> {
   final _notePasswordLogic = Get.put(NotePasswordLogic());
   final _bottomNavLogic = Get.put(BottomNavLogic());
 
-
   final _state = Get.find<NotesLogic>().state;
   final _themeState = Get.find<ThemeLogic>().state;
   @override
@@ -90,16 +89,20 @@ class _NotesScreenState extends State<NotesScreen> {
                                       padding: EdgeInsets.only(bottom: h * 0.1, top: h * 0.01),
                                       children: [
                                         for (int index = 0; index < notes.length; index++)
-                                          FutureBuilder(
+                                          FutureBuilder<Note?>(
                                               key: UniqueKey(),
                                               future: notes.get(keys[index]),
                                               builder: (context, snapShot) {
                                                 if (snapShot.hasData) {
-                                                  return ReOrderableCardWidget(
-                                                    index: index,
-                                                    notes: notes,
-                                                    snapShot: snapShot,
-                                                  );
+                                                  if (snapShot.data != null) {
+                                                    return ReOrderableCardWidget(
+                                                      index: index,
+                                                      notes: notes,
+                                                      note: snapShot.data!,
+                                                    );
+                                                  }else {
+                                                    return Container();
+                                                  }
                                                 } else {
                                                   return LoadingCardWidget();
                                                 }

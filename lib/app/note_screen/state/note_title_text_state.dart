@@ -23,11 +23,11 @@ class NoteTitleTextState {
   set canUndo(bool value) => _canUndo.value = value;
   bool get canUndo => _canUndo.value;
 
-  Rx<String?> _titleSnapShot = null.obs;
+  Rxn<String> _titleSnapShot = Rxn<String>();
   set titleSnapShot(String? value) => _titleSnapShot.value = value;
   String? get titleSnapShot => _titleSnapShot.value;
 
-  Rx<String?> _textSnapShot = null.obs;
+  Rxn<String> _textSnapShot = Rxn<String>();
   set textSnapShot(String? value) => _textSnapShot.value = value;
   String? get textSnapShot => _textSnapShot.value;
 
@@ -35,15 +35,15 @@ class NoteTitleTextState {
   set image(PickedFile? value) => _image.value = value;
   PickedFile? get image => _image.value;
 
-  Rx<String?> _textOldValue = null.obs;
-  set textOldValue(String? value) => _textOldValue.value = value;
-  String? get textOldValue => _textOldValue.value;
+  Rx<String> _textOldValue = "".obs;
+  set textOldValue(String value) => _textOldValue.value = value;
+  String get textOldValue => _textOldValue.value;
 
-  Rx<String?> _textNewValueHelper = null.obs;
+  Rxn<String> _textNewValueHelper = Rxn<String>();
   set textNewValueHelper(String? value) => _textNewValueHelper.value = value;
   String? get textNewValueHelper => _textNewValueHelper.value;
 
-  Rx<String?> _textRedoValue = null.obs;
+  Rxn<String> _textRedoValue = Rxn<String>();
   set textRedoValue(String? value) => _textRedoValue.value = value;
   String? get textRedoValue => _textRedoValue.value;
 
